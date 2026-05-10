@@ -1,6 +1,6 @@
 # Tagesplan Tag 2 — 12.05.2026 — Bezugsquellen, Anfragen, Angebotsvergleich
 
-**Modul:** M-064 Beschaffung im Büromanagement · Modul-Nr. 4
+**Modul:** Beschaffung im Büromanagement · Modul-Nr. 4
 **UE:** 9 (à 45 Min, mit 2 Pausen)
 **Material:** `Grundlagen_Bezugsquellen-Anfragen-Angebotsvergleich.pdf` (Buchseiten 239–245, 268–276)
 **Zielgruppe:** Umschüler/-innen Kaufleute für Büromanagement (IHK)

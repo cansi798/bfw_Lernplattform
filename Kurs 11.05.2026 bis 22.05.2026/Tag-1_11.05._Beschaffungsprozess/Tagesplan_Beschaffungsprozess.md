@@ -1,6 +1,6 @@
 # Tagesplan Tag 1 — 11.05.2026 — Beschaffungsprozess
 
-**Modul:** M-064 Beschaffung im Büromanagement · Modul-Nr. 3
+**Modul:** Beschaffung im Büromanagement · Modul-Nr. 3
 **UE:** 9 (à 45 Min, eingeteilt mit 2 Pausen)
 **Material:** `Grundlagen_Beschaffungsprozess.pdf` (Buchseiten 226–238 und 279–280)
 **Zielgruppe:** Umschüler/-innen Kaufleute für Büromanagement (IHK)

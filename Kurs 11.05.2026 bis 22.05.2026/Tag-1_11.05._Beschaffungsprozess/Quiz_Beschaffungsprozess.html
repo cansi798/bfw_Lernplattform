@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Tag 1 — Beschaffungsprozess · M-064</title>
+<title>Quiz Tag 1 — Beschaffungsprozess</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root {
@@ -166,6 +166,7 @@ footer {
   <span class="tag-pill">Tag 1 · 11.05.2026 · 60 Fragen</span>
   <h1>Quiz: Beschaffungsprozess</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Beschaffungsprozess.html</strong> und dem <strong>Handout_Beschaffungsprozess.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
@@ -198,20 +199,20 @@ footer {
 
 <div id="summary" style="display:none;"></div>
 
-<footer>© Can Siebert · 2026 · BFW · Modul M-064 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
 
 </div>
 
 <script>
 const QUESTIONS = [
   // === Block A: Grundlagen Beschaffung & 6 R (1-15) ===
-  { topic: "Grundlagen", q: "Was bedeutet der Begriff „Beschaffung" im engeren betriebswirtschaftlichen Sinn?",
+  { topic: "Grundlagen", q: "Was bedeutet der Begriff „Beschaffung” im engeren betriebswirtschaftlichen Sinn?",
     options: ["Nur das Einlagern von Waren", "Alle Tätigkeiten zur Bereitstellung der für die Leistungserstellung benötigten Sachgüter und Dienstleistungen", "Ausschließlich der Verkauf von Waren an Kunden", "Die Buchhaltung der Eingangsrechnungen"],
     a: 1, e: "Beschaffung umfasst die Bereitstellung aller benötigten Inputs — von der Bedarfsermittlung bis zur Bezahlung." },
   { topic: "Wertschöpfungskette", q: "An welcher Stelle der betrieblichen Wertschöpfungskette steht die Beschaffung?",
     options: ["Am Ende, nach dem Vertrieb", "In der Mitte, zwischen Produktion und Vertrieb", "Am Anfang, als Bindeglied zwischen Markt und Produktion", "Außerhalb der Wertschöpfungskette"],
     a: 2, e: "Die Beschaffung bildet die Schnittstelle zum Beschaffungsmarkt und steht ganz am Anfang der internen Wertschöpfung." },
-  { topic: "6 R", q: "Welche der folgenden Auflistungen enthält ALLE sechs „R" der Beschaffung?",
+  { topic: "6 R", q: "Welche der folgenden Auflistungen enthält ALLE sechs „R” der Beschaffung?",
     options: ["Material, Menge, Qualität, Ort, Zeit, Preis", "Material, Menge, Lieferant, Vertrag, Zahlung, Lager", "Bestellung, Lieferung, Rechnung, Zahlung, Lager, Reklamation", "Markt, Mensch, Methode, Material, Maschine, Mitwelt"],
     a: 0, e: "Die 6 R: Richtiges Material, richtige Menge, richtige Qualität, am richtigen Ort, zur richtigen Zeit, zum richtigen Preis." },
   { topic: "6 R", q: "Welche zwei Beschaffungsziele stehen typischerweise im stärksten Konflikt zueinander?",
@@ -219,7 +220,7 @@ const QUESTIONS = [
     a: 3, e: "Größere Bestellmengen senken den Stückpreis (Mengenrabatt), erhöhen aber Lagerkosten und Kapitalbindung." },
   { topic: "6 R", q: "Eine Bürokraft bestellt Druckerpapier in Premium-Fotoqualität für 50% mehr Geld, obwohl Standardpapier ausreicht. Welches der 6 R wird verletzt?",
     options: ["Richtige Qualität — überqualifiziert ist auch falsch", "Richtige Menge", "Richtiger Ort", "Richtige Zeit"],
-    a: 0, e: "„Richtige Qualität" bedeutet die geforderte Spezifikation — höhere Qualität ist nicht automatisch besser, sondern oft nur teurer." },
+    a: 0, e: "„Richtige Qualität” bedeutet die geforderte Spezifikation — höhere Qualität ist nicht automatisch besser, sondern oft nur teurer." },
   { topic: "Aufgaben", q: "Welche Aufgabe gehört NICHT zur operativen Beschaffung?",
     options: ["Bestellungen auslösen", "Reklamationen bearbeiten", "Make-or-Buy-Strategie entwickeln", "Lagerbestände kontrollieren"],
     a: 2, e: "Make-or-Buy ist eine strategische Entscheidung, keine operative Tätigkeit." },
@@ -229,15 +230,15 @@ const QUESTIONS = [
   { topic: "Beschaffungsprozess", q: "In welcher Reihenfolge laufen die Schritte des Beschaffungsprozesses idealtypisch ab?",
     options: ["Bestellung → Anfrage → Lieferung → Bedarfsermittlung", "Bedarfsermittlung → Bezugsquellen → Anfrage → Angebotsvergleich → Bestellung → Wareneingang → Rechnungsprüfung", "Bedarf → Wareneingang → Anfrage → Bestellung → Vergleich → Rechnung", "Anfrage → Bestellung → Bedarfsermittlung → Lieferung → Vergleich"],
     a: 1, e: "Der Beschaffungsprozess folgt diesen 7 Schritten in genau dieser logischen Reihenfolge." },
-  { topic: "6 R", q: "Was beschreibt das Ziel „richtiger Preis" am besten?",
+  { topic: "6 R", q: "Was beschreibt das Ziel „richtiger Preis” am besten?",
     options: ["Der absolut billigste Preis am Markt", "Der wirtschaftlich vorteilhafteste Preis unter Berücksichtigung von Qualität, Bezugskosten und Folgekosten", "Der Listenpreis ohne Rabatte", "Der höchste Preis, den der Lieferant verlangt"],
-    a: 1, e: "„Richtiger Preis" ist nicht der billigste — er bezieht Qualität, Lieferzuverlässigkeit und Folgekosten mit ein." },
+    a: 1, e: "„Richtiger Preis” ist nicht der billigste — er bezieht Qualität, Lieferzuverlässigkeit und Folgekosten mit ein." },
   { topic: "Eselsbrücke", q: "Welche Eselsbrücke fasst die 6 R der Beschaffung zusammen?",
     options: ["A-B-C-D-E-F", "M-M-Q-O-Z-P", "S-W-O-T-A-N", "1-2-3-4-5-6"],
     a: 1, e: "M-M-Q-O-Z-P = Material, Menge, Qualität, Ort, Zeit, Preis." },
   { topic: "6 R Praxis", q: "Sie als Sachbearbeiterin bestellen 1.000 Aktenordner statt der benötigten 100, weil der Mengenrabatt verlockend ist. Welches R wird verletzt?",
     options: ["Richtige Qualität", "Richtige Menge", "Richtiger Ort", "Richtige Zeit"],
-    a: 1, e: "Richtige Menge bedeutet bedarfsgerecht — auch wenn ein Rabatt lockt, gehört Überbestellen zu „falsch viel"." },
+    a: 1, e: "Richtige Menge bedeutet bedarfsgerecht — auch wenn ein Rabatt lockt, gehört Überbestellen zu „falsch viel”." },
   { topic: "Beschaffungsprozess", q: "Welcher Schritt im Beschaffungsprozess ist rechtlich noch NICHT bindend?",
     options: ["Bestellung", "Anfrage", "Wareneingang mit Mängelrüge", "Rechnungsbegleichung"],
     a: 1, e: "Eine Anfrage ist nur eine unverbindliche Aufforderung zur Angebotsabgabe — kein Vertragsantrag." },
@@ -246,7 +247,7 @@ const QUESTIONS = [
     a: 1, e: "Beschaffungsfehler wirken auf alle nachgelagerten Bereiche durch — von Produktion bis Kundenservice." },
   { topic: "6 R", q: "Welches der 6 R betrifft die zeitliche Dimension der Beschaffung?",
     options: ["Richtige Menge", "Richtige Qualität", "Richtige Zeit", "Richtiger Ort"],
-    a: 2, e: "„Richtige Zeit" steht für rechtzeitige (weder zu frühe noch zu späte) Lieferung." },
+    a: 2, e: "„Richtige Zeit” steht für rechtzeitige (weder zu frühe noch zu späte) Lieferung." },
   { topic: "Wertschöpfung", q: "Was unterscheidet die Beschaffung von der Logistik?",
     options: ["Beide sind dasselbe", "Beschaffung ist nur ein Teilgebiet der Logistik (Beschaffungslogistik)", "Beschaffung ist umfassender als Logistik", "Logistik gehört zur Beschaffung"],
     a: 1, e: "Beschaffungslogistik ist Teil der Logistik; Beschaffung umfasst zusätzlich Strategie, Verträge und Lieferantenmanagement." },
@@ -278,7 +279,7 @@ const QUESTIONS = [
     a: 2, e: "Sortimentsbreite über viele Hersteller hinweg ist ein Vorteil des INDIREKTEN Bezugs (Großhandel), nicht des direkten." },
 
   // === Block C: Make or Buy (24-33) ===
-  { topic: "Make or Buy", q: "Was bedeutet die „Make-or-Buy"-Entscheidung?",
+  { topic: "Make or Buy", q: "Was bedeutet die „Make-or-Buy”-Entscheidung?",
     options: ["Wo und wann beschafft wird", "Ob ein Sachgut oder eine Dienstleistung selbst hergestellt (Make) oder fremdbezogen (Buy) wird", "Welcher Lieferant ausgewählt wird", "Welcher Preis verhandelt wird"],
     a: 1, e: "Make-or-Buy = Eigenfertigung vs. Fremdbezug — eine grundlegende strategische Entscheidung." },
   { topic: "Make or Buy", q: "Welcher Faktor spricht typischerweise FÜR Eigenfertigung (Make)?",
@@ -292,22 +293,22 @@ const QUESTIONS = [
     a: 2, e: "Reine Kostenvergleiche ignorieren strategische Risiken; reine Strategie ignoriert Wirtschaftlichkeit." },
   { topic: "Make or Buy", q: "Eigenleistung kostet 4.830 €, Fremdbezug 4.500 €. Was sollten Sie noch berücksichtigen, bevor Sie zum Fremdbezug wechseln?",
     options: ["Nichts — der Preis entscheidet", "Vertragsbindung, Abhängigkeit, Qualitätskontrolle, Know-how-Verlust", "Nur die Lieferzeit", "Nur die Mehrwertsteuer"],
-    a: 1, e: "Bei knappem Kostenvorteil überwiegen oft qualitative Risiken — typischer Fall der „Make-or-Buy-Falle"." },
-  { topic: "Make or Buy", q: "Was ist ein typisches Beispiel für „Buy" im Büroumfeld?",
+    a: 1, e: "Bei knappem Kostenvorteil überwiegen oft qualitative Risiken — typischer Fall der „Make-or-Buy-Falle”." },
+  { topic: "Make or Buy", q: "Was ist ein typisches Beispiel für „Buy” im Büroumfeld?",
     options: ["Reinigung durch externen Dienstleister", "Eigene Erstellung von Marketing­material durch hauseigenes Grafikteam", "Eigenproduktion von Strom über Solaranlage", "Eigene Personalverwaltung"],
-    a: 0, e: "Reinigungsdienst ist ein klassisches outgesourctes „Buy" — Kerngeschäft ist meistens nicht Reinigung." },
+    a: 0, e: "Reinigungsdienst ist ein klassisches outgesourctes „Buy” — Kerngeschäft ist meistens nicht Reinigung." },
   { topic: "Make or Buy", q: "Welcher quantitative Faktor ist bei Make-or-Buy zentral?",
     options: ["Image des Lieferanten", "Vergleich aller relevanten Kosten (Personal, Material, Verwaltung) gegen Fremdbezugspreis", "Standort der Geschäftsführung", "Logo-Design"],
     a: 1, e: "Quantitativer Vergleich = Kostenvergleich aller direkt zurechenbaren Kosten." },
   { topic: "Make or Buy", q: "Welcher qualitative Faktor ist bei Make-or-Buy zentral?",
     options: ["Aktueller Aktienkurs", "Strategische Bedeutung des Sachguts und Risiko der Lieferantenabhängigkeit", "Nur die Lieferzeit", "Nur die Verpackungsgröße"],
     a: 1, e: "Strategie und Abhängigkeitsrisiko sind die Kernkriterien der qualitativen Bewertung." },
-  { topic: "Make or Buy", q: "Was ist die wichtigste Konsequenz einer „Buy"-Entscheidung für strategisch wichtige Komponenten?",
+  { topic: "Make or Buy", q: "Was ist die wichtigste Konsequenz einer „Buy”-Entscheidung für strategisch wichtige Komponenten?",
     options: ["Höhere Eigenkapitalrendite", "Risiko des Know-how-Verlusts und Lieferantenabhängigkeit", "Reduzierter Marketing-Aufwand", "Niedrigere Steuerlast"],
     a: 1, e: "Bei strategisch wichtigem Material ist Outsourcing besonders riskant — Lieferant kann Konditionen diktieren." },
   { topic: "Make or Buy", q: "Welche Eselsbrücke passt zu Make-or-Buy?",
     options: ["Wenn der Vorteil klein ist, bleib's daheim", "Wer rastet, der rostet", "Was du heute kannst besorgen, das verschiebe nicht auf morgen", "Aller Anfang ist schwer"],
-    a: 0, e: "„Wenn der Vorteil klein ist, bleib's daheim" — bei knappem Kostenvorteil im Buy überwiegen qualitative Risiken." },
+    a: 0, e: "„Wenn der Vorteil klein ist, bleib's daheim” — bei knappem Kostenvorteil im Buy überwiegen qualitative Risiken." },
 
   // === Block D: Beschaffungsprinzipien (34-43) ===
   { topic: "Prinzipien", q: "Welches Beschaffungsprinzip ist typisch für Sondermaschinen oder Einzelfertigung?",
@@ -327,7 +328,7 @@ const QUESTIONS = [
     a: 1, e: "Standardbedarfe werden in größeren Mengen vorrätig gehalten — gleichmäßiger Verbrauch, Mengenrabatt." },
   { topic: "Prinzipien", q: "Kanban ist ein...",
     options: ["Bestellverfahren mit Karten/Signalen, das den Materialfluss bedarfsgesteuert auslöst", "Buchhaltungs-Tool", "Werbeformat", "Lagersystem für Schwergut"],
-    a: 0, e: "Kanban (jap. „Karte") ist ein bedarfsgesteuertes Lieferverfahren, oft im Rahmen von JIT eingesetzt." },
+    a: 0, e: "Kanban (jap. „Karte”) ist ein bedarfsgesteuertes Lieferverfahren, oft im Rahmen von JIT eingesetzt." },
   { topic: "Prinzipien", q: "In welcher Branche ist JIT besonders verbreitet?",
     options: ["Bekleidungs-Einzelhandel", "Automobilindustrie", "Buchverlag", "Friseurhandwerk"],
     a: 1, e: "Die Automobilindustrie ist das Paradebeispiel für JIT (Toyota-Produktionssystem)." },
@@ -389,7 +390,7 @@ const QUESTIONS = [
   { topic: "Nachhaltigkeit", q: "Welcher Aspekt ist KEIN typisches Nachhaltigkeits­kriterium der Beschaffung?",
     options: ["Energie­bilanz des Lieferanten", "Verpackungs­minimierung", "Aktienkurs des Lieferanten", "Sozialstandards in der Lieferkette"],
     a: 2, e: "Der Aktienkurs ist eine Finanzkennzahl, kein Nachhaltigkeitskriterium." },
-  { topic: "Nachhaltigkeit", q: "Was ist ein „Lieferanten-Audit" im Kontext nachhaltiger Beschaffung?",
+  { topic: "Nachhaltigkeit", q: "Was ist ein „Lieferanten-Audit” im Kontext nachhaltiger Beschaffung?",
     options: ["Eine Prüfung des Lieferanten auf Einhaltung definierter Standards (Umwelt, Soziales, Qualität)", "Ein Werbevideo des Lieferanten", "Eine Werksführung für die Geschäftsleitung", "Ein gemeinsames Geschäftsessen"],
     a: 0, e: "Audits prüfen formal, ob Lieferanten die vereinbarten Standards (z.B. ISO 14001, SA 8000) tatsächlich einhalten." },
   { topic: "Nachhaltigkeit", q: "Welche Aussage zur ökologischen Beschaffung ist RICHTIG?",
@@ -401,6 +402,25 @@ let answers = new Array(QUESTIONS.length).fill(null);
 let viewMode = 'list';      // 'list' oder 'slide'
 let evalMode = 'immediate'; // 'immediate' oder 'end'
 let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
 
 // IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
 function ihkNote(pct) {
@@ -462,8 +482,9 @@ function renderQuiz() {
       <p class="q-text">${qd.q}</p>
       <div class="options">
     `;
-    qd.options.forEach((opt, j) => {
+    qd.shuffled.forEach((origIdx, j) => {
       const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
       html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
         <div class="marker">${letter}</div>
         <div>${opt}</div>
@@ -485,17 +506,18 @@ function answer(qi, oi) {
   opts.forEach(o => o.classList.add('locked'));
 
   if (evalMode === 'immediate') {
-    // Sofort markieren und Erklärung zeigen
-    const correct = QUESTIONS[qi].a;
-    opts[oi].classList.add(oi === correct ? 'correct' : 'incorrect');
-    if (oi !== correct) opts[correct].classList.add('correct');
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
     const exp = document.createElement('div');
     exp.className = 'explanation';
     exp.textContent = QUESTIONS[qi].e;
     q.appendChild(exp);
     q.classList.add('locked');
   } else {
-    // Nur „angekreuzt"-Status, keine Bewertung anzeigen
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
     opts[oi].style.borderColor = 'var(--bfw-primary)';
     opts[oi].style.background = 'var(--bfw-bg-teal)';
     opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
@@ -510,7 +532,7 @@ function updateScore() {
   document.getElementById('answered').textContent = answered;
   document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
   if (evalMode === 'immediate') {
-    const correct = answers.filter((a, i) => a === QUESTIONS[i].a).length;
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
     document.getElementById('correct').textContent = correct;
   } else {
     document.getElementById('correct').textContent = '—';
@@ -519,19 +541,20 @@ function updateScore() {
 }
 
 function finishNow() {
-  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet" gewertet
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
   // und alle Lösungen+Erklärungen werden offengelegt.
   for (let i = 0; i < QUESTIONS.length; i++) {
     const q = document.getElementById(`q-${i}`);
     if (!q) continue;
     const opts = q.querySelectorAll('.option');
     opts.forEach(o => o.classList.add('locked'));
-    const correct = QUESTIONS[i].a;
+    const correctDisplayIdx = displayCorrectIdx(i);
     if (answers[i] !== null) {
-      opts[answers[i]].classList.add(answers[i] === correct ? 'correct' : 'incorrect');
-      if (answers[i] !== correct) opts[correct].classList.add('correct');
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
     } else {
-      opts[correct].classList.add('correct');
+      opts[correctDisplayIdx].classList.add('correct');
     }
     if (!q.querySelector('.explanation')) {
       const exp = document.createElement('div');
@@ -548,7 +571,7 @@ function finishNow() {
 
 function showSummary() {
   const total = QUESTIONS.length;
-  const correct = answers.filter((a, i) => a === QUESTIONS[i].a).length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
   const answered = answers.filter(a => a !== null).length;
   const pct = Math.round((correct / total) * 100);
   const note = ihkNote(pct);
@@ -604,6 +627,7 @@ function showSummary() {
 function resetQuiz() {
   answers = new Array(QUESTIONS.length).fill(null);
   currentSlide = 0;
+  shuffleAnswers();
   document.getElementById('summary').style.display = 'none';
   document.getElementById('summary').innerHTML = '';
   renderQuiz();
