@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 4 — Ausführen von Bestellungen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 4rem 6rem; flex-direction: column; justify-content: center; background: white; animation: fadeIn 0.35s ease; overflow-y: auto; }
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.2rem; color: var(--bfw-primary-dark); margin-bottom: 1.2rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.2rem; line-height: 1.55; margin-bottom: 0.7rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.15rem; line-height: 1.55; margin-bottom: 0.35rem; }
+.subtitle { font-size: 1.3rem; color: var(--bfw-ink-soft); margin-bottom: 1.5rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.05rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+.merksatz { background: var(--bfw-bg-teal); border-left: 6px solid var(--bfw-primary); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.1rem; }
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+.formula { background: var(--bfw-bg-amber); border-left: 6px solid var(--bfw-accent); border-radius: 8px; padding: 1rem 1.4rem; margin: 1rem 0; font-size: 1.3rem; text-align: center; font-family: 'Source Code Pro', monospace; }
+table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 1.05rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.95rem; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--bfw-border); }
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button { border: none; background: var(--bfw-primary); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.12); transition: all 0.15s; }
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.7rem; }
+.numlist li::before { content: counter(numitem); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--bfw-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+@media print { .slide { display: flex; page-break-after: always; } .nav, .slide-num { display: none; } html, body { height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<section class="slide active cover">
+  <span class="cover-tag">Tag 4 · 15.05.2026</span>
+  <h1>Ausführen von Bestellungen</h1>
+  <p class="subtitle">Bestellverfahren, Andler-Formel und Bestellüberwachung</p>
+  <div class="cover-meta">
+    <span><strong>Modul</strong>Beschaffung im Büromanagement</span>
+    <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+    <span><strong>Quelle</strong>Lehrwerk Kap. 4.5, 4.6, 4.9</span>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Was Sie heute lernen</h2>
+  <p class="subtitle">Am Ende des Tages können Sie...</p>
+  <ul class="checklist">
+    <li>die vier <strong>Bestellverfahren</strong> (Bestellpunkt, Bestellrhythmus, JIT, Kanban) unterscheiden</li>
+    <li><strong>Mindest-, Meld- und Höchstbestand</strong> berechnen</li>
+    <li>den <strong>Zielkonflikt</strong> zwischen Lager- und Beschaffungskosten erläutern</li>
+    <li>die <strong>optimale Bestellmenge</strong> mit der Andler-Formel berechnen</li>
+    <li>eine Bestellung und deren <strong>Überwachung</strong> durchführen</li>
+    <li>das <strong>kaufmännische Mahnverfahren</strong> in 3 Stufen anwenden</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Wo wir bisher stehen</h2>
+  <p>Tag 3: Wir haben den Vertragsschluss rechtlich geklärt. Heute geht es um die <strong>operative Ausführung</strong> einer Bestellung.</p>
+  <ol class="numlist">
+    <li>Bedarfsermittlung — Tag 2</li>
+    <li>Bezugsquelle — Tag 2</li>
+    <li>Anfrage — Tag 2</li>
+    <li>Angebotsvergleich — Tag 2</li>
+    <li>Bestellung &amp; Vertrag — Tag 3</li>
+    <li><strong>Bestellung ausführen — heute Tag 4</strong></li>
+    <li>Wareneingang — Tag 5</li>
+    <li>Rechnung &amp; Zahlung — Tag 7+8</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Wann und wie viel bestellen?</h2>
+  <p>Zwei zentrale Fragen der operativen Beschaffung:</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Wann bestellen?</div>
+      <p style="font-size: 1rem;">Bestellverfahren — Bestellpunkt oder Bestellrhythmus?</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Wie viel bestellen?</div>
+      <p style="font-size: 1rem;">Optimale Bestellmenge — Andler-Formel</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Merksatz</span>
+    Beide Fragen sind verknüpft. Wer zu viel auf einmal bestellt, hat hohe Lagerkosten. Wer zu wenig bestellt, hat hohe Bestellkosten. Das Optimum liegt in der Mitte.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bestellpunktverfahren</h2>
+  <p>Bestellung wird ausgelöst, sobald der <strong>Meldebestand</strong> (Bestellpunkt) erreicht ist.</p>
+  <div class="formula">
+    Meldebestand = Mindestbestand + (Tagesverbrauch × Lieferzeit in Tagen)
+  </div>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Vorteile</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Reaktion auf tatsächlichen Verbrauch</li>
+        <li>Niedriger durchschnittlicher Bestand</li>
+        <li>Gut bei schwankendem Verbrauch</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Nachteile</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Laufende Bestandsüberwachung nötig</li>
+        <li>Bestelltermin nicht planbar</li>
+        <li>Mehr Bestellvorgänge</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bestellpunkt — Beispielrechnung</h2>
+  <p>Eine Druckerei verbraucht <strong>50 Blatt/Werktag</strong> Premium-Papier. Lieferzeit: <strong>5 Werktage</strong>. Sicherheitsbestand: <strong>100 Blatt</strong>.</p>
+  <div class="formula">
+    Meldebestand = 100 + (50 × 5) = <strong>350 Blatt</strong>
+  </div>
+  <p>Sobald der Lagerbestand auf 350 Blatt fällt, wird bestellt. Während der 5-tägigen Lieferzeit verbraucht die Druckerei weitere 250 Blatt → Bestand sinkt auf 100 Blatt (= Sicherheitsbestand). Genau zum Zeitpunkt 0 kommt die neue Lieferung an.</p>
+  <div class="merksatz">
+    <span class="merksatz-label">📐 Begriffe</span>
+    <strong>Mindestbestand</strong> = Sicherheitspuffer (sollte nie unterschritten werden).
+    <strong>Meldebestand</strong> = Bestellauslösepunkt.
+    <strong>Höchstbestand</strong> = Mindestbestand + Bestellmenge.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bestellrhythmusverfahren</h2>
+  <p>Bestellung wird in <strong>festen Zeitintervallen</strong> ausgelöst (z.B. jeden Montag).</p>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Bestellpunkt</th><th>Bestellrhythmus</th></tr></thead>
+    <tbody>
+      <tr><td>Auslöser</td><td>Bestand erreicht Meldebestand</td><td>Festgelegter Zeitpunkt</td></tr>
+      <tr><td>Bestellmenge</td><td>Konstant</td><td>Variabel (auf Höchstbestand auffüllen)</td></tr>
+      <tr><td>Überwachung</td><td>Permanent</td><td>Nur zum Bestellzeitpunkt</td></tr>
+      <tr><td>Geeignet für</td><td>A-Teile</td><td>B-/C-Teile</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Just-in-Time (JIT)</h2>
+  <p>Lieferung erfolgt <strong>genau zum Bedarfszeitpunkt</strong> — Lager praktisch null.</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Vorteile</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Kaum Kapitalbindung</li>
+        <li>Keine Lagerkosten</li>
+        <li>Schnelle Reaktion auf Marktveränderungen</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Voraussetzungen</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Sehr zuverlässige Lieferanten</li>
+        <li>Kurze, planbare Lieferzeiten</li>
+        <li>Enge IT-Integration (EDI)</li>
+        <li>Geographische Nähe</li>
+      </ul>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">⚠️ Risiko</span>
+    Lieferketten­störungen treffen direkt die Produktion. Beispiel: Halbleiter­knappheit 2021/22 → Automobil­werke standen tagelang still.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Kanban</h2>
+  <p>Aus Japan stammendes <strong>Pull-Verfahren</strong>: Material wird erst geliefert, wenn der Verbraucher es signalisiert (mit Karten oder elektronischen Signalen).</p>
+  <ol class="numlist">
+    <li>Verbraucher leert eine Kanban-Box (z.B. Schraubenbox an der Montagelinie).</li>
+    <li>Leere Box wird mit „Karte" zurück zum Lieferanten geschickt.</li>
+    <li>Lieferant produziert/liefert die signalisierte Menge.</li>
+    <li>Volle Box kommt zurück — Kreislauf beginnt von vorne.</li>
+  </ol>
+  <p class="muted" style="margin-top: 1rem;">Vorteil gegenüber JIT: Kein Plan nötig, das System steuert sich selbst über die Karten. Toyota hat das in den 1970er Jahren perfektioniert.</p>
+</section>
+
+<section class="slide">
+  <h2>Zielkonflikt: Lager- vs. Beschaffungskosten</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Bestellkosten (fix pro Bestellung)</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Personal für Anfrage, Bestellung, Wareneingang</li>
+        <li>IT-Aufwand</li>
+        <li>Frachtkosten-Sockel</li>
+      </ul>
+      <p class="muted" style="font-size: 0.9rem;">→ <em>Sinken</em>, wenn größere Mengen bestellt werden.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Lagerkosten (proportional zum Bestand)</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Lagermiete, Energie, Versicherung</li>
+        <li>Kapitalbindung (entgangene Zinsen)</li>
+        <li>Verderb, Schwund, Veralten</li>
+      </ul>
+      <p class="muted" style="font-size: 0.9rem;">→ <em>Steigen</em>, wenn größere Mengen bestellt werden.</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">🎯 Optimum</span>
+    Wo die Summe aus Lager- und Bestellkosten am niedrigsten ist — das berechnet die <strong>Andler-Formel</strong>.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Andler-Formel — die optimale Bestellmenge</h2>
+  <div class="formula">
+    x<sub>opt</sub> = √(2 × Jahresbedarf × Bestellkosten / (Einkaufspreis × Lagerkostensatz))
+  </div>
+  <p>Variablen:</p>
+  <ul>
+    <li><strong>Jahresbedarf</strong> in Stück</li>
+    <li><strong>Bestellkosten</strong> pro Bestellvorgang (€)</li>
+    <li><strong>Einkaufspreis</strong> pro Stück (€)</li>
+    <li><strong>Lagerkostensatz</strong> in % p.a. (als Dezimalzahl)</li>
+  </ul>
+  <div class="merksatz">
+    <span class="merksatz-label">🐴 Eselsbrücke</span>
+    Im Zähler: <strong>2 × Bedarf × Kosten</strong> (was raufgeht). Im Nenner: <strong>Preis × Lagersatz</strong> (was Last erzeugt). Wurzel = Optimum.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Andler — Beispielrechnung</h2>
+  <p>Ein Bürodienstleister: Jahresbedarf <strong>12.000 Aktenordner</strong>, Bestellkosten <strong>40 €</strong>/Bestellung, Einkaufspreis <strong>2,50 €</strong>/Stück, Lagerkostensatz <strong>20 %</strong>.</p>
+  <div class="formula">
+    x<sub>opt</sub> = √(2 × 12.000 × 40 / (2,50 × 0,20))<br>
+    = √(960.000 / 0,50)<br>
+    = √1.920.000<br>
+    ≈ <strong>1.386 Stück pro Bestellung</strong>
+  </div>
+  <p class="muted">Bestellhäufigkeit: 12.000 / 1.386 ≈ <strong>8,7 Bestellungen pro Jahr</strong> — also etwa alle 6 Wochen.</p>
+</section>
+
+<section class="slide">
+  <h2>Andler — was die Formel NICHT kann</h2>
+  <p>Die Andler-Formel ist eine Idealisierung. Folgende Annahmen sind in der Praxis selten erfüllt:</p>
+  <ul>
+    <li>Konstanter Verbrauch über das Jahr (in Wirklichkeit Saison­schwankungen)</li>
+    <li>Konstanter Einkaufspreis (in Wirklichkeit Mengenrabatte!)</li>
+    <li>Konstanter Lagerkostensatz</li>
+    <li>Sofortige Lieferung ohne Wartezeit</li>
+    <li>Keine Mengenbeschränkungen (Mindestbestellmengen!)</li>
+  </ul>
+  <p class="muted" style="margin-top: 1rem;">In der Praxis gibt das Ergebnis einen <em>Anhaltspunkt</em> — die endgültige Bestellmenge wird dann an reale Bedingungen angepasst.</p>
+</section>
+
+<section class="slide">
+  <h2>Bestellung — was muss drauf?</h2>
+  <p>Eine Bestellung enthält:</p>
+  <ul>
+    <li>Eigene Adresse + Lieferadresse</li>
+    <li>Datum + Bestellnummer (intern)</li>
+    <li>Genaue Artikelbezeichnung + Artikelnummer</li>
+    <li>Menge</li>
+    <li>Preis (lt. Angebot)</li>
+    <li>Liefertermin</li>
+    <li>Liefer- und Zahlungsbedingungen</li>
+    <li>Bezug auf Angebot (Datum/Nummer)</li>
+  </ul>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Form</span>
+    Die Bestellung sollte schriftlich nach DIN 5008 erfolgen — auch wenn sie rechtlich auch mündlich gültig wäre. Die Schriftform schafft Beweissicherheit.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bestellüberwachung</h2>
+  <p>Mit dem Versenden der Bestellung ist Ihre Arbeit nicht beendet — Sie müssen den Eingang überwachen.</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Was wird überwacht?</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li><strong>Termintreue:</strong> Kommt die Lieferung pünktlich?</li>
+        <li><strong>Mengentreue:</strong> Stimmt die gelieferte Menge?</li>
+        <li><strong>Qualität:</strong> Ist die Ware mängelfrei?</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Wie?</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Termin im Kalender / ERP eintragen</li>
+        <li>Wiedervorlage 1 Tag nach geplantem Liefertermin</li>
+        <li>Bei Verzug: Mahnstufen einleiten</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Mahnverfahren — drei Stufen</h2>
+  <table>
+    <thead><tr><th>Stufe</th><th>Bezeichnung</th><th>Inhalt</th></tr></thead>
+    <tbody>
+      <tr><td><strong>1</strong></td><td>Erinnerung</td><td>Freundlich auf Lieferverzug hinweisen, neue Frist setzen</td></tr>
+      <tr><td><strong>2</strong></td><td>Mahnung</td><td>Klarer Hinweis auf Verzug, Schadensersatzandrohung</td></tr>
+      <tr><td><strong>3</strong></td><td>Letzte Mahnung</td><td>Letzte Chance, Androhung von Rücktritt / Schadensersatz / gerichtlichem Mahnverfahren</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top: 0.8rem;">Ab Mahnstufe 3 wird der gerichtliche Mahnbescheid (Mahngericht) oder Inkassodienst eingeschaltet.</p>
+</section>
+
+<section class="slide">
+  <h2>Nichtige und anfechtbare Rechtsgeschäfte</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Nichtig (von Anfang an unwirksam)</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Geschäftsunfähig (§ 105 BGB)</li>
+        <li>Verstoß gegen Verbotsgesetz (§ 134)</li>
+        <li>Sittenwidrigkeit (§ 138)</li>
+        <li>Formmangel (z.B. Grundstück ohne Notar)</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Anfechtbar (zunächst wirksam)</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Inhalts­irrtum (§ 119 Abs. 1)</li>
+        <li>Erklärungs­irrtum (z.B. Versprecher)</li>
+        <li>Eigenschafts­irrtum (§ 119 Abs. 2)</li>
+        <li>Arglistige Täuschung (§ 123)</li>
+        <li>Drohung (§ 123)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Anfechtung muss aktiv erklärt werden (§ 143). Folge der Anfechtung: Vertrag rückwirkend nichtig (§ 142).</p>
+</section>
+
+<section class="slide">
+  <h2>Bezug zur IHK-Abschlussprüfung</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Teil 1 (KomTech)</div>
+      <ul style="margin-left: 1rem;">
+        <li>Bestellverfahren benennen</li>
+        <li>Mindest-/Meldebestand berechnen</li>
+        <li>Mahnstufen kennen</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Teil 2 (Auftragsbearbeitung)</div>
+      <ul style="margin-left: 1rem;">
+        <li><strong>Andler-Formel rechnen</strong> (klassische Klausuraufgabe!)</li>
+        <li>Bestellverfahren situativ wählen</li>
+        <li>Bestellüberwachung im Fall</li>
+        <li>Anfechtungsrechte prüfen</li>
+      </ul>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">📝 Pflicht</span>
+    Die <strong>Andler-Formel</strong> kommt fast jedes Jahr in der IHK-Klausur — auswendig lernen, mit dem Taschenrechner sicher anwenden!
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Diskussionsfragen</h2>
+  <ol style="font-size: 1.15rem;">
+    <li>Welches Bestellverfahren würde Ihr Betrieb für Druckerpapier anwenden — und warum?</li>
+    <li>Was halten Sie von der JIT-Beschaffung in Krisenzeiten?</li>
+    <li>Wie viele Bestellungen pro Jahr sind „zu viele" — wann kippt das Verhältnis von Bestellkosten zu Lagerkosten?</li>
+    <li>Wann sollte man eine Mahnung schreiben — und wann lieber direkt zum Telefon greifen?</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Zusammenfassung Tag 4</h2>
+  <ol class="numlist">
+    <li>Vier <strong>Bestellverfahren</strong>: Bestellpunkt, Bestellrhythmus, JIT, Kanban — je nach Material und Lieferant.</li>
+    <li><strong>Meldebestand</strong> = Mindestbestand + (Tagesverbrauch × Lieferzeit).</li>
+    <li><strong>Andler-Formel</strong> findet das Optimum zwischen Lager- und Bestellkosten.</li>
+    <li><strong>Bestellung</strong> schriftlich (DIN 5008) — schafft Beweissicherheit.</li>
+    <li><strong>Bestellüberwachung</strong>: Termin, Menge, Qualität.</li>
+    <li><strong>Mahnverfahren</strong>: 3 Stufen (Erinnerung, Mahnung, letzte Mahnung).</li>
+    <li><strong>Anfechtung</strong> bei Irrtum, Täuschung, Drohung — Vertrag wird rückwirkend nichtig.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Ausblick: Tag 5 (18.05.)</h2>
+  <p class="subtitle">Annahme und Lagerung der Waren</p>
+  <ul style="font-size: 1.2rem;">
+    <li>Wareneingangskontrolle (qualitativ + quantitativ)</li>
+    <li>Mängelrüge nach § 377 HGB</li>
+    <li>Lagerformen und -arten</li>
+    <li>Lagerkosten und Lagerkennzahlen (Umschlagshäufigkeit, Lagerdauer)</li>
+  </ul>
+  <p class="muted" style="margin-top: 1.5rem;">Hausaufgabe: Quiz <code>Quiz_Ausfuehren-von-Bestellungen.html</code> + Andler-Formel sicher beherrschen!</p>
+</section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 21</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+show(0);
+</script>
+
+</body>
+</html>

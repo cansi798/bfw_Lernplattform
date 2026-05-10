@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 4 — Ausführen von Bestellungen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-danger:#EF4444; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5; --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem; }
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 4 · 15.05.2026 · 61 Fragen</span>
+  <h1>Quiz: Ausführen von Bestellungen</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 61 Fragen basieren direkt auf der <strong>Praesentation</strong> und dem <strong>Handout</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">61</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">61</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Bestellverfahren (1-12) ===
+  { topic: "Bestellverfahren", q: "Was kennzeichnet das Bestellpunktverfahren?",
+    options: ["Bestellung in festen Zeitintervallen", "Bestellung wird ausgelöst, sobald der Lagerbestand den Meldebestand erreicht", "Bestellung nur einmal pro Jahr", "Bestellung durch den Lieferanten"],
+    a: 1, e: "Bestellpunkt = verbrauchsgesteuert. Sobald Meldebestand erreicht ist, wird bestellt." },
+  { topic: "Bestellverfahren", q: "Was kennzeichnet das Bestellrhythmusverfahren?",
+    options: ["Bestellung bei Erreichen eines Meldebestands", "Bestellung in festen Zeitintervallen, Menge variabel", "Bestellung nur bei Lieferantenanruf", "Just-in-Time-Lieferung"],
+    a: 1, e: "Rhythmus = zeitgesteuert: zu festen Terminen wird bestellt, Menge richtet sich nach Auffüllbedarf." },
+  { topic: "Bestellverfahren", q: "Welches Bestellverfahren ist typisch für A-Teile (hoher Wert)?",
+    options: ["Bestellrhythmusverfahren", "Bestellpunktverfahren oder JIT", "Sammelbestellung", "Einmal pro Jahr"],
+    a: 1, e: "A-Teile: kleine Mengen, häufig, bedarfsgesteuert (Bestellpunkt oder JIT)." },
+  { topic: "Bestellverfahren", q: "Was ist Just-in-Time-Beschaffung?",
+    options: ["Bestellung in festen Zeitintervallen", "Lieferung exakt zum Bedarfszeitpunkt — Lager praktisch null", "Bestellung nur bei Engpass", "Bestellung mit großem Sicherheitsbestand"],
+    a: 1, e: "JIT = fertigungssynchron, Lieferung genau wenn benötigt. Lager praktisch null." },
+  { topic: "Bestellverfahren", q: "Welche Voraussetzung ist für JIT besonders wichtig?",
+    options: ["Großes eigenes Lager", "Sehr zuverlässige Lieferanten und enge IT-Integration", "Niedriger Preis", "Hoher Sicherheitsbestand"],
+    a: 1, e: "JIT funktioniert nur mit zuverlässigen Lieferanten und schneller Datenkommunikation (oft EDI)." },
+  { topic: "Bestellverfahren", q: "Was ist Kanban?",
+    options: ["Eine Lagerart", "Ein Pull-Verfahren mit Karten/Signalen, das die Nachbestellung bedarfsgesteuert auslöst", "Eine Buchhaltungsmethode", "Eine japanische Verpackung"],
+    a: 1, e: "Kanban (jap. Karte) ist ein Pull-Verfahren — Lieferung erfolgt erst auf Signal des Verbrauchers." },
+  { topic: "Bestellverfahren", q: "Wo wurde Kanban entwickelt?",
+    options: ["In den USA bei Ford", "Bei Toyota in Japan, 1970er Jahre", "In Deutschland bei VW", "In England"],
+    a: 1, e: "Toyota hat Kanban in den 1970ern als Teil des Toyota-Produktionssystems entwickelt." },
+  { topic: "Bestellverfahren", q: "Welcher Vorteil hat das Bestellpunktverfahren gegenüber dem Bestellrhythmusverfahren?",
+    options: ["Geringere Personalkosten", "Reaktion auf tatsächlichen Verbrauch — niedrigerer Durchschnittsbestand", "Mehr Pausen", "Bessere Lieferanten"],
+    a: 1, e: "Bestellpunkt reagiert auf realen Verbrauch — passender für schwankende Bedarfe." },
+  { topic: "Bestellverfahren", q: "Welcher Nachteil hat das Bestellpunktverfahren?",
+    options: ["Hohe Lagerkosten", "Permanente Bestandsüberwachung nötig — Bestelltermin nicht planbar", "Hohe Bestellkosten", "Nicht für Lieferanten geeignet"],
+    a: 1, e: "Bestellpunkt erfordert ständige Bestandskontrolle (heute meist IT-gestützt)." },
+  { topic: "JIT", q: "Welches Risiko hat JIT in Krisenzeiten?",
+    options: ["Zu hohe Lagerkosten", "Lieferkettenstörungen führen direkt zu Produktionsstillstand (Beispiel: Halbleiterknappheit 2021/22)", "Zu niedrige Bestellkosten", "Unzufriedene Lieferanten"],
+    a: 1, e: "Ohne Pufferlager trifft jede Lieferunterbrechung sofort die Produktion." },
+  { topic: "Push/Pull", q: "Was ist der Unterschied zwischen Push- und Pull-Beschaffung?",
+    options: ["Es gibt keinen", "Push = auf Vorrat ins Lager schieben; Pull = bedarfsgesteuert vom Lieferanten holen", "Push ist teurer", "Pull ist nur für Krieg"],
+    a: 1, e: "Push: Material wird auf Verdacht ins Lager geschoben. Pull: Material wird auf Anforderung gezogen." },
+  { topic: "Bestellverfahren", q: "Welches Verfahren ist typisch für Standard-Bürobedarf wie Druckerpapier?",
+    options: ["Bestellpunktverfahren oder Bestellrhythmus mit Vorratsbeschaffung", "JIT mit täglicher Lieferung", "Einzelbeschaffung pro Druck", "Kanban"],
+    a: 0, e: "Bürobedarf = C-Teile, gleichmäßiger Verbrauch → Vorratsbeschaffung mit periodischen Bestellungen." },
+
+  // === Block B: Mindest/Meldebestand (13-22) ===
+  { topic: "Bestände", q: "Was ist der Mindestbestand?",
+    options: ["Höchster Lagerbestand", "Sicherheitspuffer, der nie unterschritten werden sollte", "Der Tagesverbrauch", "Bestellauslösepunkt"],
+    a: 1, e: "Mindestbestand = Sicherheitspuffer für Lieferunterbrechungen oder Bedarfsspitzen." },
+  { topic: "Bestände", q: "Was ist der Meldebestand?",
+    options: ["Mindestbestand", "Bestellauslösepunkt = Mindestbestand + Tagesverbrauch × Lieferzeit", "Höchstbestand", "Tagesverbrauch"],
+    a: 1, e: "Meldebestand = der Wert, bei dem die nächste Bestellung ausgelöst werden muss." },
+  { topic: "Bestände", q: "Welche Formel berechnet den Meldebestand?",
+    options: ["Höchstbestand − Mindestbestand", "Mindestbestand + (Tagesverbrauch × Lieferzeit)", "Tagesverbrauch × Lagerumschlagshäufigkeit", "Bruttobedarf − Lagerbestand"],
+    a: 1, e: "Meldebestand = Mindestbestand + (Tagesverbrauch × Lieferzeit in Tagen)." },
+  { topic: "Bestände", q: "Tagesverbrauch 50 Blatt, Lieferzeit 5 Tage, Mindestbestand 100. Wie hoch ist der Meldebestand?",
+    options: ["250", "300", "350", "400"],
+    a: 2, e: "100 + (50 × 5) = 100 + 250 = 350 Blatt." },
+  { topic: "Bestände", q: "Was ist der Höchstbestand?",
+    options: ["Mindestbestand + Bestellmenge", "Tagesverbrauch + Lagerkosten", "Meldebestand × 2", "Lagerumschlagshäufigkeit"],
+    a: 0, e: "Höchstbestand = Mindestbestand + Bestellmenge — der maximale Lagerstand nach Lieferung." },
+  { topic: "Bestände", q: "Bestellmenge 1.000, Mindestbestand 100. Wie hoch ist der Höchstbestand?",
+    options: ["900", "1.000", "1.100", "1.200"],
+    a: 2, e: "Höchstbestand = 100 + 1.000 = 1.100." },
+  { topic: "Bestände", q: "Was ist der Sicherheitsbestand?",
+    options: ["Bestellauslösepunkt", "Reservebestand zur Abfederung von Lieferengpässen oder Bedarfsspitzen", "Maximaler Lagerbestand", "Tagesbedarf"],
+    a: 1, e: "Sicherheitsbestand = Mindestbestand zur Risikoabsicherung." },
+  { topic: "Bestände", q: "Was passiert während der Lieferzeit zwischen Bestellung und Eingang?",
+    options: ["Lager bleibt gleich", "Lager sinkt vom Meldebestand auf den Mindestbestand", "Lager steigt", "Lager geht auf 0"],
+    a: 1, e: "In den Tagen zwischen Bestellung und Lieferung verbraucht das Unternehmen weiter — Lagerstand sinkt auf Mindestbestand." },
+  { topic: "Bestände", q: "Was passiert, wenn der Mindestbestand unterschritten wird?",
+    options: ["Nichts", "Risiko von Engpass — neue Bestellung wurde zu spät ausgelöst oder Lieferung verspätet", "Bestellkosten steigen", "Lieferant zahlt Strafe"],
+    a: 1, e: "Mindestbestand soll Reserve sein; Unterschreitung deutet auf zu spätes Bestellen oder Lieferverzug hin." },
+  { topic: "Bestände", q: "Wofür ist die laufende Überwachung des Bestands beim Bestellpunktverfahren wichtig?",
+    options: ["Zur Sicherheit der Mitarbeiter", "Damit der Bestellauslösepunkt rechtzeitig erkannt wird", "Zum Vergleich mit Konkurrenten", "Zur Steuerklärung"],
+    a: 1, e: "Ohne aktuelle Bestandskenntnis kann der Meldebestand übersehen werden — IT-System nötig." },
+  { topic: "Bestände", q: "Welcher Bestand ist beim Bestellpunktverfahren konstant?",
+    options: ["Mindestbestand", "Meldebestand", "Bestellmenge", "Alle drei"],
+    a: 3, e: "Beim klassischen Bestellpunktverfahren sind Mindest-, Meld- und Bestellmenge konstant." },
+
+  // === Block C: Andler (23-37) ===
+  { topic: "Andler", q: "Was berechnet die Andler-Formel?",
+    options: ["Mindestbestand", "Optimale Bestellmenge", "Lagerumschlagshäufigkeit", "Bestellrhythmus"],
+    a: 1, e: "Andler-Formel ermittelt die Bestellmenge mit den niedrigsten Gesamtkosten (Lager + Bestellung)." },
+  { topic: "Andler", q: "Wie lautet die Andler-Formel?",
+    options: ["x = √(Bedarf / Kosten)", "x = √(2 × Jahresbedarf × Bestellkosten / (Einkaufspreis × Lagerkostensatz))", "x = Bedarf × Preis", "x = Bedarf / Lagerkostensatz"],
+    a: 1, e: "Andler: Wurzel aus 2 × Jahresbedarf × Bestellkosten geteilt durch (Einkaufspreis × Lagerkostensatz)." },
+  { topic: "Andler", q: "Welche zwei Kostenarten optimiert die Andler-Formel?",
+    options: ["Personal- und Materialkosten", "Lagerkosten und Bestellkosten", "Einkaufs- und Verkaufskosten", "Steuern und Versicherung"],
+    a: 1, e: "Konflikt: Bestellkosten sinken pro Stück bei großer Menge, Lagerkosten steigen. Optimum dazwischen." },
+  { topic: "Andler", q: "Wie verhalten sich die Bestellkosten bei größerer Bestellmenge?",
+    options: ["Steigen", "Sinken pro Stück (weil Fixkosten auf mehr Stück verteilt)", "Gleich", "Verschwinden"],
+    a: 1, e: "Bestellkosten sind fix pro Bestellvorgang. Pro Stück sinken sie bei größerer Menge." },
+  { topic: "Andler", q: "Wie verhalten sich die Lagerkosten bei größerer Bestellmenge?",
+    options: ["Sinken", "Bleiben gleich", "Steigen (weil größerer Durchschnittsbestand)", "Verschwinden"],
+    a: 2, e: "Größere Mengen → größerer Durchschnittsbestand → höhere Lagerkosten." },
+  { topic: "Andler", q: "Jahresbedarf 12.000, Bestellkosten 40 €, Einkaufspreis 2,50 €, Lagersatz 20 %. Wie hoch ist die optimale Bestellmenge?",
+    options: ["Ca. 1.000", "Ca. 1.386", "Ca. 1.500", "Ca. 2.000"],
+    a: 1, e: "√(2 × 12.000 × 40 / (2,50 × 0,20)) = √(960.000 / 0,5) = √1.920.000 ≈ 1.386." },
+  { topic: "Andler", q: "Bei einer optimalen Bestellmenge von 1.386 und einem Jahresbedarf von 12.000 — wie oft wird bestellt?",
+    options: ["6,5 mal pro Jahr", "8,7 mal pro Jahr", "10 mal pro Jahr", "12 mal pro Jahr"],
+    a: 1, e: "12.000 ÷ 1.386 ≈ 8,66 Bestellungen pro Jahr — etwa alle 6 Wochen." },
+  { topic: "Andler", q: "Warum wird der Lagerkostensatz oft als Dezimalzahl eingesetzt?",
+    options: ["Aus Tradition", "Damit das Ergebnis stimmt — 20 % = 0,20", "Wegen der Wurzel", "Zur Vereinfachung"],
+    a: 1, e: "20 % als 0,20 einsetzen — sonst ist das Ergebnis 100-fach zu klein." },
+  { topic: "Andler", q: "Welche Annahme der Andler-Formel ist in der Praxis oft unrealistisch?",
+    options: ["Es gibt einen Preis", "Konstanter Verbrauch + konstanter Einkaufspreis (keine Mengenrabatte)", "Es gibt einen Bedarf", "Es gibt Bestellkosten"],
+    a: 1, e: "Die Formel ignoriert Saisonschwankungen und Mengenrabatte — beides praktisch sehr relevant." },
+  { topic: "Andler", q: "Welcher Wert geht in die Andler-Formel als 'Lagerkostensatz' ein?",
+    options: ["Lagermiete in Euro", "Prozentualer Anteil der Lagerkosten am Lagerwert pro Jahr (typisch 10–25 %)", "Anzahl Lagerplätze", "Lagerumschlagshäufigkeit"],
+    a: 1, e: "Lagerkostensatz = Lagerkosten / Lagerwert × 100 in % p.a." },
+  { topic: "Andler", q: "Was passiert, wenn die Bestellmenge größer als die Andler-Optimalmenge ist?",
+    options: ["Nichts", "Höhere Lagerkosten als Bestellkosten-Ersparnis — Gesamtkosten steigen", "Lager wird leer", "Bestellung kostet weniger"],
+    a: 1, e: "Über dem Optimum überwiegen die zusätzlichen Lagerkosten gegenüber den eingesparten Bestellkosten." },
+  { topic: "Andler", q: "Was passiert, wenn die Bestellmenge kleiner als das Optimum ist?",
+    options: ["Lager wird voller", "Häufigere Bestellungen → höhere Bestellkosten — Gesamtkosten steigen", "Lieferant freut sich", "Mengenrabatt"],
+    a: 1, e: "Unter dem Optimum: weniger Lagerkosten, aber teure Bestellkosten überwiegen." },
+  { topic: "Andler", q: "Eselsbrücke: Was steht bei der Andler-Formel im Zähler?",
+    options: ["Preis und Lagersatz", "2 × Bedarf × Bestellkosten", "Lagerkosten", "Skonto"],
+    a: 1, e: "Zähler: 2 × Jahresbedarf × Bestellkosten — alles, was die Größe nach oben treibt." },
+  { topic: "Andler", q: "Was steht bei der Andler-Formel im Nenner?",
+    options: ["Bedarf × Bestellkosten", "Einkaufspreis × Lagerkostensatz", "2 × Lagerkosten", "Skonto"],
+    a: 1, e: "Nenner: Einkaufspreis × Lagerkostensatz — was die Lagerlast verursacht." },
+  { topic: "Andler", q: "Welche Operation steht außen in der Andler-Formel?",
+    options: ["Quadrat", "Wurzel", "Logarithmus", "Multiplikation"],
+    a: 1, e: "Wurzel aus dem Bruch — daher 'optimale' Menge als geometrisches Mittel." },
+
+  // === Block D: Bestellung (38-43) ===
+  { topic: "Bestellung", q: "Welche Information gehört NICHT zwingend in eine Bestellung?",
+    options: ["Genaue Artikelbezeichnung", "Menge", "Bonität des Lieferanten", "Liefertermin"],
+    a: 2, e: "Bonität des Lieferanten prüft der Käufer separat (Schufa, Creditreform), nicht in der Bestellung." },
+  { topic: "Bestellung", q: "Welche Form sollte eine Bestellung haben?",
+    options: ["Ausschließlich mündlich", "Schriftlich nach DIN 5008 — schafft Beweissicherheit", "Per WhatsApp", "Telefon mit Bestellnummer"],
+    a: 1, e: "Schriftform nach DIN 5008 ist Standard — auch wenn mündliche Bestellung rechtlich gültig wäre." },
+  { topic: "Bestellung", q: "Warum sollte sich eine Bestellung auf das Angebot des Lieferanten beziehen?",
+    options: ["Aus Höflichkeit", "Damit Konditionen, Preis und Liefertermin bindend übernommen werden — keine Annahme mit Änderungen", "Zur Steuererklärung", "Damit der Lieferant weiß, woher er kommt"],
+    a: 1, e: "Bezug auf Angebot stellt sicher, dass die Bestellung als Annahme (nicht als neuer Antrag) gilt." },
+  { topic: "Bestellung", q: "Eine Bestellung ohne Bezug auf das Angebot, mit verändertem Preis — was ist sie rechtlich?",
+    options: ["Annahme", "Ein neuer Antrag (§ 150 Abs. 2 BGB) — Lieferant muss erneut zustimmen", "Vertrag perfekt", "Anfechtung"],
+    a: 1, e: "Annahme mit Änderungen = neuer Antrag. Vertrag erst, wenn Lieferant dem zustimmt." },
+  { topic: "Bestellung", q: "Wozu dient eine interne Bestellnummer?",
+    options: ["Zur Steuererklärung", "Zur Nachverfolgung im eigenen Buchhaltungs-/Warenwirtschaftssystem", "Zum Lieferanten-Mahnwesen", "Zur Veröffentlichung"],
+    a: 1, e: "Bestellnummer ermöglicht eindeutige Zuordnung von Bestellung, Wareneingang, Rechnung und Zahlung." },
+  { topic: "Bestellung", q: "Welcher Vorteil bringt das schriftliche Bestellen?",
+    options: ["Es ist umweltfreundlicher", "Beweissicherheit bei Streitfällen über Vertragsinhalt", "Es ist billiger", "Es ist schneller"],
+    a: 1, e: "Schriftliche Form ist beweissicher — wichtige Absicherung bei späteren Streitigkeiten." },
+
+  // === Block E: Bestellüberwachung + Mahnwesen (44-53) ===
+  { topic: "Bestellüberwachung", q: "Was wird bei der Bestellüberwachung kontrolliert?",
+    options: ["Nur der Preis", "Termintreue, Mengentreue, ggf. Qualität (Wareneingangskontrolle)", "Nur die Lieferadresse", "Nur die Bonität"],
+    a: 1, e: "Bestellüberwachung deckt Termin, Menge und Qualität ab — die letzte Prüfung erfolgt beim Wareneingang." },
+  { topic: "Bestellüberwachung", q: "Wann startet die Bestellüberwachung?",
+    options: ["Nach der Lieferung", "Nach dem Versenden der Bestellung", "Nach der Bezahlung", "Nach dem Quartalsende"],
+    a: 1, e: "Sobald die Bestellung raus ist, beginnt die Überwachung des Liefertermins." },
+  { topic: "Mahnwesen", q: "Wie viele kaufmännische Mahnstufen gibt es typischerweise?",
+    options: ["1", "2", "3", "4"],
+    a: 2, e: "Drei Stufen: Erinnerung, Mahnung, letzte Mahnung." },
+  { topic: "Mahnwesen", q: "Was ist die 1. Mahnstufe?",
+    options: ["Klage", "Erinnerung — freundlich, neue Frist setzen", "Inkasso", "Schadensersatz fordern"],
+    a: 1, e: "Erste Mahnstufe ist die freundliche Erinnerung mit neuer Frist." },
+  { topic: "Mahnwesen", q: "Was ist die 3. Mahnstufe?",
+    options: ["Erste Erinnerung", "Letzte Mahnung mit Androhung von Rücktritt, Schadensersatz und Mahnverfahren", "Glückwunschkarte", "Steuerprüfung"],
+    a: 1, e: "Dritte Stufe = letzte Mahnung mit Androhung rechtlicher Schritte." },
+  { topic: "Mahnwesen", q: "Was passiert nach der 3. Mahnung, wenn der Lieferant nicht reagiert?",
+    options: ["Nichts", "Inkasso oder gerichtliches Mahnverfahren (Mahnbescheid)", "Bestellung wird wiederholt", "Lieferant wird gelobt"],
+    a: 1, e: "Nach erfolgloser 3. Mahnung folgen Inkassobüro oder gerichtlicher Mahnbescheid." },
+  { topic: "Mahnwesen", q: "Was ist ein Mahnbescheid?",
+    options: ["Eine private Mahnung", "Ein Schreiben des Mahngerichts auf Antrag des Gläubigers", "Eine Zahlungserinnerung", "Eine Bestellung"],
+    a: 1, e: "Mahnbescheid wird vom zentralen Mahngericht ausgestellt — führt zum Vollstreckungsbescheid bei Schweigen." },
+  { topic: "Bestellüberwachung", q: "Wie überwacht man Lieferungen praktisch?",
+    options: ["Nur am Jahresende", "Wiedervorlage im Kalender / ERP-System für den Tag nach Liefertermin", "Per Anruf täglich", "Mit dem Daumen drücken"],
+    a: 1, e: "Termin im System eintragen — Wiedervorlage 1 Tag nach Liefertermin → bei Verzug aktiv werden." },
+  { topic: "Mahnwesen", q: "Wann kann man auf eine Mahnung verzichten?",
+    options: ["Nie", "Wenn der Liefertermin nach Kalender bestimmt war (kalendermäßig fester Termin) — § 286 Abs. 2 BGB", "Wenn der Lieferant freundlich ist", "Bei kleinen Beträgen"],
+    a: 1, e: "Bei kalendarisch fixiertem Liefertermin tritt der Verzug automatisch ein, ohne Mahnung." },
+  { topic: "Mahnwesen", q: "Welche Folgen hat Lieferverzug für den Lieferanten?",
+    options: ["Keine", "Schadensersatzpflicht, Rücktrittsrecht des Käufers (§§ 286 ff., 280, 323 BGB)", "Glückwunsch", "Bonus-Punkte"],
+    a: 1, e: "Verzug verpflichtet zum Verzugsschaden; Käufer kann nach Frist auch zurücktreten." },
+
+  // === Block F: Nichtige/Anfechtbare Rechtsgeschäfte (54-60) ===
+  { topic: "Nichtigkeit", q: "Was kennzeichnet ein nichtiges Rechtsgeschäft?",
+    options: ["Es ist zunächst gültig", "Es ist von Anfang an unwirksam — keine Rechtswirkung", "Es muss angefochten werden", "Es wirkt nur unter Volljährigen"],
+    a: 1, e: "Nichtiges Geschäft ist von Anfang an ungültig — erfordert keine Anfechtung." },
+  { topic: "Nichtigkeit", q: "Welcher Fall führt zur Nichtigkeit?",
+    options: ["Inhaltsirrtum", "Verstoß gegen ein gesetzliches Verbot (§ 134 BGB)", "Schlechtes Gewissen", "Niedriger Preis"],
+    a: 1, e: "§ 134 BGB: Verstoß gegen Verbotsgesetz → Geschäft nichtig." },
+  { topic: "Anfechtung", q: "Was kennzeichnet ein anfechtbares Rechtsgeschäft?",
+    options: ["Es ist sofort nichtig", "Es ist zunächst wirksam — wird durch Anfechtungserklärung rückwirkend nichtig", "Es ist unbefristet gültig", "Es muss notariell sein"],
+    a: 1, e: "Anfechtbar = wirksam, bis durch Erklärung angefochten — § 142 BGB rückwirkende Nichtigkeit." },
+  { topic: "Anfechtung", q: "Welcher Anfechtungsgrund kommt bei einem Versprecher in Betracht?",
+    options: ["Inhaltsirrtum", "Erklärungsirrtum (§ 119 Abs. 1 BGB)", "Eigenschaftsirrtum", "Drohung"],
+    a: 1, e: "Erklärungsirrtum = Sie wollten X sagen, sagten aber Y. Z.B. Versprecher, Verschreiber." },
+  { topic: "Anfechtung", q: "Was ist arglistige Täuschung?",
+    options: ["Versehen", "Bewusstes Irreführen des Vertragspartners (§ 123 BGB) — Anfechtungsgrund", "Irrtum", "Drohung"],
+    a: 1, e: "§ 123 BGB: arglistige Täuschung berechtigt zur Anfechtung." },
+  { topic: "Anfechtung", q: "Welche Frist gilt für die Anfechtung wegen Irrtums?",
+    options: ["1 Monat", "Unverzüglich nach Entdeckung (§ 121 BGB)", "1 Jahr", "10 Jahre"],
+    a: 1, e: "§ 121 BGB: Anfechtung wegen Irrtums muss unverzüglich (ohne schuldhaftes Zögern) erfolgen." },
+  { topic: "Anfechtung", q: "Was ist die Folge einer wirksamen Anfechtung?",
+    options: ["Vertrag bleibt wirksam", "Vertrag wird rückwirkend nichtig (§ 142 BGB)", "Vertrag wird teurer", "Vertrag wird verlängert"],
+    a: 1, e: "§ 142 BGB: Anfechtbarer Vertrag wird durch Anfechtung rückwirkend (von Anfang an) nichtig." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

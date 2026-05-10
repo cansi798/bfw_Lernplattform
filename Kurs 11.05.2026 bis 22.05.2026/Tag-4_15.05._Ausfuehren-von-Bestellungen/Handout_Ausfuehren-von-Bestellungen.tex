@@ -1,0 +1,318 @@
+\documentclass[11pt, a4paper]{article}
+
+\input{bfw-style.tex}
+
+\title{\vspace*{-1.5cm}\Huge\bfseries\color{bfwPrimaryDark}Tag~4: Ausführen von Bestellungen\\[0.4em]
+  \large\color{bfwInkSoft}\textnormal{Bestellverfahren, Andler-Formel und Bestellüberwachung}}
+\author{\textsf{Beschaffung im Büromanagement}\\
+\textsf{\small\copyright\ Can Siebert\,\textperiodcentered\,2026}}
+\date{15.05.2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\vspace{1em}
+\begin{merksatz}[title={\bfseries Worum geht es heute?}]
+Heute klären wir die zwei zentralen Fragen des operativen Einkaufs: \emph{Wann
+bestellen?} und \emph{Wie viel bestellen?} Dazu betrachten wir vier Bestellverfahren,
+die berühmte Andler-Formel zur optimalen Bestellmenge und das systematische Vorgehen
+bei Lieferverzug. Die Andler-Formel ist eine der häufigsten Klausuraufgaben in der
+IHK-Prüfung Teil~2 --- diese sollten Sie sicher rechnen können.
+\end{merksatz}
+
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\section{Bestellverfahren}
+
+\subsection{Die zwei Hauptgruppen}
+
+In der Praxis gibt es vier Bestellverfahren, die sich in zwei Hauptgruppen einteilen
+lassen:
+
+\textbf{Verbrauchsgesteuerte Verfahren} reagieren auf den tatsächlichen Lagerverbrauch.
+Hier zählen das Bestellpunktverfahren und JIT/Kanban.
+
+\textbf{Zeitgesteuerte Verfahren} bestellen in festen Intervallen. Hierzu gehört das
+Bestellrhythmusverfahren.
+
+\subsection{Bestellpunktverfahren}
+
+Bei diesem Verfahren wird eine Bestellung ausgelöst, sobald der Lagerbestand einen
+festgelegten Wert --- den \emph{Meldebestand} --- erreicht.
+
+\begin{merksatz}[title={Formel}]
+\textbf{Meldebestand = Mindestbestand + (Tagesverbrauch $\times$ Lieferzeit in Tagen)}
+\end{merksatz}
+
+Drei Bestände muss man unterscheiden:
+
+\begin{itemize}[itemsep=0pt]
+  \item \textbf{Mindestbestand}: Sicherheitspuffer; sollte nie unterschritten werden.
+  \item \textbf{Meldebestand}: Bestellauslösepunkt --- Mindestbestand plus erwarteter Verbrauch während der Lieferzeit.
+  \item \textbf{Höchstbestand}: Mindestbestand + Bestellmenge.
+\end{itemize}
+
+\begin{beispiel}
+Eine Druckerei verbraucht pro Werktag durchschnittlich 50~Blatt Premium-Papier.
+Die Lieferzeit beträgt 5~Werktage. Der Sicherheits\-bestand liegt bei 100~Blatt.
+
+\medskip
+$\text{Meldebestand} = 100 + (50 \times 5) = \textbf{350 Blatt}$
+
+\medskip
+Sobald der Lagerbestand auf 350 Blatt fällt, wird neu bestellt. Während der 5-tägigen
+Lieferzeit verbraucht die Druckerei weitere $50 \times 5 = 250$~Blatt $\to$ Bestand
+sinkt auf 100~Blatt (genau auf den Sicherheits\-bestand). Die neue Lieferung kommt
+just zum richtigen Zeitpunkt an.
+\end{beispiel}
+
+\subsection{Bestellrhythmusverfahren}
+
+Beim Bestellrhythmus­verfahren wird in festen Zeit­intervallen bestellt --- z.\,B.\ jeden
+Montag oder am 1.\ jedes Monats. Die Bestellmenge ist variabel und richtet sich danach,
+wie viel der Bestand bis zum gewünschten Höchst\-bestand wieder aufgefüllt werden muss.
+
+\begin{center}
+\begin{tabular}{p{4cm} p{4.5cm} p{4.5cm}}
+\toprule
+\textbf{Kriterium} & \textbf{Bestellpunkt} & \textbf{Bestellrhythmus}\\
+\midrule
+Auslöser & Bestand erreicht Meldebestand & Festgelegter Zeitpunkt\\
+Bestellmenge & Konstant & Variabel (auffüllen bis Höchstbestand)\\
+Überwachung & Permanent & Nur zum Bestelltermin\\
+Geeignet für & A-Teile, hoher Wert & B-/C-Teile, geringerer Wert\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Just-in-Time und Kanban}
+
+\textbf{Just-in-Time (JIT)} ist die fertigungssynchrone Beschaffung: Material wird
+genau zum Bedarfszeit\-punkt geliefert. Lager praktisch null, Kapital­bindung minimal.
+Voraussetzungen: sehr zuverlässige Lieferanten, kurze und planbare Lieferzeiten,
+enge IT-Integration (oft EDI), oft auch geographische Nähe. Hauptrisiko: Lieferketten\-
+störungen treffen die Produktion direkt --- wie die Halbleiterknappheit 2021/22 zeigte,
+als Automobil­werke wegen ausbleibender Mikrochips tagelang stillstanden.
+
+\textbf{Kanban} ist eine Pull-Variante des JIT, die in den 1970er Jahren bei Toyota
+entwickelt wurde. Material wird erst geliefert, wenn der Verbraucher es signalisiert
+--- traditionell über eine Karte (\emph{kanban} = jap.\ Karte), heute oft elektronisch.
+Vorteil: Das System steuert sich selbst, ohne zentrale Planung.
+
+\begin{eselsbruecke}
+\textbf{,,Push vs.\ Pull''}: Klassische Beschaffung pusht Material in das Lager
+(„auf Vorrat''), JIT/Kanban zieht es bedarfsgerecht aus dem Lieferanten heraus.
+\end{eselsbruecke}
+
+\section{Optimale Bestellmenge --- die Andler-Formel}
+
+\subsection{Der Zielkonflikt}
+
+Wer viel auf einmal bestellt, spart Bestellkosten und hat oft Mengenrabatte ---
+zahlt aber hohe Lagerkosten. Wer wenig auf einmal bestellt, hat niedrige Lagerkosten,
+aber viele teure Bestellvorgänge. Die optimale Bestellmenge ist die Menge, bei der die
+\emph{Summe} aus Lager- und Bestell­kosten am niedrigsten ist.
+
+\begin{itemize}[itemsep=0pt]
+  \item \emph{Bestellkosten} fallen pro Bestellvorgang an: Personal für Anfrage und Bestellung, IT, Frachtkosten-Sockel. Sie sinken pro Stück, je größer die Bestellmenge.
+  \item \emph{Lagerkosten} fallen proportional zum Lagerbestand an: Lagermiete, Energie, Versicherung, Kapital­bindung, Verderb. Sie steigen mit der Bestellmenge (weil größerer Durchschnittsbestand).
+\end{itemize}
+
+\subsection{Die Formel}
+
+\begin{merksatz}[title={Andler-Formel}]
+\[
+x_{\text{opt}} = \sqrt{\frac{2 \cdot \text{Jahresbedarf} \cdot \text{Bestellkosten}}{\text{Einkaufspreis} \cdot \text{Lagerkostensatz}}}
+\]
+\end{merksatz}
+
+\begin{eselsbruecke}
+Im Zähler: \textbf{,,2 mal Bedarf mal Kosten''} (was raufgeht). Im Nenner:
+\textbf{,,Preis mal Lagersatz''} (was Last erzeugt). Wurzel = Optimum.
+\end{eselsbruecke}
+
+\subsection{Beispielrechnung}
+
+\begin{beispiel}
+Ein Bürodienstleister benötigt pro Jahr 12\,000~Aktenordner. Die Bestellkosten pro
+Bestellung betragen 40~€, der Einkaufspreis pro Ordner 2,50~€ und der Lagerkostensatz
+20\,\% p.\,a.
+
+\medskip
+\[
+x_{\text{opt}} = \sqrt{\frac{2 \cdot 12\,000 \cdot 40}{2{,}50 \cdot 0{,}20}}
+= \sqrt{\frac{960\,000}{0{,}50}}
+= \sqrt{1\,920\,000}
+\approx \textbf{1\,386 Stück}
+\]
+
+\medskip
+Die optimale Bestellmenge beträgt also rund 1\,386~Aktenordner pro Bestellung.
+Bestellhäufigkeit: $12\,000 \div 1\,386 \approx 8{,}7$ Bestellungen pro Jahr ---
+also etwa alle sechs Wochen.
+\end{beispiel}
+
+\subsection{Grenzen der Andler-Formel}
+
+Die Andler-Formel ist eine Idealisierung. Sie nimmt an:
+
+\begin{itemize}[itemsep=0pt]
+  \item Konstanter Verbrauch über das Jahr (in Wirklichkeit: Saisonschwankungen)
+  \item Konstanter Einkaufspreis (in Wirklichkeit: Mengenrabatte!)
+  \item Konstanter Lagerkostensatz
+  \item Sofortige Lieferung
+  \item Keine Mindestbestellmengen
+\end{itemize}
+
+In der Praxis liefert sie deshalb einen \emph{Anhaltspunkt}, der dann an die realen
+Bedingungen angepasst werden muss.
+
+\section{Bestellung}
+
+Eine schriftliche Bestellung enthält:
+
+\begin{itemize}[itemsep=0pt]
+  \item Eigene Adresse + Lieferadresse
+  \item Datum + Bestellnummer (intern, zur Nachverfolgung)
+  \item Genaue Artikelbezeichnung mit Artikelnummer
+  \item Menge
+  \item Preis (laut Angebot)
+  \item Liefertermin
+  \item Liefer- und Zahlungsbedingungen
+  \item Bezug auf das vorhergehende Angebot (Datum/Nummer)
+\end{itemize}
+
+Form: schriftlich nach DIN~5008. Auch wenn ein mündlicher Vertrag rechtlich gültig
+wäre --- die Schriftform schafft Beweissicherheit, falls es später zu Streit kommt.
+
+\section{Bestellüberwachung}
+
+\subsection{Was wird überwacht?}
+
+Mit dem Versenden der Bestellung ist Ihre Arbeit nicht beendet. Bis die Ware im Lager
+ist, müssen drei Aspekte überwacht werden:
+
+\begin{itemize}[itemsep=0pt]
+  \item \textbf{Termintreue}: Kommt die Lieferung pünktlich?
+  \item \textbf{Mengentreue}: Stimmt die gelieferte Menge?
+  \item \textbf{Qualität}: Ist die Ware mängelfrei? (das prüft die Wareneingangs­kontrolle, Tag~5)
+\end{itemize}
+
+\subsection{Mahnverfahren bei Lieferverzug}
+
+Bleibt der Lieferant in Verzug, leitet man das kaufmännische Mahnverfahren ein.
+Es kennt drei Stufen:
+
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{8cm}}
+\toprule
+\textbf{Stufe} & \textbf{Bezeichnung} & \textbf{Inhalt}\\
+\midrule
+1 & Erinnerung & Freundlicher Hinweis auf den Verzug, Bitte um Lieferung, neue Frist setzen\\
+2 & Mahnung & Klarer Hinweis auf Verzug, Androhung von Schadensersatz\\
+3 & Letzte Mahnung & Letzte Chance, Androhung von Rücktritt vom Vertrag, Schadensersatz und gerichtlichem Mahnverfahren\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Reagiert der Lieferant nach der dritten Mahnung nicht, wird entweder ein Inkassobüro
+beauftragt oder das gerichtliche Mahnverfahren (Mahnbescheid beim zentralen Mahngericht)
+eingeleitet.
+
+\section{Nichtige und anfechtbare Rechtsgeschäfte (Vertiefung Tag 3)}
+
+Im Zusammenhang mit Bestellungen lohnt ein kurzer Blick auf zwei Kategorien fehlerhafter
+Verträge:
+
+\subsection{Nichtige Rechtsgeschäfte}
+
+Nichtige Rechtsgeschäfte sind \emph{von Anfang an} unwirksam --- sie entfalten nie
+Rechts­wirkung. Gründe:
+
+\begin{itemize}[itemsep=0pt]
+  \item Geschäftsunfähigkeit (§\,105 BGB)
+  \item Verstoß gegen ein Verbotsgesetz (§\,134)
+  \item Sittenwidrigkeit oder Wucher (§\,138)
+  \item Formmangel bei vorgeschriebener Form (z.\,B.\ Grundstück ohne Notar)
+  \item Scheingeschäft (§\,117)
+\end{itemize}
+
+\subsection{Anfechtbare Rechtsgeschäfte}
+
+Anfechtbare Rechtsgeschäfte sind \emph{zunächst wirksam}. Erst durch eine ausdrückliche
+Anfechtungs­erklärung (§\,143 BGB) werden sie rückwirkend nichtig (§\,142). Anfechtungs­gründe:
+
+\begin{itemize}[itemsep=0pt]
+  \item \emph{Inhalts­irrtum} (§\,119 Abs.\,1) --- Sie wussten, was Sie sagten, aber irrten sich über die Bedeutung.
+  \item \emph{Erklärungs­irrtum} (§\,119 Abs.\,1) --- Versprecher, Verschreiber.
+  \item \emph{Eigenschafts­irrtum} (§\,119 Abs.\,2) --- Irrtum über eine wesentliche Eigenschaft der Sache oder Person.
+  \item \emph{Arglistige Täuschung} (§\,123 Abs.\,1) --- Bewusste Irreführung durch den Vertragspartner.
+  \item \emph{Drohung} (§\,123 Abs.\,1) --- Vertrag kam unter Druck zustande.
+\end{itemize}
+
+\begin{merksatz}
+\textbf{Fristen}: Anfechtung wegen Irrtum unverzüglich nach Entdeckung (§\,121).
+Anfechtung wegen Täuschung oder Drohung: 1~Jahr ab Entdeckung (§\,124). Nach 10~Jahren
+in jedem Fall ausgeschlossen (§\,121 Abs.\,2, §\,124 Abs.\,3).
+\end{merksatz}
+
+\section{Zusammenfassung}
+
+\begin{enumerate}
+  \item Vier \textbf{Bestellverfahren}: Bestellpunkt, Bestellrhythmus, JIT, Kanban --- je nach Material und Lieferant.
+  \item \textbf{Meldebestand} = Mindestbestand $+$ (Tagesverbrauch $\times$ Lieferzeit).
+  \item \textbf{Andler-Formel} findet das Optimum zwischen Lager- und Bestellkosten.
+  \item \textbf{Bestellung} schriftlich nach DIN 5008 (Beweissicherheit).
+  \item \textbf{Bestellüberwachung}: Termin, Menge, Qualität.
+  \item \textbf{Mahnverfahren}: 3 Stufen (Erinnerung, Mahnung, letzte Mahnung).
+  \item \textbf{Anfechtung} bei Irrtum, Täuschung, Drohung --- macht den Vertrag rückwirkend nichtig.
+\end{enumerate}
+
+\newpage
+
+\section*{Glossar}
+\addcontentsline{toc}{section}{Glossar}
+
+\glossareintrag{Bestellpunktverfahren}{Verbrauchsgesteuertes Bestellverfahren --- Bestellung wird ausgelöst, sobald der Lagerbestand den Meldebestand erreicht.}
+
+\glossareintrag{Bestellrhythmusverfahren}{Zeitgesteuertes Verfahren --- Bestellung in festen Intervallen, Bestellmenge variabel.}
+
+\glossareintrag{Mindestbestand}{Sicherheitspuffer im Lager; sollte nie unterschritten werden.}
+
+\glossareintrag{Meldebestand}{Bestellauslösepunkt --- Mindestbestand plus erwarteter Verbrauch während der Lieferzeit.}
+
+\glossareintrag{Höchstbestand}{Maximaler Lagerbestand nach einer neuen Lieferung; Mindestbestand $+$ Bestellmenge.}
+
+\glossareintrag{Just-in-Time (JIT)}{Fertigungssynchrone Beschaffung; Lieferung exakt zum Bedarfszeit\-punkt, Lager praktisch null.}
+
+\glossareintrag{Kanban}{Pull-Verfahren mit Karten oder Signalen; Material wird erst auf Anforderung des Verbrauchers geliefert. Aus Japan (Toyota).}
+
+\glossareintrag{Andler-Formel}{Formel zur Berechnung der optimalen Bestellmenge: $x_\text{opt} = \sqrt{2 \cdot D \cdot K_b / (p \cdot s)}$.}
+
+\glossareintrag{Bestellkosten}{Fixkosten pro Bestellvorgang (Personal, IT, Frachtsockel) --- sinken pro Stück bei größerer Bestellmenge.}
+
+\glossareintrag{Lagerkosten}{Kosten proportional zum Lagerbestand (Miete, Energie, Versicherung, Kapital\-bindung) --- steigen mit größerer Bestellmenge.}
+
+\glossareintrag{Lagerkostensatz}{Prozentualer Anteil der Lagerkosten am Lagerwert pro Jahr (typisch 10--25\,\%).}
+
+\glossareintrag{Bestellüberwachung}{Kontrolle, ob die Lieferung termin- und mengentreu erfolgt.}
+
+\glossareintrag{Mahnung}{Aufforderung an einen säumigen Schuldner, seine Pflicht zu erfüllen.}
+
+\glossareintrag{Mahnstufen}{Drei Stufen des kaufmännischen Mahnverfahrens: Erinnerung, Mahnung, letzte Mahnung.}
+
+\glossareintrag{Mahnbescheid}{Gerichtliches Mahnverfahren beim zentralen Mahngericht --- führt nach Schweigen zum Vollstreckungsbescheid.}
+
+\glossareintrag{Nichtiges Rechtsgeschäft}{Vertrag, der von Anfang an unwirksam ist (z.\,B.\ wegen Geschäfts\-unfähigkeit, Sittenwidrigkeit).}
+
+\glossareintrag{Anfechtbares Rechtsgeschäft}{Vertrag, der zunächst wirksam ist und durch Anfechtungserklärung rückwirkend nichtig wird.}
+
+\glossareintrag{Anfechtungsgründe}{Inhalts\-irrtum (§\,119), Eigenschafts\-irrtum, arglistige Täuschung (§\,123), Drohung (§\,123).}
+
+\glossareintrag{Anfechtungsfrist}{Bei Irrtum unverzüglich nach Entdeckung; bei Täuschung/Drohung 1~Jahr; in jedem Fall max.\ 10~Jahre.}
+
+\end{document}
