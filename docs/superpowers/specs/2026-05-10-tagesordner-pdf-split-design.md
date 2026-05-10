@@ -10,9 +10,16 @@
 
 Für jeden Kurstag (außer 14.05. Christi Himmelfahrt) wird im Ordner
 `Kurs 11.05.2026 bis 22.05.2026/` ein Tagesordner angelegt. Jeder Tagesordner
-enthält ein gesplittetes PDF mit der Grundlagenliteratur, die für das jeweilige
-Tagesthema relevant ist. So wissen Ausbilder und Teilnehmer auf einen Blick,
-welche Buchseiten für welchen Tag vorzubereiten sind.
+enthält **drei Komponenten**:
+
+1. **Gesplittetes PDF** mit der Grundlagenliteratur, die für das Tagesthema relevant ist.
+2. **`Tagesplan_<Thema>.md`** — ein inhaltlich ausgearbeiteter Tagesplan
+   (Lernziele, Stoffaufbau, UE-Verlauf, Methodik, Aufgabenvorschläge).
+3. **`Aufgaben_<Thema>.md`** — Übungs- und Vertiefungsaufgaben für Teilnehmer
+   mit Verweisen auf die Buchseiten.
+
+So wissen Ausbilder und Teilnehmer auf einen Blick, **welcher Stoff am welchem
+Tag wie vermittelt wird** — nicht nur welche Buchseiten zu lesen sind.
 
 ## Kurstage
 
@@ -38,6 +45,65 @@ der Ausbilder-Vorlage).
   Beispiel: `Tag-1_11.05._Beschaffungsprozess/`
 - **Gesplittetes PDF:** `Grundlagen_<Thema>.pdf`
   Beispiel: `Grundlagen_Beschaffungsprozess.pdf`
+- **Tagesplan:** `Tagesplan_<Thema>.md`
+  Beispiel: `Tagesplan_Beschaffungsprozess.md`
+- **Aufgabenblatt:** `Aufgaben_<Thema>.md`
+  Beispiel: `Aufgaben_Beschaffungsprozess.md`
+
+## Tagesplan-Vorlage
+
+Jede `Tagesplan_<Thema>.md` folgt diesem Aufbau:
+
+```markdown
+# Tagesplan Tag N — DD.MM.YYYY — <Thema>
+
+**Modul:** M-064 Beschaffung im Büromanagement · Modul-Nr. <X>
+**UE:** ~9 (à 45 Min, 1 Pausenblock)
+**Material:** `Grundlagen_<Thema>.pdf` (Buchseiten <von>–<bis>)
+
+## Lernziele
+Die Teilnehmenden können nach diesem Tag:
+- ...
+- ...
+
+## Stoffaufbau
+| Abschnitt | Buchseite | Inhalt |
+|---|---|---|
+| 4.X.Y | S. NNN | ... |
+
+## UE-Verlauf
+| UE | Phase | Inhalt | Methode | Sozialform | Material |
+|---|---|---|---|---|---|
+| 1 | Einstieg | ... | Lehrgespräch | Plenum | Whiteboard |
+| 2 | Erarbeitung | ... | Lesen + Diskussion | Einzelarbeit + Plenum | PDF S. NNN |
+| ... | | | | | |
+
+## Methodische Hinweise
+- ...
+
+## Aufgabenvorschläge
+Siehe `Aufgaben_<Thema>.md`.
+
+## Hausaufgabe / Transfer
+- ...
+```
+
+## Aufgabenblatt-Vorlage
+
+Jede `Aufgaben_<Thema>.md` folgt diesem Aufbau:
+
+```markdown
+# Aufgaben — Tag N — <Thema>
+
+**Buchverweis:** PDF `Grundlagen_<Thema>.pdf`, Buchseiten <von>–<bis>
+
+## Aufgabe 1: <Kurztitel>
+**Sozialform:** Einzel/Partner/Gruppe · **Zeit:** ~NN Min
+
+<Aufgabentext>
+
+## Aufgabe 2: ...
+```
 
 ## Tag-zu-Inhalt-Mapping (semantisch + technisch)
 
@@ -131,30 +197,50 @@ PDF-Seitenangaben beziehen sich auf das Quell-PDF `226-395.pdf`.
 
 ## Verzeichnisstruktur (Endzustand)
 
+Jeder Tagesordner enthält PDF + Tagesplan + Aufgabenblatt (außer Tag 9: Übersicht statt PDF).
+
 ```
 Kurs 11.05.2026 bis 22.05.2026/
 ├── GrundlagenLiteratur/
-│   └── 226-395.pdf                                        (Original, unverändert)
+│   └── 226-395.pdf                                        (Original, lokal, .gitignored)
 ├── Inhaltsplanung und kursplanung/
 │   └── M-064_Beschaffung im Büromanagement_001_Ausbilder.docx
 ├── Tag-1_11.05._Beschaffungsprozess/
-│   └── Grundlagen_Beschaffungsprozess.pdf
+│   ├── Grundlagen_Beschaffungsprozess.pdf                 (.gitignored)
+│   ├── Tagesplan_Beschaffungsprozess.md
+│   └── Aufgaben_Beschaffungsprozess.md
 ├── Tag-2_12.05._Bezugsquellen-Anfragen-Angebotsvergleich/
-│   └── Grundlagen_Bezugsquellen-Anfragen-Angebotsvergleich.pdf
+│   ├── Grundlagen_Bezugsquellen-Anfragen-Angebotsvergleich.pdf
+│   ├── Tagesplan_Bezugsquellen-Anfragen-Angebotsvergleich.md
+│   └── Aufgaben_Bezugsquellen-Anfragen-Angebotsvergleich.md
 ├── Tag-3_13.05._Bestellungen-und-Kaufvertraege/
-│   └── Grundlagen_Bestellungen-und-Kaufvertraege.pdf
+│   ├── Grundlagen_Bestellungen-und-Kaufvertraege.pdf
+│   ├── Tagesplan_Bestellungen-und-Kaufvertraege.md
+│   └── Aufgaben_Bestellungen-und-Kaufvertraege.md
 ├── Tag-4_15.05._Ausfuehren-von-Bestellungen/
-│   └── Grundlagen_Ausfuehren-von-Bestellungen.pdf
+│   ├── Grundlagen_Ausfuehren-von-Bestellungen.pdf
+│   ├── Tagesplan_Ausfuehren-von-Bestellungen.md
+│   └── Aufgaben_Ausfuehren-von-Bestellungen.md
 ├── Tag-5_18.05._Annahme-und-Lagerung-der-Waren/
-│   └── Grundlagen_Annahme-und-Lagerung-der-Waren.pdf
+│   ├── Grundlagen_Annahme-und-Lagerung-der-Waren.pdf
+│   ├── Tagesplan_Annahme-und-Lagerung-der-Waren.md
+│   └── Aufgaben_Annahme-und-Lagerung-der-Waren.md
 ├── Tag-6_19.05._Kaufvertragsstoerungen/
-│   └── Grundlagen_Kaufvertragsstoerungen.pdf
+│   ├── Grundlagen_Kaufvertragsstoerungen.pdf
+│   ├── Tagesplan_Kaufvertragsstoerungen.md
+│   └── Aufgaben_Kaufvertragsstoerungen.md
 ├── Tag-7_20.05._Eingangsrechnungen/
-│   └── Grundlagen_Eingangsrechnungen.pdf
+│   ├── Grundlagen_Eingangsrechnungen.pdf
+│   ├── Tagesplan_Eingangsrechnungen.md
+│   └── Aufgaben_Eingangsrechnungen.md
 ├── Tag-8_21.05._Bezahlung-von-Rechnungen/
-│   └── Grundlagen_Bezahlung-von-Rechnungen.pdf
+│   ├── Grundlagen_Bezahlung-von-Rechnungen.pdf
+│   ├── Tagesplan_Bezahlung-von-Rechnungen.md
+│   └── Aufgaben_Bezahlung-von-Rechnungen.md
 └── Tag-9_22.05._Vertiefung-und-Reflektion/
-    └── UEBERSICHT.md
+    ├── UEBERSICHT.md                                       (Wiederholungs-Roadmap)
+    ├── Tagesplan_Vertiefung-und-Reflektion.md
+    └── Aufgaben_Vertiefung-und-Reflektion.md
 ```
 
 ## Nicht-Ziele
