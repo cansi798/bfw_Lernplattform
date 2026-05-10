@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 1 — Beschaffungsprozess · M-064</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 1 · 11.05.2026 · 60 Fragen</span>
+  <h1>Quiz: Beschaffungsprozess</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · BFW · Modul M-064 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Grundlagen Beschaffung & 6 R (1-15) ===
+  { topic: "Grundlagen", q: "Was bedeutet der Begriff „Beschaffung" im engeren betriebswirtschaftlichen Sinn?",
+    options: ["Nur das Einlagern von Waren", "Alle Tätigkeiten zur Bereitstellung der für die Leistungserstellung benötigten Sachgüter und Dienstleistungen", "Ausschließlich der Verkauf von Waren an Kunden", "Die Buchhaltung der Eingangsrechnungen"],
+    a: 1, e: "Beschaffung umfasst die Bereitstellung aller benötigten Inputs — von der Bedarfsermittlung bis zur Bezahlung." },
+  { topic: "Wertschöpfungskette", q: "An welcher Stelle der betrieblichen Wertschöpfungskette steht die Beschaffung?",
+    options: ["Am Ende, nach dem Vertrieb", "In der Mitte, zwischen Produktion und Vertrieb", "Am Anfang, als Bindeglied zwischen Markt und Produktion", "Außerhalb der Wertschöpfungskette"],
+    a: 2, e: "Die Beschaffung bildet die Schnittstelle zum Beschaffungsmarkt und steht ganz am Anfang der internen Wertschöpfung." },
+  { topic: "6 R", q: "Welche der folgenden Auflistungen enthält ALLE sechs „R" der Beschaffung?",
+    options: ["Material, Menge, Qualität, Ort, Zeit, Preis", "Material, Menge, Lieferant, Vertrag, Zahlung, Lager", "Bestellung, Lieferung, Rechnung, Zahlung, Lager, Reklamation", "Markt, Mensch, Methode, Material, Maschine, Mitwelt"],
+    a: 0, e: "Die 6 R: Richtiges Material, richtige Menge, richtige Qualität, am richtigen Ort, zur richtigen Zeit, zum richtigen Preis." },
+  { topic: "6 R", q: "Welche zwei Beschaffungsziele stehen typischerweise im stärksten Konflikt zueinander?",
+    options: ["Material und Qualität", "Ort und Zeit", "Menge und Preis", "Bestellmenge und Lagerkosten"],
+    a: 3, e: "Größere Bestellmengen senken den Stückpreis (Mengenrabatt), erhöhen aber Lagerkosten und Kapitalbindung." },
+  { topic: "6 R", q: "Eine Bürokraft bestellt Druckerpapier in Premium-Fotoqualität für 50% mehr Geld, obwohl Standardpapier ausreicht. Welches der 6 R wird verletzt?",
+    options: ["Richtige Qualität — überqualifiziert ist auch falsch", "Richtige Menge", "Richtiger Ort", "Richtige Zeit"],
+    a: 0, e: "„Richtige Qualität" bedeutet die geforderte Spezifikation — höhere Qualität ist nicht automatisch besser, sondern oft nur teurer." },
+  { topic: "Aufgaben", q: "Welche Aufgabe gehört NICHT zur operativen Beschaffung?",
+    options: ["Bestellungen auslösen", "Reklamationen bearbeiten", "Make-or-Buy-Strategie entwickeln", "Lagerbestände kontrollieren"],
+    a: 2, e: "Make-or-Buy ist eine strategische Entscheidung, keine operative Tätigkeit." },
+  { topic: "Aufgaben", q: "Was ist ein typisch strategischer Beschaffungsprozess?",
+    options: ["Wareneingangskontrolle", "Bestellung über das E-Procurement-System auslösen", "Verhandeln eines Rahmenvertrages mit einem Schlüssellieferanten", "Erfassen einer Eingangsrechnung"],
+    a: 2, e: "Rahmenverträge werden langfristig (strategisch) verhandelt; daraus werden später operative Abrufe gemacht." },
+  { topic: "Beschaffungsprozess", q: "In welcher Reihenfolge laufen die Schritte des Beschaffungsprozesses idealtypisch ab?",
+    options: ["Bestellung → Anfrage → Lieferung → Bedarfsermittlung", "Bedarfsermittlung → Bezugsquellen → Anfrage → Angebotsvergleich → Bestellung → Wareneingang → Rechnungsprüfung", "Bedarf → Wareneingang → Anfrage → Bestellung → Vergleich → Rechnung", "Anfrage → Bestellung → Bedarfsermittlung → Lieferung → Vergleich"],
+    a: 1, e: "Der Beschaffungsprozess folgt diesen 7 Schritten in genau dieser logischen Reihenfolge." },
+  { topic: "6 R", q: "Was beschreibt das Ziel „richtiger Preis" am besten?",
+    options: ["Der absolut billigste Preis am Markt", "Der wirtschaftlich vorteilhafteste Preis unter Berücksichtigung von Qualität, Bezugskosten und Folgekosten", "Der Listenpreis ohne Rabatte", "Der höchste Preis, den der Lieferant verlangt"],
+    a: 1, e: "„Richtiger Preis" ist nicht der billigste — er bezieht Qualität, Lieferzuverlässigkeit und Folgekosten mit ein." },
+  { topic: "Eselsbrücke", q: "Welche Eselsbrücke fasst die 6 R der Beschaffung zusammen?",
+    options: ["A-B-C-D-E-F", "M-M-Q-O-Z-P", "S-W-O-T-A-N", "1-2-3-4-5-6"],
+    a: 1, e: "M-M-Q-O-Z-P = Material, Menge, Qualität, Ort, Zeit, Preis." },
+  { topic: "6 R Praxis", q: "Sie als Sachbearbeiterin bestellen 1.000 Aktenordner statt der benötigten 100, weil der Mengenrabatt verlockend ist. Welches R wird verletzt?",
+    options: ["Richtige Qualität", "Richtige Menge", "Richtiger Ort", "Richtige Zeit"],
+    a: 1, e: "Richtige Menge bedeutet bedarfsgerecht — auch wenn ein Rabatt lockt, gehört Überbestellen zu „falsch viel"." },
+  { topic: "Beschaffungsprozess", q: "Welcher Schritt im Beschaffungsprozess ist rechtlich noch NICHT bindend?",
+    options: ["Bestellung", "Anfrage", "Wareneingang mit Mängelrüge", "Rechnungsbegleichung"],
+    a: 1, e: "Eine Anfrage ist nur eine unverbindliche Aufforderung zur Angebotsabgabe — kein Vertragsantrag." },
+  { topic: "Wertschöpfung", q: "Welche Folgekosten kann eine schlechte Beschaffung in nachgelagerten Bereichen verursachen?",
+    options: ["Nur höhere Lagerkosten", "Produktionsstillstand, Reklamationen, Kundenbeschwerden, Imageverlust", "Ausschließlich Mehraufwand für die Buchhaltung", "Keine — nachgelagerte Bereiche sind unabhängig"],
+    a: 1, e: "Beschaffungsfehler wirken auf alle nachgelagerten Bereiche durch — von Produktion bis Kundenservice." },
+  { topic: "6 R", q: "Welches der 6 R betrifft die zeitliche Dimension der Beschaffung?",
+    options: ["Richtige Menge", "Richtige Qualität", "Richtige Zeit", "Richtiger Ort"],
+    a: 2, e: "„Richtige Zeit" steht für rechtzeitige (weder zu frühe noch zu späte) Lieferung." },
+  { topic: "Wertschöpfung", q: "Was unterscheidet die Beschaffung von der Logistik?",
+    options: ["Beide sind dasselbe", "Beschaffung ist nur ein Teilgebiet der Logistik (Beschaffungslogistik)", "Beschaffung ist umfassender als Logistik", "Logistik gehört zur Beschaffung"],
+    a: 1, e: "Beschaffungslogistik ist Teil der Logistik; Beschaffung umfasst zusätzlich Strategie, Verträge und Lieferantenmanagement." },
+
+  // === Block B: Organisation / Wege (16-23) ===
+  { topic: "Organisation", q: "Welcher Vorteil spricht für ZENTRALE Beschaffung?",
+    options: ["Höhere Marktnähe vor Ort", "Bündelung großer Mengen und damit höhere Mengenrabatte", "Schnellere Reaktionszeit auf Vor-Ort-Bedarfe", "Geringere Standardisierung"],
+    a: 1, e: "Zentrale Bündelung ermöglicht größere Bestellmengen → bessere Konditionen." },
+  { topic: "Organisation", q: "Welcher Vorteil spricht für DEZENTRALE Beschaffung?",
+    options: ["Bessere Mengenrabatte", "Hohe Marktnähe und schnelle Reaktion vor Ort", "Einheitliche Prozesse im Konzern", "Reduzierter administrativer Aufwand"],
+    a: 1, e: "Dezentrale Beschaffung ist nah am Bedarfsort — schnelles Reagieren auf konkrete Anforderungen." },
+  { topic: "Organisation", q: "Was ist ein typisches Hybrid-Modell der Beschaffungsorganisation?",
+    options: ["Nur zentrale Beschaffung", "Nur dezentrale Beschaffung", "Zentrale Rahmenverträge mit dezentralen Abrufen", "Zentralisierung der Buchhaltung, dezentrale Wareneingänge"],
+    a: 2, e: "Zentral verhandelt man bessere Konditionen, dezentral werden bedarfsgerecht abgerufen — Best of both worlds." },
+  { topic: "Beschaffungswege", q: "Was kennzeichnet den DIREKTEN Bezug?",
+    options: ["Bezug über Großhandel", "Bezug direkt vom Hersteller", "Bezug über einen Marktplatz", "Bezug über einen Vermittler"],
+    a: 1, e: "Direkter Bezug = ohne Zwischenhändler direkt vom Hersteller; meist günstiger und mit direktem Qualitätsdialog." },
+  { topic: "Beschaffungswege", q: "Welcher Vorteil spricht für den INDIREKTEN Bezug (Großhandel)?",
+    options: ["Höchster Preis pro Stück", "Großes Sortiment, kleinere Mengen abnehmbar, ein Ansprechpartner für viele Artikel", "Direkter Kontakt zum Hersteller", "Kein Mehrwertdienstleister nötig"],
+    a: 1, e: "Großhandel bietet Sortimentsbreite und akzeptiert kleinere Bestellmengen — ideal für mittelständische Bedarfe." },
+  { topic: "Organisation", q: "Eine Filialleitung möchte spontan einen lokalen Lieferanten beauftragen, weil der Liefertermin drängt. Welcher Beschaffungs-Organisationsform entspricht dies?",
+    options: ["Zentral", "Dezentral", "Outsourcing", "Konzernweit standardisiert"],
+    a: 1, e: "Spontane Vor-Ort-Entscheidungen sind das Kennzeichen dezentraler Beschaffung." },
+  { topic: "Organisation", q: "Welcher Nachteil ist typisch für DEZENTRALE Beschaffung?",
+    options: ["Lange Reaktionszeit", "Wildwuchs durch fehlende Standardisierung und schlechtere Konditionen", "Fehlende Marktnähe", "Hoher zentraler Verwaltungsaufwand"],
+    a: 1, e: "Ohne zentrale Steuerung können viele kleine Bestellungen mit ungünstigeren Konditionen entstehen." },
+  { topic: "Beschaffungswege", q: "Welche Aussage zum direkten Bezug ist FALSCH?",
+    options: ["Niedrigerer Preis möglich", "Direkter Kontakt zum Hersteller", "Großes Sortiment vieler Hersteller bei einem Ansprechpartner", "Direkte Qualitätsabsprachen"],
+    a: 2, e: "Sortimentsbreite über viele Hersteller hinweg ist ein Vorteil des INDIREKTEN Bezugs (Großhandel), nicht des direkten." },
+
+  // === Block C: Make or Buy (24-33) ===
+  { topic: "Make or Buy", q: "Was bedeutet die „Make-or-Buy"-Entscheidung?",
+    options: ["Wo und wann beschafft wird", "Ob ein Sachgut oder eine Dienstleistung selbst hergestellt (Make) oder fremdbezogen (Buy) wird", "Welcher Lieferant ausgewählt wird", "Welcher Preis verhandelt wird"],
+    a: 1, e: "Make-or-Buy = Eigenfertigung vs. Fremdbezug — eine grundlegende strategische Entscheidung." },
+  { topic: "Make or Buy", q: "Welcher Faktor spricht typischerweise FÜR Eigenfertigung (Make)?",
+    options: ["Skaleneffekte des Spezialisten", "Schutz von Kern-Know-how", "Geringere Fixkosten", "Fokus auf Kerngeschäft"],
+    a: 1, e: "Wenn das Know-how strategisch ist, möchte das Unternehmen es nicht aus der Hand geben." },
+  { topic: "Make or Buy", q: "Welcher Faktor spricht typischerweise FÜR Fremdbezug (Buy)?",
+    options: ["Schutz von Kern-Know-how", "Auslastung freier eigener Kapazitäten", "Skaleneffekte des spezialisierten Anbieters", "Vollständige Qualitätskontrolle"],
+    a: 2, e: "Spezialisten produzieren in größeren Stückzahlen und damit oft günstiger als der Eigenbau." },
+  { topic: "Make or Buy", q: "Eine Make-or-Buy-Entscheidung sollte sich stützen auf:",
+    options: ["Nur quantitative Faktoren (Kostenvergleich)", "Nur qualitative Faktoren (Strategie)", "Quantitative UND qualitative Faktoren", "Den Bauchgefühl der Geschäftsführung"],
+    a: 2, e: "Reine Kostenvergleiche ignorieren strategische Risiken; reine Strategie ignoriert Wirtschaftlichkeit." },
+  { topic: "Make or Buy", q: "Eigenleistung kostet 4.830 €, Fremdbezug 4.500 €. Was sollten Sie noch berücksichtigen, bevor Sie zum Fremdbezug wechseln?",
+    options: ["Nichts — der Preis entscheidet", "Vertragsbindung, Abhängigkeit, Qualitätskontrolle, Know-how-Verlust", "Nur die Lieferzeit", "Nur die Mehrwertsteuer"],
+    a: 1, e: "Bei knappem Kostenvorteil überwiegen oft qualitative Risiken — typischer Fall der „Make-or-Buy-Falle"." },
+  { topic: "Make or Buy", q: "Was ist ein typisches Beispiel für „Buy" im Büroumfeld?",
+    options: ["Reinigung durch externen Dienstleister", "Eigene Erstellung von Marketing­material durch hauseigenes Grafikteam", "Eigenproduktion von Strom über Solaranlage", "Eigene Personalverwaltung"],
+    a: 0, e: "Reinigungsdienst ist ein klassisches outgesourctes „Buy" — Kerngeschäft ist meistens nicht Reinigung." },
+  { topic: "Make or Buy", q: "Welcher quantitative Faktor ist bei Make-or-Buy zentral?",
+    options: ["Image des Lieferanten", "Vergleich aller relevanten Kosten (Personal, Material, Verwaltung) gegen Fremdbezugspreis", "Standort der Geschäftsführung", "Logo-Design"],
+    a: 1, e: "Quantitativer Vergleich = Kostenvergleich aller direkt zurechenbaren Kosten." },
+  { topic: "Make or Buy", q: "Welcher qualitative Faktor ist bei Make-or-Buy zentral?",
+    options: ["Aktueller Aktienkurs", "Strategische Bedeutung des Sachguts und Risiko der Lieferantenabhängigkeit", "Nur die Lieferzeit", "Nur die Verpackungsgröße"],
+    a: 1, e: "Strategie und Abhängigkeitsrisiko sind die Kernkriterien der qualitativen Bewertung." },
+  { topic: "Make or Buy", q: "Was ist die wichtigste Konsequenz einer „Buy"-Entscheidung für strategisch wichtige Komponenten?",
+    options: ["Höhere Eigenkapitalrendite", "Risiko des Know-how-Verlusts und Lieferantenabhängigkeit", "Reduzierter Marketing-Aufwand", "Niedrigere Steuerlast"],
+    a: 1, e: "Bei strategisch wichtigem Material ist Outsourcing besonders riskant — Lieferant kann Konditionen diktieren." },
+  { topic: "Make or Buy", q: "Welche Eselsbrücke passt zu Make-or-Buy?",
+    options: ["Wenn der Vorteil klein ist, bleib's daheim", "Wer rastet, der rostet", "Was du heute kannst besorgen, das verschiebe nicht auf morgen", "Aller Anfang ist schwer"],
+    a: 0, e: "„Wenn der Vorteil klein ist, bleib's daheim" — bei knappem Kostenvorteil im Buy überwiegen qualitative Risiken." },
+
+  // === Block D: Beschaffungsprinzipien (34-43) ===
+  { topic: "Prinzipien", q: "Welches Beschaffungsprinzip ist typisch für Sondermaschinen oder Einzelfertigung?",
+    options: ["Vorratsbeschaffung", "Einzelbeschaffung im Bedarfsfall", "Just-in-Time", "Kanban"],
+    a: 1, e: "Bei Einzelaufträgen wird gezielt pro Bedarf beschafft — kein Lager." },
+  { topic: "Prinzipien", q: "Welches Beschaffungsprinzip führt zu hohen Lagerbeständen, aber großer Versorgungssicherheit?",
+    options: ["Just-in-Time", "Einzelbeschaffung", "Vorratsbeschaffung", "Kanban"],
+    a: 2, e: "Vorratsbeschaffung speichert Material in größeren Mengen → hohe Sicherheit, hohe Kapitalbindung." },
+  { topic: "Prinzipien", q: "Was kennzeichnet das Just-in-Time-Prinzip (JIT)?",
+    options: ["Material wird genau zum Produktionszeitpunkt geliefert", "Es wird auf Vorrat eingekauft", "Material wird nach Bedarf einzeln gekauft", "Es wird nur einmal jährlich bestellt"],
+    a: 0, e: "JIT = fertigungssynchrone Lieferung; Lager praktisch null, Lieferantenabhängigkeit hoch." },
+  { topic: "Prinzipien", q: "Welches Risiko hat Just-in-Time besonders stark?",
+    options: ["Hohe Lagerkosten", "Lieferantenausfälle führen direkt zu Produktionsstillstand", "Hoher Verwaltungsaufwand pro Bestellung", "Veraltetes Material"],
+    a: 1, e: "Ohne Lagerpuffer trifft jede Lieferunterbrechung direkt die Produktion." },
+  { topic: "Prinzipien", q: "Welches Beschaffungsprinzip ist typisch für Standard-Bürobedarf wie Druckerpapier?",
+    options: ["Einzelbeschaffung pro Bedarf", "Vorratsbeschaffung", "Just-in-Time mit täglicher Lieferung", "Make"],
+    a: 1, e: "Standardbedarfe werden in größeren Mengen vorrätig gehalten — gleichmäßiger Verbrauch, Mengenrabatt." },
+  { topic: "Prinzipien", q: "Kanban ist ein...",
+    options: ["Bestellverfahren mit Karten/Signalen, das den Materialfluss bedarfsgesteuert auslöst", "Buchhaltungs-Tool", "Werbeformat", "Lagersystem für Schwergut"],
+    a: 0, e: "Kanban (jap. „Karte") ist ein bedarfsgesteuertes Lieferverfahren, oft im Rahmen von JIT eingesetzt." },
+  { topic: "Prinzipien", q: "In welcher Branche ist JIT besonders verbreitet?",
+    options: ["Bekleidungs-Einzelhandel", "Automobilindustrie", "Buchverlag", "Friseurhandwerk"],
+    a: 1, e: "Die Automobilindustrie ist das Paradebeispiel für JIT (Toyota-Produktionssystem)." },
+  { topic: "Prinzipien", q: "Was ist ein typischer Nachteil der Vorratsbeschaffung?",
+    options: ["Hohe Kapitalbindung im Lager und Risiko von Veralten der Ware", "Zu wenig Sicherheitsbestand", "Hohe Reaktionszeit auf Engpässe", "Keine Mengenrabatte"],
+    a: 0, e: "Hohe Vorräte binden Kapital und können bei Modewechsel oder Ablauf wertlos werden." },
+  { topic: "Prinzipien", q: "Welches Prinzip wählen Sie für ein Spezialwerkzeug, das nur einmal benötigt wird?",
+    options: ["Vorratsbeschaffung", "Einzelbeschaffung im Bedarfsfall", "Just-in-Time mit Wochenrhythmus", "Kanban"],
+    a: 1, e: "Einzelne, einmalige Bedarfe rechtfertigen kein Lager — gezielter Einzelkauf." },
+  { topic: "Prinzipien", q: "Welche Voraussetzung ist für funktionierende JIT-Beschaffung unverzichtbar?",
+    options: ["Großes eigenes Lager als Puffer", "Sehr zuverlässige Lieferanten und enge IT-Integration zur Lieferkette", "Eigenproduktion im selben Werk", "Hohe Lagerumschlagshäufigkeit"],
+    a: 1, e: "JIT lebt von Liefer­zuverlässigkeit — ohne sie steht alles still." },
+
+  // === Block E: E-Procurement (44-53) ===
+  { topic: "E-Procurement", q: "Was ist E-Procurement?",
+    options: ["Elektronische Buchhaltung", "Elektronische Unterstützung des Beschaffungsprozesses", "Verkauf von Elektronikartikeln", "Online-Personalauswahl"],
+    a: 1, e: "E-Procurement = Electronic Procurement = elektronisch gestützte Beschaffung." },
+  { topic: "E-Procurement", q: "Was kennzeichnet die SELL-SIDE-Lösung?",
+    options: ["Der Käufer betreibt das System", "Ein Marktplatz bündelt viele Lieferanten", "Der LIEFERANT betreibt das System (z.B. Onlineshop)", "Der Lieferant kauft beim Käufer ein"],
+    a: 2, e: "Sell-Side = Verkaufsseite des Lieferanten — er betreibt z.B. einen Onlineshop." },
+  { topic: "E-Procurement", q: "Was kennzeichnet die BUY-SIDE-Lösung?",
+    options: ["Der Lieferant betreibt das System", "Der KÄUFER betreibt das System; Lieferanten stellen ihre Kataloge ein", "Ein Dritter bündelt", "Es findet kein elektronischer Datenaustausch statt"],
+    a: 1, e: "Buy-Side = Einkaufsseite des Käufers — typisch bei großen Konzernen mit vielen Lieferanten." },
+  { topic: "E-Procurement", q: "Was kennzeichnet einen MARKTPLATZ im E-Procurement?",
+    options: ["Der Lieferant betreibt das System", "Der Käufer betreibt das System", "Ein neutraler Dritter bündelt Sortimente vieler Lieferanten", "Es ist eine analoge Messe"],
+    a: 2, e: "Marktplatz = neutraler Plattform-Betreiber, der Käufer und viele Lieferanten zusammenbringt (z.B. Mercateo)." },
+  { topic: "E-Procurement", q: "Welcher Vorteil ist typisch für E-Procurement gegenüber klassischer Bestellung per Telefon/Fax?",
+    options: ["Weniger Transparenz", "Höhere Prozesskosten", "Schnellere Bestellabwicklung, weniger Fehler, bessere Auswertung", "Höhere Lieferzeit"],
+    a: 2, e: "Elektronische Workflows reduzieren manuelle Fehler und beschleunigen die Prozesse." },
+  { topic: "E-Procurement", q: "Welches der folgenden Beispiele ist eine SELL-SIDE-Lösung?",
+    options: ["Ein Konzern betreibt SAP Ariba", "Ein Lieferant betreibt seinen eigenen Onlineshop", "Mercateo bündelt viele Lieferanten", "Eine analoge Bestellung per Fax"],
+    a: 1, e: "Eigener Onlineshop des Lieferanten = klassische Sell-Side." },
+  { topic: "E-Procurement", q: "Welches Risiko hat E-Procurement?",
+    options: ["Nur höhere Kosten", "Abhängigkeit von IT-Systemen — bei Ausfall keine Bestellung möglich", "Es entsteht keine Datenspur", "Lieferanten werden überflüssig"],
+    a: 1, e: "Wenn das E-Procurement-System ausfällt, kommt der gesamte Bestellprozess zum Erliegen." },
+  { topic: "E-Procurement", q: "Was ist BMEcat?",
+    options: ["Ein Lieferantenstandard für elektronische Produktkataloge", "Ein Kantinenkonzept", "Eine Steuerklasse", "Ein Verband der Bilanzbuchhalter"],
+    a: 0, e: "BMEcat ist der vom Bundesverband Materialwirtschaft, Einkauf und Logistik definierte Katalogstandard." },
+  { topic: "E-Procurement", q: "Welcher Vorteil bietet die Buy-Side-Lösung dem Käufer?",
+    options: ["Volle Kontrolle über Sortiment, Konditionen und Genehmigungs­workflows", "Lieferantenführung des Onlineshops", "Externe Verwaltung der Bestellprozesse", "Kein eigenes System nötig"],
+    a: 0, e: "Bei Buy-Side bestimmt der Käufer, welche Lieferanten/Artikel verfügbar sind und welche Genehmigungs­regeln gelten." },
+  { topic: "E-Procurement", q: "Welcher Vorteil bietet ein Marktplatz im Vergleich zur Buy-Side-Lösung?",
+    options: ["Geringere Auswahl", "Keine eigene IT-Investition nötig — der Marktplatz-Betreiber stellt die Plattform", "Höhere Preise", "Komplette Eigenkontrolle"],
+    a: 1, e: "Marktplatz-Modelle reduzieren die IT-Investition für den Käufer — er nutzt die fremde Plattform." },
+
+  // === Block F: Ökologische Beschaffung & LkSG (54-60) ===
+  { topic: "Nachhaltigkeit", q: "Wofür steht die Abkürzung LkSG?",
+    options: ["Lieferketten­sorgfalts­pflichten­gesetz", "Lager­konditionen­schutz­gesetz", "Logistikkosten­steuerungs­gesetz", "Liquiditäts­kontroll­schutzgesetz"],
+    a: 0, e: "Das Lieferketten­sorgfalts­pflichten­gesetz (LkSG) gilt seit 2023 in Deutschland." },
+  { topic: "Nachhaltigkeit", q: "Welche Anforderung stellt das LkSG an deutsche Unternehmen ab gewisser Größe?",
+    options: ["Verbot ausländischer Lieferanten", "Sorgfaltspflichten zu Menschenrechten und Umwelt entlang der eigenen Lieferkette", "Pflicht zu CO2-neutraler Produktion", "Verbot von JIT-Beschaffung"],
+    a: 1, e: "LkSG verpflichtet Unternehmen ab gewisser Größe, ihre Lieferanten auf Menschenrechte und Umwelt zu prüfen." },
+  { topic: "Nachhaltigkeit", q: "Was ist ein typisches ökologisches Bewertungs­kriterium für Lieferanten?",
+    options: ["Nur der Preis", "Transportwege, Verpackungs­minimierung, Energie­bilanz", "Alleinstellungs­merkmal beim Lieferantenlogo", "Größe der Hauptniederlassung"],
+    a: 1, e: "Transportwege, Verpackung, Energiebilanz und CO2-Fußabdruck sind etablierte Nachhaltigkeits­kriterien." },
+  { topic: "Nachhaltigkeit", q: "Wofür steht CSRD?",
+    options: ["Corporate Sustainability Reporting Directive — EU-Richtlinie zur Nachhaltigkeitsberichterstattung", "Computer System Reporting Database", "Compliance Standards Reporting Documentation", "Continuous Sales Reporting Direction"],
+    a: 0, e: "CSRD ist die EU-Richtlinie, die Unternehmen zur transparenten Nachhaltigkeits­berichterstattung verpflichtet." },
+  { topic: "Nachhaltigkeit", q: "Welcher Aspekt ist KEIN typisches Nachhaltigkeits­kriterium der Beschaffung?",
+    options: ["Energie­bilanz des Lieferanten", "Verpackungs­minimierung", "Aktienkurs des Lieferanten", "Sozialstandards in der Lieferkette"],
+    a: 2, e: "Der Aktienkurs ist eine Finanzkennzahl, kein Nachhaltigkeitskriterium." },
+  { topic: "Nachhaltigkeit", q: "Was ist ein „Lieferanten-Audit" im Kontext nachhaltiger Beschaffung?",
+    options: ["Eine Prüfung des Lieferanten auf Einhaltung definierter Standards (Umwelt, Soziales, Qualität)", "Ein Werbevideo des Lieferanten", "Eine Werksführung für die Geschäftsleitung", "Ein gemeinsames Geschäftsessen"],
+    a: 0, e: "Audits prüfen formal, ob Lieferanten die vereinbarten Standards (z.B. ISO 14001, SA 8000) tatsächlich einhalten." },
+  { topic: "Nachhaltigkeit", q: "Welche Aussage zur ökologischen Beschaffung ist RICHTIG?",
+    options: ["Nachhaltigkeit ist heute nur noch ein Marketing-Bonus", "Durch Gesetze wie LkSG/CSRD und Markterwartung ist Nachhaltigkeit zur Pflicht in der Beschaffung geworden", "Nachhaltigkeit gilt nur für die Produktion", "Lieferanten dürfen nicht nach Umweltkriterien bewertet werden"],
+    a: 1, e: "Recht (LkSG/CSRD), Markt und gesellschaftliche Erwartung machen Nachhaltigkeit heute zur Pflicht." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.options.forEach((opt, j) => {
+      const letter = String.fromCharCode(65 + j);
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen
+    const correct = QUESTIONS[qi].a;
+    opts[oi].classList.add(oi === correct ? 'correct' : 'incorrect');
+    if (oi !== correct) opts[correct].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt"-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => a === QUESTIONS[i].a).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet" gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correct = QUESTIONS[i].a;
+    if (answers[i] !== null) {
+      opts[answers[i]].classList.add(answers[i] === correct ? 'correct' : 'incorrect');
+      if (answers[i] !== correct) opts[correct].classList.add('correct');
+    } else {
+      opts[correct].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => a === QUESTIONS[i].a).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

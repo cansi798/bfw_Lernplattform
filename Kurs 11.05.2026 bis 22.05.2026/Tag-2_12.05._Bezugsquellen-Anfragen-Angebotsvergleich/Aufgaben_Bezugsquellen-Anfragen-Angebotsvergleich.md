@@ -1,6 +1,7 @@
 # Aufgaben — Tag 2 — Bezugsquellen, Anfragen, Angebotsvergleich
 
 **Buchverweis:** PDF `Grundlagen_Bezugsquellen-Anfragen-Angebotsvergleich.pdf`, Buchseiten 239–245, 268–276
+_© Can Siebert · 2026_
 
 ## Aufgabe 1 — Bedarfsarten zuordnen
 

@@ -1,6 +1,7 @@
 # Aufgaben — Tag 1 — Beschaffungsprozess
 
 **Buchverweis:** PDF `Grundlagen_Beschaffungsprozess.pdf`, Buchseiten 226–238, 279–280
+_© Can Siebert · 2026_
 
 ## Aufgabe 1 — Wertschöpfungskette und Beschaffung
 

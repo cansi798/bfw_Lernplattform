@@ -2,6 +2,9 @@
 % Voraussetzung: Kompilation mit xelatex (wegen fontspec)
 
 \usepackage[ngerman]{babel}
+% Babel-ngerman macht " zu einem aktiven Shorthand (z.B. für "a -> ä). In unseren
+% Texten verwenden wir " als normales Zeichen — daher Shorthand komplett ausschalten.
+\shorthandoff{"}
 \usepackage{geometry}
 \geometry{a4paper, top=2.2cm, bottom=2.2cm, left=2.3cm, right=2.3cm}
 
@@ -142,5 +145,5 @@
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
-\fancyfoot[L]{\small\color{bfwInkSoft}\thepage}
-\fancyfoot[R]{\small\color{bfwInkSoft} BFW M-064 Beschaffung im Büromanagement}
+\fancyfoot[L]{\small\color{bfwInkSoft}\copyright\ Can Siebert\,\textperiodcentered\,2026}
+\fancyfoot[R]{\small\color{bfwInkSoft}\thepage}
