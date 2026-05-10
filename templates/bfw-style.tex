@@ -1,0 +1,146 @@
+% bfw-style.tex — gemeinsame Style-Definitionen für alle Handouts/Aufgabenhefte
+% Voraussetzung: Kompilation mit xelatex (wegen fontspec)
+
+\usepackage[ngerman]{babel}
+\usepackage{geometry}
+\geometry{a4paper, top=2.2cm, bottom=2.2cm, left=2.3cm, right=2.3cm}
+
+\usepackage{fontspec}
+% Fallback-Kette: Source Sans Pro -> Calibri -> Segoe UI -> Latin Modern Sans
+% (Latin Modern ist immer mit MiKTeX vorhanden)
+\IfFontExistsTF{Source Sans Pro}{%
+  \setmainfont{Source Sans Pro}[Ligatures=TeX]%
+}{\IfFontExistsTF{Calibri}{%
+  \setmainfont{Calibri}[Ligatures=TeX]%
+}{\IfFontExistsTF{Segoe UI}{%
+  \setmainfont{Segoe UI}[Ligatures=TeX]%
+}{%
+  \setmainfont{Latin Modern Sans}[Ligatures=TeX]%
+}}}
+\IfFontExistsTF{Source Code Pro}{%
+  \setmonofont{Source Code Pro}[Scale=0.92]%
+}{\IfFontExistsTF{Consolas}{%
+  \setmonofont{Consolas}[Scale=0.92]%
+}{%
+  \setmonofont{Latin Modern Mono}[Scale=0.92]%
+}}
+
+\usepackage{xcolor}
+% Farbpalette: hell, freundlich, modern
+\definecolor{bfwPrimary}{HTML}{0EA5A4}    % Petrol/Türkis - Primär
+\definecolor{bfwPrimaryDark}{HTML}{0F766E} % dunkler Petrol für Headings
+\definecolor{bfwAccent}{HTML}{F59E0B}     % Amber - Akzent
+\definecolor{bfwSuccess}{HTML}{10B981}    % Grün - Erfolg / Lösung
+\definecolor{bfwWarn}{HTML}{F97316}       % Orange - Achtung
+\definecolor{bfwInk}{HTML}{0F172A}        % fast Schwarz
+\definecolor{bfwInkSoft}{HTML}{475569}    % gedämpftes Grau
+\definecolor{bfwBgSoft}{HTML}{F8FAFC}     % off-white
+\definecolor{bfwBgTeal}{HTML}{ECFEFF}     % helles Türkis
+\definecolor{bfwBgAmber}{HTML}{FEF3C7}    % helles Gelb
+\definecolor{bfwBgRose}{HTML}{FFE4E6}     % helles Rosé für Eselsbrücken
+
+\usepackage[colorlinks=true, linkcolor=bfwPrimaryDark, urlcolor=bfwPrimaryDark]{hyperref}
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*, itemsep=2pt, topsep=2pt}
+\setlist[enumerate]{leftmargin=*, itemsep=2pt, topsep=2pt}
+
+\usepackage[most]{tcolorbox}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{decorations.pathmorphing, positioning, shapes.geometric, arrows.meta}
+
+% Merkkästchen — wichtige Definition / Kernpunkt
+\newtcolorbox{merksatz}[1][]{%
+  enhanced, breakable,
+  colback=bfwBgTeal,
+  colframe=bfwPrimary,
+  boxrule=0.6pt,
+  arc=4pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  fonttitle=\bfseries\color{bfwPrimaryDark},
+  title={\faLightbulb\ Merksatz},
+  #1
+}
+
+% Eselsbrücke — Mnemoniks
+\newtcolorbox{eselsbruecke}[1][]{%
+  enhanced, breakable,
+  colback=bfwBgRose,
+  colframe=bfwAccent,
+  boxrule=0.6pt,
+  arc=4pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  fonttitle=\bfseries\color{bfwWarn},
+  title={Eselsbrücke},
+  #1
+}
+
+% Beispiel-Box
+\newtcolorbox{beispiel}[1][]{%
+  enhanced, breakable,
+  colback=bfwBgSoft,
+  colframe=bfwInkSoft,
+  boxrule=0.4pt,
+  arc=3pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  fonttitle=\bfseries\color{bfwInk},
+  title={Beispiel},
+  #1
+}
+
+% Lösungs-Box (für Aufgabenhefte)
+\newtcolorbox{loesung}[1][]{%
+  enhanced, breakable,
+  colback=bfwBgAmber!40,
+  colframe=bfwSuccess,
+  boxrule=0.6pt,
+  arc=3pt,
+  left=10pt, right=10pt, top=8pt, bottom=8pt,
+  fonttitle=\bfseries\color{bfwSuccess!70!black},
+  title={Lösung},
+  #1
+}
+
+% Glossar-Eintrag
+\newcommand{\glossareintrag}[2]{%
+  \par\noindent\textbf{\color{bfwPrimaryDark}#1} \enspace #2\par\smallskip
+}
+
+% Section-Stil — etwas farbiger als Standard
+\usepackage{titlesec}
+\titleformat{\section}
+  {\Large\bfseries\color{bfwPrimaryDark}}
+  {\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\large\bfseries\color{bfwPrimary}}
+  {\thesubsection}{0.5em}{}
+\titleformat{\subsubsection}
+  {\normalsize\bfseries\color{bfwInk}}
+  {\thesubsubsection}{0.4em}{}
+
+% TikZ-Stil "skizzenhaft" — etwas weicher als Rough.js, aber stabil
+\tikzset{
+  roughbox/.style = {
+    draw=bfwPrimaryDark, thick, fill=bfwBgTeal,
+    rounded corners=4pt, inner sep=6pt
+  },
+  roughaccent/.style = {
+    draw=bfwAccent, thick, fill=bfwBgAmber,
+    rounded corners=4pt, inner sep=6pt
+  },
+  roughline/.style = {
+    draw=bfwInkSoft, thick, -{Stealth[length=2.5mm]}
+  }
+}
+
+% Bullet-Symbole (bewusst kein FontAwesome — vermeidet Font-Installations-Probleme)
+\newcommand{\faLightbulb}{$\bullet$}
+\newcommand{\faBookmark}{$\bullet$}
+
+% Header/Footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\small\color{bfwInkSoft}\thepage}
+\fancyfoot[R]{\small\color{bfwInkSoft} BFW M-064 Beschaffung im Büromanagement}

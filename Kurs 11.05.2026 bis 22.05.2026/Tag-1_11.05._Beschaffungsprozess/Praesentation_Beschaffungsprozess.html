@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 1 — Beschaffungsprozess · M-064</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 1 · 11.05.2026</span>
+    <h1>Der Beschaffungsprozess</h1>
+    <p class="subtitle">Vom betrieblichen Bedarf zur Bezahlung — Grundlagen und Strategie</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>M-064 Beschaffung im Büromanagement</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 4.1, 4.2, 4.10</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>den Beschaffungsprozess als Teil der <strong>Wertschöpfungskette</strong> einordnen</li>
+      <li>die <strong>sechs Beschaffungsziele</strong> (6 R) benennen und Zielkonflikte erklären</li>
+      <li>eine <strong>Make-or-Buy-Entscheidung</strong> qualitativ und quantitativ begründen</li>
+      <li>Beschaffungs<strong>prinzipien</strong> (Einzel, Vorrats, fertigungssynchron) unterscheiden</li>
+      <li><strong>E-Procurement</strong>-Konzepte (Sell-Side, Buy-Side, Marktplatz) erläutern</li>
+      <li><strong>ökologische</strong> Aspekte in eine Lieferantenauswahl einbeziehen</li>
+    </ul>
+  </section>
+
+  <!-- 3. Was ist Beschaffung? -->
+  <section class="slide">
+    <h2>Was ist eigentlich "Beschaffung"?</h2>
+    <p>Beschaffung umfasst <strong>alle Tätigkeiten</strong>, durch die ein Unternehmen die für seine Leistungserstellung benötigten Sachgüter und Dienstleistungen bereitstellt — und zwar zum richtigen Zeitpunkt, in der richtigen Menge und Qualität, am richtigen Ort und zum wirtschaftlich richtigen Preis.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die Beschaffung ist der <strong>Bindeglied</strong> zwischen Markt und Produktion. Ohne sie steht die Wertschöpfung still.
+    </div>
+    <p class="muted">Buchverweis: S. 226–229</p>
+  </section>
+
+  <!-- 4. Wertschöpfungskette - Diagramm -->
+  <section class="slide">
+    <h2>Beschaffung in der Wertschöpfungskette</h2>
+    <div class="figure" id="fig-wertschoepfung"></div>
+    <p class="caption">Die Beschaffung steht am <em>Anfang</em> der Wertschöpfung — Fehler hier wirken auf alle nachgelagerten Bereiche.</p>
+  </section>
+
+  <!-- 5. Aufgaben der Beschaffung (operativ vs. strategisch) -->
+  <section class="slide">
+    <h2>Aufgaben der Beschaffung</h2>
+    <p>Die Beschaffung hat <strong>zwei Ebenen</strong> — beide sind notwendig.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Operativ (kurzfristig)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Bestellungen auslösen</li>
+          <li>Lieferungen überwachen</li>
+          <li>Reklamationen bearbeiten</li>
+          <li>Rechnungen prüfen</li>
+          <li>Lagerbestände kontrollieren</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Strategisch (langfristig)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Lieferantenstrategie entwickeln</li>
+          <li>Make-or-Buy-Entscheidungen</li>
+          <li>Rahmenverträge verhandeln</li>
+          <li>Marktbeobachtung</li>
+          <li>Nachhaltigkeitsstrategie</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Faustregel</span>
+      Operativ = "<em>Heute</em> bestellen". Strategisch = "<em>Morgen</em> günstiger bestellen können".
+    </div>
+  </section>
+
+  <!-- 6. Die 6 R der Beschaffung — Übersicht -->
+  <section class="slide">
+    <h2>Die sechs Beschaffungsziele — „6 R"</h2>
+    <p class="subtitle">Diese Ziele bestimmen <strong>jede</strong> Beschaffungs­entscheidung.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Richtige Ware</div>Genau das gewünschte Material/Produkt.</div>
+      <div class="card teal"><div class="card-title">Richtige Menge</div>Weder zu viel noch zu wenig.</div>
+      <div class="card teal"><div class="card-title">Richtige Qualität</div>Spezifikation erfüllt — nicht mehr, nicht weniger.</div>
+      <div class="card amber"><div class="card-title">Richtiger Ort</div>Am Bedarfsort verfügbar.</div>
+      <div class="card amber"><div class="card-title">Richtige Zeit</div>Pünktlich — nicht zu früh, nicht zu spät.</div>
+      <div class="card amber"><div class="card-title">Richtiger Preis</div>Wirtschaftlich vertretbar, marktgerecht.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke „M-M-Q-O-Z-P"</span>
+      <strong>M</strong>aterial, <strong>M</strong>enge, <strong>Q</strong>ualität, <strong>O</strong>rt, <strong>Z</strong>eit, <strong>P</strong>reis — in dieser Reihenfolge.
+    </div>
+  </section>
+
+  <!-- 7. R 1+2: Material + Menge im Detail -->
+  <section class="slide">
+    <h2>R1 + R2 — Material und Menge im Detail</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Richtiges Material</div>
+        <p style="font-size: 1rem;">Das exakt benötigte Produkt. Spezifikation muss eindeutig sein: Art, Modell, Norm, Zustand.</p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Beispiel:</strong> Aktenordner DIN A4 breit, blau, mit Hebelmechanik — nicht nur „Aktenordner".</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Richtige Menge</div>
+        <p style="font-size: 1rem;">Bedarf der nächsten Periode + Sicherheits­bestand, abzüglich Lagerbestand.</p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Tipp:</strong> Mengenrabatte gegen Lagerkosten abwägen — nicht jede Großbestellung lohnt sich.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. R 3+4: Qualität + Ort -->
+  <section class="slide">
+    <h2>R3 + R4 — Qualität und Ort im Detail</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Richtige Qualität</div>
+        <p style="font-size: 1rem;">Genau die geforderte Qualitätsstufe — höhere Qualität ist meistens auch teurer und nicht immer nötig.</p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Beispiel:</strong> Druckerpapier 80 g/m² für Bürodruck reicht — Premium-Fotopapier wäre Verschwendung.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Richtiger Ort</div>
+        <p style="font-size: 1rem;">Anlieferung dorthin, wo die Ware gebraucht wird — nicht ins Zentrallager, wenn die Filiale sie nutzt.</p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Praxis:</strong> JIT-Konzepte liefern direkt an die Produktionslinie.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. R 5+6: Zeit + Preis -->
+  <section class="slide">
+    <h2>R5 + R6 — Zeit und Preis im Detail</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Richtige Zeit</div>
+        <p style="font-size: 1rem;">Pünktliche Lieferung. Zu früh = Lagerkosten, zu spät = Produktionsstillstand oder verärgerte Kunden.</p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Praxis:</strong> Lieferterminzusagen vertraglich festhalten, Vertragsstrafen bei Verzug.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Richtiger Preis</div>
+        <p style="font-size: 1rem;">Nicht der billigste, sondern der wirtschaftlich beste — inklusive Bezugskosten, Qualität und Folgekosten.</p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Falle:</strong> Ein 5 % günstigeres Angebot mit 30 % Reklamationsquote ist teuer.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Zielkonflikte (war alte 6) -->
+  <section class="slide">
+    <h2>Zielkonflikte zwischen den 6 R</h2>
+    <p>Die Beschaffungsziele stehen oft <strong>in Spannung</strong> zueinander:</p>
+    <table>
+      <thead><tr><th>Konflikt</th><th>Beschreibung</th></tr></thead>
+      <tbody>
+        <tr><td>Preis ↔ Qualität</td><td>Billiger Lieferant liefert minderwertige Ware → Reklamationen, Folgekosten.</td></tr>
+        <tr><td>Menge ↔ Lagerkosten</td><td>Große Bestellmenge senkt Stückpreis (Mengenrabatt), erhöht aber Lagerkosten und Kapitalbindung.</td></tr>
+        <tr><td>Zeit ↔ Preis</td><td>Eilbestellung verursacht Aufpreis (z.B. Express­fracht).</td></tr>
+        <tr><td>Lieferzuverlässigkeit ↔ Lagerbestand</td><td>JIT spart Lager, erhöht aber Risiko von Lieferausfällen.</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">→ Beschaffung ist immer ein <strong>Optimierungs­problem</strong>, kein Maximierungs­problem.</p>
+  </section>
+
+  <!-- 11. Beschaffungsprozess als Ablauf -->
+  <section class="slide">
+    <h2>Der Beschaffungsprozess in 7 Schritten</h2>
+    <ol class="numlist">
+      <li><strong>Bedarfsermittlung</strong> — Was wird gebraucht? Wie viel? Wann?</li>
+      <li><strong>Bezugsquellen­ermittlung</strong> — Welche Lieferanten kommen in Frage?</li>
+      <li><strong>Anfrage</strong> — Angebot einholen (rechtlich nicht bindend).</li>
+      <li><strong>Angebotsvergleich</strong> — quantitativ + qualitativ bewerten.</li>
+      <li><strong>Bestellung</strong> — Vertragsschluss durch Antrag und Annahme.</li>
+      <li><strong>Wareneingang</strong> — Kontrolle, Erfassung, ggf. Mängelrüge.</li>
+      <li><strong>Rechnungs­prüfung &amp; Zahlung</strong> — sachliche und formale Prüfung, dann Begleichung.</li>
+    </ol>
+    <p class="muted">Diese 7 Schritte bilden den Roten Faden für die Tage 2–8 dieses Kurses.</p>
+  </section>
+
+  <!-- 6. Zielkonflikte -->
+  <section class="slide">
+    <h2>Zielkonflikte zwischen den 6 R</h2>
+    <p>Die Beschaffungsziele stehen oft <strong>in Spannung</strong> zueinander:</p>
+    <table>
+      <thead><tr><th>Konflikt</th><th>Beschreibung</th></tr></thead>
+      <tbody>
+        <tr><td>Preis ↔ Qualität</td><td>Billiger Lieferant liefert minderwertige Ware → Reklamationen, Folgekosten.</td></tr>
+        <tr><td>Menge ↔ Lagerkosten</td><td>Große Bestellmenge senkt Stückpreis (Mengenrabatt), erhöht aber Lagerkosten und Kapitalbindung.</td></tr>
+        <tr><td>Zeit ↔ Preis</td><td>Eilbestellung verursacht Aufpreis (z.B. Express­fracht).</td></tr>
+        <tr><td>Lieferzuverlässigkeit ↔ Lagerbestand</td><td>JIT spart Lager, erhöht aber Risiko von Lieferausfällen.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 7. Organisation: zentral vs. dezentral -->
+  <section class="slide">
+    <h2>Organisation der Beschaffung</h2>
+    <table>
+      <thead><tr><th>Kriterium</th><th>Zentral</th><th>Dezentral</th></tr></thead>
+      <tbody>
+        <tr><td>Mengenrabatte</td><td>+ höhere Bündelung</td><td>− kleinere Mengen</td></tr>
+        <tr><td>Marktnähe</td><td>− gering</td><td>+ hoch</td></tr>
+        <tr><td>Spezialisierung</td><td>+ Einkaufsexperten</td><td>− verteilt</td></tr>
+        <tr><td>Reaktionszeit</td><td>− langsamer</td><td>+ schnell vor Ort</td></tr>
+        <tr><td>Standardisierung</td><td>+ einheitliche Prozesse</td><td>− Wildwuchs</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">In der Praxis oft <strong>hybrid</strong>: zentrale Rahmenverträge + dezentrale Abrufe.</p>
+  </section>
+
+  <!-- 8. Make or Buy - Entscheidungsrahmen -->
+  <section class="slide">
+    <h2>Make or Buy: Eigenfertigung oder Fremdbezug?</h2>
+    <div class="figure" id="fig-makeorbuy"></div>
+    <p class="muted">Die Entscheidung wird quantitativ (Kostenvergleich) <strong>und</strong> qualitativ (Know-how, Risiko, Strategie) getroffen.</p>
+  </section>
+
+  <!-- 9. Make or Buy - Kriterien -->
+  <section class="slide">
+    <h2>Make or Buy — Entscheidungskriterien</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Pro Eigenfertigung (Make)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Schutz von Kern-Know-how</li>
+          <li>Auslastung freier Kapazitäten</li>
+          <li>Qualitätskontrolle direkt</li>
+          <li>Unabhängigkeit von Lieferanten</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Pro Fremdbezug (Buy)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Skaleneffekte des Spezialisten</li>
+          <li>Geringere Fixkosten</li>
+          <li>Fokus auf Kerngeschäft</li>
+          <li>Flexible Anpassung an Schwankungen</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Beschaffungsprinzipien -->
+  <section class="slide">
+    <h2>Beschaffungsprinzipien im Vergleich</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Einzelbeschaffung</div>
+        <p style="font-size: 1rem;">Pro Auftrag wird gezielt beschafft. <em>Niedriges Lager, hoher Aufwand.</em></p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Typisch:</strong> Sondermaschinen, Einzelfertigung.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Vorratsbeschaffung</div>
+        <p style="font-size: 1rem;">Größere Mengen vorrätig im Lager. <em>Hohe Kapitalbindung, hohe Versorgungssicherheit.</em></p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Typisch:</strong> Standard-Bürobedarf.</p>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Fertigungssynchron (JIT)</div>
+        <p style="font-size: 1rem;">Lieferung erfolgt genau zum Bedarfszeitpunkt. <em>Minimaler Lagerbestand, hohe Lieferantenabhängigkeit.</em></p>
+        <p style="font-size: 0.95rem;" class="muted"><strong>Typisch:</strong> Automobilindustrie.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. E-Procurement -->
+  <section class="slide">
+    <h2>E-Procurement — drei Konzepte</h2>
+    <div class="figure" id="fig-eprocurement"></div>
+    <table>
+      <thead><tr><th>Konzept</th><th>Wer betreibt das System?</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Sell-Side</strong></td><td>Lieferant</td><td>Onlineshop von <em>Office-Versand AG</em></td></tr>
+        <tr><td><strong>Buy-Side</strong></td><td>Käufer</td><td>SAP Ariba beim Konzern</td></tr>
+        <tr><td><strong>Marktplatz</strong></td><td>Dritter Anbieter</td><td>Mercateo, BMEcat-Plattformen</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 12. Ökologische Beschaffung -->
+  <section class="slide">
+    <h2>Ökologische Beschaffung</h2>
+    <p>Nachhaltigkeit wird zum <strong>Beschaffungskriterium</strong> — getrieben durch Recht, Markt und Wertewandel.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Treiber</div>
+        <ul style="margin-left: 1rem;">
+          <li>Lieferkettengesetz (LkSG, seit 2023)</li>
+          <li>EU-Lieferkettenrichtlinie (CSDDD)</li>
+          <li>Kunden­erwartung & Reputation</li>
+          <li>CO₂-Reporting (CSRD)</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Bewertungs­kriterien</div>
+        <ul style="margin-left: 1rem;">
+          <li>Transportwege (kurze Lieferketten)</li>
+          <li>Verpackungs­minimierung</li>
+          <li>Energie­bilanz des Lieferanten</li>
+          <li>Sozial­standards (Faire Arbeit)</li>
+          <li>Recyclingfähigkeit</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 1</h2>
+    <ol class="numlist">
+      <li>Beschaffung ist <strong>Bindeglied zwischen Markt und Produktion</strong> in der Wertschöpfungskette.</li>
+      <li>Die <strong>6 R</strong> beschreiben die operativen Ziele — sie stehen oft im Konflikt zueinander.</li>
+      <li><strong>Make or Buy</strong> kombiniert Kostenvergleich (quantitativ) mit strategischen Faktoren (qualitativ).</li>
+      <li><strong>Drei Beschaffungsprinzipien</strong>: Einzel, Vorrats, fertigungssynchron — je nach Material und Strategie.</li>
+      <li><strong>E-Procurement</strong> in drei Varianten: Sell-Side, Buy-Side, Marktplatz.</li>
+      <li><strong>Ökologische Beschaffung</strong> ist heute Pflicht, nicht Kür.</li>
+    </ol>
+  </section>
+
+  <!-- Praxisbeispiel im Büro -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Beschaffung im Büro</h2>
+    <p>Ihre Sachbearbeiter-Kollegin meldet: <em>„Wir brauchen 50 neue Aktenordner DIN A4 für das Vertragsarchiv."</em></p>
+    <ol class="numlist">
+      <li><strong>Bedarf prüfen</strong>: Wirklich 50 Stück? Welche Farbe (Archivkonvention)?</li>
+      <li><strong>Lager prüfen</strong>: Sind noch welche da? → 12 noch vorhanden, also 38 nachbestellen.</li>
+      <li><strong>Bezugsquellen</strong>: Rahmenvertrag mit <em>Bürofix AG</em>? Onlineshop?</li>
+      <li><strong>Bestellung</strong> auslösen über E-Procurement-Portal.</li>
+      <li><strong>Wareneingang</strong> in 3 Werktagen, Mengenkontrolle, Erfassung.</li>
+      <li><strong>Rechnung</strong> prüfen (Menge, Preis, Skonto­frist), Zahlung freigeben.</li>
+    </ol>
+    <p class="muted">Diese 6 Schritte machen Sie als Bürokaufleute regelmäßig — strukturiert und nachvollziehbar.</p>
+  </section>
+
+  <!-- IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Teil 1 (Information.- &amp; KomTech)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Beschaffungsprozess strukturiert beschreiben</li>
+          <li>Bedarfsarten unterscheiden</li>
+          <li>Beschaffungswege benennen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Teil 2 (Auftragsbearbeitung)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Make-or-Buy quantitativ <em>und</em> qualitativ begründen</li>
+          <li>Beschaffungsprinzipien situativ wählen</li>
+          <li>E-Procurement-Konzepte zuordnen</li>
+          <li>Ökologische Aspekte einbeziehen (LkSG)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      Achten Sie auf die Aufgabenverben: „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>In welchem Bereich Ihres jetzigen oder früheren Berufs spielt Beschaffung eine Rolle? Wie wurde sie organisiert?</li>
+      <li>Welcher der 6 R hat Sie am meisten überrascht — und warum?</li>
+      <li>Würden Sie persönlich eher zu Vorrats- oder zu JIT-Beschaffung tendieren? Bei welchen Artikeln?</li>
+      <li>Welche ökologischen Beschaffungs­kriterien finden Sie selbst <em>realistisch</em> umsetzbar — und welche sind Wunschdenken?</li>
+    </ol>
+  </section>
+
+  <!-- 15. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 2 (12.05.)</h2>
+    <p class="subtitle">Bezugsquellen, Anfragen, Angebotsvergleich</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Bedarfsermittlung</strong> — Welche Bedarfsarten gibt es?</li>
+      <li><strong>ABC-Analyse</strong> — Welche Artikel haben den größten Wert?</li>
+      <li><strong>Anfrage</strong> formulieren — was muss drinstehen?</li>
+      <li><strong>Bezugskalkulation</strong> — Angebote rechnerisch vergleichen</li>
+      <li><strong>Nutzwertanalyse</strong> — qualitative Lieferantenbewertung</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Beschaffungsprozess.html</code> bearbeiten — 60 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Beschaffungsprozess.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num"><span id="slideCount">1 / 14</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+// FIG: Wertschöpfungskette
+window.addEventListener('load', () => {
+  const c1 = document.getElementById('fig-wertschoepfung');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 200');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '200');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const phases = ['Beschaffung', 'Lagerung', 'Produktion', 'Vertrieb', 'Kunden­service'];
+    const colors = ['#ECFEFF', '#FEF3C7', '#FEF3C7', '#FEF3C7', '#FFE4E6'];
+    const stroke = ['#0F766E', '#F59E0B', '#F59E0B', '#F59E0B', '#F97316'];
+    let x = 30;
+    phases.forEach((p, i) => {
+      box(rc, svg, x, 70, 140, 70, colors[i], stroke[i]);
+      text(svg, x + 70, 110, p, { bold: true, size: 16 });
+      if (i < phases.length - 1) arrow(rc, svg, x + 145, 105, x + 175, 105, '#475569');
+      x += 175;
+    });
+    text(svg, 450, 30, 'Wertschöpfungskette', { size: 19, bold: true, color: '#0F766E' });
+    text(svg, 450, 180, '↑ Hier entstehen die Beschaffungsentscheidungen', { size: 13, color: '#475569' });
+  });
+
+  // FIG: Make or Buy
+  const c2 = document.getElementById('fig-makeorbuy');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 800 300');
+  svg2.setAttribute('width', '800'); svg2.setAttribute('height', '300');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    box(rc, svg, 320, 20, 160, 60, '#ECFEFF', '#0F766E');
+    text(svg, 400, 55, 'Bedarf erkannt', { bold: true, size: 16 });
+
+    arrow(rc, svg, 400, 85, 230, 130, '#475569');
+    arrow(rc, svg, 400, 85, 570, 130, '#475569');
+
+    box(rc, svg, 130, 130, 200, 70, '#ECFEFF', '#0F766E');
+    text(svg, 230, 160, 'MAKE', { bold: true, size: 18, color: '#0F766E' });
+    text(svg, 230, 182, 'Eigenfertigung', { size: 14 });
+
+    box(rc, svg, 470, 130, 200, 70, '#FEF3C7', '#F59E0B');
+    text(svg, 570, 160, 'BUY', { bold: true, size: 18, color: '#F97316' });
+    text(svg, 570, 182, 'Fremdbezug', { size: 14 });
+
+    text(svg, 230, 230, 'Kernkompetenz · Qualitätskontrolle', { size: 13, color: '#475569' });
+    text(svg, 230, 250, 'Auslastung freier Kapazität', { size: 13, color: '#475569' });
+    text(svg, 570, 230, 'Skaleneffekte · Flexibilität', { size: 13, color: '#475569' });
+    text(svg, 570, 250, 'Fokus auf Kerngeschäft', { size: 13, color: '#475569' });
+  });
+
+  // FIG: E-Procurement
+  const c3 = document.getElementById('fig-eprocurement');
+  const svg3 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg3.setAttribute('viewBox', '0 0 800 200');
+  svg3.setAttribute('width', '800'); svg3.setAttribute('height', '200');
+  c3.appendChild(svg3);
+  makeRough(svg3, (rc, svg) => {
+    // Sell-Side
+    box(rc, svg, 30, 60, 200, 80, '#ECFEFF', '#0F766E');
+    text(svg, 130, 90, 'Sell-Side', { bold: true, size: 16, color: '#0F766E' });
+    text(svg, 130, 115, 'Lieferant betreibt', { size: 13 });
+    text(svg, 130, 132, 'Onlineshop', { size: 13 });
+
+    // Buy-Side
+    box(rc, svg, 290, 60, 200, 80, '#FEF3C7', '#F59E0B');
+    text(svg, 390, 90, 'Buy-Side', { bold: true, size: 16, color: '#F97316' });
+    text(svg, 390, 115, 'Käufer betreibt', { size: 13 });
+    text(svg, 390, 132, 'Bestellsystem', { size: 13 });
+
+    // Marktplatz
+    box(rc, svg, 550, 60, 200, 80, '#FFE4E6', '#F97316');
+    text(svg, 650, 90, 'Marktplatz', { bold: true, size: 16, color: '#F97316' });
+    text(svg, 650, 115, 'Dritter bündelt', { size: 13 });
+    text(svg, 650, 132, 'viele Lieferanten', { size: 13 });
+
+    text(svg, 400, 30, 'Wer betreibt das Beschaffungssystem?', { bold: true, size: 16, color: '#0F766E' });
+  });
+});
+</script>
+
+</body>
+</html>

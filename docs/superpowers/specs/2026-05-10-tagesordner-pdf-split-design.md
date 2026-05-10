@@ -3,6 +3,7 @@
 **Datum:** 2026-05-10
 **Modul:** M-064 "Beschaffung im Büromanagement"
 **Kursdauer:** 11.05.2026 – 22.05.2026 (9 Kurstage, 81 UE gesamt)
+**Zielgruppe:** Umschülerinnen und Umschüler im Beruf **Kauffrau/Kaufmann für Büromanagement (IHK)** — erwachsenengerechte Sprache, IHK-Prüfungsformate, praxisnahe Bezüge zu Sachbearbeitung, Auftragsabwicklung und Bürokommunikation. Aufgaben in Anlehnung an Teil 1 und Teil 2 der gestreckten Abschlussprüfung.
 **Quelle Lehrplan:** `Inhaltsplanung und kursplanung/M-064_Beschaffung im Büromanagement_001_Ausbilder.docx`
 **Quelle Literatur:** `GrundlagenLiteratur/226-395.pdf` (170 Seiten, Buchseiten 224–393, Kapitel 4 "Sachgüter und Dienstleistungen beschaffen und Verträge schließen")
 
@@ -10,16 +11,38 @@
 
 Für jeden Kurstag (außer 14.05. Christi Himmelfahrt) wird im Ordner
 `Kurs 11.05.2026 bis 22.05.2026/` ein Tagesordner angelegt. Jeder Tagesordner
-enthält **drei Komponenten**:
+enthält folgende Komponenten:
 
-1. **Gesplittetes PDF** mit der Grundlagenliteratur, die für das Tagesthema relevant ist.
-2. **`Tagesplan_<Thema>.md`** — ein inhaltlich ausgearbeiteter Tagesplan
-   (Lernziele, Stoffaufbau, UE-Verlauf, Methodik, Aufgabenvorschläge).
-3. **`Aufgaben_<Thema>.md`** — Übungs- und Vertiefungsaufgaben für Teilnehmer
-   mit Verweisen auf die Buchseiten.
+**Dozent-orientiert (Markdown):**
+1. **`Tagesplan_<Thema>.md`** — Lernziele, Stoffaufbau, UE-Verlauf, Methodik.
+2. **`Aufgaben_<Thema>.md`** — Übungsvorschläge mit Sozialform und Zeitplan.
+
+**Teilnehmer-orientiert (für Druck/Präsentation):**
+3. **`Grundlagen_<Thema>.pdf`** — gesplittete Buchpassagen.
+4. **`Praesentation_<Thema>.html`** — Foliendeck mit Deckblatt, Lernzielen,
+   Inhalt, Rough.js-Skizzen für Diagramme. Im Browser öffnen.
+5. **`Handout_<Thema>.pdf`** — Begleitskript (LaTeX) mit Inhaltsverzeichnis,
+   Merkkästchen, Eselsbrücken, Glossar, eingebetteten Skizzen.
+6. **`Quiz_<Thema>.html`** + **`Quiz_<Thema>.pdf`** — 60 Multiple-Choice-Fragen
+   in interaktiver HTML- und druckbarer PDF-Version mit Lösungsschlüssel.
+7. **`Aufgabenheft_<Thema>.pdf`** — LaTeX-Aufgabenheft zum Selbstvertiefen
+   mit ausgearbeiteten Musterlösungen am Ende.
+
+**Stil:** Hell, freundlich, modern. Petrol/Türkis als Primärfarbe (`#0EA5A4`),
+Amber als Akzent (`#F59E0B`), warme Grautöne. Sans-Serif Schriften (Inter,
+Source Sans), Rough.js mit moderater Roughness (1.5).
 
 So wissen Ausbilder und Teilnehmer auf einen Blick, **welcher Stoff am welchem
-Tag wie vermittelt wird** — nicht nur welche Buchseiten zu lesen sind.
+Tag wie vermittelt wird** — und Teilnehmer haben hochwertiges Material zum
+Wiederholen.
+
+## Tooling
+
+- **LaTeX:** MiKTeX (`pdflatex`/`xelatex`) für Handout, Aufgabenheft, Quiz-PDF.
+- **Pakete:** `tcolorbox` (Merkkästchen, Eselsbrücken), `xcolor`, `tikz`, `hyperref`, `enumitem`, `fontspec` (xelatex).
+- **HTML:** Vanilla HTML5/CSS, Rough.js via CDN für handgezeichnete Diagramme.
+- **Quiz-Format:** Quelldaten als Markdown/JSON (eine Quelle), gerendert in HTML (interaktiv) und LaTeX (Druck).
+- **Build:** Make-/Python-Skript ruft `pdflatex` auf, generiert HTML aus Quellen.
 
 ## Kurstage
 

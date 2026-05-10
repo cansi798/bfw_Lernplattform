@@ -1,0 +1,208 @@
+\documentclass[11pt, a4paper]{article}
+
+% Gemeinsame Style-Definitionen (TEXINPUTS muss templates/ enthalten — siehe scripts/build_tex.py)
+\input{bfw-style.tex}
+
+\title{\vspace*{-1.5cm}\Huge\bfseries\color{bfwPrimaryDark}Tag~1: Der Beschaffungsprozess\\[0.4em]
+  \large\color{bfwInkSoft}\textnormal{Vom betrieblichen Bedarf zur Bezahlung}}
+\author{\textsf{Modul M-064 · Beschaffung im Büromanagement · BFW}}
+\date{11.05.2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\vspace{1em}
+\begin{merksatz}[title={\bfseries Worum geht es heute?}]
+Die Beschaffung ist das Bindeglied zwischen Markt und Produktion. Sie sorgt dafür,
+dass die richtigen Materialien in der richtigen Menge, Qualität, am richtigen Ort
+zur richtigen Zeit zum wirtschaftlichen Preis verfügbar sind --- und das nachhaltig.
+\end{merksatz}
+
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\section{Beschaffung als Teil der Wertschöpfungskette}
+
+Jedes Unternehmen wandelt Eingänge (Material, Wissen, Energie) in Ausgänge (Produkte, Dienstleistungen) um. Diese Folge nennt man \emph{Wertschöpfungskette}. Die Beschaffung steht ganz am Anfang.
+
+\begin{center}
+\begin{tikzpicture}[
+  every node/.style={font=\small\sffamily, align=center}
+]
+  \node[roughbox, minimum width=2.4cm, minimum height=1.1cm] (b) {Beschaffung};
+  \node[roughaccent, minimum width=2.4cm, minimum height=1.1cm, right=0.6cm of b] (l) {Lagerung};
+  \node[roughaccent, minimum width=2.4cm, minimum height=1.1cm, right=0.6cm of l] (p) {Produktion};
+  \node[roughaccent, minimum width=2.4cm, minimum height=1.1cm, right=0.6cm of p] (v) {Vertrieb};
+  \node[roughbox, minimum width=2.4cm, minimum height=1.1cm, right=0.6cm of v] (s) {Service};
+  \draw[roughline] (b) -- (l);
+  \draw[roughline] (l) -- (p);
+  \draw[roughline] (p) -- (v);
+  \draw[roughline] (v) -- (s);
+\end{tikzpicture}
+\end{center}
+\vspace{-0.5em}
+\begin{center}\small\itshape\color{bfwInkSoft}Die Wertschöpfungskette eines Industrieunternehmens.\end{center}
+
+\subsection{Ziele der Beschaffung --- die „6~R”}
+
+\begin{merksatz}[title={Die sechs Beschaffungsziele}]
+\textbf{Beschaffung soll das richtige Material, in der richtigen Menge, in der richtigen Qualität, am richtigen Ort, zur richtigen Zeit, zum richtigen Preis bereitstellen.}
+\end{merksatz}
+
+\begin{eselsbruecke}
+\textbf{„\,M-M-Q-O-Z-P\,”} --- \emph{Material, Menge, Qualität, Ort, Zeit, Preis}.
+Wenn man die Anfangsbuchstaben in dieser Reihenfolge spricht, bleiben die sechs Ziele leichter im Kopf.
+\end{eselsbruecke}
+
+Diese Ziele stehen oft im Konflikt: Eine \emph{große Bestellmenge} senkt den Preis pro Stück, erhöht aber Lager- und Kapitalbindungskosten. Ein \emph{billiger Lieferant} liefert vielleicht später oder schlechter. Die Beschaffung muss diese Trade-offs bewusst managen.
+
+\section{Organisation der Beschaffung}
+
+\subsection{Zentral oder dezentral?}
+
+\begin{tabular}{p{4.2cm} p{5.5cm} p{5.0cm}}
+\toprule
+\textbf{Kriterium} & \textbf{Zentrale Beschaffung} & \textbf{Dezentrale Beschaffung}\\
+\midrule
+Mengenrabatte & Hoch (Bündelung) & Niedrig\\
+Marktnähe & Gering & Hoch\\
+Spezialisierung & Einkaufsexperten & Verteiltes Wissen\\
+Reaktionszeit & Langsam & Schnell vor Ort\\
+Standardisierung & Einheitlich & Wildwuchs möglich\\
+\bottomrule
+\end{tabular}
+
+\medskip
+In der Praxis sieht man häufig \emph{Hybride}: zentrale Rahmenverträge mit dezentraler Abrufmöglichkeit.
+
+\subsection{Beschaffungswege}
+
+\begin{itemize}
+  \item \textbf{Direkter Bezug:} Vom Hersteller selbst. Vorteile: niedriger Preis, direkte Qualitätsgespräche.
+  \item \textbf{Indirekter Bezug:} Über Großhandel oder Vermittler. Vorteile: kleinere Mengen, breites Sortiment.
+\end{itemize}
+
+\section{Make or Buy --- Eigenfertigung oder Fremdbezug?}
+
+Eine der grundlegendsten Entscheidungen der Beschaffung. Sie kombiniert immer:
+
+\begin{enumerate}
+  \item \textbf{Quantitative Faktoren} --- Kostenvergleich (Personal, Material, Verwaltungskosten vs. Fremdbezugspreis)
+  \item \textbf{Qualitative Faktoren} --- Know-how-Schutz, Strategie, Risiko, Auslastung, Kapazität
+\end{enumerate}
+
+\begin{beispiel}
+Eine Firma erwägt, die Reinigung extern zu vergeben. \emph{Quantitativ}: 4.830~€ Eigenleistung vs. 4.500~€ Fremdbezug $\Rightarrow$ Fremdbezug günstiger. \emph{Qualitativ}: Aber sie verliert direkten Einfluss auf die Reinigungs­qualität, hat eine Abhängigkeit vom Dienstleister und muss Vertragsmanagement aufbauen.
+\end{beispiel}
+
+\begin{eselsbruecke}
+\textbf{„Wenn der Vorteil klein ist, bleib's daheim.”} --- Bei knappem Kostenvorteil im Fremdbezug überwiegen oft die qualitativen Risiken (Know-how-Verlust, Abhängigkeit).
+\end{eselsbruecke}
+
+\section{Beschaffungsprinzipien}
+
+\subsection{Drei Grundvarianten}
+
+\begin{tabular}{p{4.5cm} p{4.5cm} p{4.5cm}}
+\toprule
+\textbf{Einzelbeschaffung} & \textbf{Vorratsbeschaffung} & \textbf{Fertigungssynchron (JIT)}\\
+\midrule
+Pro Auftrag gezielt & Größere Mengen vorrätig & Lieferung exakt zum Bedarf\\
+Niedriges Lager & Hohe Kapitalbindung & Minimaler Bestand\\
+Hoher administrativer Aufwand & Hohe Versorgungssicherheit & Hohe Lieferantenabhängigkeit\\
+\midrule
+\textit{Sondermaschinen, Einzelfertigung} & \textit{Standard-Bürobedarf} & \textit{Automobilindustrie}\\
+\bottomrule
+\end{tabular}
+
+\medskip
+\textbf{Just-in-Time (JIT)} senkt Lagerkosten drastisch, erfordert aber zuverlässige Lieferketten und enge IT-Integration mit Lieferanten. Eine Lieferunterbrechung führt schnell zu Produktionsstillstand.
+
+\section{E-Procurement}
+
+\subsection{Drei Konzepte}
+
+\begin{merksatz}
+E-Procurement ersetzt die Bestellung per Telefon/Fax durch elektronische Bestellsysteme. Drei Grundkonzepte unterscheiden sich danach, \emph{wer das System betreibt}.
+\end{merksatz}
+
+\begin{itemize}
+  \item \textbf{Sell-Side:} Der Lieferant betreibt einen Onlineshop, der Käufer kauft dort ein (z.B. \emph{Office-Versand AG}-Webshop).
+  \item \textbf{Buy-Side:} Der Käufer betreibt ein eigenes Bestellsystem, in dem zugelassene Lieferanten ihre Kataloge einstellen (z.B. \emph{SAP Ariba}).
+  \item \textbf{Marktplatz:} Ein Dritter bündelt viele Lieferanten (z.B. \emph{Mercateo}).
+\end{itemize}
+
+\begin{eselsbruecke}
+\textbf{„S - B - M”} --- \emph{Sell-Side} = Verkäufer-Webshop, \emph{Buy-Side} = Käufer-Plattform, \emph{Marktplatz} = neutraler Bündler.
+\end{eselsbruecke}
+
+\section{Ökologische Beschaffung}
+
+Nachhaltigkeit ist heute kein Bonus, sondern ein \emph{Beschaffungs­kriterium}. Treiber sind:
+
+\begin{itemize}
+  \item \textbf{Lieferkettensorgfalts­pflichtengesetz (LkSG)} --- seit 2023 verpflichtet Unternehmen ab gewisser Größe zur Sorgfalt in ihrer Lieferkette.
+  \item \textbf{EU-Lieferketten­richtlinie (CSDDD)} --- erweitert dies europaweit.
+  \item \textbf{Corporate Sustainability Reporting Directive (CSRD)} --- verpflichtet zur transparenten CO\textsubscript{2}-Berichterstattung.
+\end{itemize}
+
+\textbf{Bewertungs­kriterien für nachhaltige Lieferanten:}
+\begin{itemize}[itemsep=0pt]
+  \item Transportwege (möglichst kurz)
+  \item Verpackungs­minimierung und Recyclingfähigkeit
+  \item Energie­bilanz und CO\textsubscript{2}-Fußabdruck
+  \item Sozial­standards entlang der Lieferkette
+\end{itemize}
+
+\section{Zusammenfassung}
+
+\begin{enumerate}
+  \item Beschaffung ist Bindeglied zwischen Markt und Produktion in der Wertschöpfungskette.
+  \item Die \textbf{6 R} (Material, Menge, Qualität, Ort, Zeit, Preis) beschreiben die operativen Ziele und stehen häufig im Konflikt.
+  \item \textbf{Make or Buy} kombiniert Kostenvergleich (quantitativ) mit strategischen Faktoren (qualitativ).
+  \item Drei \textbf{Beschaffungsprinzipien}: Einzel, Vorrats, fertigungssynchron --- je nach Material und Strategie.
+  \item \textbf{E-Procurement} in drei Varianten: Sell-Side, Buy-Side, Marktplatz.
+  \item \textbf{Ökologische Beschaffung} ist heute Pflicht, nicht Kür.
+\end{enumerate}
+
+\newpage
+
+\section*{Glossar}
+\addcontentsline{toc}{section}{Glossar}
+
+\glossareintrag{Beschaffung}{Alle Tätigkeiten, durch die ein Unternehmen die zur Leistungserstellung benötigten Sachgüter und Dienstleistungen bereitstellt.}
+
+\glossareintrag{Wertschöpfungskette}{Folge von Tätigkeiten, die einen Wertzuwachs vom Material bis zum verkaufsfertigen Produkt bewirken.}
+
+\glossareintrag{6 R}{Die sechs operativen Beschaffungsziele: richtiges Material, richtige Menge, richtige Qualität, richtiger Ort, richtige Zeit, richtiger Preis.}
+
+\glossareintrag{Make or Buy}{Strategische Entscheidung zwischen Eigenfertigung (Make) und Fremdbezug (Buy) eines Sachgutes oder einer Dienstleistung.}
+
+\glossareintrag{Einzelbeschaffung}{Beschaffungsprinzip, bei dem pro Auftrag gezielt eingekauft wird; geringer Lagerbestand, hoher administrativer Aufwand.}
+
+\glossareintrag{Vorratsbeschaffung}{Beschaffungsprinzip, bei dem größere Mengen auf Vorrat eingekauft werden; hohe Versorgungssicherheit, hohe Kapitalbindung.}
+
+\glossareintrag{Just-in-Time (JIT)}{Fertigungssynchrones Beschaffungsprinzip; Material wird genau zum Bedarfszeitpunkt geliefert, Lager praktisch null.}
+
+\glossareintrag{Kanban}{Aus Japan stammendes JIT-Verfahren mit Karten/Signalen, das den Materialfluss bedarfsgesteuert auslöst.}
+
+\glossareintrag{E-Procurement}{Elektronische Unterstützung des Beschaffungsprozesses; drei Konzepte: Sell-Side, Buy-Side, Marktplatz.}
+
+\glossareintrag{Sell-Side-Lösung}{E-Procurement-System, das vom \emph{Lieferanten} betrieben wird (z.B. Onlineshop).}
+
+\glossareintrag{Buy-Side-Lösung}{E-Procurement-System, das vom \emph{Käufer} betrieben wird; Lieferanten stellen Kataloge ein.}
+
+\glossareintrag{Marktplatz}{E-Procurement-System eines neutralen Dritten, der Sortimente vieler Lieferanten bündelt.}
+
+\glossareintrag{LkSG}{Lieferketten\-sorgfalts\-pflichten\-gesetz; verpflichtet ab 2023 deutsche Unternehmen zur Sorgfalt entlang ihrer Lieferkette.}
+
+\glossareintrag{CSRD}{Corporate Sustainability Reporting Directive; EU-Richtlinie zur verpflichtenden Nachhaltigkeits\-bericht\-erstattung.}
+
+\glossareintrag{Mengenrabatt}{Preisnachlass bei Abnahme größerer Mengen; ein Anreiz zur Vorratsbeschaffung.}
+
+\glossareintrag{Skaleneffekte}{Stückkostenvorteil bei größeren Produktionsmengen; ein Argument für Fremdbezug bei Spezialisten.}
+
+\end{document}

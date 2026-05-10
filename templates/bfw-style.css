@@ -1,0 +1,161 @@
+/* bfw-style.css — gemeinsamer Stil für HTML-Präsentationen und Quiz */
+
+:root {
+  /* Farbpalette — dieselben Werte wie bfw-style.tex */
+  --bfw-primary:       #0EA5A4;  /* Petrol/Türkis */
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;  /* Amber */
+  --bfw-success:       #10B981;
+  --bfw-warn:          #F97316;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-soft:       #F8FAFC;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+
+  --bfw-radius:        12px;
+  --bfw-shadow-sm:     0 1px 2px rgba(15, 23, 42, 0.04);
+  --bfw-shadow:        0 4px 12px rgba(15, 23, 42, 0.06);
+  --bfw-shadow-lg:     0 16px 32px rgba(15, 23, 42, 0.08);
+
+  --bfw-font-sans:     'Inter', 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --bfw-font-mono:     'Source Code Pro', 'JetBrains Mono', Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--bfw-font-sans);
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--bfw-ink);
+  background: var(--bfw-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  color: var(--bfw-primary-dark);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 0.6em 0;
+}
+h1 { font-size: 2.4rem; letter-spacing: -0.01em; }
+h2 { font-size: 1.7rem; }
+h3 { font-size: 1.3rem; color: var(--bfw-primary); }
+
+a { color: var(--bfw-primary-dark); text-decoration: underline; text-underline-offset: 2px; }
+a:hover { color: var(--bfw-accent); }
+
+/* Generische Inhalt-Container */
+.bfw-card {
+  background: white;
+  border: 1px solid var(--bfw-border);
+  border-radius: var(--bfw-radius);
+  padding: 1.5rem;
+  box-shadow: var(--bfw-shadow-sm);
+}
+
+/* Merkkästchen — wichtige Definition */
+.bfw-merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 5px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+}
+.bfw-merksatz::before {
+  content: "💡 Merksatz";
+  display: block;
+  font-weight: 700;
+  color: var(--bfw-primary-dark);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Eselsbrücke */
+.bfw-eselsbruecke {
+  background: var(--bfw-bg-rose);
+  border-left: 5px solid var(--bfw-accent);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+}
+.bfw-eselsbruecke::before {
+  content: "🐴 Eselsbrücke";
+  display: block;
+  font-weight: 700;
+  color: var(--bfw-warn);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Beispiel-Box */
+.bfw-beispiel {
+  background: var(--bfw-bg-soft);
+  border: 1px dashed var(--bfw-ink-soft);
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+}
+.bfw-beispiel::before {
+  content: "📝 Beispiel";
+  display: block;
+  font-weight: 700;
+  color: var(--bfw-ink);
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+}
+
+/* Tabellen */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--bfw-shadow-sm);
+}
+th, td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bfw-border);
+}
+th {
+  background: var(--bfw-bg-teal);
+  color: var(--bfw-primary-dark);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+tr:last-child td { border-bottom: none; }
+
+/* Buttons */
+.bfw-btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.bfw-btn-primary {
+  background: var(--bfw-primary);
+  color: white;
+  box-shadow: var(--bfw-shadow-sm);
+}
+.bfw-btn-primary:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); box-shadow: var(--bfw-shadow); }
+.bfw-btn-ghost {
+  background: transparent;
+  color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.bfw-btn-ghost:hover { background: var(--bfw-bg-teal); }
