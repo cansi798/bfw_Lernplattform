@@ -1,0 +1,21 @@
+# Verlagsmaterial - nicht ins public Repo (Urheberrecht)
+**/GrundlagenLiteratur/*.pdf
+**/Grundlagen_*.pdf
+
+# Lokale Claude-Code-Konfiguration
+.claude/
+
+# OS / Editor
+desktop.ini
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+~$*
+
+# Python (falls Splitting-Skripte genutzt werden)
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
