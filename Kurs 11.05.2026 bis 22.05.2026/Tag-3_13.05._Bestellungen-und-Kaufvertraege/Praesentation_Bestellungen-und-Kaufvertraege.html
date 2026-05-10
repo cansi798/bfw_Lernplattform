@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 3 — Bestellungen und Kaufverträge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 4rem 6rem; flex-direction: column; justify-content: center; background: white; animation: fadeIn 0.35s ease; overflow-y: auto; }
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.2rem; color: var(--bfw-primary-dark); margin-bottom: 1.2rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.2rem; line-height: 1.55; margin-bottom: 0.7rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.15rem; line-height: 1.55; margin-bottom: 0.35rem; }
+.subtitle { font-size: 1.3rem; color: var(--bfw-ink-soft); margin-bottom: 1.5rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.05rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+.merksatz { background: var(--bfw-bg-teal); border-left: 6px solid var(--bfw-primary); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.1rem; }
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+.paragraph-box { background: var(--bfw-bg-amber); border-left: 6px solid var(--bfw-accent); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.05rem; font-family: 'Source Code Pro', monospace; }
+.paragraph-box strong { color: var(--bfw-warn); }
+table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 1.05rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.95rem; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--bfw-border); }
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button { border: none; background: var(--bfw-primary); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.12); transition: all 0.15s; }
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.7rem; }
+.numlist li::before { content: counter(numitem); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--bfw-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+@media print { .slide { display: flex; page-break-after: always; } .nav, .slide-num { display: none; } html, body { height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<section class="slide active cover">
+  <span class="cover-tag">Tag 3 · 13.05.2026</span>
+  <h1>Bestellungen und Kaufverträge</h1>
+  <p class="subtitle">Rechtliche Grundlagen, Vertragsschluss und AGB</p>
+  <div class="cover-meta">
+    <span><strong>Modul</strong>Beschaffung im Büromanagement</span>
+    <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+    <span><strong>Quelle</strong>Lehrwerk Kap. 4.11 + 4.12.1–4.12.3</span>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Was Sie heute lernen</h2>
+  <p class="subtitle">Am Ende des Tages können Sie...</p>
+  <ul class="checklist">
+    <li>privates und öffentliches <strong>Recht</strong> abgrenzen</li>
+    <li><strong>Geschäftsfähigkeit</strong> einer Person prüfen</li>
+    <li>Arten von <strong>Rechtsgeschäften</strong> (einseitig/mehrseitig) unterscheiden</li>
+    <li><strong>Trennungs- und Abstraktionsprinzip</strong> erklären</li>
+    <li>die <strong>Vertragsfreiheit</strong> und ihre Grenzen benennen</li>
+    <li>das <strong>Zustandekommen</strong> eines Kaufvertrags durch Antrag und Annahme prüfen</li>
+    <li><strong>AGB-Einbeziehung</strong> und -Inhaltskontrolle nach §§ 305 ff. BGB anwenden</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Wo wir gestern stehen geblieben sind</h2>
+  <p>Tag 2: Wir haben Bezugsquellen ermittelt, Anfragen gestellt und Angebote verglichen. Heute schließen wir <strong>Verträge</strong>.</p>
+  <ol class="numlist">
+    <li>Bedarfsermittlung — Tag 2</li>
+    <li>Bezugsquelle — Tag 2</li>
+    <li>Anfrage — Tag 2</li>
+    <li>Angebot &amp; Vergleich — Tag 2</li>
+    <li><strong>Bestellung &amp; Vertrag — heute Tag 3</strong></li>
+    <li>Wareneingang — Tag 5</li>
+    <li>Rechnung &amp; Zahlung — Tag 7+8</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Rechtsgebiete im Überblick</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Privates Recht</div>
+      <p style="font-size: 1rem;">Regelt Beziehungen zwischen <strong>gleichberechtigten Personen</strong>.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiele:</strong> BGB (Kaufvertrag), HGB (Handelskauf), GmbHG.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Öffentliches Recht</div>
+      <p style="font-size: 1rem;">Regelt Beziehungen zwischen <strong>Bürger und Staat</strong> (Über-/Unterordnung).</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiele:</strong> Grundgesetz, Steuerrecht, Strafrecht.</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Merksatz</span>
+    Beschaffungsverträge fallen ins <strong>private Recht</strong> — das BGB ist Ihre wichtigste Rechtsquelle.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Rechtsubjekte — wer ist „Person" im Recht?</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Natürliche Personen</div>
+      <p style="font-size: 1rem;">Jeder Mensch ab Geburt (§ 1 BGB) bis zum Tod.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiel:</strong> Sie selbst.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Juristische Personen</div>
+      <p style="font-size: 1rem;">Künstliche Rechtspersonen mit eigener Rechtspersönlichkeit.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiele:</strong> GmbH, AG, eingetragener Verein, Stadt München.</p>
+    </div>
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Nur Rechtssubjekte können Träger von Rechten und Pflichten sein — und damit Verträge schließen.</p>
+</section>
+
+<section class="slide">
+  <h2>Geschäftsfähigkeit — drei Stufen</h2>
+  <table>
+    <thead><tr><th>Stufe</th><th>Alter</th><th>Was darf man?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Geschäftsunfähig</strong></td><td>0–6 Jahre, dauerhaft Geistesgestörte (§ 104)</td><td>Nichts — alle Willenserklärungen sind nichtig (§ 105)</td></tr>
+      <tr><td><strong>Beschränkt geschäftsfähig</strong></td><td>7–17 Jahre (§ 106)</td><td>Nur lediglich rechtlich vorteilhafte Geschäfte (§ 107) — sonst Eltern-Zustimmung nötig</td></tr>
+      <tr><td><strong>Voll geschäftsfähig</strong></td><td>ab 18 Jahre</td><td>Alle Rechtsgeschäfte ohne Einschränkung</td></tr>
+    </tbody>
+  </table>
+  <div class="paragraph-box">
+    <strong>§ 110 BGB Taschengeldparagraph:</strong> Ein vom Minderjährigen ohne Zustimmung der Eltern geschlossener Vertrag ist wirksam, wenn er die vertragsmäßige Leistung mit Mitteln bewirkt, die ihm zur freien Verfügung überlassen wurden (z.B. Taschengeld).
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Rechtsobjekte — was sind „Sachen" im Recht?</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Sachen</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li><strong>Bewegliche Sachen</strong> (Aktenordner, Auto)</li>
+        <li><strong>Unbewegliche Sachen</strong> = Grundstücke und Gebäude</li>
+        <li><strong>Vertretbare</strong> Sachen (austauschbar nach Maß/Zahl/Gewicht — z.B. Druckerpapier)</li>
+        <li><strong>Unvertretbare</strong> Sachen (einzigartig — z.B. Gemälde)</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Rechte und Forderungen</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Forderungen aus Verträgen</li>
+        <li>Patente, Markenrechte</li>
+        <li>Urheberrechte</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Rechtsgeschäfte — was ist das?</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Merksatz</span>
+    Ein <strong>Rechtsgeschäft</strong> ist eine private Willenserklärung, die einen rechtlichen Erfolg herbeiführen soll. Es besteht aus einer (einseitig) oder mehreren (mehrseitig) Willenserklärungen.
+  </div>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Einseitig</div>
+      <p style="font-size: 1rem;">Nur eine Willenserklärung nötig.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiele:</strong> Kündigung, Testament, Anfechtung.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Mehrseitig (= Vertrag)</div>
+      <p style="font-size: 1rem;">Zwei oder mehr übereinstimmende Willenserklärungen.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiele:</strong> Kaufvertrag, Mietvertrag, Arbeitsvertrag.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Verpflichtungs- und Verfügungsgeschäft</h2>
+  <p>Im deutschen Recht gilt das <strong>Trennungs- und Abstraktionsprinzip</strong>: Beim Kauf eines Aktenordners passieren juristisch <em>zwei Dinge</em>!</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">1. Verpflichtungsgeschäft</div>
+      <p style="font-size: 1rem;">Die Parteien <strong>verpflichten</strong> sich.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiel:</strong> Kaufvertrag — Verkäufer verpflichtet sich zur Übergabe, Käufer zur Zahlung (§ 433 BGB).</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">2. Verfügungsgeschäft</div>
+      <p style="font-size: 1rem;">Die Verpflichtung wird <strong>erfüllt</strong>.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiel:</strong> Übergabe + Eigentumsübertragung (§ 929 BGB) und Geldzahlung.</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">🐴 Eselsbrücke</span>
+    <strong>„Versprechen — Erfüllen":</strong> Erst verspreche ich (Vertrag), dann erfülle ich (Übergabe). Beides ist rechtlich getrennt!
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Vertragsfreiheit</h2>
+  <p>Im privaten Recht gilt die <strong>Vertragsfreiheit</strong> — jeder darf grundsätzlich:</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Abschlussfreiheit</div>
+      <p style="font-size: 1rem;">Mit wem ich Verträge schließe.</p>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Inhaltsfreiheit</div>
+      <p style="font-size: 1rem;">Was im Vertrag steht.</p>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Formfreiheit</div>
+      <p style="font-size: 1rem;">Mündlich, schriftlich, per Handschlag.</p>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Aufhebungsfreiheit</div>
+      <p style="font-size: 1rem;">Verträge einvernehmlich auflösen.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Grenzen der Vertragsfreiheit</h2>
+  <p>Aber: Die Freiheit ist nicht grenzenlos.</p>
+  <div class="paragraph-box">
+    <strong>§ 134 BGB — Verbotsgesetz:</strong> Verträge, die gegen ein gesetzliches Verbot verstoßen, sind <strong>nichtig</strong>.
+    <br><em>Beispiel:</em> Kaufvertrag über Drogen.
+  </div>
+  <div class="paragraph-box">
+    <strong>§ 138 BGB — Sittenwidrigkeit/Wucher:</strong> Verträge, die gegen die guten Sitten verstoßen oder eine Notlage ausnutzen, sind <strong>nichtig</strong>.
+    <br><em>Beispiel:</em> Kreditvertrag mit 200 % Zinsen p.a. wegen Notlage.
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Daneben: <strong>Formvorschriften</strong> (z.B. Grundstückskaufvertrag muss notariell sein, § 311b BGB) und <strong>Kontrahierungszwang</strong> (z.B. Strom­versorger müssen liefern).</p>
+</section>
+
+<section class="slide">
+  <h2>Zustandekommen eines Kaufvertrags</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">📋 Grundregel</span>
+    Ein Kaufvertrag kommt zustande durch zwei <strong>übereinstimmende Willenserklärungen</strong>:
+    <strong>Antrag (= Angebot)</strong> und <strong>Annahme</strong>.
+  </div>
+  <div class="paragraph-box">
+    <strong>§ 145 BGB:</strong> Wer einem anderen die Schließung eines Vertrags <em>anträgt</em>, ist an den Antrag gebunden, es sei denn, dass er die Gebundenheit ausgeschlossen hat.
+  </div>
+  <p class="muted">Wichtig: Der Antrag (Angebot) ist <strong>bindend</strong>. Der Antragende kann nicht beliebig widerrufen.</p>
+</section>
+
+<section class="slide">
+  <h2>Antrag (Angebot) — was muss drin sein?</h2>
+  <p>Ein wirksamer Antrag braucht mindestens die <strong>essentialia negotii</strong> — die wesentlichen Bestandteile:</p>
+  <ol class="numlist">
+    <li><strong>Vertragspartner</strong> (wer kauft? wer verkauft?)</li>
+    <li><strong>Ware / Leistung</strong> (was?)</li>
+    <li><strong>Preis</strong> (wie viel?)</li>
+  </ol>
+  <p class="muted" style="margin-top: 1rem;">Daneben können Nebenabreden geregelt werden (Lieferzeit, Zahlungsbedingungen, AGB) — aber ohne die drei Hauptpunkte kein Vertrag.</p>
+</section>
+
+<section class="slide">
+  <h2>Annahme — wie wird der Vertrag perfekt?</h2>
+  <p>Die <strong>Annahme</strong> muss:</p>
+  <ul style="font-size: 1.15rem;">
+    <li>vorbehaltlos erfolgen — Zustimmung mit Änderung gilt als <em>neuer Antrag</em> (§ 150 Abs. 2 BGB)</li>
+    <li>rechtzeitig erfolgen — solange der Antrag bindet</li>
+    <li>dem Antragsteller zugehen (bei empfangsbedürftiger Annahme)</li>
+  </ul>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Praxisbeispiel</span>
+    Lieferant A bietet 100 Aktenordner für 422 € an. Sie schreiben zurück: „Wir nehmen das Angebot an, aber bitte für 400 €." → Das ist <strong>keine Annahme</strong>, sondern ein neuer Antrag. Lieferant A muss nun zustimmen, sonst kein Vertrag.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Vertragsschluss in der Praxis: Onlineshop</h2>
+  <p>Frau Meier sieht im Onlineshop von _Bürofix AG_ Aktenordner für 4,90 € pro Stück.</p>
+  <ol class="numlist">
+    <li><strong>Schaufenster-Auslage / Webshop:</strong> Das ist eine <em>invitatio ad offerendum</em> — keine bindende Offerte. Der Shop kann Bestellungen ablehnen!</li>
+    <li><strong>Bestellung absenden:</strong> Frau Meier macht damit den <strong>Antrag</strong> (Angebot zum Kauf).</li>
+    <li><strong>Bestellbestätigung des Shops:</strong> Erst diese ist die <strong>Annahme</strong> — jetzt ist der Vertrag perfekt!</li>
+  </ol>
+  <p class="muted" style="margin-top: 1rem;">Achtung: Eine automatische „Eingangsbestätigung" (E-Mail) ist <em>nicht</em> die Annahme — nur eine Bestätigung, dass die Bestellung angekommen ist.</p>
+</section>
+
+<section class="slide">
+  <h2>§ 433 BGB — Pflichten beim Kaufvertrag</h2>
+  <div class="paragraph-box">
+    <strong>§ 433 Abs. 1 BGB:</strong> Durch den Kaufvertrag wird der <strong>Verkäufer</strong> verpflichtet, dem Käufer die Sache zu übergeben und das Eigentum an der Sache zu verschaffen.
+  </div>
+  <div class="paragraph-box">
+    <strong>§ 433 Abs. 2 BGB:</strong> Der <strong>Käufer</strong> ist verpflichtet, dem Verkäufer den vereinbarten Kaufpreis zu zahlen und die gekaufte Sache abzunehmen.
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Diese „Hauptpflichten" sind die Grundlage jedes Kaufvertrags. Daneben gibt es Nebenpflichten (Information, Schutz, Mitwirkung).</p>
+</section>
+
+<section class="slide">
+  <h2>AGB — Allgemeine Geschäftsbedingungen</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Definition</span>
+    AGB sind <strong>vorformulierte Vertragsbedingungen</strong>, die eine Partei der anderen für eine Vielzahl von Verträgen stellt (§ 305 Abs. 1 BGB).
+  </div>
+  <p>Beispiele: Onlineshop-AGB, Mietvertrags-AGB, Versicherungs-AGB. Sie sparen Verhandlungs­zeit, weil nicht jeder Vertrag neu ausgehandelt werden muss.</p>
+  <p class="muted">Aber: Weil die andere Seite die AGB nicht aushandelt, schützt das Gesetz sie — vor allem bei Verbrauchergeschäften (B2C).</p>
+</section>
+
+<section class="slide">
+  <h2>AGB — wirksame Einbeziehung (§ 305 Abs. 2 BGB)</h2>
+  <p>AGB werden nur dann Vertragsbestandteil, wenn drei Bedingungen erfüllt sind:</p>
+  <ol class="numlist">
+    <li><strong>Hinweis</strong> auf die AGB durch den Verwender (vor oder bei Vertragsschluss)</li>
+    <li>Die Möglichkeit zur <strong>Kenntnisnahme</strong> in zumutbarer Weise (z.B. Link, Aushang)</li>
+    <li><strong>Einverständnis</strong> der anderen Partei (ausdrücklich oder konkludent)</li>
+  </ol>
+  <div class="merksatz">
+    <span class="merksatz-label">⚠️ Achtung</span>
+    Bei <strong>Unternehmern (B2B)</strong> sind die Voraussetzungen abgeschwächt — branchenübliche AGB können auch ohne ausdrücklichen Hinweis gelten.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>AGB — überraschende und unwirksame Klauseln</h2>
+  <div class="paragraph-box">
+    <strong>§ 305c BGB — Überraschende Klauseln:</strong> Klauseln, die nach den Umständen so ungewöhnlich sind, dass die andere Partei nicht damit rechnen musste, werden <strong>nicht Vertragsbestandteil</strong>.
+  </div>
+  <div class="paragraph-box">
+    <strong>§ 307 BGB — Inhaltskontrolle:</strong> Klauseln, die den Vertragspartner unangemessen benachteiligen, sind <strong>unwirksam</strong>. Stattdessen gilt das Gesetz.
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Beispiel: AGB-Klausel „Reklamationen nur innerhalb 24 Stunden" — wahrscheinlich unangemessen, weil das gesetzliche Mängelrechte (§ 437 BGB) drastisch verkürzt.</p>
+</section>
+
+<section class="slide">
+  <h2>Praxisbeispiel: Bestellung mit AGB-Konflikt</h2>
+  <p>Sie bestellen Druckerpapier bei _Bürofix AG_. In den AGB der Bürofix steht: <em>„Erfüllungsort und Gerichtsstand ist München."</em> In Ihren <strong>Einkaufs-AGB</strong> steht: <em>„Erfüllungsort und Gerichtsstand ist Berlin."</em></p>
+  <div class="merksatz">
+    <span class="merksatz-label">⚖️ Lösung</span>
+    Bei <strong>kollidierenden AGB</strong> gilt: Beide AGB werden insoweit, wie sie sich widersprechen, <em>nicht</em> Vertragsbestandteil. Stattdessen greift das gesetzliche Recht (BGB/HGB) — der gesetzliche Erfüllungsort ist meist beim Verkäufer (§ 269 BGB).
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bezug zur IHK-Abschlussprüfung</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Teil 1 (KomTech)</div>
+      <ul style="margin-left: 1rem;">
+        <li>Geschäftsfähigkeit unterscheiden</li>
+        <li>Rechtsgeschäfte einseitig/mehrseitig</li>
+        <li>Vertragsschluss-Schritte nennen</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Teil 2 (Auftragsbearbeitung)</div>
+      <ul style="margin-left: 1rem;">
+        <li>Kaufvertrag im konkreten Fall prüfen</li>
+        <li>AGB-Wirksamkeit beurteilen (situativ)</li>
+        <li>Pflichten aus § 433 BGB anwenden</li>
+        <li>Vertragsfreiheit vs. § 138 BGB Wucher</li>
+      </ul>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">📝 Tipp</span>
+    Lernen Sie die <strong>wichtigsten Paragraphen</strong>: § 145 (Antrag), § 147 (Annahmefrist), § 433 (Kaufvertrag), § 305 ff. (AGB), § 138 (Sittenwidrigkeit).
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Diskussionsfragen</h2>
+  <ol style="font-size: 1.15rem;">
+    <li>Lesen Sie irgendwann die AGB beim Online-Kauf? Warum (nicht)?</li>
+    <li>Was halten Sie von der Aussage „Mein Wort ist mein Wort" — gilt das im Vertragsrecht?</li>
+    <li>Sollte der Gesetzgeber Verbraucher noch stärker vor AGB schützen?</li>
+    <li>Welche Vor- und Nachteile hat ein mündlicher gegenüber einem schriftlichen Vertrag?</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Zusammenfassung Tag 3</h2>
+  <ol class="numlist">
+    <li><strong>Privates Recht</strong> regelt Beschaffungsverträge (BGB, HGB).</li>
+    <li><strong>Geschäftsfähigkeit</strong>: 0–6 (unfähig), 7–17 (beschränkt), ab 18 (voll).</li>
+    <li><strong>Rechtsgeschäfte</strong>: einseitig (Kündigung) oder mehrseitig (Vertrag). Trennungsprinzip: Verpflichtung ≠ Verfügung.</li>
+    <li><strong>Vertragsfreiheit</strong> mit Grenzen (§§ 134, 138 BGB).</li>
+    <li><strong>Kaufvertrag</strong> entsteht durch Antrag (§ 145) + Annahme. Pflichten: § 433 BGB.</li>
+    <li><strong>AGB</strong>: Einbeziehung nach § 305 Abs. 2, Inhaltskontrolle nach § 307 BGB.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Ausblick: Tag 4 (15.05.)</h2>
+  <p class="subtitle">Ausführen von Bestellungen — Bestellverfahren und Bestellüberwachung</p>
+  <ul style="font-size: 1.2rem;">
+    <li>Bestellverfahren: Bestellpunkt, Bestellrhythmus, JIT, Kanban</li>
+    <li>Optimale Bestellmenge (Andler-Formel)</li>
+    <li>Zielkonflikt: Lager- vs. Beschaffungskosten</li>
+    <li>Bestellüberwachung — Termintreue prüfen</li>
+    <li>Nichtige und anfechtbare Rechtsgeschäfte (Vertiefung)</li>
+  </ul>
+  <p class="muted" style="margin-top: 1.5rem;">Hausaufgabe: Quiz <code>Quiz_Bestellungen-und-Kaufvertraege.html</code> mit 60 MC-Fragen + AGB des eigenen Lieferanten lesen!</p>
+</section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 22</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+show(0);
+</script>
+
+</body>
+</html>

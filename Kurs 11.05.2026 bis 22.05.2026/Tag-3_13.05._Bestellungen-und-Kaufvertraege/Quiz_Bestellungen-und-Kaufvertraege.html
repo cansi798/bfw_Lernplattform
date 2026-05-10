@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 3 — Bestellungen und Kaufverträge</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-danger:#EF4444; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5; --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem; }
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 3 · 13.05.2026 · 60 Fragen</span>
+  <h1>Quiz: Bestellungen und Kaufverträge</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation</strong> und dem <strong>Handout</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Rechtsgebiete + Geschäftsfähigkeit (1-12) ===
+  { topic: "Rechtsgebiete", q: "Welches Rechtsgebiet regelt den Kaufvertrag?",
+    options: ["Öffentliches Recht", "Privates Recht (BGB)", "Strafrecht", "Verwaltungsrecht"],
+    a: 1, e: "Kaufverträge sind gleichberechtigte Rechtsbeziehungen → privates Recht (BGB)." },
+  { topic: "Rechtsgebiete", q: "Welches Verhältnis regelt das öffentliche Recht?",
+    options: ["Käufer und Verkäufer", "Mieter und Vermieter", "Bürger und Staat (Über-/Unterordnung)", "Arbeitnehmer und Arbeitgeber"],
+    a: 2, e: "Öffentliches Recht regelt Über-/Unterordnungsverhältnisse zwischen Bürger und Staat." },
+  { topic: "Rechtsgebiete", q: "Welches Gesetz ist für Beschaffungsverträge im Büroalltag besonders wichtig?",
+    options: ["Strafgesetzbuch (StGB)", "Bürgerliches Gesetzbuch (BGB)", "Grundgesetz (GG)", "Steuergesetzbuch (AO)"],
+    a: 1, e: "Das BGB regelt Kaufverträge und ist die wichtigste Rechtsquelle für Beschaffung." },
+  { topic: "Rechtsubjekte", q: "Wer ist eine natürliche Person im Sinne des BGB?",
+    options: ["Eine GmbH", "Jeder Mensch ab Geburt (§ 1 BGB)", "Ein eingetragener Verein", "Eine Stadt"],
+    a: 1, e: "Natürliche Personen sind alle Menschen ab Geburt — rechtsfähig laut § 1 BGB." },
+  { topic: "Rechtsubjekte", q: "Was ist KEINE juristische Person?",
+    options: ["GmbH", "Aktiengesellschaft (AG)", "Eingetragener Verein (e.V.)", "Privatperson"],
+    a: 3, e: "Privatpersonen sind natürliche Personen, keine juristischen Personen." },
+  { topic: "Geschäftsfähigkeit", q: "Wie viele Stufen der Geschäftsfähigkeit unterscheidet das BGB?",
+    options: ["2", "3", "4", "5"],
+    a: 1, e: "Drei Stufen: geschäftsunfähig, beschränkt geschäftsfähig, voll geschäftsfähig." },
+  { topic: "Geschäftsfähigkeit", q: "Bis zu welchem Alter ist eine Person geschäftsunfähig?",
+    options: ["Bis zum 5. Lebensjahr", "Bis zum 7. Lebensjahr (genauer: Vollendung des 7.)", "Bis zum 10. Lebensjahr", "Bis zum 14. Lebensjahr"],
+    a: 1, e: "Geschäftsunfähig sind Kinder unter 7 Jahren (§ 104 Nr. 1 BGB)." },
+  { topic: "Geschäftsfähigkeit", q: "Ab welchem Alter ist eine Person voll geschäftsfähig?",
+    options: ["Ab 14", "Ab 16", "Ab 18", "Ab 21"],
+    a: 2, e: "Volle Geschäftsfähigkeit beginnt mit dem 18. Geburtstag." },
+  { topic: "Geschäftsfähigkeit", q: "Was ist der Taschengeldparagraph?",
+    options: ["§ 105 BGB", "§ 110 BGB", "§ 145 BGB", "§ 433 BGB"],
+    a: 1, e: "§ 110 BGB regelt: Geschäft des Minderjährigen ist wirksam, wenn er es mit frei verfügbaren Mitteln (Taschengeld) bewirkt." },
+  { topic: "Geschäftsfähigkeit", q: "Ein 6-jähriges Kind kauft einen Kaugummi für 50 Cent. Was ist die Rechtsfolge?",
+    options: ["Vertrag wirksam", "Vertrag schwebend unwirksam", "Vertrag nichtig (Kind ist geschäftsunfähig)", "Vertrag anfechtbar"],
+    a: 2, e: "Unter 7 Jahren = geschäftsunfähig. Willenserklärungen sind nach § 105 BGB nichtig." },
+  { topic: "Geschäftsfähigkeit", q: "Ein 16-jähriger kauft online ein Tablet für 400 € (ohne Zustimmung der Eltern). Was gilt?",
+    options: ["Vertrag wirksam", "Vertrag schwebend unwirksam — Eltern müssen zustimmen", "Vertrag nichtig", "Vertrag anfechtbar"],
+    a: 1, e: "Beschränkt Geschäftsfähige (7-17) brauchen für nicht lediglich vorteilhafte Geschäfte die Eltern-Zustimmung. Bis dahin schwebend unwirksam." },
+  { topic: "Geschäftsfähigkeit", q: "Wann ist ein Geschäft eines Minderjährigen 'lediglich rechtlich vorteilhaft'?",
+    options: ["Wenn er Geld verdient", "Wenn es ihn nicht verpflichtet (z.B. Geschenk annehmen)", "Wenn die Eltern es genehmigen", "Wenn er volljährig wird"],
+    a: 1, e: "Lediglich vorteilhaft = ohne rechtliche Verpflichtung. Geschenke annehmen ja, Kaufvertrag nein." },
+
+  // === Block B: Rechtsobjekte (13-17) ===
+  { topic: "Rechtsobjekte", q: "Was sind Rechtsobjekte?",
+    options: ["Personen, die Verträge schließen", "Gegenstände (Sachen, Rechte), worüber Rechte bestehen", "Gerichtsentscheidungen", "Anwälte"],
+    a: 1, e: "Rechtsobjekte = das, worüber Rechtssubjekte ihre Rechte ausüben (Sachen, Rechte, Forderungen)." },
+  { topic: "Rechtsobjekte", q: "Was sind unbewegliche Sachen?",
+    options: ["Aktenordner", "Grundstücke und Gebäude", "Druckerpapier", "Computer"],
+    a: 1, e: "Unbewegliche Sachen = Grundstücke und damit fest verbundene Gebäude." },
+  { topic: "Rechtsobjekte", q: "Was sind vertretbare Sachen?",
+    options: ["Sachen, die man verkaufen kann", "Sachen, die nach Maß/Zahl/Gewicht austauschbar sind (z.B. Druckerpapier)", "Sachen, die einzigartig sind", "Geld"],
+    a: 1, e: "Vertretbar = austauschbar nach Maß, Zahl oder Gewicht. Beispiel: Druckerpapier, Schrauben." },
+  { topic: "Rechtsobjekte", q: "Was ist ein Beispiel für eine unvertretbare Sache?",
+    options: ["Druckerpapier", "Aktenordner", "Original-Gemälde", "Schrauben"],
+    a: 2, e: "Ein Original-Gemälde ist einzigartig und nicht austauschbar — unvertretbar." },
+  { topic: "Rechtsobjekte", q: "Was zählt nach BGB zu Rechten und Forderungen?",
+    options: ["Tomaten", "Patente, Markenrechte, Urheberrechte, Forderungen aus Verträgen", "Geld", "Häuser"],
+    a: 1, e: "Rechte (Patente etc.) und Forderungen sind unkörperliche Rechtsobjekte." },
+
+  // === Block C: Rechtsgeschäfte (18-27) ===
+  { topic: "Rechtsgeschäfte", q: "Was ist ein Rechtsgeschäft?",
+    options: ["Ein Gerichtsurteil", "Eine private Willenserklärung mit Ziel rechtlichen Erfolgs", "Ein Gesetzestext", "Ein Behördenakt"],
+    a: 1, e: "Rechtsgeschäft = private Willenserklärung, die einen rechtlichen Erfolg herbeiführen soll." },
+  { topic: "Rechtsgeschäfte", q: "Wie viele Willenserklärungen braucht ein einseitiges Rechtsgeschäft?",
+    options: ["Eine", "Zwei", "Drei", "Mindestens vier"],
+    a: 0, e: "Einseitig = eine Willenserklärung reicht (z.B. Kündigung, Testament)." },
+  { topic: "Rechtsgeschäfte", q: "Was ist ein Beispiel für ein einseitiges Rechtsgeschäft?",
+    options: ["Kaufvertrag", "Mietvertrag", "Kündigung eines Arbeitsverhältnisses", "Arbeitsvertrag"],
+    a: 2, e: "Kündigung ist einseitig — eine Person erklärt den Willen, das Verhältnis zu beenden." },
+  { topic: "Rechtsgeschäfte", q: "Was ist ein mehrseitiges Rechtsgeschäft?",
+    options: ["Ein Testament", "Ein Vertrag — mindestens zwei übereinstimmende Willenserklärungen", "Eine Kündigung", "Eine Mahnung"],
+    a: 1, e: "Mehrseitig = Vertrag, mindestens zwei Willenserklärungen die übereinstimmen müssen." },
+  { topic: "Rechtsgeschäfte", q: "Was ist eine empfangsbedürftige Willenserklärung?",
+    options: ["Eine, die in der Schublade bleibt", "Eine, die dem anderen zugehen muss um wirksam zu werden (z.B. Kündigung)", "Eine, die laut gesprochen werden muss", "Eine, die schriftlich sein muss"],
+    a: 1, e: "Empfangsbedürftig = wirksam erst mit Zugang beim anderen. Z.B. Kündigung." },
+  { topic: "Trennungsprinzip", q: "Was unterscheidet Verpflichtungs- und Verfügungsgeschäft?",
+    options: ["Es gibt keinen Unterschied", "Verpflichtung = sich binden (Vertrag); Verfügung = erfüllen (Übergabe + Eigentumsübertragung)", "Verpflichtung ist immer schriftlich", "Verfügung ist immer mündlich"],
+    a: 1, e: "Verpflichtungsgeschäft begründet die Pflicht, Verfügungsgeschäft erfüllt sie. Trennungsprinzip!" },
+  { topic: "Trennungsprinzip", q: "Bei einem Aktenordner-Kauf — was ist das Verpflichtungsgeschäft?",
+    options: ["Die Übergabe des Aktenordners", "Der Kaufvertrag (§ 433 BGB)", "Die Bezahlung", "Die Bestellbestätigung"],
+    a: 1, e: "Der Kaufvertrag selbst begründet die Verpflichtungen — das ist das Verpflichtungsgeschäft." },
+  { topic: "Trennungsprinzip", q: "Was ist das Verfügungsgeschäft beim Kauf eines Aktenordners?",
+    options: ["Der Kaufvertrag", "Übergabe und Eigentumsübertragung (§ 929 BGB)", "Die Anfrage", "Die Mängelrüge"],
+    a: 1, e: "Verfügungsgeschäft = die Erfüllung: Übergabe + Eigentumsübertragung der Sache." },
+  { topic: "Eselsbrücke", q: "Welche Eselsbrücke fasst das Trennungsprinzip zusammen?",
+    options: ["A-B-C", "Versprechen — Erfüllen", "Pacta sunt servanda", "Quid pro quo"],
+    a: 1, e: "'Versprechen — Erfüllen': Erst der Vertrag (Versprechen), dann die Übergabe (Erfüllen)." },
+  { topic: "Trennungsprinzip", q: "Was bedeutet das Abstraktionsprinzip?",
+    options: ["Der Vertrag ist abstrakt", "Verpflichtungs- und Verfügungsgeschäft sind unabhängig wirksam — Mangel des einen nicht zwangsläufig auf das andere", "Verträge sind unverbindlich", "Verträge müssen schriftlich sein"],
+    a: 1, e: "Abstraktion: Beide Geschäfte sind rechtlich unabhängig. Ein Mangel im einen wirkt nicht automatisch im anderen." },
+
+  // === Block D: Vertragsfreiheit (28-35) ===
+  { topic: "Vertragsfreiheit", q: "Was bedeutet Abschlussfreiheit?",
+    options: ["Der Vertrag muss schriftlich sein", "Jeder darf entscheiden, ob und mit wem er Verträge schließt", "Verträge müssen abgeschlossen sein", "Verträge können nicht aufgehoben werden"],
+    a: 1, e: "Abschlussfreiheit = die Freiheit, Verträge zu schließen oder nicht, und mit wem." },
+  { topic: "Vertragsfreiheit", q: "Was bedeutet Inhaltsfreiheit?",
+    options: ["Der Inhalt ist geheim", "Was im Vertrag steht, kann frei vereinbart werden (mit Grenzen)", "Der Inhalt muss umfassend sein", "Der Inhalt muss notariell sein"],
+    a: 1, e: "Inhaltsfreiheit = Parteien dürfen den Inhalt grundsätzlich frei vereinbaren — mit Grenzen wie § 138 BGB." },
+  { topic: "Vertragsfreiheit", q: "Was bedeutet Formfreiheit?",
+    options: ["Verträge dürfen jede Form haben", "Verträge können mündlich, schriftlich, per Handschlag geschlossen werden — mit Ausnahmen", "Form ist immer schriftlich", "Form ist immer notariell"],
+    a: 1, e: "Formfreiheit = grundsätzlich keine Form vorgeschrieben. Ausnahmen: Grundstückskauf (notariell), Bürgschaft (schriftlich)." },
+  { topic: "Vertragsfreiheit", q: "Welcher Paragraph regelt das Verbotsgesetz?",
+    options: ["§ 134 BGB", "§ 138 BGB", "§ 145 BGB", "§ 433 BGB"],
+    a: 0, e: "§ 134 BGB: Verträge gegen ein gesetzliches Verbot sind nichtig (z.B. Drogenkauf)." },
+  { topic: "Vertragsfreiheit", q: "Welcher Paragraph regelt die Sittenwidrigkeit?",
+    options: ["§ 134 BGB", "§ 138 BGB", "§ 145 BGB", "§ 305 BGB"],
+    a: 1, e: "§ 138 BGB: Verträge gegen die guten Sitten sind nichtig. Wucher ist Spezialfall." },
+  { topic: "Vertragsfreiheit", q: "Was ist Wucher?",
+    options: ["Hoher Preis", "Auffälliges Missverhältnis von Leistung und Gegenleistung unter Ausnutzung einer Notlage", "Mengenrabatt", "Inflationsausgleich"],
+    a: 1, e: "Wucher (§ 138 Abs. 2 BGB): Ausnutzen einer Notlage zu auffälligem Leistungsmissverhältnis." },
+  { topic: "Vertragsfreiheit", q: "Ist ein mündlicher Kaufvertrag rechtlich gültig?",
+    options: ["Nein, niemals", "Ja, wegen der Formfreiheit (mit wenigen Ausnahmen)", "Nur bei kleinen Summen", "Nur zwischen Verbrauchern"],
+    a: 1, e: "Grundsatz der Formfreiheit: Verträge sind formfrei, außer wo das Gesetz Form vorschreibt." },
+  { topic: "Vertragsfreiheit", q: "Welcher Vertrag MUSS notariell beurkundet werden?",
+    options: ["Kaufvertrag über ein Auto", "Grundstückskaufvertrag (§ 311b BGB)", "Mietvertrag für eine Wohnung", "Arbeitsvertrag"],
+    a: 1, e: "Grundstückskäufe brauchen notarielle Beurkundung — § 311b BGB." },
+
+  // === Block E: Kaufvertrag (36-47) ===
+  { topic: "Kaufvertrag", q: "Wie kommt ein Kaufvertrag zustande?",
+    options: ["Durch Lieferung der Ware", "Durch zwei übereinstimmende Willenserklärungen: Antrag und Annahme", "Durch Bezahlung", "Durch Lieferschein"],
+    a: 1, e: "Antrag + Annahme = Vertrag. Geregelt in §§ 145 ff. BGB." },
+  { topic: "Kaufvertrag", q: "Welcher Paragraph regelt die Bindung des Antragenden an seinen Antrag?",
+    options: ["§ 145 BGB", "§ 147 BGB", "§ 305 BGB", "§ 433 BGB"],
+    a: 0, e: "§ 145 BGB: Wer einem anderen die Schließung eines Vertrags anträgt, ist daran gebunden." },
+  { topic: "Kaufvertrag", q: "Was sind die essentialia negotii beim Kaufvertrag?",
+    options: ["Zahlungsweise und Lieferzeit", "Vertragspartner, Ware, Preis", "Lieferzeit und Versandart", "Garantie und Skonto"],
+    a: 1, e: "Essentialia negotii = wesentliche Vertragsbestandteile. Bei Kauf: Partner, Ware, Preis." },
+  { topic: "Kaufvertrag", q: "Was ist eine 'invitatio ad offerendum'?",
+    options: ["Bindender Antrag", "Aufforderung zur Abgabe eines Angebots — selbst kein Antrag", "Annahme", "Vertragsschluss"],
+    a: 1, e: "Lateinisch: Aufforderung zur Angebotsabgabe. Z.B. Schaufensterauslage, Onlineshop-Anzeige." },
+  { topic: "Kaufvertrag", q: "Was ist die Anzeige eines Aktenordners im Onlineshop rechtlich?",
+    options: ["Bindendes Angebot", "Invitatio ad offerendum (unverbindliche Aufforderung)", "Annahme", "Vertragsschluss"],
+    a: 1, e: "Onlineshop-Anzeigen sind nur Aufforderungen zum Bestellen. Der Shop kann ablehnen." },
+  { topic: "Kaufvertrag", q: "Wer macht beim Onlineshop-Kauf den Antrag?",
+    options: ["Der Shop mit der Auslage", "Der Käufer durch die Bestellung", "Der Hersteller", "Die Bank"],
+    a: 1, e: "Der Käufer macht durch Bestellabsenden den verbindlichen Antrag (Angebot zum Kauf)." },
+  { topic: "Kaufvertrag", q: "Wann ist beim Onlineshop-Kauf der Vertrag geschlossen?",
+    options: ["Mit der Bestellung", "Mit der automatischen Eingangsbestätigung", "Mit der Bestellbestätigung des Shops (Annahme)", "Mit der Lieferung"],
+    a: 2, e: "Erst die Bestellbestätigung (Annahme) schließt den Vertrag. Eingangsbestätigung ist keine Annahme." },
+  { topic: "Kaufvertrag", q: "Eine Annahme mit Änderungen ist...",
+    options: ["Eine wirksame Annahme", "Ein neuer Antrag (§ 150 Abs. 2 BGB)", "Nichtig", "Schwebend unwirksam"],
+    a: 1, e: "Annahme mit Änderungen = neuer Antrag. Der ursprüngliche Antragende muss diesem zustimmen." },
+  { topic: "§ 433 BGB", q: "Was ist die Hauptpflicht des Verkäufers nach § 433 BGB?",
+    options: ["Werbung machen", "Sache übergeben und Eigentum verschaffen", "Rechnung schreiben", "Lieferzeit einhalten"],
+    a: 1, e: "§ 433 Abs. 1: Verkäufer muss Sache übergeben UND Eigentum verschaffen." },
+  { topic: "§ 433 BGB", q: "Was ist die Hauptpflicht des Käufers nach § 433 BGB?",
+    options: ["Sich freuen", "Kaufpreis zahlen und Sache abnehmen", "Werbung machen", "Vertrag aufheben"],
+    a: 1, e: "§ 433 Abs. 2: Käufer muss zahlen UND die Sache abnehmen." },
+  { topic: "Kaufvertrag", q: "Lieferant bietet 100 Aktenordner für 422 € an, Käufer schreibt: 'Wir nehmen für 400 €'. Was ist passiert?",
+    options: ["Vertrag über 422 € geschlossen", "Vertrag über 400 € geschlossen", "Neuer Antrag des Käufers, kein Vertrag bis Lieferant zustimmt", "Vertrag nichtig"],
+    a: 2, e: "Annahme mit Änderung = neuer Antrag. Kein Vertrag bis der Lieferant dem 400 €-Antrag zustimmt." },
+  { topic: "Kaufvertrag", q: "Welche Norm regelt die Annahmefrist?",
+    options: ["§ 145 BGB", "§ 147 BGB", "§ 305 BGB", "§ 433 BGB"],
+    a: 1, e: "§ 147 BGB regelt die Annahme- und Bindungsfristen für Anträge." },
+
+  // === Block F: AGB (48-60) ===
+  { topic: "AGB", q: "Was sind AGB?",
+    options: ["Allgemeine Geschäftsbedingungen — vorformulierte Vertragsbedingungen für viele Verträge", "Antrag-Garantie-Bestimmungen", "Aktien-Geschäfts-Bedingungen", "Anti-Geschäfts-Bestimmungen"],
+    a: 0, e: "AGB nach § 305 Abs. 1 BGB: Vorformulierte Bedingungen für eine Vielzahl von Verträgen." },
+  { topic: "AGB", q: "Welcher Paragraph definiert AGB?",
+    options: ["§ 145 BGB", "§ 305 BGB", "§ 433 BGB", "§ 138 BGB"],
+    a: 1, e: "§ 305 Abs. 1 BGB definiert AGB." },
+  { topic: "AGB", q: "Wie viele Voraussetzungen müssen für die wirksame Einbeziehung von AGB erfüllt sein (§ 305 Abs. 2 BGB)?",
+    options: ["1", "2", "3", "4"],
+    a: 2, e: "Drei: Hinweis, zumutbare Kenntnisnahme, Einverständnis." },
+  { topic: "AGB", q: "Welche Voraussetzung gehört NICHT zur AGB-Einbeziehung?",
+    options: ["Hinweis bei Vertragsschluss", "Möglichkeit zur Kenntnisnahme", "Einverständnis der anderen Partei", "Notarielle Beurkundung"],
+    a: 3, e: "Notar ist NICHT erforderlich. Nur Hinweis, Kenntnisnahme, Einverständnis." },
+  { topic: "AGB", q: "Wann werden AGB im B2B-Geschäft auch ohne ausdrücklichen Hinweis Vertragsbestandteil?",
+    options: ["Niemals", "Wenn beide Parteien Kaufleute sind und die AGB branchenüblich sind", "Bei Beträgen über 1.000 €", "Bei Internet-Bestellungen"],
+    a: 1, e: "B2B mit zwei Kaufleuten: branchenübliche AGB können auch konkludent einbezogen werden." },
+  { topic: "AGB", q: "Was ist eine überraschende Klausel?",
+    options: ["Eine, die fett gedruckt ist", "Eine, die so ungewöhnlich ist, dass die andere Partei nicht damit rechnen musste (§ 305c BGB)", "Eine, die auf der ersten Seite steht", "Eine, die der Kunde mag"],
+    a: 1, e: "§ 305c BGB: Überraschende Klauseln werden nicht Vertragsbestandteil." },
+  { topic: "AGB", q: "Welcher Paragraph regelt die Inhaltskontrolle der AGB?",
+    options: ["§ 305 BGB", "§ 307 BGB", "§ 433 BGB", "§ 145 BGB"],
+    a: 1, e: "§ 307 BGB: Generalklausel der Inhaltskontrolle — unangemessene Benachteiligung führt zu Unwirksamkeit." },
+  { topic: "AGB", q: "AGB-Klausel: 'Reklamationen nur innerhalb von 24 Stunden.' Was sagt § 307 BGB dazu?",
+    options: ["Wirksam, weil schnell", "Wahrscheinlich unwirksam wegen unangemessener Benachteiligung", "Wirksam, wenn fett gedruckt", "Anfechtbar"],
+    a: 1, e: "Verkürzt die gesetzliche Mängelfrist (2 Jahre) drastisch — unangemessene Benachteiligung, daher unwirksam." },
+  { topic: "AGB", q: "Was passiert, wenn eine AGB-Klausel unwirksam ist?",
+    options: ["Der ganze Vertrag ist nichtig", "An ihre Stelle tritt das gesetzliche Recht (BGB)", "Die Klausel wird gestrichen, sonst nichts", "Der Vertrag muss neu verhandelt werden"],
+    a: 1, e: "Unwirksame AGB-Klausel → gesetzliches Recht greift. Der Vertrag bleibt im Übrigen wirksam." },
+  { topic: "AGB", q: "Was sind kollidierende AGB?",
+    options: ["AGB, die explodieren", "AGB beider Vertragsparteien, die sich widersprechen", "AGB, die geheim sind", "AGB, die alt sind"],
+    a: 1, e: "Wenn beide Parteien eigene AGB haben, die sich widersprechen — beide werden insoweit nicht Vertragsbestandteil." },
+  { topic: "AGB", q: "Bei kollidierenden AGB greift...",
+    options: ["Die AGB des Käufers", "Die AGB des Verkäufers", "Das gesetzliche Recht (BGB/HGB) für die widersprüchlichen Punkte", "Keine Regelung"],
+    a: 2, e: "Bei Konflikt fallen die widersprüchlichen Klauseln weg. Es greift die gesetzliche Regelung (BGB/HGB)." },
+  { topic: "AGB", q: "Sind individuell ausgehandelte Vertragsbedingungen AGB?",
+    options: ["Ja, immer", "Nein — Individualvereinbarungen sind keine AGB (§ 305 Abs. 1 S. 3 BGB)", "Nur bei B2C", "Nur schriftlich"],
+    a: 1, e: "AGB sind 'gestellt' und nicht individuell ausgehandelt. Echte Verhandlungen führen aus dem AGB-Recht heraus." },
+  { topic: "AGB", q: "Warum gibt es AGB-Recht überhaupt?",
+    options: ["Aus Tradition", "Schutz der schwächeren Vertragspartei (besonders Verbraucher), die AGB nicht aushandelt", "Um Anwälte zu beschäftigen", "Aus Steuergründen"],
+    a: 1, e: "AGB-Recht schützt die Partei, die AGB nicht aushandelt — vor unangemessenen Benachteiligungen." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>
