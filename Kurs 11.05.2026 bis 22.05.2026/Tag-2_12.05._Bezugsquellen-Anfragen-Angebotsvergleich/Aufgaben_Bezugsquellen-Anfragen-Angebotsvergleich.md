@@ -9,8 +9,8 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Bedarfsarten zuordnen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Bedarfsarten einfach erklärt"](https://www.youtube.com/results?search_query=Bedarfsarten+einfach+erkl%C3%A4rt)
-📺 **Ergänzend:** [YouTube: „Primärbedarf Sekundärbedarf Tertiärbedarf"](https://www.youtube.com/results?search_query=Prim%C3%A4rbedarf+Sekund%C3%A4rbedarf+Terti%C3%A4rbedarf)
+📺 **Vorbereitungsvideo:** [YouTube: „Bedarfsarten einfach erklärt"](https://www.youtube.com/results?search_query=Bedarfsarten+einfach+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Bedarfsarten+einfach+erkl%C3%A4rt)
+📺 **Ergänzend:** [YouTube: „Primärbedarf Sekundärbedarf Tertiärbedarf"](https://www.youtube.com/results?search_query=Prim%C3%A4rbedarf+Sekund%C3%A4rbedarf+Terti%C3%A4rbedarf) (https://www.youtube.com/results?search_query=Prim%C3%A4rbedarf+Sekund%C3%A4rbedarf+Terti%C3%A4rbedarf)
 
 **Sozialform:** Einzelarbeit
 
@@ -30,8 +30,8 @@ Erläutern Sie zusätzlich den Unterschied zwischen **Bruttobedarf** und **Netto
 
 ## Aufgabe 2 — ABC-Analyse
 
-📺 **Vorbereitungsvideo:** [YouTube: „ABC-Analyse Beispiel rechnen"](https://www.youtube.com/results?search_query=ABC-Analyse+Beispiel+rechnen)
-📺 **Ergänzend:** [YouTube: „ABC-Analyse Bürokaufmann IHK"](https://www.youtube.com/results?search_query=ABC-Analyse+B%C3%BCrokaufmann+IHK)
+📺 **Vorbereitungsvideo:** [YouTube: „ABC-Analyse Beispiel rechnen"](https://www.youtube.com/results?search_query=ABC-Analyse+Beispiel+rechnen) (https://www.youtube.com/results?search_query=ABC-Analyse+Beispiel+rechnen)
+📺 **Ergänzend:** [YouTube: „ABC-Analyse Bürokaufmann IHK"](https://www.youtube.com/results?search_query=ABC-Analyse+B%C3%BCrokaufmann+IHK) (https://www.youtube.com/results?search_query=ABC-Analyse+B%C3%BCrokaufmann+IHK)
 
 **Sozialform:** Partnerarbeit
 
@@ -59,8 +59,8 @@ d) Welche Konsequenzen hat die Klassifizierung für die Beschaffungsstrategie (H
 
 ## Aufgabe 3 — Anfrage formulieren
 
-📺 **Vorbereitungsvideo:** [YouTube: „Anfrage Geschäftsbrief DIN 5008"](https://www.youtube.com/results?search_query=Anfrage+Gesch%C3%A4ftsbrief+DIN+5008)
-📺 **Ergänzend:** [YouTube: „Anfrage Bürokommunikation"](https://www.youtube.com/results?search_query=Anfrage+B%C3%BCrokommunikation+Beispiel)
+📺 **Vorbereitungsvideo:** [YouTube: „Anfrage Geschäftsbrief DIN 5008"](https://www.youtube.com/results?search_query=Anfrage+Gesch%C3%A4ftsbrief+DIN+5008) (https://www.youtube.com/results?search_query=Anfrage+Gesch%C3%A4ftsbrief+DIN+5008)
+📺 **Ergänzend:** [YouTube: „Anfrage Bürokommunikation"](https://www.youtube.com/results?search_query=Anfrage+B%C3%BCrokommunikation+Beispiel) (https://www.youtube.com/results?search_query=Anfrage+B%C3%BCrokommunikation+Beispiel)
 
 **Sozialform:** Einzelarbeit
 
@@ -74,8 +74,8 @@ c) Erklären Sie: Ist die Anfrage rechtlich bindend? Begründen Sie.
 
 ## Aufgabe 4 — Bezugskalkulation (drei Angebote vergleichen)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Bezugskalkulation Schema einfach"](https://www.youtube.com/results?search_query=Bezugskalkulation+Schema+einfach+erkl%C3%A4rt)
-📺 **Ergänzend:** [YouTube: „Bezugspreis berechnen Beispiel IHK"](https://www.youtube.com/results?search_query=Bezugspreis+berechnen+Beispiel+IHK)
+📺 **Vorbereitungsvideo:** [YouTube: „Bezugskalkulation Schema einfach"](https://www.youtube.com/results?search_query=Bezugskalkulation+Schema+einfach+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Bezugskalkulation+Schema+einfach+erkl%C3%A4rt)
+📺 **Ergänzend:** [YouTube: „Bezugspreis berechnen Beispiel IHK"](https://www.youtube.com/results?search_query=Bezugspreis+berechnen+Beispiel+IHK) (https://www.youtube.com/results?search_query=Bezugspreis+berechnen+Beispiel+IHK)
 
 **Sozialform:** Einzelarbeit, dann Partnerkontrolle
 
@@ -95,8 +95,8 @@ c) Was sollte zusätzlich vor der endgültigen Auswahl geprüft werden?
 
 ## Aufgabe 5 — Nutzwertanalyse (Lieferantenbewertung)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Nutzwertanalyse Beispiel rechnen"](https://www.youtube.com/results?search_query=Nutzwertanalyse+Beispiel+rechnen)
-📺 **Ergänzend:** [YouTube: „Lieferantenbewertung qualitativ quantitativ"](https://www.youtube.com/results?search_query=Lieferantenbewertung+qualitativ+quantitativ)
+📺 **Vorbereitungsvideo:** [YouTube: „Nutzwertanalyse Beispiel rechnen"](https://www.youtube.com/results?search_query=Nutzwertanalyse+Beispiel+rechnen) (https://www.youtube.com/results?search_query=Nutzwertanalyse+Beispiel+rechnen)
+📺 **Ergänzend:** [YouTube: „Lieferantenbewertung qualitativ quantitativ"](https://www.youtube.com/results?search_query=Lieferantenbewertung+qualitativ+quantitativ) (https://www.youtube.com/results?search_query=Lieferantenbewertung+qualitativ+quantitativ)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
