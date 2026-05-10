@@ -2,6 +2,9 @@
 
 Kurs- und Materialorganisation für **Modul M-064 "Beschaffung im Büromanagement"**.
 
+🌐 **Live über GitHub Pages:** https://cansi798.github.io/bfw_Lernplattform/
+(Zugangscode: `BFW`)
+
 ## Aktueller Kurs
 
 **Zeitraum:** 11.05.2026 – 22.05.2026 (9 Kurstage, 81 UE)

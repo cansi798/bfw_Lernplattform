@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>BFW Lernplattform — Beschaffung im Büromanagement</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 50%, var(--bfw-bg-amber) 100%);
+  min-height: 100vh;
+  color: var(--bfw-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Login-Screen */
+.login-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.login-card {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(15,23,42,0.08), 0 4px 16px rgba(15,23,42,0.04);
+  border: 1px solid var(--bfw-border);
+  text-align: center;
+}
+.login-icon {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, var(--bfw-primary) 0%, var(--bfw-primary-dark) 100%);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 8px 24px rgba(14,165,164,0.3);
+}
+.login-icon svg { width: 40px; height: 40px; color: white; }
+.login-card h1 {
+  font-size: 1.7rem;
+  color: var(--bfw-primary-dark);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.login-card .subtitle {
+  color: var(--bfw-ink-soft);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.login-form {
+  display: flex; flex-direction: column;
+  gap: 0.8rem;
+}
+.login-form input {
+  padding: 0.9rem 1.1rem;
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.login-form input:focus {
+  outline: none;
+  border-color: var(--bfw-primary);
+  box-shadow: 0 0 0 3px rgba(14,165,164,0.15);
+}
+.login-form button {
+  padding: 0.9rem 1.5rem;
+  background: var(--bfw-primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.login-form button:hover {
+  background: var(--bfw-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(14,165,164,0.25);
+}
+.login-error {
+  color: var(--bfw-danger);
+  font-size: 0.9rem;
+  margin-top: 0.6rem;
+  min-height: 1.2em;
+  font-weight: 600;
+}
+.login-hint {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bfw-border);
+  font-size: 0.85rem;
+  color: var(--bfw-ink-soft);
+}
+
+/* Dashboard */
+.dashboard { display: none; padding: 2rem 1rem 4rem; }
+.dashboard.active { display: block; }
+.container { max-width: 1180px; margin: 0 auto; }
+
+.dashboard-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.8rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.04);
+  border: 1px solid var(--bfw-border);
+}
+.dashboard-header .brand {
+  display: flex; align-items: center; gap: 1rem;
+}
+.dashboard-header .brand-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--bfw-primary) 0%, var(--bfw-primary-dark) 100%);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.dashboard-header .brand-icon svg { width: 26px; height: 26px; color: white; }
+.dashboard-header h1 {
+  font-size: 1.4rem;
+  color: var(--bfw-primary-dark);
+  margin-bottom: 0.1rem;
+}
+.dashboard-header .meta { color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.btn-logout {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--bfw-ink-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-logout:hover { color: var(--bfw-danger); border-color: var(--bfw-danger); }
+
+.intro {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--bfw-border);
+  box-shadow: 0 2px 8px rgba(15,23,42,0.03);
+}
+.intro h2 {
+  color: var(--bfw-primary-dark);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+.intro p { color: var(--bfw-ink-soft); line-height: 1.55; font-size: 0.98rem; }
+
+.section-title {
+  font-size: 1.4rem;
+  color: var(--bfw-primary-dark);
+  margin: 2rem 0 1rem;
+  font-weight: 700;
+}
+
+.tage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.2rem;
+}
+.tag-card {
+  background: white;
+  border: 1px solid var(--bfw-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.tag-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.08);
+  border-color: var(--bfw-primary);
+}
+.tag-card.locked { opacity: 0.65; }
+.tag-card.locked:hover { transform: none; box-shadow: none; border-color: var(--bfw-border); }
+.tag-card .tag-stripe {
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--bfw-primary) 0%, var(--bfw-accent) 100%);
+}
+.tag-card.locked .tag-stripe { background: var(--bfw-border); }
+.tag-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal);
+  color: var(--bfw-primary-dark);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.tag-card.locked .tag-num { background: #F1F5F9; color: var(--bfw-ink-soft); }
+.tag-card h3 {
+  color: var(--bfw-ink);
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+.tag-date { color: var(--bfw-ink-soft); font-size: 0.85rem; margin-bottom: 1rem; }
+.tag-links {
+  display: flex; flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+.tag-link {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--bfw-bg-soft);
+  border: 1px solid var(--bfw-border);
+  border-radius: 8px;
+  color: var(--bfw-ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: all 0.15s;
+}
+.tag-link:hover {
+  background: var(--bfw-bg-teal);
+  border-color: var(--bfw-primary);
+  color: var(--bfw-primary-dark);
+  transform: translateX(2px);
+}
+.tag-link .link-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.tag-link.html .link-icon { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); }
+.tag-link.pdf .link-icon { background: var(--bfw-bg-rose); color: var(--bfw-warn); }
+.tag-link.md .link-icon { background: var(--bfw-bg-amber); color: var(--bfw-accent); }
+.tag-link.disabled {
+  opacity: 0.5; cursor: not-allowed;
+  pointer-events: none;
+}
+.tag-link-label { flex: 1; font-weight: 500; }
+.tag-link-arrow { color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+.coming-soon {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+  font-style: italic;
+  background: var(--bfw-bg-soft);
+  border-radius: 8px;
+  border: 1px dashed var(--bfw-border);
+}
+
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  color: var(--bfw-ink-soft);
+  font-size: 0.85rem;
+}
+footer a { color: var(--bfw-primary-dark); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<!-- LOGIN-SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+    </div>
+    <h1>BFW Lernplattform</h1>
+    <p class="subtitle">Beschaffung im Büromanagement<br>Kurs 11.05.–22.05.2026</p>
+    <form class="login-form" onsubmit="return tryLogin(event)">
+      <input type="password" id="codeInput" placeholder="Zugangscode" autocomplete="off" required autofocus>
+      <button type="submit">Zum Dashboard →</button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+    <div class="login-hint">
+      Keinen Code? Bitte beim Dozenten anfragen.
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
+  <div class="container">
+
+    <div class="dashboard-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1>BFW Lernplattform</h1>
+          <div class="meta">Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logout()">Abmelden</button>
+    </div>
+
+    <div class="intro">
+      <h2>Willkommen zur Lernplattform</h2>
+      <p>Hier finden Sie alle Materialien zum Modul: <strong>Präsentation</strong>, ausführliches <strong>Handout</strong> als PDF, ein <strong>interaktives Quiz</strong> mit 60 Multiple-Choice-Fragen und ein <strong>Aufgabenheft</strong> mit Musterlösungen — pro Kurstag. Klicken Sie auf einen der Links, um das Material zu öffnen oder herunterzuladen.</p>
+    </div>
+
+    <h2 class="section-title">Kurstage</h2>
+    <div class="tage-grid" id="tageGrid">
+      <!-- wird per JS befüllt -->
+    </div>
+
+    <h2 class="section-title">Weitere Materialien</h2>
+    <div class="tage-grid">
+      <div class="tag-card">
+        <div class="tag-stripe"></div>
+        <div class="tag-num">Übersicht</div>
+        <h3>Repository auf GitHub</h3>
+        <div class="tag-date">Quellcode und alle Dateien</div>
+        <div class="tag-links">
+          <a class="tag-link html" href="https://github.com/cansi798/bfw_Lernplattform" target="_blank" rel="noopener">
+            <span class="link-icon">⎘</span>
+            <span class="tag-link-label">GitHub-Repo öffnen</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+          <a class="tag-link md" href="docs/superpowers/specs/2026-05-10-tagesordner-pdf-split-design.md">
+            <span class="link-icon">MD</span>
+            <span class="tag-link-label">Spec-Dokument</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      © Can Siebert · 2026 · Material nur für unterrichtliche Zwecke im Rahmen des Kurses<br>
+      <a href="https://github.com/cansi798/bfw_Lernplattform">github.com/cansi798/bfw_Lernplattform</a>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+const ZUGANGSCODE = 'BFW';
+const STORAGE_KEY = 'bfw_lernplattform_unlocked';
+
+const TAGE = [
+  { num: 1, datum: '11.05.2026', thema: 'Beschaffungsprozess',
+    folder: 'Tag-1_11.05._Beschaffungsprozess',
+    slug: 'Beschaffungsprozess', verfügbar: true },
+  { num: 2, datum: '12.05.2026', thema: 'Bezugsquellen, Anfragen, Angebotsvergleich',
+    folder: 'Tag-2_12.05._Bezugsquellen-Anfragen-Angebotsvergleich',
+    slug: 'Bezugsquellen-Anfragen-Angebotsvergleich', verfügbar: false },
+  { num: 3, datum: '13.05.2026', thema: 'Bestellungen und Kaufverträge',
+    folder: 'Tag-3_13.05._Bestellungen-und-Kaufvertraege',
+    slug: 'Bestellungen-und-Kaufvertraege', verfügbar: false },
+  { num: 4, datum: '15.05.2026', thema: 'Ausführen von Bestellungen',
+    folder: 'Tag-4_15.05._Ausfuehren-von-Bestellungen',
+    slug: 'Ausfuehren-von-Bestellungen', verfügbar: false },
+  { num: 5, datum: '18.05.2026', thema: 'Annahme und Lagerung der Waren',
+    folder: 'Tag-5_18.05._Annahme-und-Lagerung-der-Waren',
+    slug: 'Annahme-und-Lagerung-der-Waren', verfügbar: false },
+  { num: 6, datum: '19.05.2026', thema: 'Kaufvertragsstörungen',
+    folder: 'Tag-6_19.05._Kaufvertragsstoerungen',
+    slug: 'Kaufvertragsstoerungen', verfügbar: false },
+  { num: 7, datum: '20.05.2026', thema: 'Eingangsrechnungen',
+    folder: 'Tag-7_20.05._Eingangsrechnungen',
+    slug: 'Eingangsrechnungen', verfügbar: false },
+  { num: 8, datum: '21.05.2026', thema: 'Bezahlung von Rechnungen',
+    folder: 'Tag-8_21.05._Bezahlung-von-Rechnungen',
+    slug: 'Bezahlung-von-Rechnungen', verfügbar: false },
+  { num: 9, datum: '22.05.2026', thema: 'Vertiefung und Reflektion',
+    folder: 'Tag-9_22.05._Vertiefung-und-Reflektion',
+    slug: 'Vertiefung-und-Reflektion', verfügbar: false }
+];
+
+const KURS_BASE = 'Kurs 11.05.2026 bis 22.05.2026';
+
+function tryLogin(e) {
+  e.preventDefault();
+  const code = document.getElementById('codeInput').value.trim().toUpperCase();
+  if (code === ZUGANGSCODE) {
+    localStorage.setItem(STORAGE_KEY, '1');
+    showDashboard();
+  } else {
+    document.getElementById('loginError').textContent = 'Falscher Zugangscode. Bitte erneut versuchen.';
+    document.getElementById('codeInput').value = '';
+    document.getElementById('codeInput').focus();
+  }
+  return false;
+}
+
+function logout() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeInput').focus();
+}
+
+function urlEncodeFolder(folder) {
+  return encodeURIComponent(KURS_BASE) + '/' + encodeURIComponent(folder);
+}
+
+function renderTage() {
+  const grid = document.getElementById('tageGrid');
+  grid.innerHTML = TAGE.map(t => {
+    const base = urlEncodeFolder(t.folder);
+    if (!t.verfügbar) {
+      return `
+        <div class="tag-card locked">
+          <div class="tag-stripe"></div>
+          <div class="tag-num">Tag ${t.num}</div>
+          <h3>${t.thema}</h3>
+          <div class="tag-date">${t.datum}</div>
+          <div class="coming-soon">In Vorbereitung</div>
+        </div>`;
+    }
+    return `
+      <div class="tag-card">
+        <div class="tag-stripe"></div>
+        <div class="tag-num">Tag ${t.num}</div>
+        <h3>${t.thema}</h3>
+        <div class="tag-date">${t.datum}</div>
+        <div class="tag-links">
+          <a class="tag-link html" href="${base}/Praesentation_${t.slug}.html" target="_blank" rel="noopener">
+            <span class="link-icon">▶</span>
+            <span class="tag-link-label">Präsentation (HTML)</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+          <a class="tag-link pdf" href="${base}/Handout_${t.slug}.pdf" target="_blank" rel="noopener">
+            <span class="link-icon">PDF</span>
+            <span class="tag-link-label">Handout (PDF)</span>
+            <span class="tag-link-arrow">↓</span>
+          </a>
+          <a class="tag-link html" href="${base}/Quiz_${t.slug}.html" target="_blank" rel="noopener">
+            <span class="link-icon">?</span>
+            <span class="tag-link-label">Quiz (60 Fragen)</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+          <a class="tag-link pdf" href="${base}/Aufgabenheft_${t.slug}.pdf" target="_blank" rel="noopener">
+            <span class="link-icon">PDF</span>
+            <span class="tag-link-label">Aufgabenheft mit Lösungen</span>
+            <span class="tag-link-arrow">↓</span>
+          </a>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function showDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').classList.add('active');
+  renderTage();
+}
+
+// Auto-Login wenn schon freigeschaltet
+if (localStorage.getItem(STORAGE_KEY) === '1') {
+  showDashboard();
+}
+</script>
+
+</body>
+</html>
