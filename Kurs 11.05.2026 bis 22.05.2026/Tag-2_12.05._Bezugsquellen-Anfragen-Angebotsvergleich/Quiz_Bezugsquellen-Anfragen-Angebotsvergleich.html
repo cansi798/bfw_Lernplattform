@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 2 — Bezugsquellen, Anfragen, Angebotsvergleich</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 2 · 12.05.2026 · 60 Fragen</span>
+  <h1>Quiz: Bezugsquellen, Anfragen, Angebotsvergleich</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation</strong> und dem <strong>Handout</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Bedarfsermittlung (1-15) ===
+  { topic: "Bedarfsarten", q: "Was ist Primärbedarf?",
+    options: ["Roh- und Hilfsstoffe", "Verkaufsfähige Endprodukte und Dienstleistungen", "Hilfs- und Betriebsstoffe", "Lagerbestand"],
+    a: 1, e: "Primärbedarf sind die verkaufsfähigen Endprodukte/Dienstleistungen, die ein Unternehmen am Markt anbietet." },
+  { topic: "Bedarfsarten", q: "Was zählt zum Sekundärbedarf?",
+    options: ["Endprodukte für Kunden", "Roh-, Hilfs- und Halbfertigmaterialien, die in das Endprodukt eingehen", "Schmierstoffe für die Werkstatt", "Werkzeuge"],
+    a: 1, e: "Sekundärbedarf sind die Materialien, die direkt in das Primärprodukt eingehen (z.B. Holzplatten für Schreibtische)." },
+  { topic: "Bedarfsarten", q: "Was ist ein typischer Tertiärbedarf?",
+    options: ["Buchenholzplatten für die Schreibtisch-Produktion", "Schmierstoff für die Säge", "Verkaufsfertige Schreibtische", "Kundenaufträge"],
+    a: 1, e: "Tertiärbedarf sind Hilfs- und Betriebsstoffe, die nicht direkt ins Produkt eingehen, aber für den Produktionsprozess gebraucht werden." },
+  { topic: "Bedarfsarten", q: "In welche Kategorie gehören 12.000 Tischbeine, die ein Möbelhersteller für 3.000 Schreibtische benötigt?",
+    options: ["Primärbedarf", "Sekundärbedarf", "Tertiärbedarf", "Bruttobedarf"],
+    a: 1, e: "Tischbeine gehen direkt in das Endprodukt (Schreibtische) ein → Sekundärbedarf." },
+  { topic: "Brutto/Netto", q: "Wie wird der Nettobedarf berechnet?",
+    options: ["Bruttobedarf + Lagerbestand", "Bruttobedarf − Lagerbestand − offene Bestellungen + Sicherheitsbestand", "Bruttobedarf − Sicherheitsbestand", "Lagerbestand + offene Bestellungen"],
+    a: 1, e: "Nettobedarf = Bruttobedarf − Lagerbestand − offene Bestellungen + Sicherheitsbestand." },
+  { topic: "Brutto/Netto", q: "Bruttobedarf 200, Lager 30, bestellt 50, Sicherheitsbestand 20. Wie hoch ist der Nettobedarf?",
+    options: ["100", "120", "140", "160"],
+    a: 2, e: "200 − 30 − 50 + 20 = 140 Stück Nettobedarf." },
+  { topic: "Brutto/Netto", q: "Was ist der Sicherheitsbestand?",
+    options: ["Maximaler Lagerbestand", "Reservebestand zur Abfederung von Lieferengpässen oder Bedarfsschwankungen", "Bereits bestellte, aber noch nicht gelieferte Menge", "Verkaufsbestand"],
+    a: 1, e: "Sicherheitsbestand puffert Lieferunterbrechungen oder unerwartete Bedarfsspitzen ab." },
+  { topic: "Bedarfsermittlung", q: "Was ist die verbrauchsgesteuerte Bedarfsermittlung?",
+    options: ["Bedarf wird aus Stücklisten berechnet", "Bedarf wird aus dem Vergangenheitsverbrauch hochgerechnet", "Bedarf wird vom Lieferanten vorgegeben", "Bedarf wird ad hoc geschätzt"],
+    a: 1, e: "Verbrauchsgesteuert = Hochrechnung aus Vergangenheitsdaten. Einfach, aber ungenau bei Veränderungen." },
+  { topic: "Bedarfsermittlung", q: "Welches Verfahren der Bedarfsermittlung ist genauer, aber aufwendiger?",
+    options: ["Verbrauchsgesteuert", "Bedarfsgesteuert", "Schätzgesteuert", "Vorratsgesteuert"],
+    a: 1, e: "Bedarfsgesteuert berechnet aus Stücklisten/Aufträgen — präzise, aber IT-aufwendig." },
+  { topic: "Bedarfsermittlung", q: "Für welche Artikel eignet sich die verbrauchsgesteuerte Ermittlung typischerweise?",
+    options: ["A-Teile", "B-Teile", "C-Teile (Bürobedarf, Hilfsstoffe)", "Sondermaterial"],
+    a: 2, e: "C-Teile mit gleichmäßigem Verbrauch werden meist verbrauchsgesteuert geplant — einfacher und ausreichend." },
+  { topic: "Bedarfsarten", q: "Was sind 3.000 Fahrräder, die ein Hersteller im Quartal verkaufen will?",
+    options: ["Sekundärbedarf", "Primärbedarf", "Tertiärbedarf", "Lagerbedarf"],
+    a: 1, e: "Verkaufsfertige Endprodukte = Primärbedarf." },
+  { topic: "Bedarfsermittlung", q: "Warum ist die Bedarfsermittlung der wichtigste erste Schritt?",
+    options: ["Weil sie keine Arbeit macht", "Weil sie die Grundlage aller nachfolgenden Beschaffungsschritte ist", "Weil der Lieferant darauf besteht", "Weil das Lager voll sein muss"],
+    a: 1, e: "Fehler in der Bedarfsermittlung pflanzen sich fort: zu wenig → Stillstand, zu viel → Kapitalbindung." },
+  { topic: "Brutto/Netto", q: "Bruttobedarf 500, Lager 100, bestellt 80, Sicherheitsbestand 50. Nettobedarf?",
+    options: ["320", "350", "370", "400"],
+    a: 2, e: "500 − 100 − 80 + 50 = 370 Stück." },
+  { topic: "Bedarfsarten", q: "Was ist der Unterschied zwischen Sekundär- und Tertiärbedarf?",
+    options: ["Es gibt keinen Unterschied", "Sekundärbedarf geht ins Produkt ein, Tertiärbedarf nicht", "Sekundärbedarf ist teurer", "Tertiärbedarf ist primär"],
+    a: 1, e: "Sekundär = drinsteckend (Bestandteil); Tertiär = drumherum (Hilfsstoff)." },
+  { topic: "Eselsbrücke", q: "Welche Eselsbrücke fasst die drei Bedarfsarten zusammen?",
+    options: ["A-B-C", "P-S-T (Primär-Sekundär-Tertiär)", "M-M-Q-O-Z-P", "1-2-3"],
+    a: 1, e: "P-S-T: Primär (Endprodukt) — Sekundär (drinsteckend) — Tertiär (drumherum)." },
+
+  // === Block B: Bezugsquellen / Lieferantenauswahl (16-25) ===
+  { topic: "Bezugsquellen", q: "Was ist eine interne Bezugsquelle?",
+    options: ["Branchenbuch", "Hauseigene Lieferantendatei aus früheren Bestellungen", "Mercateo-Marktplatz", "IHK-Datenbank"],
+    a: 1, e: "Intern = im Unternehmen verfügbar (Lieferantendatei, Erfahrungen anderer Abteilungen, Archiv)." },
+  { topic: "Bezugsquellen", q: "Was ist eine externe Bezugsquelle?",
+    options: ["Eigene Lieferantendatei", "Eigene Bestellabteilung", "Branchenbücher, Messen, Online-Marktplätze, IHK-Datenbanken", "Internes Archiv"],
+    a: 2, e: "Externe Quellen liegen außerhalb des eigenen Unternehmens." },
+  { topic: "Lieferantenauswahl", q: "Welcher Faktor gehört NICHT zu typischen Lieferanten-Auswahlkriterien?",
+    options: ["Preis und Konditionen", "Qualität", "Politische Meinung des Geschäftsführers", "Lieferzuverlässigkeit"],
+    a: 2, e: "Bewertet werden objektive Kriterien — politische Einstellungen sind keine zulässigen Beschaffungskriterien." },
+  { topic: "Lieferantenauswahl", q: "Welche Aussage trifft auf den billigsten Lieferanten zu?",
+    options: ["Er ist immer die wirtschaftlichste Wahl", "Er ist nicht automatisch die wirtschaftlichste Wahl, weil Folgekosten ignoriert werden", "Er ist immer der zuverlässigste", "Er hat immer die beste Qualität"],
+    a: 1, e: "Folgekosten (Reklamationen, Lieferverzug) machen den günstigen Listenpreis oft teurer als gedacht." },
+  { topic: "Lieferantenauswahl", q: "Welches Zertifikat ist Standard für Qualitätsmanagement?",
+    options: ["ISO 14001", "ISO 9001", "SA 8000", "DIN 5008"],
+    a: 1, e: "ISO 9001 ist der internationale Qualitätsmanagement-Standard." },
+  { topic: "Lieferantenauswahl", q: "Welches Zertifikat steht für Umweltmanagement?",
+    options: ["ISO 9001", "ISO 14001", "DIN 5008", "BMEcat"],
+    a: 1, e: "ISO 14001 ist die Norm für Umweltmanagementsysteme." },
+  { topic: "Bezugsquellen", q: "Was ist Mercateo?",
+    options: ["Eine Sell-Side-Lösung", "Eine Buy-Side-Lösung eines Konzerns", "Ein neutraler Online-Marktplatz für B2B-Beschaffung", "Eine Bank"],
+    a: 2, e: "Mercateo ist ein klassischer B2B-Marktplatz, der viele Lieferanten bündelt." },
+  { topic: "Lieferantenauswahl", q: "Welche Information liefert die Bonitätsprüfung?",
+    options: ["Lieferzeit", "Wirtschaftliche Stabilität / Insolvenzrisiko des Lieferanten", "Qualität der Produkte", "Ökologische Bilanz"],
+    a: 1, e: "Bonität = Zahlungsfähigkeit, gibt Auskunft über Insolvenzrisiko (Schufa, Creditreform)." },
+  { topic: "Lieferantenauswahl", q: "Warum ist Nachhaltigkeit heute ein Lieferanten-Auswahlkriterium?",
+    options: ["Aus Marketing-Gründen", "Wegen LkSG, EU-CSDDD, Reputation und Risikomanagement", "Weil es modisch ist", "Weil Lieferanten das verlangen"],
+    a: 1, e: "Recht (LkSG/CSDDD), Markt und Reputation machen Nachhaltigkeit zur Pflicht." },
+  { topic: "Lieferantenauswahl", q: "Was ist der Vorteil eines Marktplatzes wie Mercateo für ein KMU?",
+    options: ["Höhere Preise", "Breite Lieferantenauswahl ohne eigene IT-Investition", "Vollkontrolle wie bei Buy-Side", "Kein Internet nötig"],
+    a: 1, e: "Marktplätze bieten Sortimentsbreite und einheitliche Bestellprozesse für KMU ohne eigene IT-Kosten." },
+
+  // === Block C: ABC-Analyse (26-35) ===
+  { topic: "ABC-Analyse", q: "Was ist die ABC-Analyse?",
+    options: ["Eine Buchhaltungs-Methode", "Ein Klassifikationsverfahren, das Objekte nach wirtschaftlichem Wertanteil in 3 Klassen einteilt", "Eine Bestellmethode", "Eine Lagertechnik"],
+    a: 1, e: "ABC = Klassifikation in A (sehr wichtig), B (wichtig), C (weniger wichtig) nach Wertanteil." },
+  { topic: "ABC-Analyse", q: "Auf welchem Prinzip beruht die ABC-Analyse?",
+    options: ["Murphys Gesetz", "Pareto-Prinzip (20/80-Regel)", "Peter-Prinzip", "Eisenhower-Prinzip"],
+    a: 1, e: "Pareto: 20 % der Ursachen verursachen 80 % der Wirkung — in der Beschaffung: 20 % der Artikel = 80 % des Werts." },
+  { topic: "ABC-Analyse", q: "Welche Wertgrenze ist typisch für A-Teile?",
+    options: ["Bis ca. 50 %", "Bis ca. 70 %", "Bis ca. 90 %", "Bis ca. 100 %"],
+    a: 1, e: "A-Teile machen typischerweise bis zu 70 % des Gesamtwerts aus, obwohl es nur ca. 10 % der Artikel sind." },
+  { topic: "ABC-Analyse", q: "Welche Bedeutung haben C-Teile?",
+    options: ["Strategisch wichtigste Artikel", "Mittlere Bedeutung", "Geringe Bedeutung am Wert, aber meist viele Artikel", "Höchste Stückzahlen"],
+    a: 2, e: "C-Teile = nur ~10 % des Werts, aber ~70 % der Artikel — viele kleine Posten." },
+  { topic: "ABC-Analyse", q: "Wie sollten A-Teile typischerweise beschafft werden?",
+    options: ["Vorratsbeschaffung mit großem Lager", "Just-in-Time, Rahmenverträge, eng überwacht", "Einzelbeschaffung pro Bedarf", "Über Marktplätze"],
+    a: 1, e: "A-Teile sind wertvoll → kleine Lager, intensive Steuerung, strategische Lieferantenpartnerschaften." },
+  { topic: "ABC-Analyse", q: "Wie sollten C-Teile typischerweise beschafft werden?",
+    options: ["Just-in-Time", "Vorratsbeschaffung mit großzügigem Sicherheitsbestand", "Einzelbeschaffung pro Bedarf", "Tägliche Bestellungen"],
+    a: 1, e: "C-Teile sind billig → großzügiger Vorrat, kein hoher Aufwand pro Bestellung." },
+  { topic: "ABC-Analyse", q: "Was ist der erste Schritt einer ABC-Analyse?",
+    options: ["Klassengrenzen festlegen", "Pro Artikel den Jahresverbrauchswert berechnen", "Lieferanten kontaktieren", "Bestellungen auslösen"],
+    a: 1, e: "Schritt 1: Pro Artikel Wert berechnen (Menge × Preis), dann sortieren und kumulieren." },
+  { topic: "ABC-Analyse", q: "Welche Konsequenz hat die ABC-Analyse für die Lieferantenpflege?",
+    options: ["Alle Lieferanten gleich behandeln", "A-Teile-Lieferanten als strategische Partner pflegen, C-Teile per Standardprozess", "C-Teile-Lieferanten am intensivsten betreuen", "Keine Konsequenz"],
+    a: 1, e: "A-Teile rechtfertigen Verhandlungs- und Pflegeaufwand; C-Teile lohnen den Aufwand nicht." },
+  { topic: "ABC-Analyse", q: "Berechnen Sie: Artikel mit 48.000 € bei Gesamtwert 125.200 €. Prozentualer Anteil?",
+    options: ["28,3 %", "38,3 %", "48,3 %", "58,3 %"],
+    a: 1, e: "48.000 / 125.200 = 0,3834 ≈ 38,3 %." },
+  { topic: "ABC-Analyse", q: "Was bedeutet 'kumulierter Prozentsatz' in der ABC-Analyse?",
+    options: ["Der Anteil pro Artikel", "Die Summe der Anteile von oben bis zur aktuellen Zeile", "Der Gesamtumsatz", "Der Lagerbestand"],
+    a: 1, e: "Kumuliert = aufaddiert von Zeile 1 bis n. So sieht man, ab wann ~70/90 % erreicht sind." },
+
+  // === Block D: Anfrage (36-43) ===
+  { topic: "Anfrage", q: "Ist eine Anfrage rechtlich bindend?",
+    options: ["Ja, immer", "Nein, sie ist eine unverbindliche Aufforderung (invitatio ad offerendum)", "Nur bei Großaufträgen", "Nur wenn schriftlich"],
+    a: 1, e: "Anfrage = unverbindliche Aufforderung an den Lieferanten, ein Angebot abzugeben. Erst das Angebot ist bindend (§ 145 BGB)." },
+  { topic: "Anfrage", q: "Was ist 'invitatio ad offerendum'?",
+    options: ["Eine Bestellung", "Die Aufforderung zur Abgabe eines Angebots — rechtlich nicht bindend", "Ein Vertragsschluss", "Eine Kündigung"],
+    a: 1, e: "Lateinischer Begriff für die Aufforderung an Geschäftspartner, ein Angebot abzugeben — rechtsdogmatisch keine Willenserklärung." },
+  { topic: "Anfrage", q: "Welcher Bestandteil gehört NICHT zwingend in eine Anfrage?",
+    options: ["Genaue Artikelbezeichnung", "Menge", "Eigene Bonitätsauskunft", "Lieferort"],
+    a: 2, e: "Bonitätsauskunft des Käufers ist keine Standardinformation in einer Anfrage." },
+  { topic: "Anfrage", q: "Welche DIN-Norm regelt die Form von Geschäftsbriefen (z.B. Anfragen)?",
+    options: ["DIN 1080", "DIN 5008", "DIN A4", "DIN 9001"],
+    a: 1, e: "DIN 5008 ist die Norm für Schreib- und Gestaltungsregeln für die Textverarbeitung." },
+  { topic: "Anfrage", q: "Warum sollte eine Anfrage trotz Unverbindlichkeit präzise formuliert sein?",
+    options: ["Aus Höflichkeit", "Weil sie die Basis für das (bindende) Angebot ist — schlampige Anfrage = schlampiges Angebot", "Aus Pflicht", "Sie muss nicht präzise sein"],
+    a: 1, e: "Das Angebot des Lieferanten orientiert sich an der Anfrage. Unklare Anfrage = unbrauchbares Angebot." },
+  { topic: "Anfrage", q: "Welche Information sollte eine Anfrage zur Angebotsfrist enthalten?",
+    options: ["Keine Frist", "Bis wann das Angebot vorliegen soll", "Der Liefertermin", "Das Skonto"],
+    a: 1, e: "Eine Frist erleichtert Planung und sortiert Lieferanten aus, die nicht zeitnah antworten können." },
+  { topic: "Anfrage", q: "Kann ich Anfragen an mehrere Lieferanten gleichzeitig stellen?",
+    options: ["Nein, das ist verboten", "Ja, das ist üblich und erlaubt — die Anfrage ist nicht bindend", "Nur mit deren Einverständnis", "Nur wenn der Erste ablehnt"],
+    a: 1, e: "Da Anfragen rechtlich nicht bindend sind, dürfen sie parallel an mehrere Lieferanten gehen." },
+  { topic: "Anfrage", q: "Welche Frage gehört NICHT typisch in eine Anfrage?",
+    options: ["Nach Lieferzeit", "Nach Zahlungsbedingungen", "Nach Bonität des Lieferanten", "Nach Verpackung"],
+    a: 2, e: "Bonität des Lieferanten klärt der Käufer separat (z.B. via Creditreform), nicht in der Anfrage." },
+
+  // === Block E: Bezugskalkulation (44-53) ===
+  { topic: "Bezugskalkulation", q: "Was ist der Bezugspreis (Einstandspreis)?",
+    options: ["Der Listenpreis", "Der Endpreis nach allen Nachlässen plus Bezugskosten", "Nur der Bareinkaufspreis", "Der Verkaufspreis"],
+    a: 1, e: "Bezugspreis = Listenpreis − Rabatt − Skonto + Bezugskosten. Er ist die Vergleichsgrundlage." },
+  { topic: "Bezugskalkulation", q: "Welche Reihenfolge ist korrekt?",
+    options: ["Listenpreis → Skonto → Rabatt → Bezugskosten", "Listenpreis → Rabatt → Skonto → Bezugskosten", "Listenpreis → Bezugskosten → Rabatt → Skonto", "Listenpreis → Bezugskosten → Skonto → Rabatt"],
+    a: 1, e: "Reihenfolge: Liste → Rabatt → Skonto → Bezugskosten = Bezugspreis." },
+  { topic: "Bezugskalkulation", q: "Wie viel ist der Zieleinkaufspreis bei 100 € Liste, 10 % Rabatt?",
+    options: ["80 €", "85 €", "90 €", "100 €"],
+    a: 2, e: "100 − (100 × 10 %) = 100 − 10 = 90 €." },
+  { topic: "Bezugskalkulation", q: "Wie viel ist der Bareinkaufspreis bei 90 € Ziel, 2 % Skonto?",
+    options: ["86,40 €", "87,40 €", "88,20 €", "89,20 €"],
+    a: 2, e: "90 − (90 × 2 %) = 90 − 1,80 = 88,20 €." },
+  { topic: "Bezugskalkulation", q: "Was sind Bezugskosten?",
+    options: ["Personalkosten des Einkaufs", "Frachtkosten, Versicherung, Verpackung beim Bezug", "Skonto", "Rabatt"],
+    a: 1, e: "Bezugskosten sind alle Kosten, die zusätzlich zum Wareneinkaufspreis beim Bezug anfallen." },
+  { topic: "Bezugskalkulation", q: "Was ist Skonto?",
+    options: ["Mengenrabatt", "Prozentualer Preisnachlass bei Zahlung innerhalb einer kurzen Frist", "Treuerabatt", "Frachtkostenrabatt"],
+    a: 1, e: "Skonto = Nachlass für schnelle Zahlung (typisch 2-3 % innerhalb 10 Tagen)." },
+  { topic: "Bezugskalkulation", q: "Sie zahlen 4,50 € pro Stück, bekommen 10 % Liefererrabatt und 2 % Skonto. Wie viel kostet das Stück nach Skonto (Bareinkaufspreis)?",
+    options: ["3,87 €", "3,97 €", "4,05 €", "4,22 €"],
+    a: 1, e: "4,50 − 10% = 4,05 (Ziel), 4,05 − 2% = 4,05 − 0,081 = 3,969 ≈ 3,97 €." },
+  { topic: "Bezugskalkulation", q: "Welcher Preis ist der RICHTIGE Vergleich zwischen Lieferanten?",
+    options: ["Listenpreis", "Zieleinkaufspreis", "Bareinkaufspreis", "Bezugspreis (Einstandspreis)"],
+    a: 3, e: "Nur der Bezugspreis enthält ALLE Nachlässe und Bezugskosten — fairer Vergleich." },
+  { topic: "Bezugskalkulation", q: "Eselsbrücke 'L − R = Z, Z − S = B, B + K = E' — was steht für 'K'?",
+    options: ["Kalkulation", "Kosten (Bezugskosten)", "Konto", "Kunden"],
+    a: 1, e: "K = Bezugskosten, die nach dem Bareinkaufspreis dazugerechnet werden." },
+  { topic: "Bezugskalkulation", q: "Lieferant A: Listenpreis 4,50 €, Rabatt 10 %, Skonto 2 %, Bezugskosten 0,25 €/Stück. Bezugspreis?",
+    options: ["4,12 €", "4,22 €", "4,32 €", "4,50 €"],
+    a: 1, e: "4,50 − 0,45 = 4,05 (Ziel) − 0,081 = 3,969 (Bar) + 0,25 = 4,219 ≈ 4,22 €. Hinweis: Hier ist 4,22 das Ergebnis (B)." },
+
+  // === Block F: Nutzwertanalyse (54-60) ===
+  { topic: "Nutzwertanalyse", q: "Was leistet die Nutzwertanalyse?",
+    options: ["Quantitativen Preisvergleich", "Qualitativen Vergleich von Alternativen anhand gewichteter Kriterien", "Lagerbestandsführung", "Bestellauslösung"],
+    a: 1, e: "Nutzwertanalyse = systematische Bewertung qualitativer Kriterien mit Gewichtung." },
+  { topic: "Nutzwertanalyse", q: "Welcher Schritt gehört NICHT zur Nutzwertanalyse?",
+    options: ["Kriterien festlegen", "Kriterien gewichten (Summe = 100 %)", "Lieferzeit aufaddieren", "Pro Lieferant Punkte vergeben"],
+    a: 2, e: "Lieferzeiten werden NICHT aufaddiert; sie sind ein Kriterium, das bewertet (Punkte) und gewichtet wird." },
+  { topic: "Nutzwertanalyse", q: "Wie wird der gewichtete Nutzen pro Kriterium berechnet?",
+    options: ["Punkte − Gewichtung", "Punkte + Gewichtung", "Punkte × Gewichtung", "Punkte / Gewichtung"],
+    a: 2, e: "Gewichteter Teilnutzen = Punktwert × Gewichtungsfaktor." },
+  { topic: "Nutzwertanalyse", q: "Lieferant: Lieferzuverlässigkeit 30 %, Punkt 4. Wie hoch der gewichtete Teilnutzen?",
+    options: ["1,00", "1,20", "1,33", "0,75"],
+    a: 1, e: "4 × 0,30 = 1,20." },
+  { topic: "Nutzwertanalyse", q: "Wann gewinnt ein Lieferant in der Nutzwertanalyse?",
+    options: ["Beim höchsten Listenpreis", "Beim höchsten Gesamtnutzwert (Summe aller gewichteten Teilnutzen)", "Bei der niedrigsten Punktzahl", "Bei der höchsten Bezugskosten"],
+    a: 1, e: "Wer den höchsten aufsummierten Nutzwert hat, gewinnt qualitativ." },
+  { topic: "Nutzwertanalyse", q: "Warum reicht der quantitative Preisvergleich allein nicht aus?",
+    options: ["Weil Preise sich ändern", "Weil nicht-monetäre Faktoren (Qualität, Zuverlässigkeit) ignoriert würden", "Weil Skonto nicht zählt", "Weil Mengenrabatte fehlen"],
+    a: 1, e: "Der billigste Lieferant ist nicht automatisch der beste — Qualität und Zuverlässigkeit gehören dazu." },
+  { topic: "Nutzwertanalyse", q: "Wer entscheidet über die Gewichtung der Kriterien?",
+    options: ["Der Lieferant", "Der Käufer (subjektiv, abhängig von Strategie)", "Der Gesetzgeber", "Es gibt feste Gewichtungen"],
+    a: 1, e: "Die Gewichtung ist die zentrale subjektive Entscheidung des Käufers — sie spiegelt seine Prioritäten." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 2 — Bezugsquellen, Anfragen, Angebotsvergleich</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 4rem 6rem; flex-direction: column; justify-content: center; background: white; animation: fadeIn 0.35s ease; overflow-y: auto; }
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.2rem; color: var(--bfw-primary-dark); margin-bottom: 1.2rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.2rem; line-height: 1.55; margin-bottom: 0.7rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.15rem; line-height: 1.55; margin-bottom: 0.35rem; }
+.subtitle { font-size: 1.3rem; color: var(--bfw-ink-soft); margin-bottom: 1.5rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.05rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+.merksatz { background: var(--bfw-bg-teal); border-left: 6px solid var(--bfw-primary); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.1rem; }
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 1.05rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.95rem; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--bfw-border); }
+.figure { margin: 1.2rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.92rem; margin-top: 0.4rem; }
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button { border: none; background: var(--bfw-primary); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.12); transition: all 0.15s; }
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.7rem; }
+.numlist li::before { content: counter(numitem); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--bfw-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+@media print { .slide { display: flex; page-break-after: always; } .nav, .slide-num { display: none; } html, body { height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<section class="slide active cover">
+  <span class="cover-tag">Tag 2 · 12.05.2026</span>
+  <h1>Bezugsquellen, Anfragen, Angebotsvergleich</h1>
+  <p class="subtitle">Vom Bedarf zum besten Lieferanten — quantitativ und qualitativ</p>
+  <div class="cover-meta">
+    <span><strong>Modul</strong>Beschaffung im Büromanagement</span>
+    <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+    <span><strong>Quelle</strong>Lehrwerk Kap. 4.3, 4.7, 4.8</span>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Was Sie heute lernen</h2>
+  <p class="subtitle">Am Ende des Tages können Sie...</p>
+  <ul class="checklist">
+    <li>die <strong>Bedarfsarten</strong> (Primär-, Sekundär-, Tertiär-, Brutto-, Nettobedarf) unterscheiden</li>
+    <li>geeignete <strong>Bezugsquellen ermitteln</strong> und Lieferanten systematisch bewerten</li>
+    <li>eine <strong>ABC-Analyse</strong> durchführen und Konsequenzen ableiten</li>
+    <li>eine fachlich und rechtlich saubere <strong>Anfrage</strong> formulieren</li>
+    <li>einen <strong>quantitativen Angebotsvergleich</strong> (Bezugskalkulation) rechnen</li>
+    <li>eine <strong>Nutzwertanalyse</strong> für die qualitative Lieferantenwahl erstellen</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Wo wir gestern stehen geblieben sind</h2>
+  <p>Tag 1: Wir haben den Beschaffungsprozess in 7 Schritten kennengelernt.</p>
+  <ol class="numlist">
+    <li><strong>Bedarfsermittlung</strong> — heute Schritt 1 im Detail</li>
+    <li><strong>Bezugsquellen­ermittlung</strong> — heute Schritt 2 im Detail</li>
+    <li><strong>Anfrage</strong> — heute Schritt 3 im Detail</li>
+    <li><strong>Angebotsvergleich</strong> — heute Schritt 4 im Detail</li>
+    <li>Bestellung — Tag 3</li>
+    <li>Wareneingang — Tag 5</li>
+    <li>Rechnung &amp; Zahlung — Tag 7+8</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Bedarfsermittlung — was und wie viel?</h2>
+  <p>Die Bedarfsermittlung beantwortet die Frage: <strong>Was wird wann in welcher Menge gebraucht?</strong></p>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Merksatz</span>
+    Wer den Bedarf nicht sauber ermittelt, beschafft entweder zu viel (Lagerkosten) oder zu wenig (Stillstand). Die Bedarfsermittlung ist die Grundlage <em>aller</em> nachfolgenden Beschaffungs­schritte.
+  </div>
+  <p class="muted">Buchverweis: S. 239–245</p>
+</section>
+
+<section class="slide">
+  <h2>Bedarfsarten</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Primärbedarf</div>
+      <p style="font-size: 1rem;">Verkaufsfähige Endprodukte und Dienstleistungen.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiel:</strong> 3.000 Schreibtische pro Quartal.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Sekundärbedarf</div>
+      <p style="font-size: 1rem;">Roh-, Hilfs- und Halbfertigprodukte zur Herstellung des Primär­bedarfs.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiel:</strong> 6.000 Buchenholz­platten, 12.000 Tischbeine.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Tertiärbedarf</div>
+      <p style="font-size: 1rem;">Hilfs- und Betriebsstoffe, die nicht direkt ins Produkt eingehen.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiel:</strong> Schmierstoff für die Säge, Reinigungs­mittel.</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">🐴 Eselsbrücke</span>
+    <strong>P—S—T:</strong> <em>Primär</em> = Endprodukt, <em>Sekundär</em> = drinsteckend, <em>Tertiär</em> = drumherum.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Brutto- vs. Nettobedarf</h2>
+  <p>Der <strong>Bruttobedarf</strong> ist der gesamte Materialbedarf einer Periode.<br>
+  Der <strong>Nettobedarf</strong> = Bruttobedarf − vorhandener Lagerbestand − offene Bestellungen.</p>
+  <div class="merksatz">
+    <span class="merksatz-label">📐 Formel</span>
+    <strong>Nettobedarf = Bruttobedarf − Lagerbestand − bereits bestellt + Sicherheitsbestand</strong>
+  </div>
+  <div class="card teal" style="margin-top: 1rem;">
+    <div class="card-title">Praxisbeispiel</div>
+    <p style="font-size: 1rem;">Bedarf an Aktenordnern für Q3: <strong>200 Stück</strong> (Brutto). Im Lager: 30. Bereits bestellt: 50. Sicherheitsbestand soll 20 sein.</p>
+    <p style="font-size: 1.05rem; margin-top: 0.5rem;"><strong>Nettobedarf = 200 − 30 − 50 + 20 = 140 Stück</strong></p>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Verbrauchs- vs. bedarfsgesteuerte Ermittlung</h2>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Verbrauchsgesteuert</th><th>Bedarfsgesteuert</th></tr></thead>
+    <tbody>
+      <tr><td>Datenbasis</td><td>Vergangenheits­verbrauch</td><td>Konkrete Aufträge / Stücklisten</td></tr>
+      <tr><td>Genauigkeit</td><td>Niedriger (Schätzung)</td><td>Hoch (Berechnung)</td></tr>
+      <tr><td>Aufwand</td><td>Gering</td><td>Hoch (IT-Unterstützung nötig)</td></tr>
+      <tr><td>Typisch für</td><td>C-Teile, Bürobedarf</td><td>A-Teile, kundenauftrag­bezogen</td></tr>
+      <tr><td>Risiko</td><td>Über-/Unter­schätzung bei Bedarfs­änderungen</td><td>Aufwendig für viele Kleinpositionen</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Bezugsquellen ermitteln</h2>
+  <p>Wo finde ich überhaupt geeignete Lieferanten?</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Interne Quellen</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Lieferantendatei aus früheren Bestellungen</li>
+        <li>Erfahrungs­berichte aus anderen Abteilungen</li>
+        <li>Frühere Angebote im Archiv</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Externe Quellen</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Branchenbücher, Fachzeitschriften</li>
+        <li>Messen (z.B. CeBIT, Frankfurter Buchmesse)</li>
+        <li>Onlineplattformen (Mercateo, „Wer liefert was")</li>
+        <li>IHK-Datenbanken</li>
+        <li>Empfehlungen von Geschäftspartnern</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Lieferantenauswahl — Kriterien</h2>
+  <p>Nicht jeder Lieferant ist für jeden Bedarf geeignet. Bewerten Sie:</p>
+  <ul style="font-size: 1.15rem;">
+    <li><strong>Preis &amp; Konditionen</strong> — Listenpreis, Rabatte, Skonto, Zahlungsziel</li>
+    <li><strong>Qualität</strong> — Spezifikationstreue, Reklamationsquote, Zertifikate (ISO 9001)</li>
+    <li><strong>Lieferzuverlässigkeit</strong> — Termintreue, Vollständigkeit</li>
+    <li><strong>Service</strong> — Reklamations­bearbeitung, Beratung, Garantie</li>
+    <li><strong>Standort</strong> — Liefer­zeit, Transportkosten, Versorgungs­sicherheit</li>
+    <li><strong>Wirtschaftliche Stabilität</strong> — Insolvenz­risiko, Bonität</li>
+    <li><strong>Nachhaltigkeit</strong> — Umweltbilanz, Sozialstandards (LkSG-relevant)</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>ABC-Analyse — das Konzept</h2>
+  <p>Nicht jeder Artikel verdient die gleiche Aufmerksamkeit. Die ABC-Analyse klassifiziert Artikel nach ihrem <strong>wirtschaftlichen Wertanteil</strong>.</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">A-Teile</div>
+      <p style="font-size: 1rem;">~70 % des Werts, ~10 % der Artikel</p>
+      <p style="font-size: 0.92rem;" class="muted">Intensiv beschaffen — Rahmenverträge, Lieferantenpflege.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">B-Teile</div>
+      <p style="font-size: 1rem;">~20 % des Werts, ~20 % der Artikel</p>
+      <p style="font-size: 0.92rem;" class="muted">Mittlere Aufmerksamkeit — selektive Optimierung.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">C-Teile</div>
+      <p style="font-size: 1rem;">~10 % des Werts, ~70 % der Artikel</p>
+      <p style="font-size: 0.92rem;" class="muted">Effizient bewirtschaften — Standardprozess, kein Aufwand.</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">🐴 Eselsbrücke „Pareto-Prinzip"</span>
+    <strong>20 % der Artikel verursachen 80 % des Werts.</strong> Konzentrieren Sie sich auf die wenigen Wichtigen.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>ABC-Analyse — Beispielrechnung</h2>
+  <table>
+    <thead><tr><th>Artikel</th><th>Wert (€)</th><th>%-Anteil</th><th>Kumuliert %</th><th>Klasse</th></tr></thead>
+    <tbody>
+      <tr><td>A1</td><td style="text-align:right">48.000</td><td style="text-align:right">38,3 %</td><td style="text-align:right">38,3 %</td><td><strong style="color: var(--bfw-primary-dark)">A</strong></td></tr>
+      <tr><td>A5</td><td style="text-align:right">35.000</td><td style="text-align:right">27,9 %</td><td style="text-align:right">66,2 %</td><td><strong style="color: var(--bfw-primary-dark)">A</strong></td></tr>
+      <tr><td>A3</td><td style="text-align:right">16.000</td><td style="text-align:right">12,8 %</td><td style="text-align:right">79,0 %</td><td><strong style="color: var(--bfw-warn)">B</strong></td></tr>
+      <tr><td>A7</td><td style="text-align:right">9.500</td><td style="text-align:right">7,6 %</td><td style="text-align:right">86,6 %</td><td><strong style="color: var(--bfw-warn)">B</strong></td></tr>
+      <tr><td>A10</td><td style="text-align:right">6.350</td><td style="text-align:right">5,1 %</td><td style="text-align:right">91,7 %</td><td><strong style="color: var(--bfw-warn)">B</strong></td></tr>
+      <tr><td>A2, A9, A4, A6, A8</td><td style="text-align:right">10.350</td><td style="text-align:right">8,3 %</td><td style="text-align:right">100,0 %</td><td><strong>C</strong></td></tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 0.6rem; color: var(--bfw-ink-soft); font-size: 0.95rem;">Gesamtwert: 125.200 €. <strong>2 A-Teile machen 66 % des Werts aus</strong> — dort liegt der Hebel.</p>
+</section>
+
+<section class="slide">
+  <h2>Konsequenzen für die Beschaffung</h2>
+  <table>
+    <thead><tr><th>Klasse</th><th>Bestellrhythmus</th><th>Sicherheits­bestand</th><th>Lieferanten­pflege</th></tr></thead>
+    <tbody>
+      <tr><td><strong>A</strong></td><td>Just-in-Time, Rahmen­vertrag</td><td>Niedrig (eng überwacht)</td><td>Strategische Partner­schaft</td></tr>
+      <tr><td><strong>B</strong></td><td>Periodisch (z.B. monatlich)</td><td>Mittel</td><td>Regelmäßige Audits</td></tr>
+      <tr><td><strong>C</strong></td><td>Vorratsbeschaffung, längere Zyklen</td><td>Hoch (großzügig)</td><td>Standard­prozess, wenig Pflege</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top: 0.8rem;">Faustregel: A-Teile schwanken im Wert stark — kleine Lager, aber präzise Steuerung. C-Teile sind billig — pufferreich lagern statt jeden Bedarf einzeln zu prüfen.</p>
+</section>
+
+<section class="slide">
+  <h2>Anfrage — Begriff und rechtliche Bedeutung</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">⚖️ Rechtlich</span>
+    Eine <strong>Anfrage ist nicht bindend</strong>. Sie ist eine unverbindliche Aufforderung an den Lieferanten, ein Angebot abzugeben (lat. <em>invitatio ad offerendum</em>). Erst dessen <em>Angebot</em> ist ein bindender Vertragsantrag.
+  </div>
+  <p>Trotzdem sollten Sie die Anfrage sorgfältig formulieren — sie ist die Grundlage des Angebots, das Sie zurückbekommen.</p>
+</section>
+
+<section class="slide">
+  <h2>Anfrage — inhaltliche Bestandteile</h2>
+  <p>Eine vollständige Anfrage enthält mindestens:</p>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Sache</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Genaue Artikel­bezeichnung und Spezifikation</li>
+        <li>Menge</li>
+        <li>Liefertermin (gewünscht)</li>
+        <li>Lieferort</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Konditionen</div>
+      <ul style="margin-left: 1rem; font-size: 0.95rem;">
+        <li>Liefer- und Zahlungs­bedingungen erfragen</li>
+        <li>Lieferzeit / Liefertermin</li>
+        <li>Verpackung</li>
+        <li>Frist, bis wann das Angebot vorliegen soll</li>
+      </ul>
+    </div>
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Form: DIN 5008 (Geschäftsbrief) — saubere Aufmachung erhöht die Antwort­quote.</p>
+</section>
+
+<section class="slide">
+  <h2>Angebotsvergleich — zwei Dimensionen</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Quantitativ</div>
+      <p>Kostenvergleich: Bezugs­kalkulation</p>
+      <p class="muted" style="font-size: 0.95rem;">Listenpreis → Liefererrabatt → Lieferer­skonto → Bezugskosten → Bezugspreis</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Qualitativ</div>
+      <p>Bewertungs­vergleich: Nutzwert­analyse</p>
+      <p class="muted" style="font-size: 0.95rem;">Kriterien · Gewichtung · Punkte · gewichteter Nutzwert</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Merksatz</span>
+    Beides nutzen — niemals nur Preis vergleichen. Der billigste Lieferant kann mit niedriger Qualität teurer werden als der teurere Lieferant mit hoher Zuverlässigkeit.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bezugskalkulation — Schema</h2>
+  <table>
+    <tbody>
+      <tr><td>&nbsp;&nbsp;&nbsp; Listeneinkaufspreis</td><td style="text-align:right">100,00 €</td></tr>
+      <tr><td>− Liefererrabatt (z.B. 10 %)</td><td style="text-align:right">−10,00 €</td></tr>
+      <tr style="background: var(--bfw-bg-teal);"><td>= Zieleinkaufspreis</td><td style="text-align:right"><strong>90,00 €</strong></td></tr>
+      <tr><td>− Liefererskonto (z.B. 2 %)</td><td style="text-align:right">−1,80 €</td></tr>
+      <tr style="background: var(--bfw-bg-teal);"><td>= Bareinkaufspreis</td><td style="text-align:right"><strong>88,20 €</strong></td></tr>
+      <tr><td>+ Bezugskosten (Fracht, Versicherung, Verpackung)</td><td style="text-align:right">+5,00 €</td></tr>
+      <tr style="background: var(--bfw-bg-amber);"><td><strong>= Bezugspreis (Einstandspreis)</strong></td><td style="text-align:right"><strong>93,20 €</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="merksatz" style="margin-top: 0.8rem;">
+    <span class="merksatz-label">🐴 Eselsbrücke</span>
+    <strong>L − R = Z, Z − S = B, B + K = E:</strong> Liste, Rabatt, Ziel, Skonto, Bar, Kosten, Einstand.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bezugskalkulation — Beispiel mit drei Angeboten</h2>
+  <table>
+    <thead><tr><th>Position</th><th>Lieferant A</th><th>Lieferant B</th><th>Lieferant C</th></tr></thead>
+    <tbody>
+      <tr><td>Listenpreis pro Stück</td><td style="text-align:right">4,50 €</td><td style="text-align:right">4,80 €</td><td style="text-align:right">4,20 €</td></tr>
+      <tr><td>− Liefererrabatt</td><td style="text-align:right">10 % = 0,45</td><td style="text-align:right">12 % = 0,58</td><td style="text-align:right">5 % = 0,21</td></tr>
+      <tr><td>= Zieleinkaufspreis</td><td style="text-align:right">4,05 €</td><td style="text-align:right">4,22 €</td><td style="text-align:right">3,99 €</td></tr>
+      <tr><td>− Liefererskonto</td><td style="text-align:right">2 % = 0,08</td><td style="text-align:right">3 % = 0,13</td><td style="text-align:right">2 % = 0,08</td></tr>
+      <tr><td>= Bareinkaufspreis</td><td style="text-align:right">3,97 €</td><td style="text-align:right">4,09 €</td><td style="text-align:right">3,91 €</td></tr>
+      <tr><td>+ Bezugskosten / Stück (bei 100 Stk.)</td><td style="text-align:right">0,25 €</td><td style="text-align:right">0,18 €</td><td style="text-align:right">0,30 €</td></tr>
+      <tr style="background: var(--bfw-bg-amber);"><td><strong>= Bezugspreis / Stück</strong></td><td style="text-align:right"><strong>4,22 €</strong></td><td style="text-align:right"><strong>4,27 €</strong></td><td style="text-align:right"><strong>4,21 €</strong></td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top: 0.5rem;">Quantitativ: Lieferant <strong>C</strong> ist mit 4,21 € am günstigsten — knapp vor A. Aber: Qualitative Bewertung folgt!</p>
+</section>
+
+<section class="slide">
+  <h2>Nutzwertanalyse — qualitativer Vergleich</h2>
+  <p>Ergänzt die Bezugskalkulation um nicht-monetäre Faktoren.</p>
+  <ol class="numlist">
+    <li><strong>Kriterien</strong> festlegen (z.B. Qualität, Lieferzuverlässigkeit, Service)</li>
+    <li><strong>Gewichten</strong> (Summe = 100 %)</li>
+    <li>Pro Lieferant <strong>Punkte</strong> vergeben (z.B. 1–5)</li>
+    <li><strong>Gewichteten Nutzwert</strong> = Punkte × Gewichtung pro Kriterium → aufsummieren</li>
+    <li>Lieferant mit höchstem Gesamt­nutzwert wählen</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Nutzwertanalyse — Beispiel</h2>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Gew.</th><th>A</th><th>B</th><th>C</th></tr></thead>
+    <tbody>
+      <tr><td>Lieferzuverlässigkeit</td><td>30 %</td><td>4 → 1,20</td><td>5 → 1,50</td><td>3 → 0,90</td></tr>
+      <tr><td>Qualität</td><td>25 %</td><td>4 → 1,00</td><td>4 → 1,00</td><td>5 → 1,25</td></tr>
+      <tr><td>Service / Reklamation</td><td>20 %</td><td>3 → 0,60</td><td>4 → 0,80</td><td>4 → 0,80</td></tr>
+      <tr><td>Zahlungsziele</td><td>15 %</td><td>4 → 0,60</td><td>3 → 0,45</td><td>5 → 0,75</td></tr>
+      <tr><td>Nachhaltigkeit</td><td>10 %</td><td>3 → 0,30</td><td>5 → 0,50</td><td>2 → 0,20</td></tr>
+      <tr style="background: var(--bfw-bg-amber);"><td><strong>Nutzwert gesamt</strong></td><td><strong>100 %</strong></td><td><strong>3,70</strong></td><td><strong>4,25</strong></td><td><strong>3,90</strong></td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top: 0.6rem;">Qualitativ: Lieferant <strong>B</strong> gewinnt klar (4,25 vs. 3,90 vs. 3,70).</p>
+</section>
+
+<section class="slide">
+  <h2>Synthese — wer wird's?</h2>
+  <table>
+    <thead><tr><th>Aspekt</th><th>Bestes Angebot</th></tr></thead>
+    <tbody>
+      <tr><td>Quantitativ (Bezugspreis)</td><td><strong>Lieferant C</strong> (4,21 €)</td></tr>
+      <tr><td>Qualitativ (Nutzwert)</td><td><strong>Lieferant B</strong> (4,25)</td></tr>
+    </tbody>
+  </table>
+  <div class="merksatz">
+    <span class="merksatz-label">🤔 Entscheidung</span>
+    Lieferant <strong>B</strong>: Mehrkosten von 0,06 € pro Stück (≈ 1,4 % Aufpreis) gegenüber C — dafür deutlich höhere Lieferzuverlässigkeit, bessere Nachhaltigkeit, vergleichbare Qualität. Bei 100 Stück sind das 6,00 € Mehrkosten — ein guter Tausch gegen weniger Reklamations­risiko.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Praxisbeispiel: Bürobedarfs-Bestellung</h2>
+  <p>Sie sind Sachbearbeiter/-in. Ihre Kollegin meldet: <em>„Wir brauchen 100 Aktenordner und 5 Kartons Druckerpapier."</em></p>
+  <ol class="numlist">
+    <li><strong>Bedarf</strong> präzisieren: Aktenordner DIN A4 breit, blau, mit Hebelmechanik. Druckerpapier: 80 g/m², weiß, 500 Blatt/Karton.</li>
+    <li><strong>Lager</strong> prüfen: 30 Aktenordner noch da → Nettobedarf = 70.</li>
+    <li><strong>Bezugsquelle</strong>: Drei bekannte Lieferanten aus der Datei + Mercateo-Marktplatz.</li>
+    <li><strong>Anfrage</strong> per E-Mail (DIN 5008) mit Angebotsfrist 5 Werktage.</li>
+    <li><strong>Vergleich</strong> der drei Angebote: Bezugskalkulation + Nutzwertanalyse.</li>
+    <li><strong>Entscheidung</strong> mit kurzer Begründung dokumentieren.</li>
+    <li><strong>Bestellung</strong> auslösen — Kapitel von Tag 3.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Bezug zur IHK-Abschlussprüfung</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Teil 1 (KomTech)</div>
+      <ul style="margin-left: 1rem;">
+        <li>Bedarfsarten unterscheiden</li>
+        <li>ABC-Analyse durchführen</li>
+        <li>Anfrage formulieren (DIN 5008)</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Teil 2 (Auftragsbearbeitung)</div>
+      <ul style="margin-left: 1rem;">
+        <li>Bezugskalkulation rechnen (klassische IHK-Aufgabe)</li>
+        <li>Nutzwertanalyse anwenden</li>
+        <li>Lieferanten begründet auswählen (situativ)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">📝 Tipp</span>
+    Bezugskalkulation ist <em>fast jedes Jahr</em> Teil der IHK-Klausur. Beherrschen Sie das Schema im Schlaf!
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Diskussionsfragen</h2>
+  <ol style="font-size: 1.15rem;">
+    <li>Welche Bedarfsart ist in Ihrem Ausbildungs­betrieb am wichtigsten? Warum?</li>
+    <li>Wie würden Sie eine ABC-Analyse für die Bürobedarfs­artikel Ihres Betriebs starten?</li>
+    <li>Welche Kriterien würden Sie persönlich am stärksten gewichten — Preis oder Lieferzuverlässigkeit?</li>
+    <li>Wie geht Ihr Betrieb heute mit Lieferanten­auswahl um — formal oder per Bauchgefühl?</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Zusammenfassung Tag 2</h2>
+  <ol class="numlist">
+    <li><strong>Bedarfsarten</strong>: Primär (Endprodukt), Sekundär (Bestandteil), Tertiär (Hilfsstoff). Brutto − Lager − Bestellt + Sicherheit = Netto.</li>
+    <li><strong>ABC-Analyse</strong> klassifiziert nach Wertanteil. 20 % der Artikel = 80 % des Werts (Pareto).</li>
+    <li><strong>Anfrage</strong> ist rechtlich nicht bindend — aber inhaltlich präzise!</li>
+    <li><strong>Bezugskalkulation</strong>: Liste − Rabatt − Skonto + Bezugskosten = Bezugspreis (Einstandspreis).</li>
+    <li><strong>Nutzwertanalyse</strong>: gewichtete Bewertung qualitativer Kriterien.</li>
+    <li><strong>Beste Wahl</strong> = Synthese aus quantitativem und qualitativem Vergleich.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Ausblick: Tag 3 (13.05.)</h2>
+  <p class="subtitle">Bestellungen und Kaufverträge — Rechtsgrundlagen</p>
+  <ul style="font-size: 1.2rem;">
+    <li>Rechtsgebiete: privates vs. öffentliches Recht</li>
+    <li>Rechts­subjekte und Rechts­objekte</li>
+    <li>Arten von Rechtsgeschäften (einseitig, mehrseitig)</li>
+    <li>Vertragsfreiheit und ihre Grenzen</li>
+    <li>Zustandekommen von Kaufverträgen — Antrag und Annahme</li>
+    <li>AGB</li>
+  </ul>
+  <p class="muted" style="margin-top: 1.5rem;">Hausaufgabe: Quiz <code>Quiz_Bezugsquellen-Anfragen-Angebotsvergleich.html</code> mit 60 MC-Fragen bearbeiten. Bezugskalkulation aus dem Aufgabenheft sicher beherrschen!</p>
+</section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 23</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+show(0);
+</script>
+
+</body>
+</html>
