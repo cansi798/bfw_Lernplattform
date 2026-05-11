@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 7 — Eingangsrechnungen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-danger:#EF4444; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5; --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem; }
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 7 · 20.05.2026 · 60 Fragen</span>
+  <h1>Quiz: Eingangsrechnungen</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation</strong> und dem <strong>Handout</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Erfüllung & gutgläubiger Erwerb (1-10) ===
+  { topic: "Erfüllung", q: "Wann ist ein Kaufvertrag nach § 362 BGB erfüllt?",
+    options: ["Wenn die Rechnung kommt", "Wenn die geschuldete Leistung ordnungsgemäß bewirkt wird", "Wenn der Vertrag unterschrieben ist", "Wenn das Lager voll ist"],
+    a: 1, e: "§ 362 BGB: Schuldverhältnis erlischt mit Bewirkung der Leistung an den Gläubiger." },
+  { topic: "Erfüllung", q: "Welche Pflicht hat der Verkäufer?",
+    options: ["Nur Übergabe", "Übergabe der Sache und Verschaffung des Eigentums (§ 433 I BGB)", "Nur Eigentumsübergang", "Nur Beratung"],
+    a: 1, e: "§ 433 I BGB: Verkäufer schuldet Übergabe + Eigentumsverschaffung." },
+  { topic: "Erfüllung", q: "Welche Pflicht hat der Käufer?",
+    options: ["Nur Bezahlen", "Zahlung des Kaufpreises und Abnahme der Sache (§ 433 II BGB)", "Nur Abnehmen", "Reparieren"],
+    a: 1, e: "§ 433 II BGB: Käufer zahlt Kaufpreis und nimmt die Sache ab." },
+  { topic: "Erfüllung", q: "Welche Norm regelt den gutgläubigen Eigentumserwerb?",
+    options: ["§ 362 BGB", "§ 932 BGB", "§ 449 BGB", "§ 14 UStG"],
+    a: 1, e: "§ 932 BGB regelt den gutgläubigen Erwerb beweglicher Sachen vom Nichtberechtigten." },
+  { topic: "Erfüllung", q: "Welche Voraussetzung gehört NICHT zum gutgläubigen Erwerb?",
+    options: ["Verkehrsgeschäft", "Bewegliche Sache", "Übergabe", "Notarielle Beurkundung"],
+    a: 3, e: "Notarielle Beurkundung wird nicht verlangt; § 932 BGB gilt für bewegliche Sachen." },
+  { topic: "Erfüllung", q: "Wann ist gutgläubiger Erwerb ausgeschlossen?",
+    options: ["Bei B2B", "Bei abhandengekommenen Sachen (§ 935 BGB), z.B. gestohlen, verloren", "Bei Bargeschäften", "Bei Verbrauchern"],
+    a: 1, e: "§ 935 BGB: Kein gutgläubiger Erwerb bei gestohlenen/verlorenen/abhandengekommenen Sachen." },
+  { topic: "Erfüllung", q: "Welche Ausnahme zu § 935 BGB gibt es?",
+    options: ["Keine", "Erwerb in öffentlicher Versteigerung", "Bei B2C", "Beim Bargeldkauf"],
+    a: 1, e: "Auch abhandengekommene Sachen können bei öffentlicher Versteigerung gutgläubig erworben werden." },
+  { topic: "Erfüllung", q: "Was bedeutet 'guter Glaube' nach § 932 II BGB?",
+    options: ["Nur volle Kenntnis schadet", "Keine Kenntnis und keine grob fahrlässige Unkenntnis", "Nur Vorsatz schadet", "Egal, was man weiß"],
+    a: 1, e: "Schon grob fahrlässige Unkenntnis schließt den Gutglaubensschutz aus." },
+  { topic: "Erfüllung", q: "Wer trägt die Beweislast für den fehlenden guten Glauben?",
+    options: ["Der Erwerber", "Der ehemalige Eigentümer (Anfechtende)", "Das Gericht", "Der Verkäufer"],
+    a: 1, e: "Der gute Glaube wird vermutet — der Anspruchsteller muss bösen Glauben/grobe Fahrlässigkeit beweisen." },
+  { topic: "Erfüllung", q: "Welcher Grundsatz steckt hinter § 932 BGB?",
+    options: ["Vertrauensschutz und Verkehrsschutz", "Strenge Eigentumsregel", "Einkommensteuerrecht", "Insolvenzschutz"],
+    a: 0, e: "Verkehrsschutz: Wer redlich erwirbt, soll geschützt werden — fördert den Handel." },
+
+  // === Block B: Eigentumsvorbehalt (11-20) ===
+  { topic: "Eigentumsvorbehalt", q: "Welche Norm regelt den Eigentumsvorbehalt?",
+    options: ["§ 362 BGB", "§ 449 BGB", "§ 932 BGB", "§ 14 UStG"],
+    a: 1, e: "§ 449 BGB regelt die Vereinbarung des Eigentumsvorbehalts beim Kauf beweglicher Sachen." },
+  { topic: "Eigentumsvorbehalt", q: "Was ist der Eigentumsvorbehalt?",
+    options: ["Verbot des Weiterverkaufs", "Klausel: Eigentum geht erst mit voller Bezahlung über", "Steuerrechtliche Vorschrift", "Warnhinweis"],
+    a: 1, e: "Sicherungsmittel des Verkäufers — Eigentum wird vorbehalten bis zur Vollzahlung." },
+  { topic: "Eigentumsvorbehalt", q: "Welche Form ist der einfache Eigentumsvorbehalt?",
+    options: ["Eigentum geht erst über, wenn alle Forderungen beglichen sind", "Eigentum geht mit Bezahlung der konkreten Lieferung über", "Käufer darf weiterverkaufen", "Vorbehalt wird auf Dritte übertragen"],
+    a: 1, e: "Einfacher EV: konkrete Lieferung gegen konkreten Kaufpreis." },
+  { topic: "Eigentumsvorbehalt", q: "Was kennzeichnet den erweiterten Eigentumsvorbehalt?",
+    options: ["Käufer darf weiterverkaufen", "Eigentum geht erst über, wenn alle offenen Forderungen aus der Geschäftsverbindung beglichen sind", "Vorbehalt geht an Dritte", "Mehrwertsteuer"],
+    a: 1, e: "Erweiterter EV / Kontokorrent-Vorbehalt: Sicherheit für die gesamte Geschäftsbeziehung." },
+  { topic: "Eigentumsvorbehalt", q: "Was kennzeichnet den verlängerten Eigentumsvorbehalt?",
+    options: ["Eigentum geht nie über", "Käufer darf weiterverkaufen, Forderungen werden im Voraus an den Lieferanten abgetreten (§ 398 BGB)", "Käufer darf nicht weiterverkaufen", "Vorbehalt nur für 1 Jahr"],
+    a: 1, e: "Verlängerter EV: Wiederverkaufsbefugnis + Vorausabtretung der Forderungen." },
+  { topic: "Eigentumsvorbehalt", q: "Was kennzeichnet den weitergeleiteten Eigentumsvorbehalt?",
+    options: ["Vorbehalt wird an einen Dritten übertragen (z.B. bei Verarbeitung)", "Wird nicht weitergegeben", "Nur einmalig", "Steuerlich relevant"],
+    a: 0, e: "Weitergeleiteter EV: bei Verbindung/Verarbeitung übertragen sich die Sicherungsrechte auf das neue Produkt/den Eigentümer." },
+  { topic: "Eigentumsvorbehalt", q: "Welche Form sichert den Lieferanten gegen die Insolvenz des Wiederverkäufer-Käufers ab?",
+    options: ["Einfacher EV", "Verlängerter EV mit Vorausabtretung", "Bargeldkauf", "Keine"],
+    a: 1, e: "Im Insolvenzfall sichert die Vorausabtretung dem Lieferanten den Zugriff auf die Kundenforderung." },
+  { topic: "Eigentumsvorbehalt", q: "Was passiert ohne EV bei Insolvenz des Käufers?",
+    options: ["Lieferant ist gesichert", "Lieferant ist normaler Insolvenzgläubiger — meist nur Quote", "Volle Rückzahlung", "Keine Folgen"],
+    a: 1, e: "Ohne Sicherheit ist der Lieferant Insolvenzgläubiger — meist deutliche Verluste." },
+  { topic: "Eigentumsvorbehalt", q: "Welche Norm regelt die Forderungsabtretung?",
+    options: ["§ 433 BGB", "§ 398 BGB", "§ 932 BGB", "§ 14 UStG"],
+    a: 1, e: "§ 398 BGB regelt die Abtretung von Forderungen — Basis für den verlängerten EV." },
+  { topic: "Eigentumsvorbehalt", q: "Wer ist beim einfachen EV bis zur Bezahlung Eigentümer?",
+    options: ["Der Käufer", "Der Verkäufer (Lieferant)", "Beide", "Niemand"],
+    a: 1, e: "Beim EV bleibt der Verkäufer Eigentümer; der Käufer ist (rechtmäßiger) Besitzer." },
+
+  // === Block C: Erfüllungsort & Gefahrübergang (21-30) ===
+  { topic: "Gefahrübergang", q: "Welche Norm regelt den Erfüllungsort allgemein?",
+    options: ["§ 269 BGB", "§ 446 BGB", "§ 447 BGB", "§ 14 UStG"],
+    a: 0, e: "§ 269 BGB regelt, wo der Schuldner seine Leistung zu erbringen hat." },
+  { topic: "Gefahrübergang", q: "Was ist der gesetzliche Regelfall der Schuld?",
+    options: ["Bringschuld", "Holschuld", "Schickschuld", "Versendungskauf"],
+    a: 1, e: "Mangels anderer Vereinbarung ist die Schuld eine Holschuld (Erfüllungsort beim Schuldner)." },
+  { topic: "Gefahrübergang", q: "Was ist eine Bringschuld?",
+    options: ["Schuldner schickt", "Erfüllungsort beim Gläubiger — Schuldner bringt zum Gläubiger", "Käufer holt ab", "Schuldner liefert nie"],
+    a: 1, e: "Bringschuld: Verkäufer verpflichtet sich, die Sache zum Käufer zu bringen." },
+  { topic: "Gefahrübergang", q: "Was ist eine Schickschuld / ein Versendungskauf?",
+    options: ["Schuldner liefert persönlich", "Erfüllungsort beim Schuldner, aber Versand auf Käufergefahr", "Bargeschäft", "B2C"],
+    a: 1, e: "Schickschuld = Erfüllungsort beim Verkäufer, Transport mit Spediteur auf Risiko des Käufers." },
+  { topic: "Gefahrübergang", q: "Welche Norm regelt den allgemeinen Gefahrübergang?",
+    options: ["§ 269 BGB", "§ 446 BGB", "§ 447 BGB", "§ 14 UStG"],
+    a: 1, e: "§ 446 BGB: Mit Übergabe geht die Gefahr auf den Käufer über (Grundregel)." },
+  { topic: "Gefahrübergang", q: "Welche Norm regelt den Versendungskauf?",
+    options: ["§ 269 BGB", "§ 446 BGB", "§ 447 BGB", "§ 14 UStG"],
+    a: 2, e: "§ 447 BGB: Beim Versendungskauf geht die Gefahr mit Übergabe an den Spediteur über." },
+  { topic: "Gefahrübergang", q: "Wann geht beim B2B-Versendungskauf die Gefahr über?",
+    options: ["Bei Bezahlung", "Mit Übergabe an den Spediteur/Frachtführer", "Bei Ankunft", "Bei Bestellung"],
+    a: 1, e: "§ 447 BGB: Übergabe an die zur Versendung bestimmte Person — schon dann Gefahrübergang." },
+  { topic: "Gefahrübergang", q: "Wann geht beim B2C-Versendungskauf die Gefahr über?",
+    options: ["Mit Übergabe an Spediteur", "Erst mit Übergabe an den Verbraucher (§ 475 II BGB)", "Bei Versand", "Bei Bestellung"],
+    a: 1, e: "Beim Verbrauchsgüterkauf geht die Gefahr erst mit Übergabe an den Verbraucher über — § 475 II BGB." },
+  { topic: "Gefahrübergang", q: "Wer trägt das Risiko, wenn die Ware auf dem Transport bei B2B beschädigt wird?",
+    options: ["Verkäufer", "Käufer (§ 447 BGB)", "Spediteur", "Niemand"],
+    a: 1, e: "Bei B2B ab Übergabe an den Spediteur trägt der Käufer die Gefahr." },
+  { topic: "Gefahrübergang", q: "Was ist der Gerichtsstand zwischen Kaufleuten häufig?",
+    options: ["Wohnsitz Beklagter", "Vertraglich vereinbart (§ 38 ZPO zulässig zwischen Kaufleuten)", "Sitz EZB", "Brüssel"],
+    a: 1, e: "Zwischen Kaufleuten kann Gerichtsstand frei vereinbart werden — § 38 ZPO." },
+
+  // === Block D: Pflichtangaben Rechnung § 14 UStG (31-40) ===
+  { topic: "Pflichtangaben", q: "Welche Norm regelt die Pflichtangaben einer Rechnung?",
+    options: ["§ 14 UStG", "§ 433 BGB", "§ 932 BGB", "§ 269 BGB"],
+    a: 0, e: "§ 14 UStG nennt die Pflichtangaben für umsatzsteuerliche Zwecke." },
+  { topic: "Pflichtangaben", q: "Welche Angabe ist KEINE Pflichtangabe nach § 14 UStG?",
+    options: ["Steuernummer / USt-IdNr.", "Rechnungsdatum", "Telefonnummer des Lieferanten", "Liefer-/Leistungsdatum"],
+    a: 2, e: "Telefonnummer ist nicht zwingend; Adresse, Steuernr., Datum, Lieferdatum etc. sind Pflicht." },
+  { topic: "Pflichtangaben", q: "Was muss zwingend auf einer Rechnung stehen, damit Vorsteuerabzug möglich ist?",
+    options: ["Werbeslogan", "Vollständige Pflichtangaben nach § 14 UStG", "Visum des Geschäftsführers", "Wappen"],
+    a: 1, e: "Nur eine ordnungsgemäße Rechnung mit allen Pflichtangaben berechtigt zum Vorsteuerabzug." },
+  { topic: "Pflichtangaben", q: "Was ist ein Vorsteuerabzug?",
+    options: ["Rabatt vor dem Kauf", "Verrechnung gezahlter USt aus Eingangsrechnungen mit eigener USt-Schuld", "Eine Strafsteuer", "Unternehmensgewinn"],
+    a: 1, e: "§ 15 UStG: Unternehmer verrechnet seine Vorsteuer mit der eingenommenen Umsatzsteuer." },
+  { topic: "Pflichtangaben", q: "Welche Pflichtangabe ist nach § 14 IV Nr. 2 UStG zwingend?",
+    options: ["Steuernummer ODER USt-IdNr. des Lieferanten", "Hausnummer im Adressfeld", "Geburtsdatum", "Quartalsangabe"],
+    a: 0, e: "Steuernummer ODER USt-IdNr. des leistenden Unternehmers — eine von beiden reicht." },
+  { topic: "Pflichtangaben", q: "Was ist eine Kleinbetragsrechnung?",
+    options: ["Bis 250 € brutto — vereinfachte Pflichtangaben (§ 33 UStDV)", "Bis 1000 €", "Bis 50 €", "Beliebig"],
+    a: 0, e: "§ 33 UStDV: Bis 250 € brutto reichen vereinfachte Angaben (kein Käufername etc.)." },
+  { topic: "Pflichtangaben", q: "Was muss bei der Bezeichnung der Lieferung in der Rechnung stehen?",
+    options: ["Nur Stückzahl", "Menge UND handelsübliche Bezeichnung", "Nur Bild", "Eigentlich nichts"],
+    a: 1, e: "§ 14 IV Nr. 5 UStG: Menge und handelsübliche Bezeichnung." },
+  { topic: "Pflichtangaben", q: "Was ist der Unterschied zwischen Rechnungsdatum und Liefer-/Leistungsdatum?",
+    options: ["Kein Unterschied", "Rechnungsdatum = Ausstellung; Liefer-/Leistungsdatum = wann die Leistung erbracht wurde", "Identisch", "Liefer-/Leistungsdatum nur bei B2C"],
+    a: 1, e: "Beide Daten sind getrennt anzugeben (§ 14 IV Nr. 6 UStG)." },
+  { topic: "Pflichtangaben", q: "Welche Pflichtangabe gilt für die Rechnungsnummer?",
+    options: ["Beliebige Nummer", "Fortlaufende, einmalige Nummer", "Telefonnummer", "Postleitzahl"],
+    a: 1, e: "§ 14 IV Nr. 4 UStG: Fortlaufende Nummer mit einmaliger Identifizierbarkeit." },
+  { topic: "Pflichtangaben", q: "Was passiert, wenn eine Pflichtangabe fehlt?",
+    options: ["Vorsteuerabzug ist sicher", "Vorsteuerabzug kann verweigert werden — Rechnung sollte zur Korrektur zurück", "Strafe sofort", "Steuerprüfung"],
+    a: 1, e: "Bei fehlender Pflichtangabe ist der Vorsteuerabzug gefährdet — Korrektur erforderlich." },
+
+  // === Block E: Rechnungsprüfung formell/sachlich/rechnerisch (41-50) ===
+  { topic: "Prüfung", q: "Was prüft die formelle Rechnungsprüfung?",
+    options: ["Mengen", "Pflichtangaben § 14 UStG sind vollständig vorhanden", "Steuerlast", "Skonto"],
+    a: 1, e: "Formelle Prüfung = Vollständigkeit der Pflichtangaben." },
+  { topic: "Prüfung", q: "Was prüft die sachliche Rechnungsprüfung?",
+    options: ["Pflichtangaben", "Übereinstimmung mit Bestellung und Lieferung — wurde das Richtige geliefert?", "Beträge addieren", "Umsatzsteuersatz"],
+    a: 1, e: "Sachliche Prüfung = stimmt die Rechnung mit Bestellung + Wareneingang überein?" },
+  { topic: "Prüfung", q: "Was prüft die rechnerische Rechnungsprüfung?",
+    options: ["Adressen", "Beträge: Mengen × Preise, Zwischensummen, USt, Brutto, Skonto", "Designs", "Qualität der Ware"],
+    a: 1, e: "Rechnerische Prüfung = sind alle Berechnungen korrekt?" },
+  { topic: "Prüfung", q: "Was ist der Drei-Punkt-Vergleich?",
+    options: ["Drei Personen", "Bestellung — Wareneingang/Lieferschein — Rechnung müssen übereinstimmen", "Drei Lieferanten vergleichen", "Drei Branchen"],
+    a: 1, e: "Klassischer Abgleich in der Rechnungsprüfung — alle drei Dokumente müssen passen." },
+  { topic: "Prüfung", q: "In welcher Reihenfolge wird üblicherweise geprüft?",
+    options: ["Rechnerisch, sachlich, formell", "Formell, sachlich, rechnerisch", "Sachlich, rechnerisch, formell", "Beliebig"],
+    a: 1, e: "Erst formell (sind alle Angaben da?), dann sachlich, dann rechnerisch." },
+  { topic: "Prüfung", q: "Was tun bei einem formellen Mangel der Eingangsrechnung?",
+    options: ["Trotzdem zahlen", "An Lieferanten zur Korrektur zurücksenden", "Wegwerfen", "Selbst korrigieren"],
+    a: 1, e: "Korrigierte Rechnung anfordern — sonst Vorsteuerabzug gefährdet." },
+  { topic: "Prüfung", q: "Was tun bei einem sachlichen Fehler (z.B. falsche Menge)?",
+    options: ["Ignorieren", "Klärung mit Lieferant — ggf. Gutschrift oder Nachbelastung", "Sofort zahlen", "Mahnung schreiben"],
+    a: 1, e: "Sachlich klären — Korrektur durch Gutschrift oder Berichtigungsrechnung." },
+  { topic: "Prüfung", q: "Was tun bei einem rechnerischen Fehler?",
+    options: ["Selbst korrigieren und zahlen", "Korrigierte Rechnung anfordern", "Rechtsanwalt einschalten", "Polizei rufen"],
+    a: 1, e: "Auch rechnerische Fehler über Berichtigungsrechnung klären — keine eigenen Korrekturen." },
+  { topic: "Prüfung", q: "Welche Rolle spielt der Lieferschein in der Rechnungsprüfung?",
+    options: ["Keine", "Beleg für die tatsächlich gelieferte Menge — Basis der sachlichen Prüfung", "Nur Werbung", "Steuerunterlage"],
+    a: 1, e: "Lieferschein dokumentiert den Wareneingang — wichtig für den Drei-Punkt-Vergleich." },
+  { topic: "Prüfung", q: "Wer ist für die Rechnungsprüfung im Büro typischerweise verantwortlich?",
+    options: ["Geschäftsführung", "Sachbearbeiter/-in in Buchhaltung oder Einkauf", "Hausmeister", "Spediteur"],
+    a: 1, e: "Rechnungsprüfung ist klassische Aufgabe der Sachbearbeitung im Bürokontext." },
+
+  // === Block F: Praxis & Berechnungen (51-60) ===
+  { topic: "Praxis", q: "Bestellung 50 Aktenordner à 4,80 €. Zwischensumme?",
+    options: ["120 €", "240 €", "320 €", "480 €"],
+    a: 1, e: "50 × 4,80 € = 240,00 €." },
+  { topic: "Praxis", q: "Nettosumme 532 €, USt 19 %. Wie hoch ist die USt?",
+    options: ["95,76 €", "101,08 €", "106,40 €", "112,32 €"],
+    a: 1, e: "532 × 0,19 = 101,08 €." },
+  { topic: "Praxis", q: "Nettosumme 532 €, USt 19 %. Bruttobetrag?",
+    options: ["532,00 €", "601,08 €", "633,08 €", "651,40 €"],
+    a: 2, e: "532 + 101,08 = 633,08 €." },
+  { topic: "Praxis", q: "Welcher USt-Satz gilt regelmäßig in Deutschland?",
+    options: ["7 %", "12 %", "19 %", "25 %"],
+    a: 2, e: "Regulärer Steuersatz: 19 %; ermäßigt: 7 % (z.B. Lebensmittel, Bücher)." },
+  { topic: "Praxis", q: "Welcher USt-Satz gilt für Bücher und ermäßigte Produkte?",
+    options: ["0 %", "7 %", "10 %", "19 %"],
+    a: 1, e: "Ermäßigter Steuersatz: 7 % (§ 12 UStG)." },
+  { topic: "Praxis", q: "Was geschieht beim Vorsteuerabzug?",
+    options: ["Käufer behält die USt", "Unternehmer verrechnet gezahlte Vorsteuer mit eigener USt-Schuld", "Steuerstundung", "Preisrabatt"],
+    a: 1, e: "Unternehmer rechnet Vorsteuer (aus Eingangsrechnungen) gegen eigene Umsatzsteuer auf." },
+  { topic: "Praxis", q: "Welche typischen Fehler treten in Eingangsrechnungen auf?",
+    options: ["Falsche Mengen, fehlende Pflichtangaben, falsche Preise, doppelte Versandkosten", "Nur Tippfehler", "Nur Faltfehler", "Keine Fehler"],
+    a: 0, e: "Praxis: Falsche Mengen, falsche Preise, fehlende Steuernummer, Doppelberechnung sind Klassiker." },
+  { topic: "Praxis", q: "Wann ist eine Eingangsrechnung 'archivierbar'?",
+    options: ["Wenn sie alt ist", "Nach erfolgreicher Prüfung und Verbuchung — Aufbewahrung 10 Jahre § 147 AO", "Nach 1 Jahr", "Nie"],
+    a: 1, e: "§ 147 AO: 10 Jahre Aufbewahrungsfrist für Rechnungen." },
+  { topic: "Praxis", q: "Wer haftet, wenn der Vorsteuerabzug wegen Mängel verloren geht?",
+    options: ["Der Lieferant", "Der Käufer/Empfänger — er muss auf vollständige Rechnungen achten", "Das Finanzamt", "Niemand"],
+    a: 1, e: "Der Empfänger muss vor Zahlung die Rechnung prüfen — sonst trägt er das wirtschaftliche Risiko." },
+  { topic: "Praxis", q: "Welche Aufgabe hat das Büromanagement bei Eingangsrechnungen?",
+    options: ["Nur ablegen", "Prüfen, freigeben, kontieren, zur Buchhaltung weiterleiten — zentrale Sachbearbeitung", "Nur scannen", "Verstecken"],
+    a: 1, e: "Sachbearbeiter prüfen, freigeben, kontieren — zentrale Bürotätigkeit." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const sEl = document.getElementById('summary');
+  sEl.style.display = 'block';
+  sEl.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  sEl.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

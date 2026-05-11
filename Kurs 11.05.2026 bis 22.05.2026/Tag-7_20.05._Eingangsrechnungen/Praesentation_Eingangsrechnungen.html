@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 7 — Eingangsrechnungen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 4rem 6rem; flex-direction: column; justify-content: center; background: white; animation: fadeIn 0.35s ease; overflow-y: auto; }
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.2rem; color: var(--bfw-primary-dark); margin-bottom: 1.2rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.2rem; line-height: 1.55; margin-bottom: 0.7rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.15rem; line-height: 1.55; margin-bottom: 0.35rem; }
+.subtitle { font-size: 1.3rem; color: var(--bfw-ink-soft); margin-bottom: 1.5rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.05rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+.merksatz { background: var(--bfw-bg-teal); border-left: 6px solid var(--bfw-primary); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.1rem; }
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+.formula { background: var(--bfw-bg-amber); border-left: 6px solid var(--bfw-accent); border-radius: 8px; padding: 1rem 1.4rem; margin: 1rem 0; font-size: 1.2rem; text-align: center; font-family: 'Source Code Pro', monospace; }
+.paragraph-box { background: var(--bfw-bg-rose); border-left: 6px solid var(--bfw-warn); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.05rem; }
+.paragraph-box strong { color: var(--bfw-warn); }
+table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 1.05rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.95rem; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--bfw-border); }
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button { border: none; background: var(--bfw-primary); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.12); transition: all 0.15s; }
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.7rem; }
+.numlist li::before { content: counter(numitem); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--bfw-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+@media print { .slide { display: flex; page-break-after: always; } .nav, .slide-num { display: none; } html, body { height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<section class="slide active cover">
+  <span class="cover-tag">Tag 7 · 20.05.2026</span>
+  <h1>Eingangsrechnungen</h1>
+  <p class="subtitle">Erfüllung · Eigentumsvorbehalt · Gefahrübergang · Rechnungsprüfung</p>
+  <div class="cover-meta">
+    <span><strong>Modul</strong>Beschaffung im Büromanagement</span>
+    <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+    <span><strong>Quelle</strong>Lehrwerk Kap. 4.12.4–4.12.7</span>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Was Sie heute lernen</h2>
+  <ul class="checklist">
+    <li>die <strong>Erfüllung</strong> nach § 362 BGB erklären</li>
+    <li><strong>gutgläubigen Eigentumserwerb</strong> nach § 932 BGB prüfen</li>
+    <li><strong>vier Formen des Eigentumsvorbehalts</strong> unterscheiden</li>
+    <li><strong>Erfüllungsort, Gefahrübergang</strong> (§§ 269, 446, 447 BGB)</li>
+    <li><strong>Pflichtangaben einer Rechnung</strong> nach § 14 UStG</li>
+    <li><strong>Rechnungsprüfung</strong>: formell, sachlich, rechnerisch + Drei-Punkt-Vergleich</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Vom Wareneingang zur Buchhaltung</h2>
+  <p>Die Lieferung ist da, jetzt kommt die Rechnung — und sie braucht eine sorgfältige Prüfung.</p>
+  <ol class="numlist">
+    <li>Bedarfsermittlung — Tag 1</li>
+    <li>Bezugsquelle, Anfrage, Angebote — Tag 2</li>
+    <li>Bestellung &amp; Vertrag — Tag 3</li>
+    <li>Bestellung ausführen — Tag 4</li>
+    <li>Wareneingang &amp; Lager — Tag 5</li>
+    <li>Vertragsstörungen — Tag 6</li>
+    <li><strong>Rechnung &amp; Prüfung — heute Tag 7</strong></li>
+    <li>Bezahlung — Tag 8</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Erfüllung — § 362 BGB</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">§ 362 BGB</span>
+    Das Schuldverhältnis erlischt, wenn die <strong>geschuldete Leistung</strong> an den <strong>Gläubiger bewirkt</strong> wird.
+  </div>
+  <ul>
+    <li>Verkäufer: Übergabe + Eigentumsverschaffung (§ 433 I BGB)</li>
+    <li>Käufer: Kaufpreis zahlen + Sache abnehmen (§ 433 II BGB)</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Gutgläubiger Eigentumserwerb — § 932 BGB</h2>
+  <p>Eigentum kann auch vom <strong>Nichtberechtigten</strong> erworben werden — wenn der Käufer in gutem Glauben ist.</p>
+  <ol class="numlist">
+    <li>Verkehrsgeschäft</li>
+    <li>Bewegliche Sache</li>
+    <li>Übergabe (oder Übergabesurrogat)</li>
+    <li>Guter Glaube (keine grob fahrlässige Unkenntnis)</li>
+  </ol>
+  <div class="paragraph-box"><strong>Achtung § 935 BGB:</strong> Bei abhandengekommenen Sachen (Diebstahl, Verlust) ist gutgläubiger Erwerb ausgeschlossen — Ausnahme: öffentliche Versteigerung.</div>
+</section>
+
+<section class="slide">
+  <h2>Eigentumsvorbehalt — § 449 BGB</h2>
+  <div class="merksatz">
+    Klausel im Kaufvertrag: <strong>Eigentum geht erst mit voller Bezahlung über</strong>. Bis dahin bleibt der Verkäufer Eigentümer.
+  </div>
+  <p>Wichtigstes Sicherungsmittel des Verkäufers im Geschäftsverkehr.</p>
+</section>
+
+<section class="slide">
+  <h2>Vier Formen des Eigentumsvorbehalts</h2>
+  <table>
+    <thead><tr><th>Form</th><th>Inhalt</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Einfacher EV</strong></td><td>Eigentum mit Bezahlung der konkreten Lieferung</td></tr>
+      <tr><td><strong>Erweiterter EV</strong></td><td>Eigentum erst, wenn alle Forderungen aus der Geschäftsverbindung beglichen</td></tr>
+      <tr><td><strong>Verlängerter EV</strong></td><td>Käufer darf weiterverkaufen, Forderungen werden im Voraus abgetreten (§ 398 BGB)</td></tr>
+      <tr><td><strong>Weitergeleiteter EV</strong></td><td>Vorbehalt geht auf einen Dritten über (z.B. bei Verarbeitung)</td></tr>
+    </tbody>
+  </table>
+  <div class="merksatz">
+    <span class="merksatz-label">Eselsbrücke „EVE-W"</span>
+    <strong>E</strong>infach — <strong>V</strong>erlängert — <strong>E</strong>rweitert — <strong>W</strong>eitergeleitet.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Erfüllungsort — § 269 BGB</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Holschuld</div>
+      <p>Erfüllungsort beim Schuldner — Käufer holt ab. <strong>Gesetzlicher Regelfall.</strong></p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Bringschuld</div>
+      <p>Erfüllungsort beim Gläubiger — Verkäufer bringt zum Käufer.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Schickschuld</div>
+      <p>Erfüllungsort beim Schuldner, Versand auf Käufergefahr.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Gefahrübergang — Grundregel § 446 BGB</h2>
+  <div class="merksatz">
+    Mit <strong>Übergabe</strong> der Kaufsache geht die <strong>Preisgefahr</strong> auf den Käufer über. Bis dahin: Verkäufer-Risiko.
+  </div>
+  <p>Preisgefahr = Wer trägt das Risiko, wenn die Sache zufällig untergeht (z.B. zerstört wird)?</p>
+</section>
+
+<section class="slide">
+  <h2>Versendungskauf — § 447 BGB (Klausurklassiker!)</h2>
+  <div class="merksatz">
+    Bei Versendung an einen anderen Ort auf Verlangen des Käufers geht die Gefahr bereits mit <strong>Übergabe an den Spediteur/Frachtführer</strong> über.
+  </div>
+  <div class="paragraph-box"><strong>Achtung B2C:</strong> Beim Verbrauchsgüterkauf gilt § 475 II BGB — die Gefahr geht erst mit Übergabe an den Verbraucher über.</div>
+</section>
+
+<section class="slide">
+  <h2>Pflichtangaben einer Rechnung — § 14 UStG</h2>
+  <ol class="numlist">
+    <li>Vollständiger Name und Anschrift Lieferant + Empfänger</li>
+    <li>Steuernummer oder USt-IdNr. des Lieferanten</li>
+    <li>Ausstellungsdatum der Rechnung</li>
+    <li>Fortlaufende, einmalige Rechnungsnummer</li>
+    <li>Menge und handelsübliche Bezeichnung</li>
+    <li>Liefer- oder Leistungsdatum</li>
+    <li>Nettoentgelt nach Steuersätzen aufgeschlüsselt</li>
+    <li>Steuersatz und Steuerbetrag</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Vorsteuerabzug — § 15 UStG</h2>
+  <div class="merksatz">
+    Der Unternehmer verrechnet die in <strong>Eingangsrechnungen</strong> gezahlte USt (Vorsteuer) mit seiner eigenen Umsatzsteuerschuld.
+  </div>
+  <p><strong>Aber:</strong> Nur eine ordnungsgemäße Rechnung mit allen Pflichtangaben berechtigt zum Vorsteuerabzug.</p>
+  <p class="muted">Ausnahme: Kleinbetragsrechnungen bis 250 € brutto — vereinfachte Angaben (§ 33 UStDV).</p>
+</section>
+
+<section class="slide">
+  <h2>Rechnungsprüfung — drei Stufen</h2>
+  <table>
+    <thead><tr><th>Stufe</th><th>Inhalt</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Formell</strong></td><td>Pflichtangaben § 14 UStG vollständig?</td></tr>
+      <tr><td><strong>Sachlich</strong></td><td>Stimmt mit Bestellung + Wareneingang?</td></tr>
+      <tr><td><strong>Rechnerisch</strong></td><td>Beträge richtig? Mengen × Preise, USt, Brutto, Skonto</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Drei-Punkt-Vergleich</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Bestellung</div>
+      <p>Was war vereinbart? Mengen, Preise, Konditionen.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Wareneingang / Lieferschein</div>
+      <p>Was ist tatsächlich geliefert worden?</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Rechnung</div>
+      <p>Was steht in der Rechnung?</p>
+    </div>
+  </div>
+  <div class="merksatz">Alle drei müssen übereinstimmen — sonst Klärungsbedarf.</div>
+</section>
+
+<section class="slide">
+  <h2>Beispielrechnung</h2>
+  <div class="card teal">
+    <div class="card-title">Sachverhalt</div>
+    <p>50 Aktenordner à 4,80 € · 10 Pakete Druckerpapier à 28,00 € · Versand 12 € · USt 19 %</p>
+  </div>
+  <table>
+    <tbody>
+      <tr><td>50 × 4,80 €</td><td><strong>240,00 €</strong></td></tr>
+      <tr><td>10 × 28,00 €</td><td><strong>280,00 €</strong></td></tr>
+      <tr><td>Versand</td><td><strong>12,00 €</strong></td></tr>
+      <tr><td>Zwischensumme netto</td><td><strong>532,00 €</strong></td></tr>
+      <tr><td>USt 19 %</td><td><strong>101,08 €</strong></td></tr>
+      <tr><td>Bruttosumme</td><td><strong>633,08 €</strong></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Was tun bei Fehlern?</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Formell</div>
+      <p>Rechnung an Lieferant zur Korrektur (sonst Vorsteuerabzug verloren).</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Sachlich</div>
+      <p>Klärung — Gutschrift oder Berichtigungsrechnung.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Rechnerisch</div>
+      <p>Korrigierte Rechnung anfordern.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>IHK-Prüfungsbezug</h2>
+  <h3>Teil 1 — Informationstechnisches Büromanagement</h3>
+  <ul>
+    <li>Eingangsrechnung in Excel rechnerisch prüfen</li>
+    <li>Formelle Prüfliste erstellen</li>
+  </ul>
+  <h3>Teil 2 — Wirtschafts- und Sozialkunde</h3>
+  <ul>
+    <li>Eigentumsvorbehalt und seine Formen</li>
+    <li>Gefahrübergang — § 446 vs. § 447 BGB</li>
+    <li>Pflichtangaben § 14 UStG</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Diskussionsfragen</h2>
+  <ol>
+    <li>Welche Form des Eigentumsvorbehalts würden Sie als Lieferant für Ihre Top-3-Kunden empfehlen?</li>
+    <li>Ein Spediteur beschädigt Ihre Lieferung. Wer haftet — und wer holt sich das Geld zurück?</li>
+    <li>Wie würden Sie in Ihrem Büro einen schlanken Rechnungsprüfungs-Workflow gestalten?</li>
+    <li>Welche Rolle spielt die Digitalisierung (E-Rechnung, ZUGFeRD) für die Pflichtangaben?</li>
+  </ol>
+</section>
+
+<section class="slide cover">
+  <h2 style="font-size: 2.6rem;">Vielen Dank!</h2>
+  <p class="subtitle">Im nächsten Tag (Tag 8): Bezahlung von Rechnungen — Zahlungsarten, Skonto, E-Commerce-Zahlungen.</p>
+  <p class="muted" style="margin-top: 2rem;">Quiz und Aufgabenheft auf der Lernplattform — Code „BFW".</p>
+  <div style="position: absolute; bottom: 2rem; right: 4rem; color: var(--bfw-ink-soft); font-size: 0.95rem;">© Can Siebert · 2026 · Tag 7</div>
+</section>
+
+</div>
+
+<div class="nav">
+  <span class="nav-counter"><span id="cur">1</span> / <span id="tot">19</span></span>
+  <button onclick="go(-1)">‹</button>
+  <button onclick="go(1)">›</button>
+</div>
+<div class="slide-num">© Can Siebert · 2026</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let idx = 0;
+document.getElementById('tot').textContent = slides.length;
+function go(d) {
+  idx = Math.max(0, Math.min(slides.length - 1, idx + d));
+  slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+  document.getElementById('cur').textContent = idx + 1;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(1);
+  if (e.key === 'ArrowLeft') go(-1);
+});
+</script>
+
+</body>
+</html>
