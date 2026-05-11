@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 5 — Annahme und Lagerung der Waren</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 4rem 6rem; flex-direction: column; justify-content: center; background: white; animation: fadeIn 0.35s ease; overflow-y: auto; }
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.2rem; color: var(--bfw-primary-dark); margin-bottom: 1.2rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.2rem; line-height: 1.55; margin-bottom: 0.7rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.15rem; line-height: 1.55; margin-bottom: 0.35rem; }
+.subtitle { font-size: 1.3rem; color: var(--bfw-ink-soft); margin-bottom: 1.5rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.05rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+.merksatz { background: var(--bfw-bg-teal); border-left: 6px solid var(--bfw-primary); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.1rem; }
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+.formula { background: var(--bfw-bg-amber); border-left: 6px solid var(--bfw-accent); border-radius: 8px; padding: 1rem 1.4rem; margin: 1rem 0; font-size: 1.2rem; text-align: center; font-family: 'Source Code Pro', monospace; }
+.paragraph-box { background: var(--bfw-bg-rose); border-left: 6px solid var(--bfw-warn); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.05rem; }
+.paragraph-box strong { color: var(--bfw-warn); }
+table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 1.05rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.95rem; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--bfw-border); }
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button { border: none; background: var(--bfw-primary); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.12); transition: all 0.15s; }
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.7rem; }
+.numlist li::before { content: counter(numitem); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--bfw-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+@media print { .slide { display: flex; page-break-after: always; } .nav, .slide-num { display: none; } html, body { height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<section class="slide active cover">
+  <span class="cover-tag">Tag 5 · 18.05.2026</span>
+  <h1>Annahme und Lagerung der Waren</h1>
+  <p class="subtitle">Wareneingangskontrolle, § 377 HGB, Lagerformen, Lagerkennzahlen</p>
+  <div class="cover-meta">
+    <span><strong>Modul</strong>Beschaffung im Büromanagement</span>
+    <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+    <span><strong>Quelle</strong>Lehrwerk Kap. 4.4</span>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Was Sie heute lernen</h2>
+  <ul class="checklist">
+    <li>den <strong>Wareneingangsprozess</strong> in seinen Schritten beschreiben</li>
+    <li>eine <strong>Mängelrüge nach § 377 HGB</strong> form- und fristgerecht erstellen</li>
+    <li><strong>offene und verdeckte Mängel</strong> unterscheiden</li>
+    <li>Aufgaben und Funktionen der <strong>Lagerhaltung</strong> benennen</li>
+    <li><strong>Lagerformen</strong> (Eigen-/Fremdlager) und <strong>Lagerarten</strong> unterscheiden</li>
+    <li>die wichtigsten <strong>Lagerkennzahlen</strong> berechnen (LUH, Lagerdauer, Lagerzinsen)</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Wo wir bisher stehen</h2>
+  <p>Die Bestellung ist raus, die Lieferung kommt — heute geht es um Annahme und Lagerung.</p>
+  <ol class="numlist">
+    <li>Bedarfsermittlung — Tag 2</li>
+    <li>Bezugsquelle — Tag 2</li>
+    <li>Anfrage — Tag 2</li>
+    <li>Angebotsvergleich — Tag 2</li>
+    <li>Bestellung &amp; Vertrag — Tag 3</li>
+    <li>Bestellung ausführen — Tag 4</li>
+    <li><strong>Wareneingang &amp; Lager — heute Tag 5</strong></li>
+    <li>Rechnung &amp; Zahlung — Tag 7+8</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Wareneingang in 4 Schritten</h2>
+  <ol class="numlist">
+    <li><strong>Annahme</strong>: Lieferung entgegennehmen, Lieferschein unterschreiben (mit Vorbehalt bei Verdacht!)</li>
+    <li><strong>Äußere Kontrolle</strong>: Anzahl Pakete, sichtbare Beschädigungen — vor dem Fahrer protokollieren</li>
+    <li><strong>Innere Kontrolle</strong>: Auspacken, Stichprobe oder Vollkontrolle, Vergleich mit Lieferschein und Bestellung</li>
+    <li><strong>Erfassung</strong>: Buchung im Warenwirtschafts­system, Einlagerung am bestimmten Lagerplatz</li>
+  </ol>
+  <div class="merksatz">
+    <span class="merksatz-label">⚠️ Wichtig</span>
+    Die innere Kontrolle muss <strong>unverzüglich</strong> erfolgen — sonst droht der Verlust der Mängelrechte (§ 377 HGB)!
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Mängel — offene oder verdeckte?</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Offene Mängel</div>
+      <p style="font-size: 1rem;">Bei der üblichen Kontrolle sofort erkennbar.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiele:</strong> beschädigtes Verpackungsmaterial, falsche Stückzahl, falsche Farbe.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Verdeckte Mängel</div>
+      <p style="font-size: 1rem;">Erst später entdeckt, oft im Gebrauch.</p>
+      <p style="font-size: 0.92rem;" class="muted"><strong>Beispiele:</strong> defekte Mechanik im Aktenordner, schlechter Druck (erst beim ersten Drucken sichtbar).</p>
+    </div>
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Auch verdeckte Mängel müssen unverzüglich nach Entdeckung gerügt werden.</p>
+</section>
+
+<section class="slide">
+  <h2>§ 377 HGB — die Rügepflicht</h2>
+  <div class="paragraph-box">
+    <strong>§ 377 Abs. 1 HGB:</strong> Ist der Kauf für beide Teile ein Handelsgeschäft, so hat der Käufer die Ware <em>unverzüglich</em> nach Ablieferung durch den Verkäufer zu untersuchen, soweit dies nach ordnungsmäßigem Geschäftsgange tunlich ist, und, wenn sich ein Mangel zeigt, dem Verkäufer <em>unverzüglich</em> Anzeige zu machen.
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">📋 Folge bei Versäumnis (§ 377 Abs. 2 HGB)</span>
+    Wenn Sie den Mangel nicht rechtzeitig rügen, gilt die Ware als <strong>genehmigt</strong> — Sie verlieren alle Mängelrechte (Nacherfüllung, Rücktritt, Minderung, Schadensersatz).
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Mängelrüge — was muss drinstehen?</h2>
+  <p>Eine vollständige Mängelrüge enthält:</p>
+  <ul>
+    <li>Bezug auf die Lieferung (Lieferschein-Nr., Datum, Bestell-Nr.)</li>
+    <li>Genaue Beschreibung des Mangels</li>
+    <li>Konkretes Gewähr­leistungs­recht, das Sie ausüben (Nacherfüllung / Minderung / Rücktritt)</li>
+    <li>Frist für die Reaktion des Verkäufers</li>
+    <li>Datum, Unterschrift</li>
+  </ul>
+  <div class="merksatz">
+    <span class="merksatz-label">⏱️ Frist</span>
+    „Unverzüglich" heißt in der Praxis: <strong>1–2 Werktage</strong> nach Entdeckung. Telefon-Anruf reicht nicht — Schriftform aus Beweisgründen!
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Aufgaben der Lagerhaltung</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Sicherungsfunktion</div>
+      <p style="font-size: 1rem;">Sicherung der Versorgung gegen Lieferengpässe und Bedarfsspitzen.</p>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Bereitstellungsfunktion</div>
+      <p style="font-size: 1rem;">Material steht bereit, wenn es gebraucht wird.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Überbrückungsfunktion</div>
+      <p style="font-size: 1rem;">Zwischenlagerung bei zeitlicher Differenz zwischen Beschaffung und Verbrauch.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Spekulationsfunktion</div>
+      <p style="font-size: 1rem;">Einkauf zu günstigem Zeitpunkt (z.B. vor Preiserhöhung) und Lagerung.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Eigenlager oder Fremdlager?</h2>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Eigenlager</th><th>Fremdlager</th></tr></thead>
+    <tbody>
+      <tr><td>Investition</td><td>Hoch (Gebäude, Einrichtung)</td><td>Keine</td></tr>
+      <tr><td>Fixkosten</td><td>Hoch</td><td>Variable Kosten</td></tr>
+      <tr><td>Flexibilität</td><td>Gering (Größe steht fest)</td><td>Hoch (Anpassung an Bedarf)</td></tr>
+      <tr><td>Kontrolle</td><td>Volle Kontrolle</td><td>Eingeschränkt</td></tr>
+      <tr><td>Know-how</td><td>Beim eigenen Personal</td><td>Beim Dienstleister</td></tr>
+      <tr><td>Geeignet für</td><td>Großvolumiger Dauerbedarf</td><td>Schwankender oder kleiner Bedarf</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Lagerarten nach Bauart</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Bodenlager</div>
+      <p style="font-size: 1rem;">Waren stehen direkt am Boden. Einfach, günstig.</p>
+      <p style="font-size: 0.92rem;" class="muted">Geeignet für Großgut.</p>
+    </div>
+    <div class="card teal">
+      <div class="card-title">Regallager</div>
+      <p style="font-size: 1rem;">Standardregale, manuell oder mit Stapler. Flexibel.</p>
+      <p style="font-size: 0.92rem;" class="muted">Klassisch im Mittelstand.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Hochregallager</div>
+      <p style="font-size: 1rem;">Bis 50 m hoch, automatisiert. Maximale Raumnutzung.</p>
+      <p style="font-size: 0.92rem;" class="muted">Hohe Investition.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Blocklager</div>
+      <p style="font-size: 1rem;">Stapelung von Paletten ohne Regal. Günstig.</p>
+      <p style="font-size: 0.92rem;" class="muted">Für gleichartige Waren.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Kanallager</div>
+      <p style="font-size: 1rem;">Paletten in Kanälen, FIFO oder LIFO.</p>
+      <p style="font-size: 0.92rem;" class="muted">Z.B. Verbrauchsmaterial.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Etagenlager</div>
+      <p style="font-size: 1rem;">Mehrere Stockwerke nutzen.</p>
+      <p style="font-size: 0.92rem;" class="muted">Für Innenstädte.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Bestandteile der Lagerkosten</h2>
+  <ul style="font-size: 1.15rem;">
+    <li><strong>Personalkosten</strong> — Lagermitarbeiter, Schichtleitung</li>
+    <li><strong>Raumkosten</strong> — Miete, Energie, Reinigung</li>
+    <li><strong>Anlagekosten</strong> — Abschreibung Regale, Stapler, IT</li>
+    <li><strong>Kapitalbindungskosten</strong> — entgangene Zinsen für gebundenes Kapital</li>
+    <li><strong>Versicherungskosten</strong> — Lagerwert versichern</li>
+    <li><strong>Lagerrisikokosten</strong> — Verderb, Schwund, Veralten</li>
+  </ul>
+  <div class="merksatz">
+    <span class="merksatz-label">💡 Größter Brocken</span>
+    Die <strong>Kapitalbindung</strong> ist oft der größte Posten — Geld im Lager kann nicht produktiv investiert werden (Opportunitätskosten).
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Lagerkennzahlen — die wichtigsten 4</h2>
+  <p>Vier Kennzahlen, die in fast jeder IHK-Klausur kommen:</p>
+  <ol class="numlist">
+    <li>Durchschnittlicher Lagerbestand</li>
+    <li>Lagerumschlagshäufigkeit (LUH)</li>
+    <li>Durchschnittliche Lagerdauer</li>
+    <li>Lagerzinsen (Lagerzinssatz × durchschnittl. Lagerbestand)</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>1. Durchschnittlicher Lagerbestand</h2>
+  <div class="formula">
+    Ø Lagerbestand = (Anfangsbestand + Endbestand) / 2
+  </div>
+  <p>Genauere Variante (12 Monatsbestände):</p>
+  <div class="formula" style="font-size: 1rem;">
+    Ø Lagerbestand = (AB + B<sub>1</sub> + B<sub>2</sub> + ... + B<sub>12</sub>) / 13
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">📐 Beispiel</span>
+    AB = 4.000 Stück, EB = 6.000 Stück → Ø Lagerbestand = (4.000 + 6.000) / 2 = <strong>5.000 Stück</strong>.
+    <br>Bei 5,00 € pro Stück: <strong>25.000 €</strong> durchschnittlicher Lagerwert.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>2. Lagerumschlagshäufigkeit (LUH)</h2>
+  <div class="formula">
+    LUH = Jahresverbrauch / Ø Lagerbestand
+  </div>
+  <p>Sagt: <strong>Wie oft pro Jahr wird der Lagerbestand komplett umgeschlagen?</strong></p>
+  <div class="merksatz">
+    <span class="merksatz-label">📐 Beispiel</span>
+    Jahresverbrauch 50.000 Stück, Ø Lagerbestand 5.000 Stück → LUH = 50.000 / 5.000 = <strong>10</strong>.
+    <br>Das Lager wird also 10-mal pro Jahr umgeschlagen.
+  </div>
+  <p class="muted">Hohe LUH = wenig Kapitalbindung = wirtschaftlich gut. Niedrige LUH = Lager liegt zu lange.</p>
+</section>
+
+<section class="slide">
+  <h2>3. Durchschnittliche Lagerdauer</h2>
+  <div class="formula">
+    Ø Lagerdauer = 360 Tage / LUH
+  </div>
+  <p>Sagt: <strong>Wie lange liegt eine Ware durchschnittlich im Lager?</strong></p>
+  <div class="merksatz">
+    <span class="merksatz-label">📐 Beispiel</span>
+    Bei LUH = 10 → Ø Lagerdauer = 360 / 10 = <strong>36 Tage</strong>.
+    <br>Eine Ware liegt also im Schnitt 36 Tage im Lager.
+  </div>
+  <p class="muted">Hinweis: Das kaufmännische Jahr hat 360 Tage (12 × 30), nicht 365.</p>
+</section>
+
+<section class="slide">
+  <h2>4. Lagerzinsen</h2>
+  <div class="formula">
+    Lagerzinsen = (Ø Lagerwert × Lagerdauer × Lagerzinssatz) / 360
+  </div>
+  <p>Vereinfacht (für Jahr): <em>Ø Lagerwert × Lagerzinssatz</em></p>
+  <div class="merksatz">
+    <span class="merksatz-label">📐 Beispiel</span>
+    Ø Lagerwert 25.000 €, Lagerzinssatz 8 % → Lagerzinsen = 25.000 × 0,08 = <strong>2.000 € pro Jahr</strong>.
+    <br>Diese 2.000 € sind die "versteckten" Kosten der Kapitalbindung.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Lagerkennzahlen-Übung — kompletter Fall</h2>
+  <p>Aus der Schreibwaren-Vertrieb GmbH: AB 4.000 Stück (à 5,00 €), EB 6.000 Stück, Jahresverbrauch 50.000 Stück, Lagerzinssatz 8 %.</p>
+  <table>
+    <thead><tr><th>Kennzahl</th><th>Berechnung</th><th>Ergebnis</th></tr></thead>
+    <tbody>
+      <tr><td>Ø Lagerbestand (Stück)</td><td>(4.000 + 6.000) / 2</td><td><strong>5.000 Stück</strong></td></tr>
+      <tr><td>Ø Lagerwert (€)</td><td>5.000 × 5,00 €</td><td><strong>25.000 €</strong></td></tr>
+      <tr><td>LUH</td><td>50.000 / 5.000</td><td><strong>10</strong></td></tr>
+      <tr><td>Ø Lagerdauer</td><td>360 / 10</td><td><strong>36 Tage</strong></td></tr>
+      <tr><td>Lagerzinsen / Jahr</td><td>25.000 × 0,08</td><td><strong>2.000 €</strong></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Bezug zur IHK-Abschlussprüfung</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Teil 1 (KomTech)</div>
+      <ul style="margin-left: 1rem;">
+        <li>Wareneingangsschritte nennen</li>
+        <li>§ 377 HGB Pflicht erläutern</li>
+        <li>Lagerformen unterscheiden</li>
+      </ul>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Teil 2 (Auftragsbearbeitung)</div>
+      <ul style="margin-left: 1rem;">
+        <li><strong>Lagerkennzahlen rechnen</strong> (häufig in Klausuren!)</li>
+        <li>Mängelrüge im konkreten Fall verfassen</li>
+        <li>Eigenlager vs. Fremdlager beurteilen</li>
+        <li>Lagerart situativ wählen</li>
+      </ul>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">📝 Pflicht</span>
+    <strong>Lagerkennzahlen-Formeln</strong> (LUH, Lagerdauer, Lagerzinsen) auswendig — Klassiker in der IHK-Prüfung Teil 2!
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Diskussionsfragen</h2>
+  <ol style="font-size: 1.15rem;">
+    <li>Hatten Sie schon mal eine Mängelrüge geschrieben? Wie war die Reaktion des Lieferanten?</li>
+    <li>Welche Lagerart hat Ihr Ausbildungsbetrieb? Warum gerade diese?</li>
+    <li>Wäre Outsourcing der Lagerhaltung (Fremdlager) für Ihren Betrieb sinnvoll?</li>
+    <li>Welche LUH halten Sie für realistisch im Bürobedarfshandel?</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Zusammenfassung Tag 5</h2>
+  <ol class="numlist">
+    <li><strong>Wareneingang</strong>: Annahme → äußere → innere Kontrolle → Erfassung.</li>
+    <li><strong>§ 377 HGB</strong>: Beim Handelskauf unverzüglich prüfen und rügen — sonst Verlust der Mängelrechte.</li>
+    <li><strong>Mängel</strong>: offen (sofort sichtbar) oder verdeckt (später entdeckt) — beide unverzüglich rügen.</li>
+    <li><strong>Lagerformen</strong>: Eigenlager (Kontrolle, hohe Fixkosten) vs. Fremdlager (flexibel, variable Kosten).</li>
+    <li><strong>Lagerarten</strong>: Boden, Regal, Hochregal, Block, Kanal, Etage.</li>
+    <li><strong>Lagerkennzahlen</strong>: Ø Bestand = (AB + EB)/2; LUH = Verbrauch / Ø Bestand; Ø Dauer = 360/LUH; Lagerzinsen = Ø Wert × Zinssatz.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Ausblick: Tag 6 (19.05.)</h2>
+  <p class="subtitle">Kaufvertragsstörungen</p>
+  <ul style="font-size: 1.2rem;">
+    <li>Überblick Leistungsstörungen</li>
+    <li>Schuldnerverzug: Lieferungsverzug (Verkäuferseite)</li>
+    <li>Gläubigerverzug: Annahmeverzug (Käuferseite)</li>
+    <li>Schlechtleistung: mangelhafte Lieferung — Käuferrechte (Nacherfüllung, Rücktritt, Minderung, Schadensersatz)</li>
+    <li>Besonderheiten bei verschiedenen Kaufvertragsarten</li>
+  </ul>
+  <p class="muted" style="margin-top: 1.5rem;">Hausaufgabe: Quiz <code>Quiz_Annahme-und-Lagerung-der-Waren.html</code> + Lagerkennzahlen-Formeln auswendig!</p>
+</section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 22</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+show(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 5 — Annahme und Lagerung der Waren</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-danger:#EF4444; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5; --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem; }
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 5 · 18.05.2026 · 60 Fragen</span>
+  <h1>Quiz: Annahme und Lagerung der Waren</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation</strong> und dem <strong>Handout</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Wareneingang/§ 377 HGB (1-12) ===
+  { topic: "Wareneingang", q: "Welche Schritte umfasst die Wareneingangskontrolle?",
+    options: ["Nur Auspacken", "Annahme, äußere Kontrolle, innere Kontrolle, Erfassung", "Nur Bezahlen", "Nur Lagern"],
+    a: 1, e: "Vier Schritte: Annahme, äußere Kontrolle (vor dem Fahrer), innere Kontrolle (nach Abfahrt), Erfassung im System." },
+  { topic: "Wareneingang", q: "Was ist die äußere Wareneingangskontrolle?",
+    options: ["Prüfung des Inhalts", "Sichtprüfung der Verpackung und Anzahl der Pakete vor dem Fahrer", "Buchung im System", "Mängelrüge schreiben"],
+    a: 1, e: "Äußere Kontrolle = vor dem Frachtfahrer, Pakete zählen, sichtbare Schäden protokollieren." },
+  { topic: "Wareneingang", q: "Was ist die innere Wareneingangskontrolle?",
+    options: ["Verpackung zählen", "Auspacken und Inhalt prüfen (Menge, Beschaffenheit, Identität)", "Nur Lieferschein lesen", "Telefonisch nachfragen"],
+    a: 1, e: "Innere Kontrolle = Inhalt prüfen, Vergleich mit Lieferschein und Bestellung." },
+  { topic: "Wareneingang", q: "Wann unterschreibt man den Lieferschein 'mit Vorbehalt'?",
+    options: ["Nie", "Wenn sichtbare Schäden am Karton oder Verdacht auf Schäden vorliegen", "Immer", "Nur Donnerstags"],
+    a: 1, e: "Bei sichtbaren Beschädigungen: mit Vorbehalt unterschreiben — sichert Mängelrechte." },
+  { topic: "§ 377 HGB", q: "Für welchen Käufer gilt die Rügeobliegenheit nach § 377 HGB?",
+    options: ["Verbraucher", "Kaufmann beim Handelskauf (B2B)", "Nur Privatperson", "Nur Behörden"],
+    a: 1, e: "§ 377 HGB gilt für Handelskäufe — beide Vertragspartner müssen Kaufleute sein." },
+  { topic: "§ 377 HGB", q: "Was muss der Käufer nach § 377 HGB unverzüglich tun?",
+    options: ["Bezahlen", "Die Ware untersuchen und bei Mängeln Anzeige erstatten", "Eine Beschwerde online posten", "Den Lieferanten anrufen"],
+    a: 1, e: "§ 377 Abs. 1 HGB: Untersuchen + bei Mangel anzeigen — beides unverzüglich." },
+  { topic: "§ 377 HGB", q: "Was passiert, wenn die Mängelrüge versäumt wird?",
+    options: ["Nichts", "Die Ware gilt als genehmigt — Mängelrechte sind verloren (§ 377 Abs. 2 HGB)", "Der Lieferant zahlt Strafe", "Die Frist läuft neu"],
+    a: 1, e: "§ 377 Abs. 2: Bei Versäumnis gilt die Ware als genehmigt — keine Nacherfüllung, kein Rücktritt, keine Minderung, kein Schadensersatz." },
+  { topic: "§ 377 HGB", q: "Was bedeutet 'unverzüglich' im Sinne von § 377 HGB?",
+    options: ["Sofort, ohne jede Pause", "Ohne schuldhaftes Zögern (§ 121 BGB) — meist 1–2 Werktage", "Innerhalb 6 Monate", "Nach Saisonende"],
+    a: 1, e: "Unverzüglich = ohne schuldhaftes Zögern, in der Praxis meist 1–2 Werktage." },
+  { topic: "Mängel", q: "Was ist ein offener Mangel?",
+    options: ["Ein Mangel an einem geöffneten Karton", "Ein Mangel, der bei der üblichen Wareneingangsprüfung sofort erkennbar ist", "Ein Mangel, der nicht behoben werden kann", "Ein interner Mangel"],
+    a: 1, e: "Offene Mängel sind sofort sichtbar (z.B. falsche Stückzahl, sichtbare Beschädigung)." },
+  { topic: "Mängel", q: "Was ist ein verdeckter Mangel?",
+    options: ["Ein versteckter Mangel hinter dem Regal", "Ein Mangel, der erst später (z.B. im Gebrauch) entdeckt wird", "Ein bekannter Mangel", "Ein dokumentierter Mangel"],
+    a: 1, e: "Verdeckte Mängel zeigen sich erst später — auch sie müssen nach Entdeckung unverzüglich gerügt werden." },
+  { topic: "Mängelrüge", q: "Welche Form sollte die Mängelrüge haben?",
+    options: ["Nur mündlich", "Schriftlich (Brief, E-Mail, Fax) — Beweissicherheit", "WhatsApp", "Telefonanruf reicht"],
+    a: 1, e: "Beweissicherheit verlangt Schriftform — Telefonanruf ist beweisrechtlich riskant." },
+  { topic: "Mängelrüge", q: "Welche Information gehört NICHT zwingend in eine Mängelrüge?",
+    options: ["Bezug auf Lieferung (Lieferschein-Nr.)", "Genaue Beschreibung des Mangels", "Schuhgröße des Sachbearbeiters", "Fristsetzung für Reaktion"],
+    a: 2, e: "Persönliche Daten des Sachbearbeiters sind irrelevant — wichtig sind Bezug, Mangel, Frist, gewähltes Recht." },
+
+  // === Block B: Aufgaben Lagerhaltung (13-20) ===
+  { topic: "Lageraufgaben", q: "Was ist die Sicherungsfunktion des Lagers?",
+    options: ["Lager schützen vor Diebstahl", "Sicherung der Versorgung gegen Lieferengpässe und Bedarfsspitzen", "Versicherung des Lagers", "Brandschutz"],
+    a: 1, e: "Sicherungsfunktion = Versorgung sicherstellen, falls etwas schief läuft." },
+  { topic: "Lageraufgaben", q: "Was ist die Bereitstellungsfunktion?",
+    options: ["Bereitstellung von Personal", "Material steht bereit, wenn es gebraucht wird", "Bereitstellung von Geld", "Bereitstellung des Lagerschlüssels"],
+    a: 1, e: "Bereitstellungsfunktion = jederzeit sofortiger Zugriff auf das benötigte Material." },
+  { topic: "Lageraufgaben", q: "Was ist die Überbrückungsfunktion?",
+    options: ["Überbrückung einer Brücke", "Zwischenlagerung bei zeitlicher Differenz zwischen Beschaffung und Verbrauch", "Überbrückung von Mitarbeiterausfällen", "Saisonarbeit"],
+    a: 1, e: "Überbrückung = Zeitpuffer zwischen Einkauf und Verbrauch (z.B. wöchentlicher Einkauf, täglicher Verbrauch)." },
+  { topic: "Lageraufgaben", q: "Was ist die Spekulationsfunktion?",
+    options: ["Spekulation an der Börse", "Einkauf zu günstigem Zeitpunkt (z.B. vor Preiserhöhung) und Lagerung", "Glücksspiel im Lager", "Spekulation über Mitarbeiter"],
+    a: 1, e: "Spekulationsfunktion = Einkauf VOR erwarteter Preiserhöhung und Lagerung für späteren Verbrauch." },
+  { topic: "Lageraufgaben", q: "Welche Funktion hat das Lager bei Wein und Käse?",
+    options: ["Sicherungsfunktion", "Bereitstellungsfunktion", "Veredelungsfunktion (Wert/Qualität verbessert sich durch Lagerung)", "Spekulationsfunktion"],
+    a: 2, e: "Wein, Käse, Holz werden durch Lagerung wertvoller — Veredelungsfunktion." },
+  { topic: "Lageraufgaben", q: "Welche Funktion ist NICHT typisch für die Lagerhaltung?",
+    options: ["Sicherungsfunktion", "Veredelungsfunktion", "Bereitstellungsfunktion", "Personalentwicklungsfunktion"],
+    a: 3, e: "Personalentwicklung ist Aufgabe der Personalabteilung, nicht des Lagers." },
+  { topic: "Lageraufgaben", q: "Welcher Vorteil entsteht durch ein Lager bei schwankendem Verbrauch?",
+    options: ["Mehr Personal", "Versorgungssicherheit auch bei Bedarfsspitzen", "Höhere Steuern", "Weniger Lieferanten"],
+    a: 1, e: "Lager federt Bedarfsschwankungen ab — daher die Sicherungsfunktion." },
+  { topic: "Lageraufgaben", q: "Welcher Nachteil entsteht bei zu hohen Lagerbeständen?",
+    options: ["Mehr Mitarbeiter", "Hohe Kapitalbindung, Lager- und Risikokosten — Geld liegt brach", "Höhere Verkaufszahlen", "Bessere Beziehung zum Lieferanten"],
+    a: 1, e: "Hohe Bestände = hohe Kapitalbindung. Geld könnte sonst produktiv eingesetzt werden." },
+
+  // === Block C: Lagerformen Eigen/Fremd (21-28) ===
+  { topic: "Lagerformen", q: "Was ist ein Eigenlager?",
+    options: ["Lager im Eigentum eines Mitarbeiters", "Lager im Eigentum des Unternehmens — alle Kosten und Risiken trägt das Unternehmen", "Lager des Lieferanten", "Lager des Kunden"],
+    a: 1, e: "Eigenlager = Unternehmen besitzt und betreibt das Lager selbst." },
+  { topic: "Lagerformen", q: "Was ist ein Fremdlager?",
+    options: ["Lager in einem fremden Land", "Lager bei einem Logistikdienstleister gemietet — kein eigenes Eigentum", "Lager eines Konkurrenten", "Lager im Internet"],
+    a: 1, e: "Fremdlager = bei einem externen Dienstleister angemietet." },
+  { topic: "Lagerformen", q: "Welcher Vorteil hat das Eigenlager?",
+    options: ["Geringere Investitionskosten", "Volle Kontrolle über Prozesse und eigenes Know-how", "Variable Kosten", "Hohe Flexibilität"],
+    a: 1, e: "Eigenlager: maximale Kontrolle, eigenes Know-how — dafür hohe Investition." },
+  { topic: "Lagerformen", q: "Welcher Vorteil hat das Fremdlager?",
+    options: ["Volle Kontrolle", "Keine Investition, variable Kosten, hohe Flexibilität", "Niedrigster Stückpreis", "Eigenes Personal"],
+    a: 1, e: "Fremdlager: keine eigene Investition, Anpassung an Bedarf möglich — Mengenflexibilität." },
+  { topic: "Lagerformen", q: "Welcher Nachteil hat das Eigenlager?",
+    options: ["Wenig Kontrolle", "Hohe Fixkosten und Investition (Gebäude, Einrichtung)", "Variable Kosten", "Keine Flexibilität"],
+    a: 1, e: "Eigenlager: hohe Investitions- und Fixkosten — auch bei niedriger Auslastung." },
+  { topic: "Lagerformen", q: "Welcher Nachteil hat das Fremdlager?",
+    options: ["Niedrige Kosten", "Eingeschränkte Kontrolle, Abhängigkeit vom Dienstleister", "Eigene Investition", "Eigenes Personal"],
+    a: 1, e: "Fremdlager: weniger Kontrolle und Lieferantenabhängigkeit." },
+  { topic: "Lagerformen", q: "Wann ist ein Eigenlager besonders sinnvoll?",
+    options: ["Bei kleinem schwankendem Bedarf", "Bei großvolumigem Dauerbedarf, wo eigene Investition sich lohnt", "Bei einmaligen Aufträgen", "Bei B2C-Geschäft"],
+    a: 1, e: "Großvolumige Dauerbedarfe rechtfertigen die hohe Investition." },
+  { topic: "Lagerformen", q: "Wann ist ein Fremdlager besonders sinnvoll?",
+    options: ["Bei jährlich konstantem riesigen Bedarf", "Bei schwankendem oder kleinem Bedarf — keine eigene Investition nötig", "Wenn man volle Kontrolle braucht", "Wenn das Lager strategisch ist"],
+    a: 1, e: "Schwankender Bedarf passt zu variablen Kosten des Fremdlagers." },
+
+  // === Block D: Lagerarten (29-38) ===
+  { topic: "Lagerarten", q: "Was ist ein Hochregallager?",
+    options: ["Lager auf dem Dach", "Lager mit Regalen bis zu 50 m Höhe, meist automatisiert", "Lager auf hohem Berg", "Mehrstöckiges Bürogebäude"],
+    a: 1, e: "Hochregallager: bis 50 m hoch, automatisiert, maximale Raumnutzung." },
+  { topic: "Lagerarten", q: "Welcher Vorteil hat das Hochregallager?",
+    options: ["Niedrige Investitionen", "Maximale Raumnutzung auf kleiner Grundfläche", "Manueller Betrieb", "Keine Technik"],
+    a: 1, e: "Bis zu 50 m Höhe = enorme Stellplatzkapazität auf wenig Grundfläche." },
+  { topic: "Lagerarten", q: "Was ist ein Bodenlager?",
+    options: ["Lager im Keller", "Waren stehen direkt am Boden, ohne Regal — einfach und günstig", "Erdgeschoss-Lager", "Lager unter Wasser"],
+    a: 1, e: "Bodenlager: keine Regale, geeignet für Großgut. Sehr günstig." },
+  { topic: "Lagerarten", q: "Was ist ein Blocklager?",
+    options: ["Lager mit Bauklötzen", "Stapelung von Paletten ohne Regale, Block für Block", "Wohnblock", "Industriegebiet"],
+    a: 1, e: "Blocklager: Paletten gestapelt, ohne Regal. Günstig, geeignet für gleichartige Waren." },
+  { topic: "Lagerarten", q: "Was ist ein Kanallager?",
+    options: ["Lager am Wasserkanal", "Paletten in Kanälen gelagert, Entnahme nach FIFO oder LIFO", "Lager in einer Schleuse", "Kanal-TV"],
+    a: 1, e: "Kanallager: Paletten in tiefen Reihen, hohe Flächennutzung. Typisch FIFO/LIFO." },
+  { topic: "Lagerarten", q: "Was ist ein Etagenlager?",
+    options: ["Lager auf einem Berg", "Lager mit mehreren Stockwerken — Flächengewinn auf gleicher Grundfläche", "Lager nur im Erdgeschoss", "Lager im Aufzug"],
+    a: 1, e: "Etagenlager: Stockwerke übereinander → mehr Lagerraum auf gleicher Fläche. Typisch in Innenstädten." },
+  { topic: "Lagerarten", q: "Welche Lagerart ist günstig für gleichartige Großgüter?",
+    options: ["Hochregallager", "Bodenlager oder Blocklager", "Etagenlager", "Kanallager"],
+    a: 1, e: "Boden-/Blocklager: günstig, ohne aufwendige Regale, ideal für Großgut/Paletten." },
+  { topic: "Lagerarten", q: "FIFO bedeutet im Lager...",
+    options: ["First In, First Out — älteste Ware wird zuerst entnommen", "First In, First Order", "Free In, Free Out", "Final In, Final Out"],
+    a: 1, e: "FIFO: was zuerst kommt, geht zuerst raus. Wichtig bei Waren mit Mindesthaltbarkeit." },
+  { topic: "Lagerarten", q: "LIFO bedeutet im Lager...",
+    options: ["Last In, First Out — neueste Ware wird zuerst entnommen", "Long In, First Out", "Late In, Far Out", "Last In, Final Order"],
+    a: 1, e: "LIFO: was zuletzt eingelagert wird, geht zuerst raus." },
+  { topic: "Lagerarten", q: "Welche Lagerart eignet sich für ein Bürodienstleister mit geringem Lagerbedarf?",
+    options: ["Eigenes Hochregallager", "Fremdlager bei Logistiker — keine Investition nötig", "Großes Eigenlager auf 50 m", "Internationales Distributionszentrum"],
+    a: 1, e: "Geringer Bedarf rechtfertigt keine Investition → Fremdlager ist sinnvoll." },
+
+  // === Block E: Lagerkosten (39-48) ===
+  { topic: "Lagerkosten", q: "Welcher Posten gehört zu den Lagerkosten?",
+    options: ["Werbungskosten", "Personalkosten Lager, Raumkosten, Anlagekosten, Kapitalbindung, Versicherung, Risiko", "Vertriebskosten", "Marketingkosten"],
+    a: 1, e: "Lagerkosten: alle direkten Kosten für Lagerbetrieb plus Kapitalbindung und Risiko." },
+  { topic: "Lagerkosten", q: "Was sind Kapitalbindungskosten?",
+    options: ["Bankgebühren", "Opportunitätskosten — entgangene Zinsen für das Geld, das in Lagerbeständen gebunden ist", "Lohnsteuer", "Mietkosten"],
+    a: 1, e: "Kapital im Lager kann nicht produktiv investiert werden — Opportunitätskosten." },
+  { topic: "Lagerkosten", q: "Was sind Lagerrisikokosten?",
+    options: ["Versicherungspolice", "Kosten für Verderb, Schwund, Diebstahl und technisches Veralten", "Bauschutz", "Personalrisiko"],
+    a: 1, e: "Lagerware kann verderben, gestohlen werden, technisch veralten — diese Risiken sind Kosten." },
+  { topic: "Lagerkosten", q: "Welcher Lagerkostenposten ist oft der größte?",
+    options: ["Personalkosten", "Raummiete", "Kapitalbindungskosten", "Versicherung"],
+    a: 2, e: "Bei wertvollen Lagerbeständen sind Kapitalbindungskosten oft der dominierende Block." },
+  { topic: "Lagerkosten", q: "Was ist der Lagerzinssatz?",
+    options: ["Bankzins", "Prozentualer Zinsanspruch auf das im Lager gebundene Kapital", "Skonto", "Lagermiete"],
+    a: 1, e: "Lagerzinssatz = Opportunitätszins für Kapitalbindung im Lager (typisch 8–12 % p.a.)." },
+  { topic: "Lagerkosten", q: "Welcher Posten gehört NICHT zu den Lagerkosten?",
+    options: ["Personalkosten Lager", "Lagermiete", "Werbung", "Versicherung des Lagerbestands"],
+    a: 2, e: "Werbung ist Vertriebs-/Marketingkosten, kein Lagerkosten." },
+  { topic: "Lagerkosten", q: "Wie wirken sich höhere Lagerbestände auf die Kapitalbindung aus?",
+    options: ["Sie sinkt", "Sie steigt — mehr Geld liegt im Lager fest", "Sie bleibt gleich", "Sie verschwindet"],
+    a: 1, e: "Mehr Bestand = mehr Geld gebunden = höhere Opportunitätskosten." },
+  { topic: "Lagerkosten", q: "Wie kann ein Unternehmen Lagerkosten senken?",
+    options: ["Mehr lagern", "Hohe LUH anstreben (häufiger umschlagen, weniger Bestand pro Tag)", "Versicherung kündigen", "Personal entlassen"],
+    a: 1, e: "Hohe LUH = wenig Bestand pro Zeitpunkt = weniger Kapitalbindung und Lagerkosten." },
+  { topic: "Lagerkosten", q: "Warum gehören Versicherungskosten zu den Lagerkosten?",
+    options: ["Sie sind unfreiwillig", "Sie schützen den Lagerwert (Sachversicherung)", "Sie sind steuerlich relevant", "Aus Tradition"],
+    a: 1, e: "Lagerwerte werden gegen Brand, Diebstahl, Wasser versichert — direkt verursachte Kosten." },
+  { topic: "Lagerkosten", q: "Welche Lagerkostenart ist 'versteckt' (oft unterschätzt)?",
+    options: ["Personalkosten", "Kapitalbindung — nicht direkt sichtbar in der Kostenrechnung", "Raumkosten", "Versicherung"],
+    a: 1, e: "Kapitalbindung wird oft übersehen, weil keine echte Auszahlung — aber Opportunitätskosten." },
+
+  // === Block F: Lagerkennzahlen (49-60) ===
+  { topic: "Lagerkennzahlen", q: "Wie wird der durchschnittliche Lagerbestand berechnet?",
+    options: ["AB × EB", "(Anfangsbestand + Endbestand) / 2", "AB − EB", "EB / AB"],
+    a: 1, e: "Einfache Formel: Ø Lagerbestand = (AB + EB) / 2." },
+  { topic: "Lagerkennzahlen", q: "AB = 4.000 Stück, EB = 6.000 Stück. Ø Lagerbestand?",
+    options: ["4.000", "5.000", "6.000", "10.000"],
+    a: 1, e: "(4.000 + 6.000) / 2 = 5.000 Stück." },
+  { topic: "Lagerkennzahlen", q: "Wie wird die Lagerumschlagshäufigkeit (LUH) berechnet?",
+    options: ["Bestand × Verbrauch", "Jahresverbrauch / Ø Lagerbestand", "Bestand / Verbrauch", "AB + EB / Verbrauch"],
+    a: 1, e: "LUH = Jahresverbrauch / Ø Lagerbestand. Sagt: Wie oft das Lager pro Jahr umgeschlagen wird." },
+  { topic: "Lagerkennzahlen", q: "Jahresverbrauch 50.000, Ø Lagerbestand 5.000. LUH?",
+    options: ["5", "8", "10", "20"],
+    a: 2, e: "50.000 / 5.000 = 10. Das Lager wird 10-mal pro Jahr umgeschlagen." },
+  { topic: "Lagerkennzahlen", q: "Was bedeutet eine hohe LUH?",
+    options: ["Lager liegt zu lange", "Schnelle Lagerumschlagung — wenig Kapitalbindung, wirtschaftlich gut", "Lieferant ist langsam", "Lager ist zu klein"],
+    a: 1, e: "Hohe LUH = schneller Umschlag = weniger gebundenes Kapital = wirtschaftlich vorteilhaft." },
+  { topic: "Lagerkennzahlen", q: "Wie wird die durchschnittliche Lagerdauer berechnet?",
+    options: ["LUH × 360", "360 / LUH", "LUH + 360", "365 / LUH"],
+    a: 1, e: "Lagerdauer = 360 Tage / LUH (kaufmännisches Jahr = 360 Tage)." },
+  { topic: "Lagerkennzahlen", q: "Bei LUH = 10 — wie hoch ist die durchschnittliche Lagerdauer?",
+    options: ["10 Tage", "30 Tage", "36 Tage", "100 Tage"],
+    a: 2, e: "360 / 10 = 36 Tage. Eine Ware liegt im Schnitt 36 Tage im Lager." },
+  { topic: "Lagerkennzahlen", q: "Wie viele Tage hat das kaufmännische Jahr?",
+    options: ["360 Tage", "365 Tage", "366 Tage", "12 Monate × 31 = 372"],
+    a: 0, e: "Kaufmännisch: 360 Tage (12 × 30). Vereinfacht für Berechnungen." },
+  { topic: "Lagerkennzahlen", q: "Wie werden die Lagerzinsen pro Jahr berechnet (vereinfacht)?",
+    options: ["Lagerwert + Lagerzinssatz", "Ø Lagerwert × Lagerzinssatz", "Lagerwert − Lagerzinssatz", "Lagerzinssatz / Lagerwert"],
+    a: 1, e: "Lagerzinsen = Ø Lagerwert × Lagerzinssatz (für ganzes Jahr)." },
+  { topic: "Lagerkennzahlen", q: "Ø Lagerwert 25.000 €, Lagerzinssatz 8 %. Lagerzinsen?",
+    options: ["1.000 €", "2.000 €", "2.500 €", "8.000 €"],
+    a: 1, e: "25.000 € × 0,08 = 2.000 € Lagerzinsen pro Jahr." },
+  { topic: "Lagerkennzahlen", q: "Was sagt eine niedrige LUH (z.B. 2)?",
+    options: ["Lager ist sehr effizient", "Lager liegt zu lange — hohe Kapitalbindung, evtl. Veralten", "Lieferant ist sehr schnell", "Lager ist klein"],
+    a: 1, e: "Niedrige LUH = Ware liegt lange = viel gebundenes Kapital, Risiko von Veralten." },
+  { topic: "Lagerkennzahlen", q: "Welche Lagerkennzahl ist besonders relevant für die IHK-Prüfung Teil 2?",
+    options: ["Lagerteppich", "Alle vier (Ø Bestand, LUH, Ø Lagerdauer, Lagerzinsen)", "Anzahl Mitarbeiter", "Höhe des Lagers"],
+    a: 1, e: "Alle vier Kennzahlen sind klausurrelevant — Formeln auswendig kennen!" }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>
