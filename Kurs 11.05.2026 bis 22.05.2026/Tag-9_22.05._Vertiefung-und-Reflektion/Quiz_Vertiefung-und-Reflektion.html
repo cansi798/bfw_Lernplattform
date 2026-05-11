@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 9 — Vertiefung und Reflektion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-danger:#EF4444; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5; --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem; }
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 9 · 22.05.2026 · 60 Fragen Mix</span>
+  <h1>Quiz: Vertiefung und Reflektion</h1>
+  <p class="subtitle">Multiple-Choice quer durch alle 8 Vortage — IHK-Mustertest</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">60 Fragen, gemischt aus allen Themen. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Beschaffungsprozess + Bezugskalkulation (Tag 1-2) (1-10) ===
+  { topic: "Tag 1-2", q: "Welche Schritte umfasst der Beschaffungsprozess in der richtigen Reihenfolge?",
+    options: ["Bestellung, Anfrage, Lieferung, Zahlung", "Bedarf, Bezugsquelle, Anfrage, Angebot, Bestellung, Lieferung, Wareneingang, Rechnung, Zahlung", "Lieferung, Bestellung, Bezahlung", "Anfrage, Lieferung, Verkauf"],
+    a: 1, e: "9-stufige Beschaffungskette von Bedarfsermittlung bis Zahlung." },
+  { topic: "Tag 1-2", q: "Was sind die 6 W der Bestellung?",
+    options: ["Was, Wer, Wann, Wo, Wie viel, Welche Qualität", "Wer, Was, Wo, Wie, Wann, Warum", "Was, Wo, Wer, Welcher, Wieso, Wann", "Beliebige sechs W"],
+    a: 0, e: "Klassische Aufzählung im Einkauf." },
+  { topic: "Tag 1-2", q: "Was sind A-Güter in der ABC-Analyse?",
+    options: ["Billigste Güter", "Wenige Güter mit hohem Wertanteil", "Alphabetisch erste Güter", "Lagerteile"],
+    a: 1, e: "A-Güter: ca. 10–20 % der Artikel, ca. 70–80 % des Wertes — Schwerpunkt der Beschaffung." },
+  { topic: "Tag 1-2", q: "Wie wird der Bezugspreis kalkuliert?",
+    options: ["Listenpreis + Steuer", "Listenpreis − Rabatt − Skonto + Bezugskosten", "Listenpreis × USt", "Listenpreis ÷ 2"],
+    a: 1, e: "Bezugskalkulation: Listenpreis − Liefererrabatt − Liefererskonto + Bezugskosten = Bezugspreis." },
+  { topic: "Tag 1-2", q: "Listenpreis 1.000 €, Rabatt 10 %, Skonto 2 %, Bezugskosten 18 €. Bezugspreis?",
+    options: ["882 €", "900 €", "918 €", "1.000 €"],
+    a: 1, e: "1.000 − 100 (Rabatt) − 18 (2 % Skonto auf 900) + 18 (Bezugskosten) = 900 €." },
+  { topic: "Tag 1-2", q: "Was ist eine bestimmte Anfrage?",
+    options: ["Vage Frage nach Konditionen", "Konkrete Anfrage mit Mengen-/Qualitätsangaben", "Eine SMS", "Ein Telefonat"],
+    a: 1, e: "Bestimmte Anfrage: konkret nach Menge/Qualität/Termin — Lieferant kann sofort kalkulieren." },
+  { topic: "Tag 1-2", q: "Was ist der Unterschied zwischen quantitativem und qualitativem Angebotsvergleich?",
+    options: ["Es gibt keinen", "Quantitativ: Preise rechnen; Qualitativ: andere Faktoren wie Service, Lieferzeit, Reputation", "Quantitativ: Mengen; Qualitativ: Beschwerden", "Beide gleich"],
+    a: 1, e: "Quantitativer Vergleich = harte Zahlen; qualitativer Vergleich = weiche Faktoren." },
+  { topic: "Tag 1-2", q: "Was sind interne Bezugsquellen?",
+    options: ["Lieferanten im Ausland", "Eigenfertigung im Unternehmen", "Großhandel", "Online-Plattformen"],
+    a: 1, e: "Intern: Eigenfertigung; extern: Lieferanten." },
+  { topic: "Tag 1-2", q: "Welche Bedarfsart sind Aktenordner für ein Bürobetrieb?",
+    options: ["Rohstoff", "Hilfs-/Betriebsstoff", "Investitionsgut", "Anlagegut"],
+    a: 1, e: "Aktenordner sind Bürobedarf = Hilfs-/Betriebsstoffe." },
+  { topic: "Tag 1-2", q: "Was bedeutet Lieferantenbewertung?",
+    options: ["Steuerbewertung", "Systematische Bewertung von Lieferanten nach quantitativen und qualitativen Kriterien", "Strafsteuer", "Verbraucherschutz"],
+    a: 1, e: "Lieferantenbewertung = Scoring von Lieferanten — Auswahl und Pflege der Lieferantenbasis." },
+
+  // === Block B: Vertrag & AGB (Tag 3) + Wareneingang/Lager (Tag 4-5) (11-20) ===
+  { topic: "Tag 3-5", q: "Welche Normen regeln Antrag und Annahme?",
+    options: ["§§ 145, 147 BGB", "§§ 305, 307 BGB", "§§ 286, 437 BGB", "§§ 14, 33 UStG"],
+    a: 0, e: "§ 145 BGB Antrag, § 147 BGB Annahme — Vertragsschluss durch zwei korrespondierende Willenserklärungen." },
+  { topic: "Tag 3-5", q: "Was sind essentialia negotii beim Kaufvertrag?",
+    options: ["Gericht, Anwalt, Datum", "Kaufgegenstand, Kaufpreis, Vertragsparteien", "AGB, Datum, Unterschrift", "Steuersatz, Branche, Bonität"],
+    a: 1, e: "Wesentliche Vertragsbestandteile: Was, Preis, Wer." },
+  { topic: "Tag 3-5", q: "Welche Norm regelt die AGB-Inhaltskontrolle?",
+    options: ["§ 305 BGB", "§ 307 BGB", "§ 433 BGB", "§ 286 BGB"],
+    a: 1, e: "§ 307 BGB: AGB-Klauseln dürfen den Vertragspartner nicht unangemessen benachteiligen." },
+  { topic: "Tag 3-5", q: "Was ist Just-in-Time?",
+    options: ["Lieferung nach Lust und Laune", "Lieferung exakt zum benötigten Zeitpunkt — Lagerminimierung", "Wochenend-Lieferung", "Versandkosten-Modell"],
+    a: 1, e: "JIT: Lieferung im Bedarfszeitpunkt, kein/kaum Lager — typisch in Automobilindustrie." },
+  { topic: "Tag 3-5", q: "Welche vier Schritte umfasst der Wareneingang?",
+    options: ["Auspacken, Bezahlen, Lagern, Verkaufen", "Annahme, äußere Kontrolle, innere Kontrolle, Erfassung", "Bestellen, Liefern, Prüfen, Zahlen", "Lesen, Schreiben, Rechnen, Speichern"],
+    a: 1, e: "Vier-Schritt-Wareneingang: Annahme → äußere → innere Kontrolle → Erfassung." },
+  { topic: "Tag 3-5", q: "Welche Norm regelt die Rügepflicht beim Handelskauf?",
+    options: ["§ 377 HGB", "§ 286 BGB", "§ 437 BGB", "§ 14 UStG"],
+    a: 0, e: "§ 377 HGB: unverzügliche Untersuchung und Mängelanzeige." },
+  { topic: "Tag 3-5", q: "Was passiert bei Versäumnis der Mängelrüge nach § 377 HGB?",
+    options: ["Nichts", "Ware gilt als genehmigt — alle Mängelrechte sind verloren", "Strafe", "Mahngebühr"],
+    a: 1, e: "Rechtsfolge: Verlust von Nacherfüllung, Rücktritt, Minderung, Schadensersatz." },
+  { topic: "Tag 3-5", q: "Wie wird die Lagerumschlagshäufigkeit berechnet?",
+    options: ["Bestand × Verbrauch", "Jahresverbrauch / Ø Lagerbestand", "Bestand / Verbrauch", "Verbrauch + Bestand"],
+    a: 1, e: "LUH = Jahresverbrauch / Ø Lagerbestand. Hoch = wenig Kapitalbindung." },
+  { topic: "Tag 3-5", q: "Was sagt eine hohe LUH aus?",
+    options: ["Lager liegt zu lange", "Schneller Umschlag — wenig gebundenes Kapital — wirtschaftlich gut", "Lieferant ist langsam", "Lager ist klein"],
+    a: 1, e: "Hohe LUH = schneller Verkauf, geringe Kapitalbindung." },
+  { topic: "Tag 3-5", q: "Wie wird die durchschnittliche Lagerdauer berechnet?",
+    options: ["LUH × 360", "360 / LUH", "365 / LUH", "LUH + 360"],
+    a: 1, e: "Ø Lagerdauer = 360 / LUH (kaufmännisches Jahr 360 Tage)." },
+
+  // === Block C: Kaufvertragsstörungen (Tag 6) (21-30) ===
+  { topic: "Tag 6", q: "Welche drei Voraussetzungen hat der Schuldnerverzug nach § 286 BGB?",
+    options: ["Bestellung, Lieferung, Rechnung", "Fälligkeit, Mahnung, Vertretenmüssen", "Vertrag, Geld, Übergabe", "Frist, Brief, Bezahlung"],
+    a: 1, e: "§ 286 BGB: Fälligkeit + Mahnung + Vertretenmüssen." },
+  { topic: "Tag 6", q: "Wann ist die Mahnung entbehrlich?",
+    options: ["Bei B2C", "Bei kalendermäßig bestimmtem Liefertermin", "Nie", "Bei Bargeschäften"],
+    a: 1, e: "§ 286 II BGB: bei kalendermäßiger Bestimmung keine Mahnung nötig." },
+  { topic: "Tag 6", q: "Welcher Verzugszinssatz gilt B2B?",
+    options: ["Basiszins + 5 %-Punkte", "Basiszins + 9 %-Punkte", "5 %", "9 %"],
+    a: 1, e: "B2B: Basiszins + 9 %-Punkte (§ 288 II BGB)." },
+  { topic: "Tag 6", q: "Forderung 8.000 €, Zinssatz 12,62 %, 30 Tage Verzug. Verzugszinsen?",
+    options: ["80,00 €", "84,13 €", "96,00 €", "126,20 €"],
+    a: 1, e: "8.000 × 0,1262 × 30/360 = 84,13 €." },
+  { topic: "Tag 6", q: "Welche Norm regelt den Annahmeverzug?",
+    options: ["§ 286 BGB", "§§ 293 ff. BGB", "§ 437 BGB", "§ 14 UStG"],
+    a: 1, e: "§§ 293 ff. BGB: Annahmeverzug = Gläubigerverzug." },
+  { topic: "Tag 6", q: "Welche Norm regelt die Käuferrechte bei Mängeln?",
+    options: ["§ 437 BGB", "§ 286 BGB", "§ 449 BGB", "§ 932 BGB"],
+    a: 0, e: "§ 437 BGB listet die vier Käuferrechte." },
+  { topic: "Tag 6", q: "Welches Käuferrecht hat Vorrang?",
+    options: ["Rücktritt", "Nacherfüllung (§ 439 BGB)", "Minderung", "Schadensersatz"],
+    a: 1, e: "Vorrang der Nacherfüllung — Verkäufer bekommt zuerst die Chance zur Mängelbeseitigung." },
+  { topic: "Tag 6", q: "Welche zwei Formen der Nacherfüllung gibt es?",
+    options: ["Geld oder Ware", "Nachbesserung (Reparatur) oder Ersatzlieferung", "Tausch oder Rabatt", "Mahnung oder Klage"],
+    a: 1, e: "§ 439 BGB: Wahlrecht des Käufers zwischen Nachbesserung und Ersatzlieferung." },
+  { topic: "Tag 6", q: "Drucker 600 €, Wert mangelfrei 600, mangelhaft 480. Geminderter Preis?",
+    options: ["120 €", "180 €", "420 €", "480 €"],
+    a: 3, e: "600 × (480/600) = 480 €. Käufer fordert 120 € zurück." },
+  { topic: "Tag 6", q: "Was bedeutet Beweislastumkehr nach § 477 BGB?",
+    options: ["Käufer beweist alles", "12 Monate nach Übergabe wird vermutet, dass der Mangel bei Übergabe vorlag", "Verkäufer hat keine Pflichten", "24 Monate Garantie"],
+    a: 1, e: "§ 477 BGB schützt den Verbraucher mit der 12-Monats-Vermutung." },
+
+  // === Block D: Eingangsrechnungen (Tag 7) (31-40) ===
+  { topic: "Tag 7", q: "Welche Norm regelt die Erfüllung?",
+    options: ["§ 362 BGB", "§ 286 BGB", "§ 437 BGB", "§ 14 UStG"],
+    a: 0, e: "§ 362 BGB: Schuldverhältnis erlischt mit Bewirkung der Leistung." },
+  { topic: "Tag 7", q: "Was regelt § 932 BGB?",
+    options: ["Verzug", "Gutgläubigen Eigentumserwerb vom Nichtberechtigten", "AGB", "Steuerrecht"],
+    a: 1, e: "§ 932 BGB: gutgläubiger Erwerb beweglicher Sachen." },
+  { topic: "Tag 7", q: "Wann ist gutgläubiger Erwerb ausgeschlossen?",
+    options: ["Immer", "Bei abhandengekommenen Sachen (§ 935 BGB)", "Bei Kaufleuten", "Bei Bargeld"],
+    a: 1, e: "§ 935 BGB: kein gutgläubiger Erwerb bei Diebstahl/Verlust — Ausnahme öffentliche Versteigerung." },
+  { topic: "Tag 7", q: "Welche Norm regelt den Eigentumsvorbehalt?",
+    options: ["§ 449 BGB", "§ 286 BGB", "§ 437 BGB", "§ 14 UStG"],
+    a: 0, e: "§ 449 BGB regelt den Eigentumsvorbehalt." },
+  { topic: "Tag 7", q: "Was kennzeichnet den verlängerten Eigentumsvorbehalt?",
+    options: ["Eigentum geht nie über", "Käufer darf weiterverkaufen — Forderungen werden im Voraus abgetreten", "Käufer darf nicht weiterverkaufen", "Vorbehalt nur 1 Jahr"],
+    a: 1, e: "Verlängerter EV: Wiederverkaufsbefugnis + Vorausabtretung der Forderungen." },
+  { topic: "Tag 7", q: "Welche Norm regelt den Versendungskauf B2B?",
+    options: ["§ 446 BGB", "§ 447 BGB", "§ 475 BGB", "§ 433 BGB"],
+    a: 1, e: "§ 447 BGB: Gefahrübergang mit Übergabe an Spediteur." },
+  { topic: "Tag 7", q: "Welche Norm regelt die Pflichtangaben einer Rechnung?",
+    options: ["§ 14 UStG", "§ 433 BGB", "§ 449 BGB", "§ 286 BGB"],
+    a: 0, e: "§ 14 UStG nennt die Pflichtangaben für Rechnungen." },
+  { topic: "Tag 7", q: "Welche Pflichtangabe ist KEINE Pflicht?",
+    options: ["Steuernummer", "Liefer-/Leistungsdatum", "Telefonnummer des Lieferanten", "Rechnungsnummer"],
+    a: 2, e: "Telefonnummer ist keine Pflichtangabe nach § 14 UStG." },
+  { topic: "Tag 7", q: "Was ist der Drei-Punkt-Vergleich?",
+    options: ["Drei Lieferanten", "Bestellung — Wareneingang/Lieferschein — Rechnung müssen übereinstimmen", "Drei Branchen", "Drei Kunden"],
+    a: 1, e: "Klassischer Abgleich: Bestellung — Lieferung — Rechnung." },
+  { topic: "Tag 7", q: "Was passiert bei formellem Mangel der Rechnung?",
+    options: ["Trotzdem zahlen", "Vorsteuerabzug gefährdet — Rechnung zur Korrektur zurück", "Wegwerfen", "Selbst korrigieren"],
+    a: 1, e: "Korrigierte Rechnung anfordern — sonst kein Vorsteuerabzug." },
+
+  // === Block E: Bezahlung (Tag 8) (41-50) ===
+  { topic: "Tag 8", q: "Welche drei Hauptfunktionen hat Geld?",
+    options: ["Tauschmittel, Wertaufbewahrung, Recheneinheit", "Kaufen, Sparen, Verkaufen", "Münzen, Scheine, Karten", "Drei Wünsche"],
+    a: 0, e: "Klassische Geldfunktionen." },
+  { topic: "Tag 8", q: "Was ist Buchgeld?",
+    options: ["Münzen", "Guthaben auf Bankkonten", "Bücher", "Aktien"],
+    a: 1, e: "Buchgeld = Kontoguthaben, per Überweisung/Lastschrift/Karte verfügbar." },
+  { topic: "Tag 8", q: "Wofür steht SEPA?",
+    options: ["Single Euro Payments Area", "Sofortige Europäische Postanweisung", "Standard für Bankleitzahlen", "Sicherer Europäischer Postauftrag"],
+    a: 0, e: "Single Euro Payments Area." },
+  { topic: "Tag 8", q: "Wie viele Stellen hat eine deutsche IBAN?",
+    options: ["18", "20", "22", "26"],
+    a: 2, e: "DE-IBAN: 22 Stellen." },
+  { topic: "Tag 8", q: "Was kennzeichnet die SEPA-Basis-Lastschrift?",
+    options: ["B2B-Verfahren", "B2C — 8 Wochen Erstattungsrecht", "Kein Mandat nötig", "Bareinzahlung"],
+    a: 1, e: "SEPA-Basis: 8 Wochen Erstattung ohne Begründung." },
+  { topic: "Tag 8", q: "Was ist die Debitkarte (girocard)?",
+    options: ["Karte mit Kreditrahmen", "Karte mit sofortiger Belastung des Kontos", "Bargeld", "Geschenkkarte"],
+    a: 1, e: "Debitkarte: sofortige Kontobelastung — Deckung erforderlich." },
+  { topic: "Tag 8", q: "Was ist eine TAN?",
+    options: ["Eine Kontonummer", "Einmal gültiger Sicherheitscode für Banking-Transaktionen", "Eine Steuer", "Ein Bankkürzel"],
+    a: 1, e: "TAN = Transaktionsnummer; PSD2-Sicherheitsmerkmal." },
+  { topic: "Tag 8", q: "Skontosatz 2 %, Skontofrist 14 Tage, Zahlungsziel 30 Tage. Effektivverzinsung?",
+    options: ["20 %", "30 %", "45 %", "60 %"],
+    a: 2, e: "2 × 360 / (30 − 14) = 720 / 16 = 45 % p.a." },
+  { topic: "Tag 8", q: "Lohnt sich Skonto bei Bankkredit zu 9 % und Skonto-Effektivzins 45 %?",
+    options: ["Nein", "Ja, deutlich — 36 Prozentpunkte Vorteil", "Egal", "Nur bei Verbrauchern"],
+    a: 1, e: "Skonto fast immer ziehen, wenn Effektivzins über Bankzinsen liegt." },
+  { topic: "Tag 8", q: "Was bedeutet '2/10 — netto 30'?",
+    options: ["2 Tage Skonto", "2 % Skonto in 10 Tagen, sonst voller Betrag in 30 Tagen", "10 % Skonto", "30 Tage Skonto"],
+    a: 1, e: "US-Notation für klassische Skonto-Konditionen." },
+
+  // === Block F: Querverbindungen + Praxis (51-60) ===
+  { topic: "Querverbindung", q: "Sie erhalten am 18.05.2026 eine mangelhafte Lieferung von 10 Bürostühlen (B2B). Was tun Sie ZUERST?",
+    options: ["Sofort zurücktreten", "§ 377 HGB: unverzüglich Mängelrüge schreiben + Nacherfüllung verlangen", "Klagen", "Bezahlen"],
+    a: 1, e: "Erst Rüge nach § 377 HGB, dann Nacherfüllung verlangen — Vorrang vor Rücktritt!" },
+  { topic: "Querverbindung", q: "Eine Bestellung über 100 Stühle wird nicht zum kalendermäßig vereinbarten Termin geliefert. Welche Schritte?",
+    options: ["Nichts", "Verzug nach § 286 (Mahnung entbehrlich), Verzugszinsen, ggf. Frist setzen + Rücktritt § 323", "Sofort Anwalt", "Bestellung stornieren"],
+    a: 1, e: "Lieferungsverzug ohne Mahnung — Rechtsfolgen aus § 286 BGB anwenden." },
+  { topic: "Querverbindung", q: "Was ist die typische IHK-Klausurfolge: Wareneingang → ... ?",
+    options: ["Mängelrüge → Käuferrechte → Rechnungsprüfung → Zahlung", "Reset", "Telefon", "Lager"],
+    a: 0, e: "Logische Kette: Wareneingang prüfen → ggf. rügen → Käuferrechte → Rechnung prüfen → bezahlen." },
+  { topic: "Praxis", q: "Welche Sachbearbeiter-Tätigkeit gehört zum Büromanagement?",
+    options: ["Geldwäsche", "Rechnungsprüfung, SEPA-Überweisungen, Mahnungen, Lagerstatistik", "Bargeldherstellung", "Politik"],
+    a: 1, e: "Klassische Bürotätigkeiten der Beschaffung/Buchhaltung." },
+  { topic: "Praxis", q: "Welche Aufbewahrungsfrist gilt für Rechnungen (§ 147 AO)?",
+    options: ["1 Jahr", "5 Jahre", "10 Jahre", "20 Jahre"],
+    a: 2, e: "10 Jahre Aufbewahrungsfrist nach § 147 AO." },
+  { topic: "Praxis", q: "Welcher reguläre USt-Satz gilt in Deutschland?",
+    options: ["7 %", "12 %", "19 %", "25 %"],
+    a: 2, e: "Regulär: 19 %; ermäßigt 7 %." },
+  { topic: "Praxis", q: "Welche Zahlungsmethode minimiert das Ausfallrisiko des Händlers im E-Commerce?",
+    options: ["Rechnung", "Vorkasse", "Kauf auf Rate", "Nachnahme"],
+    a: 1, e: "Vorkasse = Geld zuerst, dann Versand — minimales Risiko für Händler." },
+  { topic: "Praxis", q: "Welche Norm regelt Verzugszinsen?",
+    options: ["§ 14 UStG", "§ 288 BGB", "§ 449 BGB", "§ 932 BGB"],
+    a: 1, e: "§ 288 BGB regelt die Höhe der Verzugszinsen." },
+  { topic: "Querverbindung", q: "Wenn Sie Skonto ziehen, hat das Auswirkungen auf welche andere Berechnung?",
+    options: ["Verzugszinsen", "Bezugskalkulation — der Skonto reduziert den Bezugspreis", "Lagerkennzahlen", "USt"],
+    a: 1, e: "Bezugskalkulation: Skonto wird vom Zieleinkaufspreis abgezogen → Bareinkaufspreis → Bezugspreis." },
+  { topic: "Praxis", q: "Was ist Ihr persönlicher Lernschritt nach Tag 9?",
+    options: ["Aufhören zu lernen", "Schwachstellen identifizieren, gezielt wiederholen, weitere Quizzes machen, Karteikarten für Top-10-Formeln", "Nur Fernsehen", "Vergessen"],
+    a: 1, e: "Reflexion + gezielte Wiederholung + aktives Üben = solide IHK-Vorbereitung." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const sEl = document.getElementById('summary');
+  sEl.style.display = 'block';
+  sEl.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  sEl.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

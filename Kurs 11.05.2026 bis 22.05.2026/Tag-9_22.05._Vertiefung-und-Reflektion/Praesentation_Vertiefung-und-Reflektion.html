@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 9 — Vertiefung und Reflektion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 4rem 6rem; flex-direction: column; justify-content: center; background: white; animation: fadeIn 0.35s ease; overflow-y: auto; }
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.2rem; color: var(--bfw-primary-dark); margin-bottom: 1.2rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.2rem; line-height: 1.55; margin-bottom: 0.7rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.15rem; line-height: 1.55; margin-bottom: 0.35rem; }
+.subtitle { font-size: 1.3rem; color: var(--bfw-ink-soft); margin-bottom: 1.5rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.05rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+.merksatz { background: var(--bfw-bg-teal); border-left: 6px solid var(--bfw-primary); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.1rem; }
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+.formula { background: var(--bfw-bg-amber); border-left: 6px solid var(--bfw-accent); border-radius: 8px; padding: 1rem 1.4rem; margin: 1rem 0; font-size: 1.2rem; text-align: center; font-family: 'Source Code Pro', monospace; }
+.paragraph-box { background: var(--bfw-bg-rose); border-left: 6px solid var(--bfw-warn); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.05rem; }
+.paragraph-box strong { color: var(--bfw-warn); }
+table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 1.05rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.95rem; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--bfw-border); }
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button { border: none; background: var(--bfw-primary); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.12); transition: all 0.15s; }
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.7rem; }
+.numlist li::before { content: counter(numitem); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--bfw-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+@media print { .slide { display: flex; page-break-after: always; } .nav, .slide-num { display: none; } html, body { height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<section class="slide active cover">
+  <span class="cover-tag">Tag 9 · 22.05.2026</span>
+  <h1>Vertiefung und Reflektion</h1>
+  <p class="subtitle">Wiederholung aller 8 Tage · IHK-Mustertest · Lerntransfer</p>
+  <div class="cover-meta">
+    <span><strong>Modul</strong>Beschaffung im Büromanagement</span>
+    <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+    <span><strong>Format</strong>Wiederholung + Reflexion</span>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Was uns heute erwartet</h2>
+  <ul class="checklist">
+    <li>Roundup aller <strong>8 Tage</strong> kompakt</li>
+    <li>Querverbindungen erkennen — kein Thema steht für sich</li>
+    <li>Top-10-Formeln und Paragraphen wiederholen</li>
+    <li>IHK-Mustertest (60 Punkte themenübergreifend)</li>
+    <li>Quiz mit 60 Mix-Fragen</li>
+    <li>Persönlicher Lernplan für die IHK-Prüfungsvorbereitung</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Die 9-stufige Beschaffungskette</h2>
+  <ol class="numlist">
+    <li>Bedarfsermittlung — Tag 1</li>
+    <li>Bezugsquelle, Anfrage, Angebot — Tag 2</li>
+    <li>Bestellung &amp; Vertragsschluss — Tag 3</li>
+    <li>Ausführen der Bestellung — Tag 4</li>
+    <li>Wareneingang &amp; Lager — Tag 5</li>
+    <li>Vertragsstörungen — Tag 6</li>
+    <li>Eingangsrechnung &amp; Prüfung — Tag 7</li>
+    <li>Bezahlung — Tag 8</li>
+    <li><strong>Reflexion &amp; Vertiefung — heute</strong></li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Tag 1-2 — Beschaffung &amp; Kalkulation</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">Bezugskalkulation</span>
+    Listenpreis − Liefererrabatt = Zieleinkaufspreis − Liefererskonto = Bareinkaufspreis + Bezugskosten = <strong>Bezugspreis</strong>
+  </div>
+  <ul>
+    <li>6 W der Bestellung (Was, Wer, Wann, Wo, Wie viel, Welche Qualität)</li>
+    <li>ABC-Analyse: Konzentration auf wenige A-Güter</li>
+    <li>Bestimmte Anfrage = konkrete Mengen-/Qualitätsangaben</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Tag 3-4 — Vertrag &amp; Lieferung</h2>
+  <ul>
+    <li><strong>Vertragsschluss:</strong> Antrag (§ 145 BGB) + Annahme (§ 147 BGB)</li>
+    <li><strong>Essentialia negotii:</strong> Gegenstand, Preis, Parteien</li>
+    <li><strong>AGB §§ 305 ff.:</strong> Einbeziehung, Inhaltskontrolle § 307</li>
+    <li><strong>Verbraucher</strong> § 13 vs. <strong>Unternehmer</strong> § 14</li>
+    <li><strong>Lieferschein, Just-in-Time, Lieferantenmanagement</strong></li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Tag 5 — Wareneingang &amp; Lager</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">Wareneingang in 4 Schritten</span>
+    Annahme → äußere Kontrolle → innere Kontrolle → Erfassung
+  </div>
+  <div class="paragraph-box"><strong>§ 377 HGB:</strong> Beim Handelskauf unverzüglich rügen — sonst Verlust aller Mängelrechte!</div>
+  <h3>Lagerkennzahlen</h3>
+  <ul>
+    <li>Ø Lagerbestand = (AB + EB) / 2</li>
+    <li>LUH = Jahresverbrauch / Ø Lagerbestand</li>
+    <li>Ø Lagerdauer = 360 / LUH</li>
+    <li>Lagerzinsen = Ø Lagerwert × Lagerzinssatz</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Tag 6 — Kaufvertragsstörungen</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Schuldnerverzug § 286 BGB</div>
+      <p>Fälligkeit + Mahnung + Vertretenmüssen → Verzugszinsen, Rücktritt</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Annahmeverzug §§ 293 ff.</div>
+      <p>Käufer nimmt nicht an → Haftungsmilderung, Mehraufwendungen</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Schlechtleistung § 437</div>
+      <p>Nacherfüllung → Rücktritt → Minderung → Schadensersatz</p>
+    </div>
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;">Verzugszinsen B2B: Basiszins + 9 %-Punkte. Minderung: Kaufpreis × Wert mangelhaft / Wert mangelfrei.</p>
+</section>
+
+<section class="slide">
+  <h2>Tag 7 — Eingangsrechnungen</h2>
+  <ul>
+    <li><strong>Erfüllung</strong> § 362 BGB; <strong>gutgläubiger Erwerb</strong> § 932 BGB</li>
+    <li><strong>Eigentumsvorbehalt</strong> § 449 BGB: einfach / erweitert / verlängert / weitergeleitet</li>
+    <li><strong>Gefahrübergang:</strong> § 446 (Übergabe), § 447 (Spediteur B2B), § 475 II (B2C)</li>
+    <li><strong>Pflichtangaben</strong> § 14 UStG → Vorsteuerabzug</li>
+    <li><strong>Rechnungsprüfung:</strong> formell / sachlich / rechnerisch + Drei-Punkt-Vergleich</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Tag 8 — Bezahlung &amp; Skonto</h2>
+  <ul>
+    <li>SEPA: Überweisung, Lastschrift (Basis B2C / Firmen B2B), Dauerauftrag</li>
+    <li>Karten: Debit / Kredit / Prepaid; TAN-Verfahren PSD2</li>
+    <li>E-Commerce: Vorkasse, Rechnung, PayPal, Klarna, Sofortüberweisung</li>
+  </ul>
+  <div class="formula">Effektivverzinsung Skonto = Skontosatz × 360 / (Zahlungsfrist − Skontofrist)</div>
+  <p class="muted">Beispiel „2/14 — netto 30": 2 × 360 / 16 = 45 % p.a. → fast immer ziehen!</p>
+</section>
+
+<section class="slide">
+  <h2>Querverbindungen — so denkt die IHK</h2>
+  <div class="merksatz">
+    <span class="merksatz-label">Beispielkette</span>
+    Wareneingang (Tag 5) + § 377 HGB Mängelrüge → Käuferrechte § 437 BGB (Tag 6) → Verzugsfolgen § 286 (Tag 6)
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">Beispielkette</span>
+    Bestellung (Tag 3) → Lieferung (Tag 4) → Eigentumsvorbehalt (Tag 7) sichert Lieferantenforderung
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">Beispielkette</span>
+    Rechnung (Tag 7) → § 14 UStG → Vorsteuerabzug → Skonto-Entscheidung (Tag 8)
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Top-10 Klausurklassiker (auswendig!)</h2>
+  <ol class="numlist">
+    <li>Bezugskalkulation: Listenpreis − Rabatt − Skonto + Bezugskosten</li>
+    <li>§ 377 HGB Rügepflicht beim Handelskauf</li>
+    <li>LUH = Jahresverbrauch / Ø Lagerbestand</li>
+    <li>Ø Lagerdauer = 360 / LUH</li>
+    <li>§ 286 BGB Verzug: Fälligkeit + Mahnung + Vertretenmüssen</li>
+    <li>Verzugszinsen B2B + 9 %-Punkte; B2C + 5</li>
+    <li>§ 437 BGB Käuferrechte (Nacherfüllung Vorrang)</li>
+    <li>§ 447 BGB Versendungskauf: Gefahr ab Spediteur (B2B)</li>
+    <li>§ 14 UStG: 8 Pflichtangaben</li>
+    <li>Skonto-Effektivzins-Formel</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Gesamtfall „Bürofix AG"</h2>
+  <div class="card teal">
+    <div class="card-title">Sachverhalt</div>
+    <p>02.05.2026: Bestellung 100 Bürostühle bei Office-Möbel KG. Listenpreis 200 €, Rabatt 10 %, Skonto 2 %, Bezugskosten 600 € gesamt. Liefertermin 15.05. — bis 25.05. nichts geliefert.</p>
+  </div>
+  <h3>Aufgabenstellung</h3>
+  <ul>
+    <li>Bezugspreis pro Stuhl berechnen</li>
+    <li>Rechtslage zur verspäteten Lieferung beurteilen</li>
+    <li>Nächste Schritte aus Sicht des Einkaufs vorschlagen</li>
+  </ul>
+  <p class="muted">Lösung: Aufgabe 1 im Aufgabenheft Tag 9.</p>
+</section>
+
+<section class="slide">
+  <h2>Lernreflexion — wo stehen Sie?</h2>
+  <h3>Selbsteinschätzung pro Tag</h3>
+  <table>
+    <thead><tr><th>Thema</th><th>sicher</th><th>noch unsicher</th></tr></thead>
+    <tbody>
+      <tr><td>Beschaffungsprozess + 6W</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Bezugskalkulation</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Vertragsschluss + AGB</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Wareneingang + § 377 HGB</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Lagerkennzahlen</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Verzug + Verzugszinsen</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Käuferrechte § 437 BGB</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Eigentumsvorbehalt + Gefahrübergang</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Pflichtangaben Rechnung</td><td>☐</td><td>☐</td></tr>
+      <tr><td>Skonto + Effektivverzinsung</td><td>☐</td><td>☐</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Persönlicher Lernplan</h2>
+  <ol>
+    <li>Identifizieren Sie die <strong>3 Themen</strong>, die noch unsicher sind.</li>
+    <li>Für jedes Thema: <strong>3 Wiederholungsschritte</strong> (Handout durchlesen, 60 Quizfragen, Aufgabenheft mit Lösungen).</li>
+    <li>Karteikarten für die <strong>Top-10-Formeln/Paragraphen</strong> — täglich 5 Minuten.</li>
+    <li>Pro Woche einen <strong>Mustertest</strong> (z.B. Aufgabenheft eines anderen Tages).</li>
+  </ol>
+  <div class="merksatz">Verteilte Wiederholung schlägt Hauruck-Lernen am Vortag.</div>
+</section>
+
+<section class="slide">
+  <h2>Diskussionsfragen</h2>
+  <ol>
+    <li>Welches Thema war für Sie am schwierigsten — und warum?</li>
+    <li>Welche Querverbindung haben Sie heute neu erkannt?</li>
+    <li>Wie würden Sie die wichtigsten 3 Inhalte einem Berufseinsteiger erklären?</li>
+    <li>Welche Praxisbeispiele aus Ihrem Berufsumfeld passen zu welchem Tag?</li>
+  </ol>
+</section>
+
+<section class="slide cover">
+  <h2 style="font-size: 2.6rem;">Vielen Dank für 9 Tage!</h2>
+  <p class="subtitle">Sie haben den Modulblock „Beschaffung im Büromanagement" abgeschlossen.</p>
+  <div class="merksatz" style="font-size: 1.2rem;">Die IHK-Vorbereitung läuft weiter — Quiz, Aufgabenhefte und UEBERSICHT.md sind Ihre täglichen Begleiter bis zur Prüfung.</div>
+  <p class="muted" style="margin-top: 2rem;">Lernplattform — Code „BFW".</p>
+  <div style="position: absolute; bottom: 2rem; right: 4rem; color: var(--bfw-ink-soft); font-size: 0.95rem;">© Can Siebert · 2026 · Tag 9</div>
+</section>
+
+</div>
+
+<div class="nav">
+  <span class="nav-counter"><span id="cur">1</span> / <span id="tot">17</span></span>
+  <button onclick="go(-1)">‹</button>
+  <button onclick="go(1)">›</button>
+</div>
+<div class="slide-num">© Can Siebert · 2026</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let idx = 0;
+document.getElementById('tot').textContent = slides.length;
+function go(d) {
+  idx = Math.max(0, Math.min(slides.length - 1, idx + d));
+  slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+  document.getElementById('cur').textContent = idx + 1;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(1);
+  if (e.key === 'ArrowLeft') go(-1);
+});
+</script>
+
+</body>
+</html>
