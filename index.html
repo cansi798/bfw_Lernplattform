@@ -258,6 +258,8 @@ body {
 .tag-link.html .link-icon { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); }
 .tag-link.pdf .link-icon { background: var(--bfw-bg-rose); color: var(--bfw-warn); }
 .tag-link.md .link-icon { background: var(--bfw-bg-amber); color: var(--bfw-accent); }
+.tag-link.video .link-icon { background: #EDE9FE; color: #6D28D9; }
+.tag-link.audio .link-icon { background: #DCFCE7; color: #15803D; }
 .tag-link.disabled {
   opacity: 0.5; cursor: not-allowed;
   pointer-events: none;
@@ -378,7 +380,8 @@ const STORAGE_KEY = 'bfw_lernplattform_unlocked';
 const TAGE = [
   { num: 1, datum: '11.05.2026', thema: 'Beschaffungsprozess',
     folder: 'Tag-1_11.05._Beschaffungsprozess',
-    slug: 'Beschaffungsprozess', verfügbar: true },
+    slug: 'Beschaffungsprozess', verfügbar: true,
+    medien: { video: 'Tag1_Video_bfw.mp4', podcast: 'Tag1_Podcast_bfw.m4a' } },
   { num: 2, datum: '12.05.2026', thema: 'Bezugsquellen, Anfragen, Angebotsvergleich',
     folder: 'Tag-2_12.05._Bezugsquellen-Anfragen-Angebotsvergleich',
     slug: 'Bezugsquellen-Anfragen-Angebotsvergleich', verfügbar: true },
@@ -447,6 +450,17 @@ function renderTage() {
           <div class="coming-soon">In Vorbereitung</div>
         </div>`;
     }
+    const medienLinks = t.medien ? `
+          <a class="tag-link video" href="${base}/${encodeURIComponent(t.medien.video)}" target="_blank" rel="noopener">
+            <span class="link-icon">🎬</span>
+            <span class="tag-link-label">Video-Aufzeichnung</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+          <a class="tag-link audio" href="${base}/${encodeURIComponent(t.medien.podcast)}" target="_blank" rel="noopener">
+            <span class="link-icon">🎧</span>
+            <span class="tag-link-label">Podcast (Audio)</span>
+            <span class="tag-link-arrow">→</span>
+          </a>` : '';
     return `
       <div class="tag-card">
         <div class="tag-stripe"></div>
@@ -473,7 +487,7 @@ function renderTage() {
             <span class="link-icon">PDF</span>
             <span class="tag-link-label">Aufgabenheft mit Lösungen</span>
             <span class="tag-link-arrow">↓</span>
-          </a>
+          </a>${medienLinks}
         </div>
       </div>`;
   }).join('');
