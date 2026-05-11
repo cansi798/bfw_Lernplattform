@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 6 — Kaufvertragsstörungen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide { position: absolute; inset: 0; display: none; padding: 4rem 6rem; flex-direction: column; justify-content: center; background: white; animation: fadeIn 0.35s ease; overflow-y: auto; }
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.2rem; color: var(--bfw-primary-dark); margin-bottom: 1.2rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.2rem; line-height: 1.55; margin-bottom: 0.7rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.15rem; line-height: 1.55; margin-bottom: 0.35rem; }
+.subtitle { font-size: 1.3rem; color: var(--bfw-ink-soft); margin-bottom: 1.5rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 1.5rem; }
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.05rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.2rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.1rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+.merksatz { background: var(--bfw-bg-teal); border-left: 6px solid var(--bfw-primary); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.1rem; }
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 0.95rem; }
+.formula { background: var(--bfw-bg-amber); border-left: 6px solid var(--bfw-accent); border-radius: 8px; padding: 1rem 1.4rem; margin: 1rem 0; font-size: 1.2rem; text-align: center; font-family: 'Source Code Pro', monospace; }
+.paragraph-box { background: var(--bfw-bg-rose); border-left: 6px solid var(--bfw-warn); border-radius: 8px; padding: 0.9rem 1.3rem; margin: 1rem 0; font-size: 1.05rem; }
+.paragraph-box strong { color: var(--bfw-warn); }
+table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 1.05rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.6rem 0.9rem; font-weight: 700; font-size: 0.95rem; }
+td { padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--bfw-border); }
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button { border: none; background: var(--bfw-primary); color: white; width: 44px; height: 44px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; box-shadow: 0 2px 8px rgba(15,23,42,0.12); transition: all 0.15s; }
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.7rem; }
+.numlist li::before { content: counter(numitem); position: absolute; left: 0; top: 0; width: 2rem; height: 2rem; background: var(--bfw-primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; }
+@media print { .slide { display: flex; page-break-after: always; } .nav, .slide-num { display: none; } html, body { height: auto; overflow: visible; } }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<section class="slide active cover">
+  <span class="cover-tag">Tag 6 · 19.05.2026</span>
+  <h1>Kaufvertragsstörungen</h1>
+  <p class="subtitle">Lieferungsverzug · Annahmeverzug · Schlechtleistung · Käuferrechte</p>
+  <div class="cover-meta">
+    <span><strong>Modul</strong>Beschaffung im Büromanagement</span>
+    <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+    <span><strong>Quelle</strong>Lehrwerk Kap. 4.14</span>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Was Sie heute lernen</h2>
+  <ul class="checklist">
+    <li>die <strong>drei Hauptarten</strong> von Leistungsstörungen unterscheiden</li>
+    <li>den <strong>Lieferungsverzug nach § 286 BGB</strong> prüfen (Fälligkeit, Mahnung, Vertretenmüssen)</li>
+    <li><strong>Verzugszinsen</strong> rechnen — B2B + 9 %-Punkte, B2C + 5 %-Punkte</li>
+    <li>den <strong>Annahmeverzug nach §§ 293 ff. BGB</strong> erklären</li>
+    <li>die <strong>vier Käuferrechte</strong> nach § 437 BGB benennen und anwenden</li>
+    <li>Besonderheiten zwischen <strong>Handelskauf, Verbrauchsgüterkauf, Stück- und Gattungskauf</strong></li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Wo wir bisher stehen</h2>
+  <p>Die Lieferung ist da — heute geht es darum, was bei Störungen passiert.</p>
+  <ol class="numlist">
+    <li>Bedarfsermittlung — Tag 1</li>
+    <li>Bezugsquelle, Anfrage, Angebotsvergleich — Tag 2</li>
+    <li>Bestellung &amp; Vertrag — Tag 3</li>
+    <li>Bestellung ausführen — Tag 4</li>
+    <li>Wareneingang &amp; Lager — Tag 5</li>
+    <li><strong>Wenn etwas schiefgeht — heute Tag 6</strong></li>
+    <li>Rechnung &amp; Zahlung — Tag 7+8</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Drei Familien der Leistungsstörungen</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Schuldnerverzug</div>
+      <p>Lieferung kommt zu spät — § 286 BGB.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Annahmeverzug</div>
+      <p>Käufer nimmt nicht an — §§ 293 ff. BGB.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Schlechtleistung</div>
+      <p>Ware ist mangelhaft — § 437 BGB.</p>
+    </div>
+  </div>
+  <div class="merksatz">
+    <span class="merksatz-label">Eselsbrücke „SAS"</span>
+    <strong>S</strong>chuldnerverzug — <strong>A</strong>nnahmeverzug — <strong>S</strong>chlechtleistung.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Lieferungsverzug — § 286 BGB</h2>
+  <h3>Drei Voraussetzungen</h3>
+  <ol class="numlist">
+    <li><strong>Fälligkeit</strong> der Leistung — der Termin ist erreicht.</li>
+    <li><strong>Mahnung</strong> — eindeutige Aufforderung zur Leistung.</li>
+    <li><strong>Vertretenmüssen</strong> — Verschulden (§ 276 BGB) — wird vermutet.</li>
+  </ol>
+</section>
+
+<section class="slide">
+  <h2>Wann ist die Mahnung entbehrlich?</h2>
+  <p>§ 286 Abs. 2 BGB nennt vier Fälle:</p>
+  <ul>
+    <li>kalendermäßig <strong>bestimmter</strong> Liefertermin („15.05.2026")</li>
+    <li>kalendermäßig <strong>berechenbarer</strong> Termin („14 Tage nach Bestellung")</li>
+    <li>ernsthafte und endgültige <strong>Leistungsverweigerung</strong></li>
+    <li>besondere Gründe</li>
+  </ul>
+  <div class="paragraph-box"><strong>Geldschulden:</strong> § 286 Abs. 3 BGB — spätestens 30 Tage nach Fälligkeit und Rechnungszugang automatisch in Verzug.</div>
+</section>
+
+<section class="slide">
+  <h2>Verzugszinsen — die Klausurformel</h2>
+  <div class="formula">Zinsen = Forderung × Zinssatz × Tage / 360</div>
+  <table>
+    <thead><tr><th>Fall</th><th>Zinssatz</th></tr></thead>
+    <tbody>
+      <tr><td>B2C — gegenüber Verbraucher</td><td>Basiszins + 5 %-Punkte</td></tr>
+      <tr><td>B2B — beidseitig Unternehmer</td><td>Basiszins + 9 %-Punkte</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="font-size: 0.95rem; margin-top: 0.7rem;">Basiszins: halbjährlich von der Deutschen Bundesbank festgelegt (z.B. 3,62 %).</p>
+</section>
+
+<section class="slide">
+  <h2>Beispielrechnung Verzugszinsen</h2>
+  <div class="card teal" style="font-size: 1.1rem;">
+    <div class="card-title">Sachverhalt</div>
+    <p>Rechnung 8.000 € netto, B2B, 30 Tage Verzug, Basiszins 3,62 %.</p>
+  </div>
+  <div class="formula">Zinssatz = 3,62 % + 9 % = 12,62 %<br>Zinsen = 8.000 × 0,1262 × 30 / 360 = <strong>84,13 €</strong></div>
+  <p class="muted">→ Mindestschaden — höhere Verzugsschäden bleiben einklagbar.</p>
+</section>
+
+<section class="slide">
+  <h2>Rechtsfolgen des Schuldnerverzugs</h2>
+  <ul>
+    <li><strong>Erfüllung</strong> bleibt bestehen — Lieferung muss nachgeholt werden</li>
+    <li><strong>Verzugszinsen</strong> (§ 288 BGB)</li>
+    <li><strong>Schadensersatz wegen Verzögerung</strong> (§§ 280 I, 286 BGB)</li>
+    <li><strong>Rücktritt</strong> nach Fristsetzung (§ 323 BGB)</li>
+    <li><strong>Schadensersatz statt der Leistung</strong> (§ 281 BGB) nach Fristablauf</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Annahmeverzug — §§ 293 ff. BGB</h2>
+  <h3>Voraussetzungen</h3>
+  <ul>
+    <li>Schuldner bietet die Leistung <strong>ordnungsgemäß</strong> an (§ 294: tatsächlich; § 295: wörtlich, wenn Mitwirkung)</li>
+    <li>Gläubiger nimmt <strong>nicht an</strong> oder unterlässt eine geschuldete Mitwirkung</li>
+  </ul>
+  <div class="merksatz">
+    <span class="merksatz-label">Praxisbeispiel</span>
+    Ein Lieferant bringt 200 Aktenordner pünktlich — die Käuferin verweigert die Annahme ohne Begründung. → Annahmeverzug.
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Folgen des Annahmeverzugs</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Haftungsmilderung (§ 300)</div>
+      <p>Schuldner haftet nur noch für Vorsatz und grobe Fahrlässigkeit.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Mehraufwendungen (§ 304)</div>
+      <p>Lager-, Transport-, Versuchskosten sind ersatzfähig.</p>
+    </div>
+    <div class="card rose">
+      <div class="card-title">Gefahrübergang</div>
+      <p>Preisgefahr geht auf den Gläubiger über.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Schlechtleistung — Sachmangel § 434 BGB</h2>
+  <p>Ein <strong>Sachmangel</strong> liegt vor, wenn die Sache bei Gefahrübergang:</p>
+  <ul>
+    <li>nicht die <strong>vereinbarte Beschaffenheit</strong> hat,</li>
+    <li>sich nicht für die <strong>vertraglich vorausgesetzte</strong> Verwendung eignet,</li>
+    <li>nicht die <strong>übliche Beschaffenheit</strong> aufweist (objektive Erwartung).</li>
+  </ul>
+  <div class="paragraph-box"><strong>§ 434 III BGB:</strong> Auch <em>Falschlieferung</em> (aliud) und <em>Mengenabweichung</em> (Minus) sind Sachmängel.</div>
+</section>
+
+<section class="slide">
+  <h2>Käuferrechte — § 437 BGB</h2>
+  <ol class="numlist">
+    <li><strong>Nacherfüllung</strong> (§ 439) — Vorrang!</li>
+    <li><strong>Rücktritt</strong> (§§ 437 Nr. 2, 323) — nach Fristablauf</li>
+    <li><strong>Minderung</strong> (§ 441) — auch bei unerheblichen Mängeln</li>
+    <li><strong>Schadensersatz</strong> (§§ 437 Nr. 3, 280, 281)</li>
+  </ol>
+  <div class="merksatz">
+    <span class="merksatz-label">Vorrang der Nacherfüllung</span>
+    Der Verkäufer bekommt zuerst die Chance zur Mängelbeseitigung — angemessene Frist (i.d.R. 14 Tage).
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Nacherfüllung — die zwei Wege (§ 439)</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Nachbesserung</div>
+      <p>Reparatur der mangelhaften Sache.</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Ersatzlieferung</div>
+      <p>Neue mangelfreie Sache liefern.</p>
+    </div>
+  </div>
+  <p class="muted" style="margin-top: 0.8rem;"><strong>Wahlrecht beim Käufer.</strong> Verkäufer kann verweigern, wenn nur unverhältnismäßig hohe Kosten möglich sind.</p>
+</section>
+
+<section class="slide">
+  <h2>Minderung — die Verhältnisformel</h2>
+  <div class="formula">Geminderter Preis = Kaufpreis × (Wert mangelhaft / Wert mangelfrei)</div>
+  <div class="card teal" style="margin-top: 1rem;">
+    <div class="card-title">Beispiel Drucker</div>
+    <p>Kaufpreis 600 €, Wert mangelfrei 600 €, mangelhaft 420 €.</p>
+    <p>Geminderter Preis = 600 × (420 / 600) = <strong>420 €</strong></p>
+    <p>Rückforderung: <strong>180 €</strong></p>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>Vor- und Nachteile: Rücktritt vs. Minderung</h2>
+  <table>
+    <thead><tr><th></th><th>Rücktritt</th><th>Minderung</th></tr></thead>
+    <tbody>
+      <tr><td>Ware</td><td>Geht zurück</td><td>Bleibt beim Käufer</td></tr>
+      <tr><td>Geld</td><td>Voller Betrag zurück</td><td>Teilbetrag zurück</td></tr>
+      <tr><td>Bei unerheblichen Mängeln</td><td>Ausgeschlossen</td><td>Möglich</td></tr>
+      <tr><td>Aufwand</td><td>Hoch (Rückabwicklung)</td><td>Gering</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Handelskauf vs. Verbrauchsgüterkauf</h2>
+  <table>
+    <thead><tr><th>Kriterium</th><th>Handelskauf (B2B)</th><th>Verbrauchsgüterkauf (B2C)</th></tr></thead>
+    <tbody>
+      <tr><td>Norm</td><td>§§ 373 ff. HGB</td><td>§§ 474 ff. BGB</td></tr>
+      <tr><td>Käufer</td><td>Kaufmann</td><td>Verbraucher (§ 13 BGB)</td></tr>
+      <tr><td>Besonderheit</td><td>Rügepflicht § 377 HGB</td><td>Beweislastumkehr § 477 BGB</td></tr>
+      <tr><td>Verjährung</td><td>2 Jahre, dispositiv</td><td>2 Jahre, kaum verkürzbar</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="slide">
+  <h2>Stückkauf vs. Gattungskauf</h2>
+  <div class="cards">
+    <div class="card teal">
+      <div class="card-title">Stückkauf</div>
+      <p>Konkrete, individuell bestimmte Sache.</p>
+      <p class="muted">Bsp.: gebrauchter Drucker, Seriennr. XYZ</p>
+    </div>
+    <div class="card amber">
+      <div class="card-title">Gattungskauf</div>
+      <p>Sache der Gattung nach (z.B. „50 Tonerkartuschen HP 26A").</p>
+      <p class="muted">Lieferant kann aus der Gattung beschaffen.</p>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <h2>IHK-Prüfungsbezug</h2>
+  <h3>Teil 1 — Informationstechnisches Büromanagement</h3>
+  <ul>
+    <li>Mängelanzeige am PC formulieren (textverarbeitete Aufgabe)</li>
+    <li>Verzugszinsen tabellenkalkulatorisch berechnen</li>
+  </ul>
+  <h3>Teil 2 — Wirtschafts- und Sozialkunde / Kundenbeziehungsprozesse</h3>
+  <ul>
+    <li>Kaufvertragsstörungen klassifizieren und beurteilen</li>
+    <li>Käuferrechte richtig zuordnen (Nacherfüllung vor Rücktritt!)</li>
+    <li>Berechnung der Minderung</li>
+  </ul>
+</section>
+
+<section class="slide">
+  <h2>Diskussionsfragen</h2>
+  <ol>
+    <li>Sie sind im Einkauf — wann ist es klüger zu mahnen, wann auf den Kalender zu vertrauen?</li>
+    <li>Ein Lieferant repariert dauerhaft, statt zu ersetzen. Wie lange ist das zumutbar?</li>
+    <li>Welche internen Abläufe in Ihrem Büro sichern eine schnelle Mängelanzeige nach § 377 HGB?</li>
+    <li>Ein Verbraucher reklamiert nach 9 Monaten — wer trägt die Beweislast und warum?</li>
+  </ol>
+</section>
+
+<section class="slide cover">
+  <h2 style="font-size: 2.6rem;">Vielen Dank!</h2>
+  <p class="subtitle">Im nächsten Tag (Tag 7): Eingangsrechnungen — Erfüllung, Eigentumsvorbehalt, Rechnungsprüfung.</p>
+  <p class="muted" style="margin-top: 2rem;">Quiz und Aufgabenheft auf der Lernplattform — Code „BFW".</p>
+  <div style="position: absolute; bottom: 2rem; right: 4rem; color: var(--bfw-ink-soft); font-size: 0.95rem;">© Can Siebert · 2026 · Tag 6</div>
+</section>
+
+</div>
+
+<div class="nav">
+  <span class="nav-counter"><span id="cur">1</span> / <span id="tot">21</span></span>
+  <button onclick="go(-1)">‹</button>
+  <button onclick="go(1)">›</button>
+</div>
+<div class="slide-num">© Can Siebert · 2026</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+let idx = 0;
+document.getElementById('tot').textContent = slides.length;
+function go(d) {
+  idx = Math.max(0, Math.min(slides.length - 1, idx + d));
+  slides.forEach((s, i) => s.classList.toggle('active', i === idx));
+  document.getElementById('cur').textContent = idx + 1;
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') go(1);
+  if (e.key === 'ArrowLeft') go(-1);
+});
+</script>
+
+</body>
+</html>

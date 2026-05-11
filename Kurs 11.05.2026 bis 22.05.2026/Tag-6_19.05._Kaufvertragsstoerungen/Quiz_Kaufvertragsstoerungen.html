@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 6 — Kaufvertragsstörungen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-danger:#EF4444; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5; --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem; }
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 6 · 19.05.2026 · 60 Fragen</span>
+  <h1>Quiz: Kaufvertragsstörungen</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation</strong> und dem <strong>Handout</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Überblick Leistungsstörungen (1-10) ===
+  { topic: "Überblick", q: "Was versteht man unter einer Leistungsstörung?",
+    options: ["Werbeunterbrechung", "Die geschuldete Leistung wird nicht, nicht rechtzeitig oder nicht ordnungsgemäß erbracht", "Ein Streit mit dem Kunden", "Lärm im Lager"],
+    a: 1, e: "Leistungsstörung = Pflichtverletzung im Schuldverhältnis (§ 280 BGB)." },
+  { topic: "Überblick", q: "Welche drei Hauptarten von Kaufvertragsstörungen gibt es?",
+    options: ["Lieferungsverzug, Annahmeverzug, Schlechtleistung", "Krieg, Streik, Wetter", "Insolvenz, Streit, Tod", "Mahnung, Klage, Vollstreckung"],
+    a: 0, e: "SAS: Schuldnerverzug (Lieferungsverzug), Annahmeverzug, Schlechtleistung." },
+  { topic: "Überblick", q: "Welche Störung liegt vor, wenn der Lieferant einen kalendermäßig vereinbarten Termin nicht einhält?",
+    options: ["Annahmeverzug", "Schuldnerverzug / Lieferungsverzug", "Schlechtleistung", "Höhere Gewalt"],
+    a: 1, e: "Verspätete Lieferung = Schuldnerverzug nach § 286 BGB." },
+  { topic: "Überblick", q: "Welche Störung liegt vor, wenn der Käufer die ordnungsgemäß angebotene Ware grundlos nicht annimmt?",
+    options: ["Schuldnerverzug", "Annahmeverzug / Gläubigerverzug", "Schlechtleistung", "Mängelrüge"],
+    a: 1, e: "Verweigerte Annahme = Gläubigerverzug nach §§ 293 ff. BGB." },
+  { topic: "Überblick", q: "Welche Störung liegt vor, wenn die gelieferten Aktenordner sichtbar beschädigt sind?",
+    options: ["Lieferungsverzug", "Annahmeverzug", "Schlechtleistung / Sachmangel", "Verbrauchsgüterkauf"],
+    a: 2, e: "Mangelhafte Ware = Schlechtleistung, Sachmangel nach § 434 BGB." },
+  { topic: "Überblick", q: "Wer ist beim Schuldnerverzug der Schuldner im Liefervorgang?",
+    options: ["Der Käufer", "Der Lieferant (Verkäufer)", "Die Bank", "Der Spediteur"],
+    a: 1, e: "Schuldner der Lieferpflicht ist der Lieferant; Schuldner der Zahlungspflicht ist der Käufer." },
+  { topic: "Überblick", q: "Wer ist beim Annahmeverzug der Gläubiger?",
+    options: ["Der Lieferant", "Der Käufer (Empfänger der Lieferung)", "Die Bank", "Das Finanzamt"],
+    a: 1, e: "Der Käufer ist Gläubiger der Lieferpflicht — verweigert er die Annahme, kommt er in Annahmeverzug." },
+  { topic: "Überblick", q: "Welche Norm regelt grundsätzlich die Pflichtverletzung im Schuldverhältnis?",
+    options: ["§ 14 UStG", "§ 280 BGB", "§ 433 BGB", "§ 1 GG"],
+    a: 1, e: "§ 280 BGB ist die zentrale Schadensersatznorm bei Pflichtverletzung." },
+  { topic: "Überblick", q: "Welcher Begriff fasst Lieferungsverzug und Zahlungsverzug zusammen?",
+    options: ["Schlechtleistung", "Schuldnerverzug", "Annahmeverzug", "Höhere Gewalt"],
+    a: 1, e: "Beide sind Spielarten des Schuldnerverzugs (§ 286 BGB)." },
+  { topic: "Überblick", q: "Welche Aussage ist richtig?",
+    options: ["Leistungsstörungen sind selten", "Leistungsstörungen sind ein zentrales Praxisthema im Büromanagement und in der IHK-Prüfung", "Leistungsstörungen kosten nichts", "Leistungsstörungen sind nicht regelbar"],
+    a: 1, e: "Klausurrelevanz: Leistungsstörungen sind in IHK Teil 1 und Teil 2 regelmäßig Thema." },
+
+  // === Block B: Lieferungsverzug § 286 BGB (11-20) ===
+  { topic: "Lieferungsverzug", q: "Welche drei Voraussetzungen hat der Schuldnerverzug nach § 286 BGB?",
+    options: ["Bestellung, Lieferung, Rechnung", "Fälligkeit, Mahnung, Vertretenmüssen", "Vertrag, Geld, Übergabe", "Kaufmann, Verbraucher, Drittland"],
+    a: 1, e: "Drei Voraussetzungen: Fälligkeit + Mahnung + Vertretenmüssen." },
+  { topic: "Lieferungsverzug", q: "Was bedeutet 'Fälligkeit' in § 286 BGB?",
+    options: ["Die Leistung ist erbracht", "Der Termin für die Leistung ist erreicht", "Der Vertrag ist unterschrieben", "Die Rechnung ist gestellt"],
+    a: 1, e: "Fälligkeit = der Zeitpunkt, ab dem die Leistung verlangt werden kann." },
+  { topic: "Lieferungsverzug", q: "Was ist eine Mahnung?",
+    options: ["Eine Bestellung", "Eine eindeutige Aufforderung des Gläubigers an den Schuldner zur Leistung", "Eine Rechnung", "Eine Annahme"],
+    a: 1, e: "Mahnung = klare Aufforderung zur Leistung — meist schriftlich (Beweisbarkeit)." },
+  { topic: "Lieferungsverzug", q: "Wann ist eine Mahnung entbehrlich?",
+    options: ["Nie", "Bei kalendermäßig bestimmtem oder berechenbarem Liefertermin (§ 286 II BGB)", "Bei Verbrauchergeschäften", "An Sonntagen"],
+    a: 1, e: "§ 286 II Nr. 1/2 BGB: bei kalendermäßiger Bestimmung keine Mahnung nötig." },
+  { topic: "Lieferungsverzug", q: "Bei Geldschulden: Wann tritt Verzug spätestens ein, auch ohne Mahnung?",
+    options: ["Sofort", "30 Tage nach Fälligkeit und Rechnungszugang (§ 286 III BGB)", "60 Tage", "90 Tage"],
+    a: 1, e: "§ 286 III BGB: 30-Tage-Regel für Geldschulden ohne Mahnung." },
+  { topic: "Lieferungsverzug", q: "Was bedeutet 'Vertretenmüssen' im Sinne von § 276 BGB?",
+    options: ["Anwesenheit", "Vorsatz oder Fahrlässigkeit des Schuldners", "Vertretung durch Anwalt", "Vertragsabschluss"],
+    a: 1, e: "Vertretenmüssen = Verschulden (Vorsatz oder Fahrlässigkeit)." },
+  { topic: "Lieferungsverzug", q: "Wird das Vertretenmüssen beim Verzug vermutet?",
+    options: ["Nein, Gläubiger muss es beweisen", "Ja, der Schuldner muss sich entlasten", "Nur bei B2C", "Nur bei Verbrauchern"],
+    a: 1, e: "Beweislastumkehr: Der Schuldner muss beweisen, dass er den Verzug nicht zu vertreten hat." },
+  { topic: "Lieferungsverzug", q: "Welcher Anspruch besteht NICHT als Folge des Schuldnerverzugs?",
+    options: ["Erfüllung", "Verzugszinsen", "Sofortiger Rücktritt ohne Fristsetzung", "Schadensersatz wegen Verzögerung"],
+    a: 2, e: "Rücktritt erfordert grundsätzlich eine angemessene Nachfrist (§ 323 BGB)." },
+  { topic: "Lieferungsverzug", q: "Welche Norm regelt den Rücktritt nach Fristsetzung wegen Verzugs?",
+    options: ["§ 286 BGB", "§ 323 BGB", "§ 437 BGB", "§ 459 BGB"],
+    a: 1, e: "§ 323 BGB: Rücktritt nach erfolglosem Ablauf einer angemessenen Nachfrist." },
+  { topic: "Lieferungsverzug", q: "Welche Aussage zum Lieferungsverzug ist richtig?",
+    options: ["Der Anspruch auf Erfüllung erlischt", "Der Anspruch auf Erfüllung bleibt zusätzlich zum Schadensersatzanspruch bestehen", "Der Schuldner muss sofort zahlen", "Es gibt keine Folgen"],
+    a: 1, e: "Erfüllungsanspruch bleibt bestehen — daneben Schadensersatz wegen Verzögerung." },
+
+  // === Block C: Verzugszinsen / Berechnung (21-30) ===
+  { topic: "Verzugszinsen", q: "Welcher Zinssatz gilt bei Verzug zwischen Unternehmern (B2B)?",
+    options: ["Basiszinssatz + 5 %-Punkte", "Basiszinssatz + 9 %-Punkte", "5 % fix", "9 % fix"],
+    a: 1, e: "B2B: Basiszinssatz + 9 %-Punkte (§ 288 II BGB)." },
+  { topic: "Verzugszinsen", q: "Welcher Zinssatz gilt bei Verzug gegenüber einem Verbraucher (B2C)?",
+    options: ["Basiszinssatz + 5 %-Punkte", "Basiszinssatz + 9 %-Punkte", "5 % fix", "10 % fix"],
+    a: 0, e: "B2C: Basiszinssatz + 5 %-Punkte (§ 288 I BGB)." },
+  { topic: "Verzugszinsen", q: "Wer setzt den Basiszinssatz fest?",
+    options: ["Der Bundestag", "Die Deutsche Bundesbank (halbjährlich)", "Die EZB", "Der Bund der Versicherten"],
+    a: 1, e: "Basiszinssatz wird halbjährlich von der Bundesbank festgelegt (§ 247 BGB)." },
+  { topic: "Verzugszinsen", q: "Wie lautet die Verzugszinsformel?",
+    options: ["Forderung × Tage / Jahr", "Forderung × Zinssatz × Tage / 360", "Forderung × Zinssatz / 12", "Forderung × Tage × Monate"],
+    a: 1, e: "Standard: Zinsen = Kapital × Zinssatz × Tage / 360 (kaufmännisches Jahr)." },
+  { topic: "Verzugszinsen", q: "Wie viele Tage hat das kaufmännische Jahr?",
+    options: ["360 Tage", "365 Tage", "366 Tage", "354 Tage"],
+    a: 0, e: "Kaufmännisches Jahr = 360 Tage (12 × 30)." },
+  { topic: "Verzugszinsen", q: "Forderung 8.000 €, B2B-Verzugszinssatz 12,62 %, 30 Tage Verzug. Wie hoch sind die Verzugszinsen?",
+    options: ["80,00 €", "84,13 €", "126,20 €", "1.009,60 €"],
+    a: 1, e: "8.000 × 0,1262 × 30/360 = 84,13 €." },
+  { topic: "Verzugszinsen", q: "Forderung 5.000 €, Basiszins 3,62 % + 9 %-Punkte (B2B), 60 Tage Verzug. Verzugszinsen?",
+    options: ["52,58 €", "105,17 €", "631,00 €", "12,62 €"],
+    a: 1, e: "5.000 × 0,1262 × 60/360 = 105,17 €." },
+  { topic: "Verzugszinsen", q: "Welche Norm regelt die Verzugszinsen?",
+    options: ["§ 286 BGB", "§ 288 BGB", "§ 247 BGB", "§ 433 BGB"],
+    a: 1, e: "§ 288 BGB regelt die Höhe der Verzugszinsen, § 247 BGB den Basiszinssatz." },
+  { topic: "Verzugszinsen", q: "Forderung 1.000 €, Zinssatz 12 %, 90 Tage Verzug. Verzugszinsen?",
+    options: ["12 €", "30 €", "60 €", "120 €"],
+    a: 1, e: "1.000 × 0,12 × 90/360 = 30 €." },
+  { topic: "Verzugszinsen", q: "Sind Verzugszinsen ein Mindestschaden oder eine Pauschale?",
+    options: ["Pauschalsumme", "Gesetzlicher Mindestschadensersatz — Mehrschaden bleibt einklagbar", "Strafe", "Steuer"],
+    a: 1, e: "Verzugszinsen sind Mindestschaden — höherer Verzugsschaden ist konkret nachweisbar zu fordern." },
+
+  // === Block D: Annahmeverzug §§ 293 ff. BGB (31-40) ===
+  { topic: "Annahmeverzug", q: "Welche Norm regelt den Annahmeverzug?",
+    options: ["§ 286 BGB", "§§ 293 ff. BGB", "§ 437 BGB", "§ 14 UStG"],
+    a: 1, e: "Annahmeverzug ist in §§ 293 bis 304 BGB geregelt." },
+  { topic: "Annahmeverzug", q: "Wer kann in Annahmeverzug geraten?",
+    options: ["Der Schuldner", "Der Gläubiger (z.B. Käufer der Lieferung)", "Der Notar", "Der Spediteur"],
+    a: 1, e: "Annahmeverzug = Gläubigerverzug. Der Käufer als Gläubiger der Lieferung kann in Annahmeverzug kommen." },
+  { topic: "Annahmeverzug", q: "Was muss der Schuldner für den Annahmeverzug des Gläubigers tun?",
+    options: ["Nichts", "Die Leistung ordnungsgemäß anbieten (§ 294 BGB tatsächliches Angebot)", "Eine Rechnung schreiben", "Eine Mahnung schicken"],
+    a: 1, e: "§ 294 BGB: Tatsächliches Angebot der Leistung am vereinbarten Ort/Zeit/Art." },
+  { topic: "Annahmeverzug", q: "Wann reicht ein 'wörtliches' Angebot (§ 295 BGB)?",
+    options: ["Immer", "Wenn der Gläubiger eine Mitwirkung schuldet (z.B. Abholung)", "Bei B2B", "Bei B2C"],
+    a: 1, e: "§ 295 BGB: Wörtliches Angebot reicht, wenn der Gläubiger eine Handlung vorzunehmen hat." },
+  { topic: "Annahmeverzug", q: "Welche Folge hat der Annahmeverzug für die Haftung des Schuldners?",
+    options: ["Keine", "Haftungsmilderung — nur noch Vorsatz und grobe Fahrlässigkeit (§ 300 BGB)", "Vollhaftung", "Bußgeld"],
+    a: 1, e: "§ 300 BGB: Haftungsmilderung — Schuldner haftet nur noch für Vorsatz/grobe Fahrlässigkeit." },
+  { topic: "Annahmeverzug", q: "Welche Mehraufwendungen kann der Schuldner ersetzt verlangen?",
+    options: ["Reisekosten", "Lager-, Transportkosten, weitere Lieferversuche (§ 304 BGB)", "Reparaturkosten", "Anwaltskosten ohne Voraussetzung"],
+    a: 1, e: "§ 304 BGB: Anspruch auf Ersatz der durch den Annahmeverzug entstandenen Mehraufwendungen." },
+  { topic: "Annahmeverzug", q: "Geht beim Annahmeverzug die Gefahr auf den Käufer über?",
+    options: ["Nein", "Ja, mit Eintritt des Annahmeverzugs (Stückschuld, § 446 iVm § 300 BGB)", "Nur bei Versendungskauf", "Nur bei Verbrauchergeschäften"],
+    a: 1, e: "Mit Annahmeverzug geht die Preisgefahr auf den Gläubiger über." },
+  { topic: "Annahmeverzug", q: "Wann liegt KEIN Annahmeverzug vor?",
+    options: ["Bei rechtmäßiger Mängelrüge des Käufers (mangelhafte Ware)", "Wenn Lieferzeit eingehalten ist", "Wenn die Ware angeboten wurde", "Wenn der Lieferant pünktlich ist"],
+    a: 0, e: "Wer mangelhafte Ware berechtigt zurückweist, ist nicht in Annahmeverzug." },
+  { topic: "Annahmeverzug", q: "Welche Möglichkeit hat der Lieferant beim Annahmeverzug einer Massenware?",
+    options: ["Vernichten", "Selbsthilfeverkauf nach § 373 HGB / Hinterlegung § 372 BGB", "Verschenken", "Behalten ohne Folgen"],
+    a: 1, e: "§ 373 HGB Selbsthilfeverkauf bei Handelskauf; § 372 BGB Hinterlegung als Erfüllungssurrogat." },
+  { topic: "Annahmeverzug", q: "Bleibt die Zahlungspflicht des Käufers beim Annahmeverzug bestehen?",
+    options: ["Nein, sie erlischt", "Ja, da die Leistung ordnungsgemäß angeboten wurde", "Halbiert sich", "Wird gestundet"],
+    a: 1, e: "Der Käufer bleibt zahlungspflichtig, wenn die Leistung angeboten wurde." },
+
+  // === Block E: Schlechtleistung & Käuferrechte § 437 BGB (41-50) ===
+  { topic: "Käuferrechte", q: "Welche Norm regelt den Sachmangel beim Kauf?",
+    options: ["§ 286 BGB", "§ 434 BGB", "§ 437 BGB", "§ 14 UStG"],
+    a: 1, e: "§ 434 BGB: Sachmangel — Abweichung von vereinbarter/üblicher Beschaffenheit." },
+  { topic: "Käuferrechte", q: "Welche Norm listet die Käuferrechte bei Mängeln auf?",
+    options: ["§ 437 BGB", "§ 280 BGB", "§ 286 BGB", "§ 433 BGB"],
+    a: 0, e: "§ 437 BGB nennt: Nacherfüllung, Rücktritt, Minderung, Schadensersatz." },
+  { topic: "Käuferrechte", q: "Welches Käuferrecht hat Vorrang?",
+    options: ["Rücktritt", "Nacherfüllung (§ 439 BGB)", "Minderung", "Schadensersatz"],
+    a: 1, e: "Vorrang der Nacherfüllung — der Verkäufer bekommt die Chance zur Mängelbeseitigung." },
+  { topic: "Käuferrechte", q: "Welche zwei Formen der Nacherfüllung gibt es?",
+    options: ["Geld oder Ware", "Nachbesserung (Reparatur) oder Ersatzlieferung", "Rücknahme oder Tausch", "Mahnung oder Klage"],
+    a: 1, e: "§ 439 BGB: Wahl zwischen Nachbesserung und Ersatzlieferung — Wahlrecht hat der Käufer." },
+  { topic: "Käuferrechte", q: "Wann ist der Rücktritt ausgeschlossen?",
+    options: ["Bei B2B", "Bei nur unerheblichen Mängeln (§ 323 V 2 BGB)", "Bei E-Commerce", "Nie"],
+    a: 1, e: "§ 323 V 2 BGB: Rücktritt bei unerheblichen Mängeln ausgeschlossen — Minderung aber möglich." },
+  { topic: "Käuferrechte", q: "Welche Frist ist für die Nacherfüllung in der Regel angemessen?",
+    options: ["1 Tag", "ca. 14 Tage", "6 Monate", "1 Jahr"],
+    a: 1, e: "Praxisrichtwert: 14 Tage. Bei einfachen Reparaturen weniger, bei Maschinen mehr." },
+  { topic: "Käuferrechte", q: "Welche Norm regelt den Rücktritt nach erfolgloser Fristsetzung?",
+    options: ["§ 437 BGB", "§ 323 BGB", "§ 286 BGB", "§ 280 BGB"],
+    a: 1, e: "§ 323 BGB: Rücktritt vom Vertrag nach Fristablauf." },
+  { topic: "Käuferrechte", q: "Welche Norm regelt die Minderung?",
+    options: ["§ 437 BGB", "§ 441 BGB", "§ 323 BGB", "§ 280 BGB"],
+    a: 1, e: "§ 441 BGB: Minderung des Kaufpreises im Verhältnis Wert mangelfrei zu Wert mangelhaft." },
+  { topic: "Käuferrechte", q: "Wie wird die Minderung berechnet (§ 441 III BGB)?",
+    options: ["Kaufpreis − Mangelbetrag", "Kaufpreis × (Wert mangelhaft / Wert mangelfrei)", "Kaufpreis / 2", "Kaufpreis × Schadenshöhe"],
+    a: 1, e: "Verhältnisrechnung: gem. Preis = Kaufpreis × Wert mangelhaft / Wert mangelfrei." },
+  { topic: "Käuferrechte", q: "Drucker für 600 €, Wert mangelfrei 600, Wert mangelhaft 420. Geminderter Preis?",
+    options: ["180 €", "300 €", "420 €", "600 €"],
+    a: 2, e: "600 × (420/600) = 420 €. Käufer kann 180 € zurückfordern." },
+
+  // === Block F: Kaufvertragsarten (51-60) ===
+  { topic: "Kaufvertragsarten", q: "Was ist ein Handelskauf?",
+    options: ["Kauf in einem Geschäft", "Kaufvertrag zwischen zwei Kaufleuten (B2B)", "Kauf im Internet", "Kauf von Aktien"],
+    a: 1, e: "Handelskauf nach §§ 373 ff. HGB — beidseitig kaufmännisch." },
+  { topic: "Kaufvertragsarten", q: "Welche Pflicht gilt zusätzlich beim Handelskauf?",
+    options: ["Kassenpflicht", "Rügepflicht nach § 377 HGB", "Bargeldpflicht", "Mehrwertsteuer"],
+    a: 1, e: "§ 377 HGB: unverzügliche Untersuchung und Mängelanzeige beim Handelskauf." },
+  { topic: "Kaufvertragsarten", q: "Was ist ein Verbrauchsgüterkauf (§ 474 BGB)?",
+    options: ["Kauf zwischen zwei Verbrauchern", "Kauf einer beweglichen Sache durch Verbraucher von einem Unternehmer", "Kauf eines Hauses", "Kauf von Verbrauchsgütern in der Industrie"],
+    a: 1, e: "B2C-Kauf einer beweglichen Sache: Verbraucher kauft von Unternehmer." },
+  { topic: "Kaufvertragsarten", q: "Was bedeutet Beweislastumkehr nach § 477 BGB?",
+    options: ["Käufer muss alles beweisen", "In den ersten 12 Monaten nach Übergabe wird vermutet, dass der Mangel bei Übergabe vorlag", "Verkäufer hat keine Pflicht", "Es gibt keine Frist"],
+    a: 1, e: "§ 477 BGB: 12-Monats-Vermutung zugunsten des Verbrauchers." },
+  { topic: "Kaufvertragsarten", q: "Wer ist Verbraucher nach § 13 BGB?",
+    options: ["Unternehmer", "Eine natürliche Person, die zu privaten Zwecken handelt", "Eine GmbH", "Ein Freiberufler im Beruf"],
+    a: 1, e: "§ 13 BGB: Verbraucher = natürliche Person, weder gewerblich noch selbstständig handelnd." },
+  { topic: "Kaufvertragsarten", q: "Wer ist Unternehmer nach § 14 BGB?",
+    options: ["Natürliche oder juristische Person, die in Ausübung ihrer gewerblichen oder selbstständigen Tätigkeit handelt", "Nur Aktiengesellschaften", "Nur Selbstständige", "Jeder mit Job"],
+    a: 0, e: "§ 14 BGB definiert den Unternehmerbegriff weit." },
+  { topic: "Kaufvertragsarten", q: "Was ist ein Stückkauf?",
+    options: ["Kauf vieler Stücke", "Kauf einer konkreten, individuell bestimmten Sache", "Kauf in Stückzahl", "Kauf nach Gewicht"],
+    a: 1, e: "Stückkauf: konkrete Einzelsache (z.B. gebrauchter Drucker mit Seriennummer)." },
+  { topic: "Kaufvertragsarten", q: "Was ist ein Gattungskauf?",
+    options: ["Kauf nur einer Sorte", "Kauf einer der Gattung nach bestimmten Sache (z.B. 50 Aktenordner blau)", "Kauf in der Familie", "Kauf von Genossenschaft"],
+    a: 1, e: "Gattungskauf: Lieferant kann aus der Gattung beschaffen — keine konkrete Einzelsache." },
+  { topic: "Kaufvertragsarten", q: "Welche Form des Verzugs trifft den Käufer beim Zahlungsverzug?",
+    options: ["Annahmeverzug", "Schuldnerverzug (Zahlungsverzug)", "Schlechtleistung", "Höhere Gewalt"],
+    a: 1, e: "Beim Geldschuldverhältnis ist der Käufer Schuldner — er kommt in Schuldner-/Zahlungsverzug." },
+  { topic: "Kaufvertragsarten", q: "Welche Aussage zum Verbrauchsgüterkauf stimmt?",
+    options: ["Verkürzung der Verjährung auf unter 2 Jahre bei Neuware ist zulässig", "Verkürzung der Verjährung auf unter 2 Jahre bei Neuware ist unzulässig (§ 476 BGB)", "Es gibt keine Verjährung", "Beweislast trägt immer der Käufer"],
+    a: 1, e: "§ 476 BGB schützt den Verbraucher: Verjährungsfrist bei Neuware mind. 2 Jahre." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const sEl = document.getElementById('summary');
+  sEl.style.display = 'block';
+  sEl.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  sEl.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>
