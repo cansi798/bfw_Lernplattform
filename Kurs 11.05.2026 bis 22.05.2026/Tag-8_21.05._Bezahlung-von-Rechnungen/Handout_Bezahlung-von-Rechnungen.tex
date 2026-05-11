@@ -1,0 +1,250 @@
+\documentclass[11pt, a4paper]{article}
+
+\input{bfw-style.tex}
+
+\title{\vspace*{-1.5cm}\Huge\bfseries\color{bfwPrimaryDark}Tag~8: Bezahlung von Rechnungen\\[0.4em]
+  \large\color{bfwInkSoft}\textnormal{Geld, Zahlungsarten, SEPA, Karten, Onlinebanking, E-Commerce, Skonto}}
+\author{\textsf{Beschaffung im Büromanagement}\\
+\textsf{\small\copyright\ Can Siebert\,\textperiodcentered\,2026}}
+\date{21.05.2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\vspace{1em}
+\begin{merksatz}[title={\bfseries Worum geht es heute?}]
+Die Rechnung ist geprüft --- jetzt geht es ans Zahlen. Heute lernen wir die wichtigsten
+Zahlungsarten kennen: bar, halbbar, bargeldlos. Schwerpunkt sind SEPA-Verfahren,
+Zahlungskarten, Onlinebanking und die typischen Bezahlmethoden im E-Commerce.
+Außerdem rechnen wir Skonto --- die wichtigste kaufmännische Berechnung der
+Beschaffung und ein verlässlicher Punktelieferant in der IHK-Klausur Teil~2.
+\end{merksatz}
+
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\section{Geldfunktionen und Geldarten}
+
+\subsection{Drei Funktionen des Geldes}
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Tauschmittel}: Geld erleichtert den Tausch (statt Naturaltausch).
+  \item \textbf{Wertaufbewahrung}: Geld kann gespart und für späteren Konsum aufbewahrt werden.
+  \item \textbf{Wertmaßstab / Recheneinheit}: Geld misst den Wert von Gütern und ermöglicht Preisvergleiche.
+\end{itemize}
+
+\subsection{Geldarten}
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Bargeld}: Münzen und Banknoten --- gesetzliches Zahlungsmittel.
+  \item \textbf{Buchgeld (Giralgeld)}: Guthaben auf Konten --- wird durch Überweisung, Lastschrift, Karte transferiert.
+  \item \textbf{Elektronisches Geld}: digitale Werteinheiten (z.\,B.\ Prepaid-Karten, einige Wallet-Lösungen).
+\end{itemize}
+
+\section{Zahlungsarten}
+
+\begin{center}
+\begin{tabular}{p{3.5cm} p{10.5cm}}
+\toprule
+\textbf{Art} & \textbf{Beispiel}\\
+\midrule
+Bar & Kassenzahlung mit Münzen/Scheinen\\
+Halbbar & Bareinzahlung auf ein Bankkonto, Postanweisung\\
+Bargeldlos & SEPA-Überweisung, SEPA-Lastschrift, Kartenzahlung, PayPal\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Bargeldlose Zahlungsformen}
+
+\subsection{SEPA-Überweisung}
+
+Der \emph{SEPA-Raum} (Single Euro Payments Area) umfasst 36~Länder. Jede Überweisung
+nutzt \textbf{IBAN} (International Bank Account Number) --- in Deutschland 22~Stellen
+(z.\,B.\ DE89~3704~0044~0532~0130~00). Standard-Überweisung dauert maximal einen Bankarbeitstag.
+
+\subsection{SEPA-Lastschrift}
+
+Bei der \emph{Lastschrift} zieht der Empfänger das Geld vom Konto des Zahlers ein ---
+mit dessen Mandat (Einwilligung).
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{SEPA-Basis-Lastschrift} (Core): typisch B2C, Erstattungsrecht 8 Wochen ohne Begründung, 13 Monate bei nicht autorisierter Lastschrift.
+  \item \textbf{SEPA-Firmen-Lastschrift} (B2B): zwischen Unternehmen, kein Erstattungsrecht --- höhere Sicherheit für den Empfänger.
+\end{itemize}
+
+\subsection{Dauerauftrag}
+
+Wiederkehrende Überweisung mit gleichem Betrag und Empfänger (z.\,B.\ Miete). \emph{Vom
+Zahler initiiert} --- im Gegensatz zur Lastschrift.
+
+\section{Zahlungskarten}
+
+\begin{center}
+\begin{tabular}{p{3.5cm} p{10.5cm}}
+\toprule
+\textbf{Karte} & \textbf{Funktion}\\
+\midrule
+Debitkarte (girocard) & Sofortige Belastung des Kontos --- Kontodeckung erforderlich.\\
+Kreditkarte & Verfügungsrahmen, monatliche Sammelabrechnung; Charge (volle Zahlung) oder Revolving (Teilzahlung mit Zinsen).\\
+Prepaid-Karte & Vorab aufgeladenes Guthaben --- ideal für Jugendliche oder Online-Shopping.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Onlinebanking, Mobil-Banking, TAN-Verfahren}
+
+Onlinebanking nutzt \textbf{Zwei-Faktor-Authentifizierung} (PSD2): Ein zweites,
+unabhängiges Sicherheitsmerkmal neben PIN/Passwort.
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{chipTAN}: TAN-Generator mit Bankkarte erzeugt eine einmal gültige TAN.
+  \item \textbf{photoTAN}: Farbiger Code im Banking-Programm wird mit App fotografiert.
+  \item \textbf{pushTAN}: TAN per App (eigene Banking-App, durch separate App freigegeben).
+  \item \textbf{Biometrie}: Fingerabdruck oder Face-ID auf dem Smartphone.
+\end{itemize}
+
+\begin{merksatz}[title={Sicherheitsregeln}]
+\begin{enumerate}[itemsep=0pt]
+  \item Niemals TAN am Telefon weitergeben --- Banken fragen nie danach.
+  \item Vor jeder TAN-Eingabe Empfänger und Betrag im Generator/App prüfen.
+  \item Nur HTTPS-Verbindungen nutzen (Schloss-Symbol im Browser).
+\end{enumerate}
+\end{merksatz}
+
+\section{Zahlungsformen im E-Commerce}
+
+\begin{center}
+\begin{tabular}{p{3cm} p{6cm} p{4.5cm}}
+\toprule
+\textbf{Form} & \textbf{Beschreibung} & \textbf{Bewertung}\\
+\midrule
+Vorkasse & Zahlung vor Versand & Sicher für Händler, riskant für Käufer\\
+Rechnung & Zahlung nach Lieferung & Käuferfreundlich, hohes Ausfallrisiko Händler\\
+Lastschrift & Einzug nach Lieferung & Praktisch, Mandat erforderlich\\
+Kreditkarte & Sofortige Autorisierung & Schnell, weltweit, Käuferschutz oft enthalten\\
+PayPal & Wallet-Zahlung & Käuferschutz, Gebühren für Händler\\
+Klarna & Rechnungs- oder Ratenkauf via Klarna & Händler bekommt Geld sofort, Käufer bezahlt später\\
+Sofortüberweisung & Echtzeit-Überweisung über Klarna-System & Schnell, aber Bankzugangsdaten teilen\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Skonto rechnen --- der IHK-Klassiker}
+
+\subsection{Was ist Skonto?}
+
+\emph{Skonto} ist ein Preisnachlass, den der Lieferant gewährt, wenn der Käufer
+innerhalb einer kurzen Frist zahlt. Er belohnt schnelle Zahlung und reduziert das
+Forderungsausfallrisiko des Lieferanten.
+
+\subsection{Beispiel-Zahlungsbedingung}
+
+\textit{,,Zahlbar in 30~Tagen netto Kasse oder innerhalb 14~Tagen mit 2\,\% Skonto.''}
+
+\begin{beispiel}
+Rechnung netto 5\,000~€. Skonto-Inanspruchnahme:
+\begin{itemize}[itemsep=0pt]
+  \item Skontobetrag $= 5\,000 \times 0{,}02 = \mathbf{100{,}00~€}$
+  \item Zahlbetrag $= 5\,000 - 100 = \mathbf{4\,900{,}00~€}$
+\end{itemize}
+\end{beispiel}
+
+\begin{merksatz}[title={Effektivverzinsung der Skonto-Inanspruchnahme}]
+\textbf{Effektivverzinsung} $= \dfrac{\text{Skontosatz} \times 360}{\text{Zahlungsfrist} - \text{Skontofrist}}$
+\end{merksatz}
+
+\begin{beispiel}
+Bei 2\,\% Skonto, 14~Tage Skontofrist, 30~Tage Zahlungsziel:
+$\dfrac{2 \times 360}{30 - 14} = \dfrac{720}{16} = \mathbf{45{,}00\,\%~\text{p.\,a.}}$
+
+Selbst wenn der Bankkredit 9~\% kostet --- Skonto ist mit 45~\% effektiv ungleich
+teurer abzulehnen. Praxisregel: \textbf{Skonto fast immer ziehen.}
+\end{beispiel}
+
+\subsection{Was ist die Skonto-Bezugsgröße?}
+
+Skonto wird typischerweise vom \textbf{Rechnungsbetrag nach Abzug von Liefererrabatten}
+und ggf.\ vor USt berechnet. In der Klausur wird der Bezug klar genannt --- ,,vom
+Rechnungsbetrag'', ,,vom Nettowarenwert'' usw.
+
+\subsection{,,2/10 --- netto 30''}
+
+Eine in den USA verbreitete, auch in Deutschland gebräuchliche Kurzschreibweise:
+\textbf{2~\% Skonto bei Zahlung innerhalb 10~Tagen, sonst voller Betrag fällig in 30~Tagen.}
+
+Effektivverzinsung: $\dfrac{2 \times 360}{30 - 10} = 36\,\%$ p.\,a.
+
+\section{Zusammenfassung}
+
+\begin{enumerate}[itemsep=2pt]
+  \item \textbf{Geld}: Funktionen Tausch / Wertaufbewahrung / Maßstab; Bargeld vs. Buchgeld.
+  \item \textbf{Zahlungsarten}: bar, halbbar, bargeldlos.
+  \item \textbf{SEPA}: Überweisung, Basis-/Firmen-Lastschrift, Dauerauftrag --- IBAN-basiert.
+  \item \textbf{Karten}: Debit, Kredit (Charge/Revolving), Prepaid.
+  \item \textbf{Onlinebanking}: chipTAN, photoTAN, pushTAN; immer Zwei-Faktor.
+  \item \textbf{E-Commerce}: Vorkasse, Rechnung, Lastschrift, Karte, PayPal, Klarna, Sofortüberweisung.
+  \item \textbf{Skonto}: Effektivverzinsung $= \frac{\text{Skontosatz} \times 360}{\text{Zahlungsfrist}-\text{Skontofrist}}$ --- meist deutlich über Bankzinsen.
+\end{enumerate}
+
+\newpage
+
+\section*{Glossar}
+\addcontentsline{toc}{section}{Glossar}
+
+\glossareintrag{Bargeld}{Münzen und Banknoten --- gesetzliches Zahlungsmittel.}
+
+\glossareintrag{Buchgeld (Giralgeld)}{Guthaben auf Bankkonten --- per Überweisung, Lastschrift, Karte verfügbar.}
+
+\glossareintrag{Halbbare Zahlung}{Mischform: bar einzahlen, bargeldlos überweisen (z.\,B.\ Bareinzahlung am Bankschalter).}
+
+\glossareintrag{SEPA}{Single Euro Payments Area --- einheitlicher Euro-Zahlungsraum (36 Länder).}
+
+\glossareintrag{IBAN}{International Bank Account Number --- in Deutschland 22-stellig (z.\,B.\ DE89\ldots).}
+
+\glossareintrag{BIC}{Bank Identifier Code --- internationale Bankleitzahl (heute meist nicht mehr nötig in der EU).}
+
+\glossareintrag{SEPA-Basis-Lastschrift}{Lastschriftverfahren für B2C --- 8 Wochen Erstattungsrecht ohne Begründung.}
+
+\glossareintrag{SEPA-Firmen-Lastschrift}{Lastschriftverfahren zwischen Unternehmen --- kein Erstattungsrecht.}
+
+\glossareintrag{Dauerauftrag}{Wiederkehrende Überweisung mit festem Betrag und Empfänger --- vom Zahler initiiert.}
+
+\glossareintrag{Debitkarte (girocard)}{Karte mit sofortiger Kontobelastung --- nur bei Deckung.}
+
+\glossareintrag{Kreditkarte}{Karte mit monatlicher Sammelabrechnung; Charge (volle Zahlung) oder Revolving (Teilzahlung).}
+
+\glossareintrag{Prepaid-Karte}{Karte mit vorab aufgeladenem Guthaben.}
+
+\glossareintrag{TAN}{Transaktionsnummer --- Einmal-Code zur Freigabe einer Bankaktion.}
+
+\glossareintrag{chipTAN}{TAN-Verfahren mit kartenbasiertem Generator (Lesen eines Flickercodes vom Bildschirm).}
+
+\glossareintrag{photoTAN}{TAN-Verfahren mit Mobile-App, fotografiert einen farbigen Code im Banking-Browser.}
+
+\glossareintrag{pushTAN}{TAN-Verfahren mit eigener App auf dem Smartphone.}
+
+\glossareintrag{PSD2}{EU-Richtlinie zur Zahlungsdienste --- erfordert Zwei-Faktor-Authentifizierung.}
+
+\glossareintrag{Vorkasse}{Bezahlung vor Lieferung --- sicher für Händler, riskant für Käufer.}
+
+\glossareintrag{Kauf auf Rechnung}{Zahlung nach Lieferung --- käuferfreundlich, höheres Ausfallrisiko für Händler.}
+
+\glossareintrag{PayPal}{Wallet-System mit Käuferschutz; Händler zahlen Transaktionsgebühr.}
+
+\glossareintrag{Klarna}{Zahlungsdienstleister: Rechnungs- oder Ratenkauf für den Käufer, Händler erhält Geld sofort.}
+
+\glossareintrag{Sofortüberweisung}{Echtzeit-Überweisung über Klarna --- Käufer gibt Online-Banking-Daten ein.}
+
+\glossareintrag{Skonto}{Preisnachlass des Lieferanten bei schneller Zahlung (typisch 2--3\,\% bei 10--14 Tagen Frist).}
+
+\glossareintrag{Skontofrist}{Frist, innerhalb der gezahlt werden muss, um Skonto zu erhalten (z.\,B.\ 14 Tage).}
+
+\glossareintrag{Zahlungsziel}{Maximale Zahlungsfrist ohne Skonto (z.\,B.\ 30 Tage netto Kasse).}
+
+\glossareintrag{Effektivverzinsung der Skonto-Inanspruchnahme}{$=\frac{\text{Skontosatz} \times 360}{\text{Zahlungsfrist}-\text{Skontofrist}}$ --- meist sehr hoch (30--60\,\%).}
+
+\end{document}

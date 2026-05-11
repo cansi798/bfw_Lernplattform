@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 8 — Bezahlung von Rechnungen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root { --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B; --bfw-warn:#F97316; --bfw-success:#10B981; --bfw-danger:#EF4444; --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC; --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7; --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5; --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem; }
+.container { max-width: 880px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem; }
+h1 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+.controls { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.progress { flex: 1; min-width: 200px; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; }
+.progress > div { height: 100%; background: var(--bfw-primary); border-radius: 999px; transition: width 0.3s; }
+.score { font-weight: 700; color: var(--bfw-primary-dark); font-size: 1.05rem; }
+.btn { border: none; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; transition: all 0.15s; }
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost { background: transparent; color: var(--bfw-primary-dark); border: 1.5px solid var(--bfw-primary); }
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+.question { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.6rem 1.8rem; margin-bottom: 1.2rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num { display: inline-block; background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); font-weight: 700; font-size: 0.85rem; padding: 0.25rem 0.7rem; border-radius: 999px; margin-bottom: 0.7rem; }
+.q-topic { display: inline-block; margin-left: 0.5rem; color: var(--bfw-ink-soft); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option { display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.8rem 1rem; background: var(--bfw-bg-soft); border: 1.5px solid var(--bfw-border); border-radius: 10px; cursor: pointer; font-size: 1.02rem; transition: all 0.15s; }
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker { flex-shrink: 0; width: 28px; height: 28px; background: white; border: 1.5px solid var(--bfw-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+.explanation { margin-top: 0.9rem; padding: 0.9rem 1.1rem; background: var(--bfw-bg-amber); border-left: 4px solid var(--bfw-accent); border-radius: 6px; font-size: 0.98rem; line-height: 1.5; }
+.explanation::before { content: "Erklärung:"; font-weight: 700; color: var(--bfw-warn); margin-right: 0.5rem; }
+.summary { background: white; border-radius: 14px; padding: 2rem; text-align: center; border: 2px solid var(--bfw-primary); box-shadow: 0 8px 24px rgba(14,165,164,0.12); margin-top: 2rem; }
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score { font-size: 3.5rem; font-weight: 800; color: var(--bfw-primary); line-height: 1; margin: 1rem 0; }
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+footer { text-align: center; color: var(--bfw-ink-soft); font-size: 0.85rem; margin-top: 3rem; }
+@media print { .controls, .btn { display: none; } .option.locked { background: white; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 8 · 21.05.2026 · 60 Fragen</span>
+  <h1>Quiz: Bezahlung von Rechnungen</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation</strong> und dem <strong>Handout</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Beschaffung im Büromanagement · Kurs 11.05.–22.05.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Geld & Zahlungsarten (1-10) ===
+  { topic: "Geld", q: "Welche drei Hauptfunktionen erfüllt Geld?",
+    options: ["Kaufen, Verkaufen, Sparen", "Tauschmittel, Wertaufbewahrung, Recheneinheit", "Münzen, Scheine, Karten", "Drei Wünsche"],
+    a: 1, e: "Klassische Funktionen: Tauschmittel, Wertaufbewahrung, Wertmaßstab/Recheneinheit." },
+  { topic: "Geld", q: "Was ist Bargeld?",
+    options: ["Karten", "Münzen und Banknoten — gesetzliches Zahlungsmittel", "Buchgeld", "Aktien"],
+    a: 1, e: "Bargeld = Münzen + Scheine. Gesetzliches Zahlungsmittel in Deutschland (Euro)." },
+  { topic: "Geld", q: "Was ist Buchgeld?",
+    options: ["Münzen", "Guthaben auf Bankkonten", "Bücher", "Wertpapiere"],
+    a: 1, e: "Buchgeld (Giralgeld) = Kontoguthaben — per Überweisung/Lastschrift/Karte verfügbar." },
+  { topic: "Zahlungsarten", q: "Welche Zahlungsart ist die Bareinzahlung am Bankschalter?",
+    options: ["Bar", "Halbbar", "Bargeldlos", "Spende"],
+    a: 1, e: "Halbbar: Bareinzahlung auf ein Konto — Mischform aus Bargeld und Buchgeld." },
+  { topic: "Zahlungsarten", q: "Welche Zahlungsart ist die SEPA-Überweisung?",
+    options: ["Bar", "Halbbar", "Bargeldlos", "Postzahlung"],
+    a: 2, e: "SEPA-Überweisung = bargeldlos. Buchgeld wechselt zwischen Konten." },
+  { topic: "Zahlungsarten", q: "Welche Zahlungsart ist die Kassenzahlung mit Münzen?",
+    options: ["Bar", "Halbbar", "Bargeldlos", "Mobil"],
+    a: 0, e: "Kassenzahlung mit Münzen/Scheinen = bar." },
+  { topic: "Geld", q: "Was sind Beispiele für elektronisches Geld?",
+    options: ["Münzen", "Prepaid-Karten, manche Wallet-Lösungen", "Aktien", "Wertpapiere"],
+    a: 1, e: "E-Geld: vorab aufgeladene digitale Werteinheiten." },
+  { topic: "Geld", q: "Wer gibt Banknoten in Deutschland heraus?",
+    options: ["Bundesbank/EZB", "Bundesregierung", "Sparkassen", "Kommerzbanken"],
+    a: 0, e: "Banknoten gibt die Europäische Zentralbank (über die nationalen Notenbanken) heraus." },
+  { topic: "Geld", q: "Was bedeutet 'gesetzliches Zahlungsmittel'?",
+    options: ["Verbrauchergesetz", "Münzen/Scheine müssen zur Erfüllung von Geldschulden angenommen werden", "Bargeldverbot", "Kein Wert"],
+    a: 1, e: "Gesetzliches Zahlungsmittel: Annahme zur Schuldtilgung kann nicht verweigert werden (mit Einschränkungen)." },
+  { topic: "Zahlungsarten", q: "Welche Zahlungsarten zählen zu den bargeldlosen?",
+    options: ["Münzzahlung", "Überweisung, Lastschrift, Kartenzahlung, PayPal", "Bareinzahlung am Schalter", "Tausch von Waren"],
+    a: 1, e: "Bargeldlos: alle Verfahren ohne physisches Geld — Buchgeld/elektronisches Geld." },
+
+  // === Block B: SEPA-Verfahren (11-20) ===
+  { topic: "SEPA", q: "Wofür steht SEPA?",
+    options: ["Single Euro Payments Area", "Sofortige Europäische Postanweisung", "Standard für Europäische Privatbanken", "Sichere Europäische Postaufträge"],
+    a: 0, e: "SEPA = Single Euro Payments Area — einheitlicher europäischer Zahlungsraum." },
+  { topic: "SEPA", q: "Wie viele Stellen hat eine deutsche IBAN?",
+    options: ["18", "20", "22", "26"],
+    a: 2, e: "DE-IBAN: 22 Stellen (DE + 2 Prüfziffern + 8 BLZ + 10 Kontonummer)." },
+  { topic: "SEPA", q: "Was ist die SEPA-Basis-Lastschrift?",
+    options: ["B2B-Lastschrift", "Lastschriftverfahren typisch für B2C — 8 Wochen Erstattungsrecht", "Bareinzahlung", "Sofortüberweisung"],
+    a: 1, e: "SEPA-Core: 8-Wochen-Erstattungsrecht ohne Begründung — Verbraucherschutz." },
+  { topic: "SEPA", q: "Was ist die SEPA-Firmen-Lastschrift?",
+    options: ["B2C-Lastschrift", "Lastschriftverfahren zwischen Unternehmen — kein Erstattungsrecht", "Bareinzahlung", "Sofortüberweisung"],
+    a: 1, e: "SEPA-B2B: ohne Erstattungsrecht — höhere Sicherheit für den Empfänger." },
+  { topic: "SEPA", q: "Wer initiiert eine Überweisung?",
+    options: ["Empfänger", "Zahler (Schuldner)", "Bank", "Spediteur"],
+    a: 1, e: "Bei der Überweisung initiiert der Zahler die Transaktion bei seiner Bank." },
+  { topic: "SEPA", q: "Wer initiiert eine Lastschrift?",
+    options: ["Zahler", "Empfänger (Gläubiger) — mit Mandat des Zahlers", "Bank", "Notar"],
+    a: 1, e: "Lastschrift: Empfänger zieht ein, vorher hat Zahler ein Mandat erteilt." },
+  { topic: "SEPA", q: "Was ist ein Dauerauftrag?",
+    options: ["Einmalige Überweisung", "Wiederkehrende Überweisung mit gleichem Betrag (z.B. Miete)", "Lastschrift", "Kreditrückzahlung"],
+    a: 1, e: "Dauerauftrag = vom Zahler eingerichtete wiederkehrende Überweisung mit festem Betrag." },
+  { topic: "SEPA", q: "Wann wird eine SEPA-Überweisung gutgeschrieben?",
+    options: ["Sofort", "Spätestens am nächsten Bankarbeitstag", "Nach 7 Tagen", "Nach 14 Tagen"],
+    a: 1, e: "Maximalfrist: 1 Bankarbeitstag (bei Echtzeit-Überweisung sofort)." },
+  { topic: "SEPA", q: "Wofür steht IBAN?",
+    options: ["Internationale Bankarbeitsnummer", "International Bank Account Number", "Internationale Banküberweisung", "Internet Banking Account Number"],
+    a: 1, e: "IBAN = International Bank Account Number." },
+  { topic: "SEPA", q: "Was ist ein BIC?",
+    options: ["Bankinterner Code", "Bank Identifier Code — internationale Bankleitzahl", "Bargeldscheck", "Bank Information Center"],
+    a: 1, e: "BIC = Bank Identifier Code; in der EU heute meist nicht mehr nötig." },
+
+  // === Block C: Zahlungskarten + Onlinebanking (21-30) ===
+  { topic: "Karten", q: "Was ist die Debitkarte (girocard)?",
+    options: ["Karte mit Kreditrahmen", "Karte mit sofortiger Belastung des Kontos", "Bargeld", "Geschenkkarte"],
+    a: 1, e: "Debitkarte = sofortige Kontobelastung. Konto muss gedeckt sein." },
+  { topic: "Karten", q: "Was ist die Kreditkarte?",
+    options: ["Sofortige Kontobelastung", "Karte mit Verfügungsrahmen, monatliche Sammelabrechnung", "Bargeld", "Mietkarte"],
+    a: 1, e: "Kreditkarte: Verfügungsrahmen, monatliche Abrechnung; Charge oder Revolving." },
+  { topic: "Karten", q: "Was ist die Prepaid-Karte?",
+    options: ["Kredit auf Vorschuss", "Karte mit vorab aufgeladenem Guthaben", "Karte mit Bargeld", "Karte für Mieten"],
+    a: 1, e: "Prepaid: Guthaben vor Nutzung aufladen; ideal für Jugendliche oder Online-Shopping." },
+  { topic: "Karten", q: "Was unterscheidet Charge- und Revolving-Kreditkarte?",
+    options: ["Charge: Teilzahlung; Revolving: volle Zahlung", "Charge: volle Zahlung am Monatsende; Revolving: Teilzahlung mit Zinsen", "Beide gleich", "Beide nur in den USA"],
+    a: 1, e: "Charge = volle Zahlung; Revolving = Teilzahlung möglich, aber Zinsen fallen an." },
+  { topic: "Onlinebanking", q: "Was ist eine TAN?",
+    options: ["Eine Kontonummer", "Transaktionsnummer — einmaliger Sicherheitscode", "Eine Steuer", "Ein Bankkürzel"],
+    a: 1, e: "TAN = einmal gültige Transaktionsnummer; eines von zwei PSD2-Sicherheitsmerkmalen." },
+  { topic: "Onlinebanking", q: "Was ist chipTAN?",
+    options: ["TAN per E-Mail", "TAN-Generator mit Bankkarte und Flickercode", "Reine SMS-TAN", "Kein TAN-Verfahren"],
+    a: 1, e: "chipTAN: TAN-Generator mit Bankkarte erzeugt eine TAN aus dem Flickercode." },
+  { topic: "Onlinebanking", q: "Was ist photoTAN?",
+    options: ["TAN als Foto", "TAN per fotografiertem Farbcode in einer App", "TAN per Telefon", "TAN per Brief"],
+    a: 1, e: "photoTAN: Farbiger Code im Banking-Browser wird mit App fotografiert." },
+  { topic: "Onlinebanking", q: "Was ist pushTAN?",
+    options: ["TAN per Pushbenachrichtigung in eigener Banking-App", "TAN per SMS", "TAN per Brief", "TAN per Mail"],
+    a: 0, e: "pushTAN: TAN auf dem Smartphone per App generiert/freigegeben." },
+  { topic: "Onlinebanking", q: "Welche Sicherheitsregel beim Onlinebanking ist KORREKT?",
+    options: ["TAN immer am Telefon weitergeben", "Vor TAN-Eingabe Empfänger und Betrag im Generator prüfen", "Nur unverschlüsselte Verbindungen", "Banken fragen TAN per Mail"],
+    a: 1, e: "Vor jeder TAN-Eingabe: Empfänger-IBAN und Betrag prüfen!" },
+  { topic: "Onlinebanking", q: "Was ist PSD2?",
+    options: ["Eine TAN-App", "EU-Richtlinie zur Zahlungsdiensten — fordert Zwei-Faktor-Authentifizierung", "Eine Bankenversion", "Ein Datenschutzgesetz"],
+    a: 1, e: "PSD2 = Payment Services Directive 2 — verlangt SCA (Strong Customer Authentication)." },
+
+  // === Block D: E-Commerce-Zahlungen (31-40) ===
+  { topic: "E-Commerce", q: "Was ist Vorkasse?",
+    options: ["Zahlung nach Lieferung", "Zahlung vor Versand", "Bareinzahlung am Schalter", "Anzahlung"],
+    a: 1, e: "Vorkasse: Käufer zahlt zuerst, Versand erfolgt nach Geldeingang." },
+  { topic: "E-Commerce", q: "Wer trägt das größere Risiko bei Vorkasse?",
+    options: ["Händler", "Käufer (Geld weg, Ware kommt vielleicht nicht)", "Bank", "Spediteur"],
+    a: 1, e: "Bei Vorkasse trägt der Käufer das Risiko, da er zuerst zahlt." },
+  { topic: "E-Commerce", q: "Was ist Kauf auf Rechnung?",
+    options: ["Vorkasse", "Lieferung erst, Zahlung später (innerhalb Frist)", "Tausch", "Lastschrift"],
+    a: 1, e: "Rechnungskauf: Ware kommt zuerst, Zahlung folgt — käuferfreundlich." },
+  { topic: "E-Commerce", q: "Wer trägt das größere Risiko bei Rechnungskauf?",
+    options: ["Käufer", "Händler — Risiko des Zahlungsausfalls", "Bank", "Niemand"],
+    a: 1, e: "Beim Kauf auf Rechnung trägt der Händler das Forderungsausfallrisiko." },
+  { topic: "E-Commerce", q: "Was bietet PayPal seinen Käufern?",
+    options: ["Kein Schutz", "Käuferschutz bei Nichterhalt oder mangelhafter Ware", "Zinsen", "Geschenke"],
+    a: 1, e: "PayPal-Käuferschutz: Erstattung bei nicht erhaltener oder erheblich abweichender Ware." },
+  { topic: "E-Commerce", q: "Wie verdient PayPal Geld?",
+    options: ["Reine Spende", "Transaktionsgebühren beim Händler", "Käufer-Abos", "Werbung"],
+    a: 1, e: "Händler zahlen Transaktionsgebühr (Prozentsatz + fixe Komponente)." },
+  { topic: "E-Commerce", q: "Was bietet Klarna typischerweise an?",
+    options: ["Bargeldzahlung", "Kauf auf Rechnung oder Ratenzahlung — Händler erhält Geld sofort", "Aktien", "Tauschsystem"],
+    a: 1, e: "Klarna übernimmt das Ausfallrisiko, Händler bekommt Geld sofort, Käufer zahlt später/in Raten." },
+  { topic: "E-Commerce", q: "Was ist 'Sofortüberweisung' (Klarna)?",
+    options: ["Echtzeit-Überweisung über Klarna-System mit Banking-Login", "PayPal-Variante", "Bareinzahlung", "Ein Geschenk"],
+    a: 0, e: "Sofortüberweisung loggt sich mit Banking-Daten ein und initiiert die Überweisung in Echtzeit." },
+  { topic: "E-Commerce", q: "Welche Zahlart minimiert das Ausfallrisiko des Händlers am stärksten?",
+    options: ["Rechnung", "Vorkasse oder vorautorisiert Karte", "Lastschrift", "Nachnahme"],
+    a: 1, e: "Vorkasse: Geld da, dann Versand — minimales Ausfallrisiko für den Händler." },
+  { topic: "E-Commerce", q: "Welche Zahlart ist im stationären Handel klassisch?",
+    options: ["Klarna", "Bar oder girocard (Debitkarte)", "Vorkasse", "PayPal"],
+    a: 1, e: "Stationär: Bargeld und Debitkarte sind die klassischen Zahlungswege." },
+
+  // === Block E: Skonto rechnen (41-50) ===
+  { topic: "Skonto", q: "Was ist Skonto?",
+    options: ["Eine Strafe", "Preisnachlass des Lieferanten bei schneller Zahlung", "Ein Aufpreis", "Ein Steuersatz"],
+    a: 1, e: "Skonto = Preisnachlass für schnelle Zahlung; belohnt zuverlässige Käufer." },
+  { topic: "Skonto", q: "Was bedeutet 'Zahlbar in 30 Tagen netto Kasse oder 14 Tagen mit 2 % Skonto'?",
+    options: ["30 Tage Vorkasse", "Zahlung vollständig in 30 Tagen oder mit 2 % Skontoabzug innerhalb 14 Tagen", "Skonto immer", "14 Tage Bezahlung extra"],
+    a: 1, e: "Standardformulierung: Innerhalb 14 Tagen 2 % Abzug, sonst voller Betrag in 30 Tagen." },
+  { topic: "Skonto", q: "Rechnung 5.000 € netto, 2 % Skonto. Skontobetrag?",
+    options: ["50 €", "100 €", "150 €", "200 €"],
+    a: 1, e: "5.000 € × 2 % = 100 € Skonto." },
+  { topic: "Skonto", q: "Rechnung 5.000 €, Skontobetrag 100 €. Zahlbetrag bei Skonto?",
+    options: ["4.800 €", "4.900 €", "5.000 €", "5.100 €"],
+    a: 1, e: "5.000 − 100 = 4.900 € Zahlbetrag." },
+  { topic: "Skonto", q: "Wie lautet die Formel für die Effektivverzinsung der Skonto-Inanspruchnahme?",
+    options: ["Skontosatz × 360 / (Zahlungsfrist − Skontofrist)", "Skontosatz × 100", "Zahlungsfrist / 360", "Skonto + Frist"],
+    a: 0, e: "Effektivverzinsung = Skontosatz × 360 / (Zahlungsfrist − Skontofrist)." },
+  { topic: "Skonto", q: "Effektivverzinsung bei 2 % Skonto, 14 Tage Skontofrist, 30 Tage Zahlungsziel?",
+    options: ["20 %", "30 %", "45 %", "60 %"],
+    a: 2, e: "2 × 360 / (30 − 14) = 720 / 16 = 45 %." },
+  { topic: "Skonto", q: "Effektivverzinsung bei '2/10 — netto 30'?",
+    options: ["12 %", "24 %", "30 %", "36 %"],
+    a: 3, e: "2 × 360 / (30 − 10) = 720 / 20 = 36 %." },
+  { topic: "Skonto", q: "Lohnt sich Skonto bei Bankkredit zu 9 % und Skonto-Effektivzins 45 %?",
+    options: ["Nein", "Ja, deutlich — 36 Prozentpunkte Differenz zu Gunsten des Skontoabzugs", "Egal", "Nur bei Verbrauchern"],
+    a: 1, e: "Skonto fast immer ziehen — Effektivzinsen weit über üblichen Bankzinsen." },
+  { topic: "Skonto", q: "Von welcher Bezugsgröße wird Skonto häufig berechnet?",
+    options: ["Bruttowarenwert nur", "Vom Rechnungsbetrag (bzw. von der Aufgabe definierten Bezugsgröße — Netto- oder Bruttowarenwert nach Liefererrabatt)", "Mehrwertsteuer", "Versandkosten"],
+    a: 1, e: "Üblich: Rechnungsbetrag/Nettowarenwert nach Liefererrabatt — die Aufgabe definiert es." },
+  { topic: "Skonto", q: "Welcher Vorteil entsteht dem Lieferanten durch Skonto?",
+    options: ["Mehr Steuern", "Schneller Geldzufluss + geringeres Ausfallrisiko", "Mehr Lager", "Mehr Bürokratie"],
+    a: 1, e: "Lieferant erhält schneller Geld und reduziert das Forderungsausfallrisiko." },
+
+  // === Block F: Praxis & Mix (51-60) ===
+  { topic: "Praxis", q: "Welche Bank gibt den Basiszinssatz heraus?",
+    options: ["Sparkasse", "Deutsche Bundesbank (halbjährlich)", "EZB", "Bundeszentralbank"],
+    a: 1, e: "Basiszinssatz wird halbjährlich von der Deutschen Bundesbank festgelegt." },
+  { topic: "Praxis", q: "Welche Form der Zahlung ist für eine Monatsmiete am praktischsten?",
+    options: ["Bareinzahlung", "Dauerauftrag", "Sofortüberweisung", "Vorkasse"],
+    a: 1, e: "Dauerauftrag: gleicher Betrag, gleicher Empfänger, fester Termin — automatisch." },
+  { topic: "Praxis", q: "Welche Aufzeichnung muss ein Unternehmen wie lange aufbewahren?",
+    options: ["Rechnungen 1 Jahr", "Rechnungen 10 Jahre nach § 147 AO", "Rechnungen 5 Jahre", "Keine Pflicht"],
+    a: 1, e: "§ 147 AO: 10 Jahre Aufbewahrungsfrist für Rechnungen und Buchhaltungsbelege." },
+  { topic: "Praxis", q: "Welcher USt-Satz ist Standard?",
+    options: ["7 %", "12 %", "19 %", "25 %"],
+    a: 2, e: "Regulär: 19 %; ermäßigt 7 %." },
+  { topic: "Praxis", q: "Welche Aufgabe gehört zum Büromanagement im Zahlungsverkehr?",
+    options: ["Geldwäsche", "Rechnungsfreigabe und SEPA-Überweisungen vorbereiten", "Bargeldherstellung", "Zentralbankaufgaben"],
+    a: 1, e: "Sachbearbeiter prüfen Rechnungen, kontieren und bereiten Zahlungen vor." },
+  { topic: "Praxis", q: "Welche Norm regelt Verzugszinsen bei Zahlungsverzug?",
+    options: ["§ 288 BGB", "§ 14 UStG", "§ 449 BGB", "§ 932 BGB"],
+    a: 0, e: "§ 288 BGB regelt die Höhe der Verzugszinsen." },
+  { topic: "Praxis", q: "Wie hoch ist der B2B-Verzugszinssatz?",
+    options: ["Basiszins + 5 %-Punkte", "Basiszins + 9 %-Punkte", "5 %", "9 %"],
+    a: 1, e: "B2B: Basiszins + 9 %-Punkte; B2C: + 5 %-Punkte." },
+  { topic: "Praxis", q: "Wer haftet, wenn der Vorsteuerabzug wegen formellem Mangel verloren geht?",
+    options: ["Der Lieferant", "Der Empfänger der Rechnung — er sollte vor Zahlung prüfen", "Das Finanzamt", "Niemand"],
+    a: 1, e: "Empfänger trägt das wirtschaftliche Risiko: vor Zahlung Pflichtangaben prüfen!" },
+  { topic: "Praxis", q: "Welche Sicherheitsfunktion bieten Kreditkarten typischerweise?",
+    options: ["Käuferschutz und Chargeback-Möglichkeit", "Kein Schutz", "Pflichtversicherung", "Steuerermäßigung"],
+    a: 0, e: "Kreditkarten bieten meist Käuferschutz und Rückbuchungsmöglichkeit (Chargeback)." },
+  { topic: "Praxis", q: "Welche Rolle spielt das Büromanagement bei der Skonto-Entscheidung?",
+    options: ["Keine", "Sachbearbeiter rechnen Skonto-Vorteilhaftigkeit aus und steuern Zahlungstermine", "Nur Geschäftsführung", "Bank entscheidet"],
+    a: 1, e: "Liquiditätssteuerung und Skonto-Optimierung sind klassische Sachbearbeiter-Aufgaben." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';
+let evalMode = 'immediate';
+let currentSlide = 0;
+
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) { if (answers[qi] === null) return false; return origIndex(qi, answers[qi]) === QUESTIONS[qi].a; }
+
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut', color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut', color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend', color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft', color: '#F97316', bestanden: false };
+  return { num: 6, name: 'ungenügend', color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost', mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost', mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost', mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost', mode !== 'end');
+}
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') { allQ.forEach(q => q.style.display = ''); }
+  else { allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none')); document.getElementById('slidePos').textContent = currentSlide + 1; document.getElementById('slideTotal').textContent = QUESTIONS.length; }
+}
+function nextSlide() { if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); } }
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `<span class="q-num">Frage ${i + 1}</span><span class="q-topic">${qd.topic}</span><p class="q-text">${qd.q}</p><div class="options">`;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})"><div class="marker">${letter}</div><div>${opt}</div></div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+  if (evalMode === 'immediate') {
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else { document.getElementById('correct').textContent = '—'; }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else { opts[correctDisplayIdx].classList.add('correct'); }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+  const skala = [
+    { stufe: 1, label: 'sehr gut', range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut', range: '81 – 91 %', col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %', col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend', range: '50 – 66 %', col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft', range: '30 – 49 %', col: '#F97316' },
+    { stufe: 6, label: 'ungenügend', range: '0 – 29 %', col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `<tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}"><td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td><td>${s.label}</td><td>${s.range}</td></tr>`).join('');
+  const sEl = document.getElementById('summary');
+  sEl.style.display = 'block';
+  sEl.innerHTML = `<div class="summary"><h2>Quiz ausgewertet</h2><div class="big-score" style="color: ${note.color};">${note.num}</div><div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div><div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}</div>${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}<div style="margin: 1.6rem auto 0; max-width: 360px;"><table style="font-size: 0.9rem;"><thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead><tbody>${skalaRows}</tbody></table><p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)</p></div><div style="margin-top: 1.5rem;"><button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button><button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button></div></div>`;
+  sEl.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>
