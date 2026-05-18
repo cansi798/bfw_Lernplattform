@@ -287,6 +287,240 @@ footer {
 }
 footer a { color: var(--bfw-primary-dark); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
+
+/* ============================================== */
+/* MORGENQUIZ — Wiederholung Tag 1-4              */
+/* ============================================== */
+.morgen-card {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FEF9E7 60%, #FFE4E6 100%);
+  border: 2px solid var(--bfw-accent);
+  border-radius: 16px;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1.2rem;
+  box-shadow: 0 4px 20px rgba(245,158,11,0.18);
+  position: relative; overflow: hidden;
+}
+.morgen-card::before {
+  content: ""; position: absolute; top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(245,158,11,0.20) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.morgen-card .mq-info { display: flex; align-items: center; gap: 1.1rem; position: relative; }
+.morgen-card .sun-icon {
+  width: 56px; height: 56px;
+  background: white; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 12px rgba(245,158,11,0.25);
+  flex-shrink: 0;
+}
+.morgen-card h3 { color: #92400E; margin-bottom: 0.25rem; font-size: 1.2rem; }
+.morgen-card .mq-desc { color: var(--bfw-ink-soft); font-size: 0.92rem; line-height: 1.5; }
+.btn-start-quiz {
+  padding: 0.8rem 1.6rem;
+  background: var(--bfw-accent); color: white;
+  border: none; border-radius: 10px;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+  font-family: inherit;
+  position: relative;
+  white-space: nowrap;
+}
+.btn-start-quiz:hover {
+  background: #D97706; transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245,158,11,0.35);
+}
+
+/* Overlay */
+.quiz-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,0.65);
+  z-index: 1000;
+  padding: 1.5rem 0.8rem;
+  overflow-y: auto;
+}
+.quiz-overlay.active { display: block; }
+.quiz-modal {
+  max-width: 880px; margin: 0 auto;
+  background: white; border-radius: 18px;
+  padding: 2rem 2.2rem;
+  box-shadow: 0 24px 70px rgba(15,23,42,0.35);
+}
+.quiz-modal h2 { color: var(--bfw-primary-dark); font-size: 1.6rem; margin-bottom: 0.8rem; }
+.quiz-modal .mq-sub { color: var(--bfw-ink-soft); margin-bottom: 1.2rem; font-size: 0.98rem; }
+.quiz-witz {
+  background: var(--bfw-bg-amber);
+  border: 1.5px dashed var(--bfw-accent);
+  border-radius: 12px;
+  padding: 1.1rem 1.3rem;
+  margin: 1.2rem 0;
+  font-style: italic;
+  color: #78350F;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+.quiz-controls {
+  display: flex; gap: 0.5rem;
+  justify-content: flex-end;
+  margin: 1.2rem 0;
+  flex-wrap: wrap;
+}
+.btn-quiz {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-quiz.primary { background: var(--bfw-primary); color: white; border-color: var(--bfw-primary); }
+.btn-quiz.primary:hover { background: var(--bfw-primary-dark); border-color: var(--bfw-primary-dark); }
+.btn-quiz.ghost { background: transparent; color: var(--bfw-primary-dark); }
+.btn-quiz.ghost:hover { background: var(--bfw-bg-teal); }
+.btn-quiz.danger { background: transparent; color: var(--bfw-danger); border-color: var(--bfw-danger); }
+.btn-quiz.danger:hover { background: #FEE2E2; }
+
+.quiz-progress {
+  background: var(--bfw-bg-teal);
+  height: 9px; border-radius: 999px;
+  margin: 1rem 0 1.5rem; overflow: hidden;
+}
+.quiz-progress > div {
+  height: 100%; background: linear-gradient(90deg, var(--bfw-primary) 0%, var(--bfw-accent) 100%);
+  width: 0; transition: width 0.3s;
+}
+.quiz-score {
+  display: flex; gap: 1.5rem;
+  font-weight: 600; color: var(--bfw-ink-soft);
+  font-size: 0.95rem; margin-bottom: 0.5rem;
+}
+.quiz-score strong { color: var(--bfw-primary-dark); font-size: 1.05rem; }
+
+.mq-block-header {
+  background: linear-gradient(90deg, var(--bfw-bg-teal) 0%, transparent 100%);
+  color: var(--bfw-primary-dark);
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  margin: 1.5rem 0 0.8rem;
+  border-left: 4px solid var(--bfw-primary);
+  font-size: 1.02rem;
+}
+
+.mq-question {
+  background: var(--bfw-bg-soft);
+  border: 1px solid var(--bfw-border);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 0.9rem;
+}
+.mq-question.locked { background: white; }
+.mq-q-num {
+  display: inline-block;
+  background: var(--bfw-bg-amber); color: #92400E;
+  font-weight: 700; font-size: 0.78rem;
+  padding: 0.22rem 0.6rem; border-radius: 999px;
+  margin-right: 0.5rem;
+}
+.mq-q-topic {
+  color: var(--bfw-ink-soft);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mq-q-text {
+  font-size: 1.02rem; line-height: 1.55;
+  margin: 0.6rem 0 0.9rem; font-weight: 500;
+}
+.mq-paragraph {
+  background: white;
+  border-left: 3px solid var(--bfw-primary);
+  padding: 0.8rem 1rem;
+  margin: 0.7rem 0 1rem;
+  font-size: 0.93rem;
+  color: var(--bfw-ink);
+  line-height: 1.6;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+}
+.mq-paragraph .mq-paragraph-label {
+  display: block; font-size: 0.75rem; font-weight: 700;
+  color: var(--bfw-primary-dark);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+.mq-options { display: flex; flex-direction: column; gap: 0.45rem; }
+.mq-option {
+  display: flex; align-items: flex-start; gap: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  background: white;
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 9px;
+  cursor: pointer; transition: all 0.15s;
+  font-size: 0.96rem; line-height: 1.5;
+}
+.mq-option:hover { border-color: var(--bfw-primary); background: var(--bfw-bg-teal); }
+.mq-option.locked { cursor: default; }
+.mq-option.locked:hover { background: white; border-color: var(--bfw-border); }
+.mq-option.locked.correct { background: #D1FAE5; border-color: var(--bfw-success); color: #064E3B; }
+.mq-option.locked.incorrect { background: #FEE2E2; border-color: var(--bfw-danger); color: #7F1D1D; }
+.mq-marker {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  background: var(--bfw-bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; flex-shrink: 0;
+  font-size: 0.88rem;
+  border: 1.5px solid var(--bfw-border);
+}
+.mq-option:hover .mq-marker { background: var(--bfw-primary); color: white; border-color: var(--bfw-primary); }
+.mq-option.locked.correct .mq-marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.mq-option.locked.incorrect .mq-marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.mq-option.locked:hover .mq-marker { background: var(--bfw-bg-soft); color: var(--bfw-ink); border-color: var(--bfw-border); }
+.mq-option.locked.correct:hover .mq-marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.mq-option.locked.incorrect:hover .mq-marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.mq-exp {
+  margin-top: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--bfw-bg-teal);
+  border-radius: 7px;
+  font-size: 0.9rem;
+  color: var(--bfw-ink-soft);
+  line-height: 1.55;
+}
+.mq-exp strong { color: var(--bfw-primary-dark); }
+
+/* Result */
+.mq-result { text-align: center; padding: 1rem 0.5rem 0.5rem; }
+.mq-big-score {
+  font-size: 4rem; font-weight: 900;
+  line-height: 1; margin: 1rem 0 0.5rem;
+}
+.mq-grade { font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 600; }
+.mq-bestanden {
+  margin: 0.5rem 0 1.2rem;
+  font-weight: 700; font-size: 1rem;
+}
+.mq-skala {
+  width: 100%; max-width: 480px;
+  margin: 1.2rem auto;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.mq-skala th, .mq-skala td {
+  padding: 0.45rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bfw-border);
+}
+.mq-skala th { color: var(--bfw-ink-soft); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.mq-skala tr.active { background: var(--bfw-bg-teal); font-weight: 700; }
+.mq-result-buttons {
+  margin-top: 1.5rem;
+  display: flex; gap: 0.7rem;
+  justify-content: center; flex-wrap: wrap;
+}
 </style>
 </head>
 <body>
@@ -338,6 +572,17 @@ footer a:hover { text-decoration: underline; }
       <p>Hier finden Sie alle Materialien zum Modul: <strong>Präsentation</strong>, ausführliches <strong>Handout</strong> als PDF, ein <strong>interaktives Quiz</strong> mit 60 Multiple-Choice-Fragen und ein <strong>Aufgabenheft</strong> mit Musterlösungen — pro Kurstag. Klicken Sie auf einen der Links, um das Material zu öffnen oder herunterzuladen.</p>
     </div>
 
+    <div class="morgen-card">
+      <div class="mq-info">
+        <div class="sun-icon">🌅</div>
+        <div>
+          <h3>Wiederholungs-Morgenquiz · Tag 1 bis Tag 4</h3>
+          <div class="mq-desc">60 Fragen aus Präsentation und Handout der ersten vier Kurstage<br>· Perfekt zum Aufwachen mit Beschaffungslogik ·</div>
+        </div>
+      </div>
+      <button class="btn-start-quiz" onclick="startMorgenQuiz()">Quiz starten →</button>
+    </div>
+
     <h2 class="section-title">Kurstage</h2>
     <div class="tage-grid" id="tageGrid">
       <!-- wird per JS befüllt -->
@@ -349,6 +594,11 @@ footer a:hover { text-decoration: underline; }
     </footer>
 
   </div>
+</div>
+
+<!-- MORGENQUIZ-OVERLAY -->
+<div id="morgenQuizOverlay" class="quiz-overlay">
+  <div class="quiz-modal" id="morgenQuizModal"><!-- per JS befüllt --></div>
 </div>
 
 <script>
@@ -484,6 +734,531 @@ function showDashboard() {
   document.getElementById('dashboard').classList.add('active');
   renderTage();
 }
+
+// =================================================================
+// MORGENQUIZ — Wiederholung Tag 1-4 (60 Fragen)
+// =================================================================
+
+const MQ_WITZE_START = [
+  'Guten Morgen! Bevor es losgeht, eine kleine Eselsbrücke: Ein Kaufmann ohne Skonto ist wie ein Aktenordner ohne Hebel — formal vorhanden, aber irgendwie sinnlos. ☕ Auf gehts!',
+  'Achtung Spruch: Drei Lieferanten, zwei Skonto-Fristen und ein vergessener Meldebestand sitzen in einem Boot. Wer paddelt? — Genau, Sie. Viel Spaß!',
+  'Wie viele Kaufleute braucht man, um eine Glühbirne zu wechseln? Antwort: Keinen — sie holen drei Angebote ein, mahnen den Elektriker und buchen die Birne als Anlagevermögen. So gehört sich das.',
+  'Was sagt der Beschaffer zum Lieferanten am Montagmorgen? — „Heute kaufe ich nichts — heute lese ich nur AGB." Der Lieferant: „Dann sehen wir uns Mittwoch wieder."',
+  'Frage: Warum nimmt der Einkäufer nachts immer Bleistift und Block mit ins Bett? — Falls ihm in der Nacht der optimale Meldebestand einfällt. Schriftform schafft Beweissicherheit, selbst im Traum.',
+  'Sagt ein Auszubildender zum Chef: „Ich habe gerade § 433 BGB auswendig gelernt." Chef: „Schön — und jetzt? Liefern Sie mir das Eigentum daran auch noch?"'
+];
+
+const MQ_WITZE_ENDE = [
+  'Glückwunsch! Sie haben gerade mehr §§ überlebt als ein durchschnittlicher Justiziar an einem Montagmorgen. Belohnung: Sie dürfen jetzt einen Kaffee bestellen — bitte unter Beachtung der 6 R.',
+  'Wenn dieses Ergebnis ein Lagerbestand wäre — wären Sie über dem Mindestbestand? Falls ja: weiter so. Falls nicht: morgen ist ein neuer Tag und der Meldebestand wartet schon. 🎯',
+  'Ende. Falls Sie unsicher sind, ob Sie heute mit dem richtigen Schuh aus dem Bett gestiegen sind — das ist kein Fehler, sondern Anfechtungsgrund wegen Erklärungsirrtums nach § 119 BGB. ;-)',
+  'Sie haben es geschafft! Erinnern Sie sich: Der billigste Lieferant ist nicht immer der beste — und das schnellste Quiz nicht immer das gründlichste. Sie haben sich Zeit genommen, sehr gut!',
+  'Quiz beendet. Falls die Note nicht passt: das ist nur eine Wareneingangskontrolle — kein Vertragsbruch. Reklamieren Sie sich morgen einfach selbst nach und liefern Sie eine bessere Version.',
+  'Sehr gut! Jetzt sind Sie offiziell BGB-fest. Verwenden Sie diese Fähigkeit nur zum Guten — und nicht, um auf Familienfeiern den § 433 wörtlich zu zitieren.'
+];
+
+const MQ_TAG_LABEL = {
+  1: 'Tag 1 — Beschaffungsprozess (11.05.)',
+  2: 'Tag 2 — Bezugsquellen, Anfragen, Angebotsvergleich (12.05.)',
+  3: 'Tag 3 — Bestellungen und Kaufverträge (13.05.)',
+  4: 'Tag 4 — Ausführen von Bestellungen (15.05.)'
+};
+
+const MQ_QUESTIONS = [
+  // ===== TAG 1 — BESCHAFFUNGSPROZESS (1-15) =====
+  { tag: 1, topic: '6 R', q: 'Die Beschaffung verfolgt die sogenannten 6 R der Beschaffung. Welche Auflistung enthält ALLE sechs?',
+    options: ['Material, Menge, Qualität, Ort, Zeit, Preis', 'Bestellung, Lieferung, Rechnung, Zahlung, Lager, Reklamation', 'Markt, Mensch, Methode, Material, Maschine, Mitwelt', 'Material, Menge, Lieferant, Vertrag, Zahlung, Lager'],
+    a: 0, e: 'Die 6 R: Richtiges Material, richtige Menge, richtige Qualität, am richtigen Ort, zur richtigen Zeit, zum richtigen Preis (Eselsbrücke: M-M-Q-O-Z-P).' },
+
+  { tag: 1, topic: 'Beschaffungsprozess', q: 'In welcher Reihenfolge laufen die sieben Schritte des idealtypischen Beschaffungsprozesses ab?',
+    options: ['Bedarfsermittlung → Bezugsquellen → Anfrage → Angebotsvergleich → Bestellung → Wareneingang → Rechnungsprüfung', 'Anfrage → Bestellung → Bedarfsermittlung → Lieferung → Vergleich → Rechnung', 'Bedarf → Wareneingang → Anfrage → Bestellung → Vergleich → Rechnung', 'Bestellung → Anfrage → Lieferung → Bedarfsermittlung'],
+    a: 0, e: 'Der Beschaffungsprozess folgt genau diesen 7 Schritten in dieser logischen Reihenfolge.' },
+
+  { tag: 1, topic: 'Anfrage', q: 'Lesen Sie folgenden Sachverhalt: Eine Sachbearbeiterin der Müller GmbH versendet ein Schreiben an drei Lieferanten mit der Bitte, ein Angebot über 200 Aktenordner abzugeben. Welche rechtliche Qualität hat dieses Schreiben?',
+    paragraph: 'Sachverhalt: „Sehr geehrte Damen und Herren, wir bitten Sie um Abgabe eines Angebots über 200 Aktenordner DIN A4 breit, Lieferung bis Ende des Monats. Für eine Antwort bis spätestens Freitag wären wir dankbar."',
+    options: ['Unverbindliche Aufforderung zur Abgabe eines Angebots (invitatio ad offerendum) — nicht bindend', 'Verbindlicher Antrag im Sinne von § 145 BGB', 'Annahme eines bestehenden Angebots', 'Bestellung mit sofortiger Lieferpflicht'],
+    a: 0, e: 'Eine Anfrage ist nur eine unverbindliche Aufforderung an den Lieferanten, ein Angebot abzugeben — keine Willenserklärung mit Bindungswirkung. Erst das Angebot bindet (§ 145 BGB).' },
+
+  { tag: 1, topic: 'Make-or-Buy', q: 'Was bezeichnet die sogenannte „Make-or-Buy"-Entscheidung?',
+    options: ['Die Entscheidung, ob ein Sachgut oder eine Dienstleistung selbst hergestellt (Make) oder fremdbezogen (Buy) wird', 'Die Entscheidung, welcher Lieferant ausgewählt wird', 'Die Entscheidung, wann bestellt wird', 'Die Entscheidung über die Zahlungsweise'],
+    a: 0, e: 'Make-or-Buy = grundsätzliche strategische Entscheidung zwischen Eigenfertigung und Fremdbezug.' },
+
+  { tag: 1, topic: 'Make-or-Buy Praxis', q: 'Eigenleistung kostet 4.830 €, Fremdbezug 4.500 €. Was sollten Sie zusätzlich zum reinen Kostenvergleich berücksichtigen, bevor Sie zum Fremdbezug wechseln?',
+    options: ['Vertragsbindung, Abhängigkeit vom Lieferanten, Qualitätskontrolle und drohenden Know-how-Verlust', 'Nichts — der Preis entscheidet allein', 'Nur die Lieferzeit', 'Nur die Mehrwertsteuer'],
+    a: 0, e: 'Bei knappem Kostenvorteil überwiegen oft qualitative Risiken — Eselsbrücke: „Wenn der Vorteil klein ist, bleibts daheim."' },
+
+  { tag: 1, topic: 'Beschaffungsprinzipien', q: 'Welches Beschaffungsprinzip führt zu hohen Lagerbeständen, aber großer Versorgungssicherheit?',
+    options: ['Vorratsbeschaffung', 'Just-in-Time', 'Einzelbeschaffung im Bedarfsfall', 'Kanban'],
+    a: 0, e: 'Vorratsbeschaffung speichert Material in größeren Mengen → hohe Sicherheit, aber hohe Kapitalbindung im Lager.' },
+
+  { tag: 1, topic: 'JIT', q: 'Was kennzeichnet das Just-in-Time-Prinzip (JIT)?',
+    options: ['Material wird genau zum Produktionszeitpunkt geliefert, Lager praktisch null', 'Es wird auf Vorrat eingekauft', 'Material wird nach Bedarf einzeln gekauft', 'Es wird nur einmal jährlich bestellt'],
+    a: 0, e: 'JIT = fertigungssynchrone Lieferung; Lager praktisch null, dafür hohe Abhängigkeit vom Lieferanten.' },
+
+  { tag: 1, topic: 'Kanban', q: 'Wo und wann wurde das Kanban-Verfahren entwickelt?',
+    options: ['Bei Toyota in Japan in den 1970er Jahren', 'In den USA bei Ford in den 1920er Jahren', 'In Deutschland bei VW in den 1990ern', 'In England zur Industriellen Revolution'],
+    a: 0, e: 'Kanban (jap. „Karte") wurde von Toyota als Teil des Toyota-Produktionssystems entwickelt — Pull-Verfahren mit Karten/Signalen.' },
+
+  { tag: 1, topic: 'E-Procurement', q: 'Was kennzeichnet die SELL-SIDE-Lösung im E-Procurement?',
+    options: ['Der LIEFERANT betreibt das System (z. B. eigener Onlineshop)', 'Der Käufer betreibt das System', 'Ein neutraler Dritter bündelt Sortimente vieler Lieferanten', 'Es findet kein elektronischer Datenaustausch statt'],
+    a: 0, e: 'Sell-Side = Verkaufsseite des Lieferanten — er betreibt z. B. einen Onlineshop oder eigenen B2B-Katalog.' },
+
+  { tag: 1, topic: 'E-Procurement', q: 'Was kennzeichnet die BUY-SIDE-Lösung im E-Procurement?',
+    options: ['Der KÄUFER betreibt das System; Lieferanten stellen ihre Kataloge ein', 'Der Lieferant betreibt das System', 'Ein Dritter bündelt die Sortimente', 'Es findet kein elektronischer Datenaustausch statt'],
+    a: 0, e: 'Buy-Side = Einkaufsseite des Käufers — typisch bei großen Konzernen (SAP Ariba, Coupa) mit eigenen Genehmigungsworkflows.' },
+
+  { tag: 1, topic: 'E-Procurement', q: 'Was kennzeichnet einen MARKTPLATZ im E-Procurement?',
+    options: ['Ein neutraler Dritter bündelt Sortimente vieler Lieferanten (z. B. Mercateo)', 'Der Lieferant betreibt das System', 'Der Käufer betreibt das System', 'Es ist eine analoge Messe'],
+    a: 0, e: 'Marktplatz = neutraler Plattform-Betreiber bringt Käufer und viele Lieferanten zusammen.' },
+
+  { tag: 1, topic: 'LkSG', q: 'Lesen Sie den folgenden Gesetzesauszug. Welche Anforderung stellt das LkSG an deutsche Unternehmen ab einer bestimmten Größe?',
+    paragraph: 'Lieferkettensorgfaltspflichtengesetz (LkSG), in Kraft seit 1. Januar 2023: „Unternehmen mit Sitz in Deutschland müssen entlang ihrer Lieferkette menschenrechtliche und umweltbezogene Sorgfaltspflichten erfüllen. Hierzu gehört u. a. eine Risikoanalyse, ein Beschwerdeverfahren und eine regelmäßige Berichterstattung. Erfasst sind seit 2024 alle Unternehmen mit mindestens 1.000 Arbeitnehmern."',
+    options: ['Sorgfaltspflichten zu Menschenrechten und Umwelt entlang der eigenen Lieferkette', 'Verbot ausländischer Lieferanten', 'Pflicht zur CO₂-neutralen Produktion', 'Verbot von Just-in-Time-Beschaffung'],
+    a: 0, e: 'LkSG verpflichtet Unternehmen ab gewisser Größe, ihre Lieferanten auf Menschenrechte und Umwelt zu prüfen — siehe Auszug oben.' },
+
+  { tag: 1, topic: 'CSRD', q: 'Wofür steht die Abkürzung CSRD?',
+    options: ['Corporate Sustainability Reporting Directive — EU-Richtlinie zur Nachhaltigkeitsberichterstattung', 'Computer System Reporting Database', 'Compliance Standards Reporting Documentation', 'Continuous Sales Reporting Direction'],
+    a: 0, e: 'CSRD ist die EU-Richtlinie, die Unternehmen zur transparenten Nachhaltigkeitsberichterstattung verpflichtet.' },
+
+  { tag: 1, topic: 'Organisation', q: 'Welcher Vorteil spricht typischerweise für ZENTRALE Beschaffung?',
+    options: ['Bündelung großer Mengen und damit höhere Mengenrabatte sowie einheitliche Standards', 'Höhere Marktnähe vor Ort', 'Schnellere Reaktionszeit auf lokale Bedarfe', 'Geringere Standardisierung'],
+    a: 0, e: 'Zentrale Bündelung ermöglicht größere Bestellmengen → bessere Konditionen und einheitliche Prozesse.' },
+
+  { tag: 1, topic: '6 R Praxis', q: 'Eine Bürokraft bestellt Druckerpapier in Premium-Fotoqualität für 50 % mehr Geld, obwohl Standardpapier für interne Ausdrucke vollkommen ausreicht. Welches der 6 R wird verletzt?',
+    options: ['Richtige Qualität — überqualifiziert ist auch falsch', 'Richtige Menge', 'Richtiger Ort', 'Richtige Zeit'],
+    a: 0, e: '„Richtige Qualität" bedeutet die geforderte Spezifikation — höhere Qualität ist nicht automatisch besser, sondern oft nur teurer.' },
+
+  // ===== TAG 2 — BEZUGSQUELLEN, ANFRAGEN, ANGEBOTSVERGLEICH (16-30) =====
+  { tag: 2, topic: 'Bedarfsarten', q: 'Was versteht man unter Primärbedarf?',
+    options: ['Verkaufsfähige Endprodukte und Dienstleistungen, die ein Unternehmen am Markt anbietet', 'Roh- und Hilfsstoffe', 'Hilfs- und Betriebsstoffe', 'Der aktuelle Lagerbestand'],
+    a: 0, e: 'Primärbedarf = die marktfähigen Endprodukte/Dienstleistungen, die das Unternehmen anbietet.' },
+
+  { tag: 2, topic: 'Bedarfsarten', q: 'Ein Möbelhersteller benötigt für die Produktion von 3.000 Schreibtischen insgesamt 12.000 Tischbeine. In welche Bedarfskategorie gehören diese 12.000 Tischbeine?',
+    options: ['Sekundärbedarf — sie gehen direkt in das Endprodukt ein', 'Primärbedarf — verkaufsfähiges Endprodukt', 'Tertiärbedarf — Hilfsstoffe', 'Bruttobedarf — Gesamtbedarf ohne Abzüge'],
+    a: 0, e: 'Tischbeine gehen direkt in das Endprodukt (Schreibtisch) ein → Sekundärbedarf.' },
+
+  { tag: 2, topic: 'Bedarfsarten', q: 'Was ist ein typischer Tertiärbedarf in der Möbelproduktion?',
+    options: ['Schmierstoff für die Säge (Hilfs-/Betriebsstoff)', 'Buchenholzplatten für die Schreibtische', 'Verkaufsfertige Schreibtische', 'Kundenaufträge'],
+    a: 0, e: 'Tertiärbedarf = Hilfs- und Betriebsstoffe, die NICHT direkt ins Produkt eingehen, aber für den Produktionsprozess gebraucht werden.' },
+
+  { tag: 2, topic: 'Brutto/Netto', q: 'Wie wird der Nettobedarf korrekt berechnet?',
+    options: ['Bruttobedarf − Lagerbestand − offene Bestellungen + Sicherheitsbestand', 'Bruttobedarf + Lagerbestand', 'Bruttobedarf − Sicherheitsbestand', 'Lagerbestand + offene Bestellungen'],
+    a: 0, e: 'Nettobedarf = Bruttobedarf − Lagerbestand − offene Bestellungen + Sicherheitsbestand.' },
+
+  { tag: 2, topic: 'Brutto/Netto', q: 'Berechnen Sie den Nettobedarf anhand der folgenden Werte: Bruttobedarf 200 Stück, Lagerbestand 30 Stück, bereits bestellt (aber noch nicht geliefert) 50 Stück, Sicherheitsbestand 20 Stück.',
+    options: ['140 Stück', '100 Stück', '120 Stück', '160 Stück'],
+    a: 0, e: 'Nettobedarf = 200 − 30 − 50 + 20 = 140 Stück.' },
+
+  { tag: 2, topic: 'ABC-Analyse', q: 'Was leistet die ABC-Analyse?',
+    options: ['Sie ist ein Klassifikationsverfahren, das Objekte nach wirtschaftlichem Wertanteil in 3 Klassen (A/B/C) einteilt', 'Sie regelt die Buchhaltung', 'Sie ist eine Bestellmethode', 'Sie ist eine Lagertechnik'],
+    a: 0, e: 'ABC = Klassifikation in A (sehr wichtig), B (wichtig), C (weniger wichtig) nach Jahresverbrauchswert.' },
+
+  { tag: 2, topic: 'ABC-Analyse', q: 'Auf welchem Prinzip beruht die ABC-Analyse?',
+    options: ['Pareto-Prinzip (20/80-Regel)', 'Murphys Gesetz', 'Peter-Prinzip', 'Eisenhower-Prinzip'],
+    a: 0, e: 'Pareto: 20 % der Ursachen verursachen 80 % der Wirkung. In der Beschaffung: ca. 20 % der Artikel = 80 % des Wertes.' },
+
+  { tag: 2, topic: 'ABC-Analyse', q: 'Welcher Wertanteil ist typisch für A-Teile in einer ABC-Analyse?',
+    options: ['Bis ca. 70 % des Gesamtwerts (bei nur ca. 10 % der Artikel)', 'Bis ca. 50 %', 'Bis ca. 90 %', 'Bis ca. 100 %'],
+    a: 0, e: 'A-Teile machen typischerweise bis zu 70 % des Gesamtwerts aus, obwohl sie nur ca. 10 % der Artikelanzahl sind.' },
+
+  { tag: 2, topic: 'ABC-Analyse', q: 'Wie sollten A-Teile typischerweise beschafft werden?',
+    options: ['Just-in-Time, Rahmenverträge, eng überwacht und strategische Lieferantenpartnerschaften', 'Vorratsbeschaffung mit großem Lager', 'Einzelbeschaffung pro Bedarf, kein Vertrag', 'Über Marktplätze ohne weitere Pflege'],
+    a: 0, e: 'A-Teile sind wertvoll → kleine Lager, intensive Steuerung, strategische Partner.' },
+
+  { tag: 2, topic: 'Bezugskalkulation', q: 'In welcher Reihenfolge werden die Preisbestandteile bei der Bezugskalkulation verarbeitet?',
+    options: ['Listenpreis → Rabatt → Skonto → Bezugskosten = Bezugspreis (Einstandspreis)', 'Listenpreis → Skonto → Rabatt → Bezugskosten', 'Listenpreis → Bezugskosten → Rabatt → Skonto', 'Listenpreis → Bezugskosten → Skonto → Rabatt'],
+    a: 0, e: 'Korrekte Reihenfolge: Liste → Rabatt (= Ziel) → Skonto (= Bar) → Bezugskosten = Bezugspreis.' },
+
+  { tag: 2, topic: 'Bezugskalkulation Praxis', q: 'Berechnen Sie den Bezugspreis pro Stück: Listenpreis 4,50 €, 10 % Lieferanten-Rabatt, 2 % Skonto, Bezugskosten 0,25 €/Stück.',
+    options: ['4,22 €', '4,12 €', '4,32 €', '4,50 €'],
+    a: 0, e: 'Schritt für Schritt: 4,50 − 10 % = 4,05 (Ziel) − 2 % = 3,969 (Bar) + 0,25 = 4,219 ≈ 4,22 €.' },
+
+  { tag: 2, topic: 'Skonto', q: 'Was ist Skonto?',
+    options: ['Prozentualer Preisnachlass für die Zahlung innerhalb einer kurzen Frist (typisch 2-3 % innerhalb von 10 Tagen)', 'Mengenrabatt für Großbestellungen', 'Treuerabatt für Stammkunden', 'Frachtkostennachlass'],
+    a: 0, e: 'Skonto = Nachlass für schnelle Zahlung. Typische Klausel: „2 % Skonto bei Zahlung innerhalb 10 Tagen, sonst netto 30 Tage."' },
+
+  { tag: 2, topic: 'Nutzwertanalyse', q: 'Was leistet die Nutzwertanalyse beim Lieferantenvergleich?',
+    options: ['Sie ermöglicht den qualitativen Vergleich von Alternativen anhand gewichteter Kriterien', 'Sie liefert ausschließlich einen quantitativen Preisvergleich', 'Sie verwaltet Lagerbestände', 'Sie löst Bestellungen automatisch aus'],
+    a: 0, e: 'Nutzwertanalyse = systematische Bewertung qualitativer Kriterien (z. B. Zuverlässigkeit) mit Gewichtung.' },
+
+  { tag: 2, topic: 'Nutzwertanalyse', q: 'Ein Lieferant erhält für das Kriterium „Lieferzuverlässigkeit" 4 Punkte. Die Gewichtung des Kriteriums beträgt 30 %. Wie hoch ist der gewichtete Teilnutzen?',
+    options: ['1,20', '1,00', '1,33', '0,75'],
+    a: 0, e: 'Gewichteter Teilnutzen = Punktwert × Gewichtungsfaktor = 4 × 0,30 = 1,20.' },
+
+  { tag: 2, topic: 'Anfrage Recht', q: 'Was bedeutet die lateinische Bezeichnung „invitatio ad offerendum" im Zusammenhang mit Anfragen?',
+    options: ['Aufforderung zur Abgabe eines Angebots — rechtlich nicht bindend', 'Bindender Antrag im Sinne von § 145 BGB', 'Bindende Annahme eines Angebots', 'Sofortiger Vertragsschluss'],
+    a: 0, e: 'Lateinisch für die Aufforderung an einen Geschäftspartner, ein Angebot abzugeben — rechtlich nicht bindend.' },
+
+  // ===== TAG 3 — BESTELLUNGEN UND KAUFVERTRÄGE (31-45) =====
+  { tag: 3, topic: 'Rechtsgebiete', q: 'Welches Gesetz ist für Beschaffungsverträge im Büroalltag besonders wichtig?',
+    options: ['Bürgerliches Gesetzbuch (BGB) — privates Recht', 'Strafgesetzbuch (StGB)', 'Grundgesetz (GG)', 'Abgabenordnung (AO)'],
+    a: 0, e: 'Das BGB regelt Kaufverträge und ist die wichtigste Rechtsquelle für die Beschaffung — privates Recht zwischen gleichgeordneten Partnern.' },
+
+  { tag: 3, topic: 'Natürliche Person', q: 'Lesen Sie folgenden Gesetzestext. Was bedeutet er für die Rechtsfähigkeit?',
+    paragraph: '§ 1 BGB Beginn der Rechtsfähigkeit: „Die Rechtsfähigkeit des Menschen beginnt mit der Vollendung der Geburt."',
+    options: ['Jeder Mensch ist ab seiner Geburt rechtsfähig und damit eine natürliche Person', 'Rechtsfähigkeit beginnt erst mit dem 7. Lebensjahr', 'Rechtsfähigkeit beginnt mit Volljährigkeit (18 Jahre)', 'Rechtsfähigkeit setzt einen Eintrag im Personenstandsregister voraus'],
+    a: 0, e: 'Aus § 1 BGB ergibt sich: Jeder Mensch ist von Geburt an rechtsfähig — auch ein Säugling kann z. B. erben.' },
+
+  { tag: 3, topic: 'Geschäftsunfähig', q: 'Lesen Sie folgenden Gesetzestext. Welche Rechtsfolge hat es, wenn ein 6-jähriges Kind im Kiosk einen Kaugummi für 50 Cent „kauft"?',
+    paragraph: '§ 104 BGB Geschäftsunfähigkeit: „Geschäftsunfähig ist: 1. wer nicht das siebente Lebensjahr vollendet hat, 2. wer sich in einem die freie Willensbestimmung ausschließenden Zustand krankhafter Störung der Geistestätigkeit befindet, sofern nicht der Zustand seiner Natur nach ein vorübergehender ist." § 105 BGB Nichtigkeit der Willenserklärung: „(1) Die Willenserklärung eines Geschäftsunfähigen ist nichtig."',
+    options: ['Der „Kaufvertrag" ist nichtig — das Kind ist nach § 104 Nr. 1 BGB geschäftsunfähig', 'Der Vertrag ist wirksam, weil der Betrag klein ist', 'Der Vertrag ist schwebend unwirksam, bis die Eltern zustimmen', 'Der Vertrag ist anfechtbar'],
+    a: 0, e: '§ 104 Nr. 1 BGB: Wer das 7. Lebensjahr nicht vollendet hat, ist geschäftsunfähig. § 105: Willenserklärung daher nichtig (von Anfang an unwirksam).' },
+
+  { tag: 3, topic: 'Taschengeldparagraph', q: 'Lesen Sie folgenden Gesetzestext. Wie heißt dieser Paragraph im Volksmund und was regelt er?',
+    paragraph: '§ 110 BGB Bewirken der Leistung mit eigenen Mitteln: „Ein von dem Minderjährigen ohne Zustimmung des gesetzlichen Vertreters geschlossener Vertrag gilt als von Anfang an wirksam, wenn der Minderjährige die vertragsmäßige Leistung mit Mitteln bewirkt, die ihm zu diesem Zwecke oder zu freier Verfügung von dem Vertreter oder mit dessen Zustimmung von einem Dritten überlassen worden sind."',
+    options: ['Taschengeldparagraph — ein Geschäft eines Minderjährigen ist wirksam, wenn er es mit ihm überlassenen (Taschengeld-)Mitteln bewirkt', 'Wuchertatbestand — Schutz vor sittenwidrigen Geschäften', 'Anfechtungsparagraph — Schutz vor Irrtum', 'AGB-Paragraph — Inhaltskontrolle'],
+    a: 0, e: 'Volksmund: „Taschengeldparagraph". § 110 BGB rettet kleine Käufe Minderjähriger durch nachträgliche Wirksamkeit, sobald der Minderjährige das Taschengeld einsetzt.' },
+
+  { tag: 3, topic: 'Beschränkt geschäftsfähig', q: 'Ein 16-jähriger Schüler bestellt online ohne Wissen seiner Eltern ein Tablet im Wert von 400 €. Die Eltern erfahren davon nach der Lieferung. Welche Rechtsfolge tritt ein, solange die Eltern nicht reagiert haben?',
+    options: ['Der Vertrag ist schwebend unwirksam — er wird erst wirksam, wenn die Eltern zustimmen, oder nichtig, wenn sie verweigern', 'Der Vertrag ist sofort vollwirksam, weil das Tablet bereits geliefert wurde', 'Der Vertrag ist sofort nichtig', 'Der Vertrag ist nur anfechtbar'],
+    a: 0, e: 'Beschränkt Geschäftsfähige (7-17 Jahre) brauchen für nicht lediglich rechtlich vorteilhafte Geschäfte die Zustimmung der Eltern → bis dahin schwebend unwirksam (§ 108 BGB).' },
+
+  { tag: 3, topic: 'Rechtsobjekte', q: 'Was sind „vertretbare Sachen" im Sinne des BGB?',
+    options: ['Sachen, die nach Maß, Zahl oder Gewicht austauschbar sind — z. B. Druckerpapier, Schrauben', 'Sachen, die einzigartig und nicht austauschbar sind', 'Sachen, die nur in einer Stadt verkauft werden', 'Sachen, die unter 100 € kosten'],
+    a: 0, e: 'Vertretbar = austauschbar nach Maß/Zahl/Gewicht. Beispiel: Druckerpapier ist beliebig austauschbar. Ein Original-Gemälde dagegen ist unvertretbar.' },
+
+  { tag: 3, topic: 'Rechtsgeschäfte', q: 'Wie viele übereinstimmende Willenserklärungen braucht ein EINSEITIGES Rechtsgeschäft (z. B. eine Kündigung)?',
+    options: ['Eine — eine einzige Willenserklärung reicht aus', 'Zwei — Antrag und Annahme', 'Drei', 'Mindestens vier'],
+    a: 0, e: 'Einseitig = eine Willenserklärung reicht. Beispiele: Kündigung, Testament, Anfechtung. Mehrseitig = Vertrag (mindestens 2 übereinstimmende Erklärungen).' },
+
+  { tag: 3, topic: 'Trennungsprinzip', q: 'Eine Sachbearbeiterin kauft im Laden einen Aktenordner und zahlt sofort bar. Was ist hier das Verpflichtungsgeschäft, was das Verfügungsgeschäft?',
+    options: ['Verpflichtung = der Kaufvertrag (§ 433 BGB); Verfügung = Übergabe des Ordners und Eigentumsübertragung (§ 929 BGB)', 'Verpflichtung = die Bezahlung; Verfügung = der Vertrag', 'Beide sind dasselbe Geschäft', 'Verfügung = der Vertrag; Verpflichtung = die Lieferung'],
+    a: 0, e: 'Trennungsprinzip: Der Kaufvertrag (§ 433) begründet die Pflicht — das ist das Verpflichtungsgeschäft. Die Übergabe und Eigentumsübertragung (§ 929) erfüllt sie — Verfügungsgeschäft.' },
+
+  { tag: 3, topic: '§ 433 BGB', q: 'Lesen Sie folgenden Gesetzestext. Was sind danach die Hauptpflichten des Verkäufers?',
+    paragraph: '§ 433 BGB Vertragstypische Pflichten beim Kaufvertrag, Absatz 1: „Durch den Kaufvertrag wird der Verkäufer einer Sache verpflichtet, dem Käufer die Sache zu übergeben und das Eigentum an der Sache zu verschaffen. Der Verkäufer hat dem Käufer die Sache frei von Sach- und Rechtsmängeln zu verschaffen."',
+    options: ['Sache übergeben UND Eigentum verschaffen — beides frei von Sach- und Rechtsmängeln', 'Nur den Kaufpreis fordern', 'Nur Werbung machen', 'Nur die Rechnung schreiben'],
+    a: 0, e: '§ 433 Abs. 1 BGB nennt drei Hauptpflichten des Verkäufers: 1) Übergabe der Sache, 2) Eigentumsverschaffung, 3) Mangelfreiheit.' },
+
+  { tag: 3, topic: '§ 433 BGB', q: 'Lesen Sie folgenden Gesetzestext. Was sind danach die Hauptpflichten des Käufers?',
+    paragraph: '§ 433 BGB Vertragstypische Pflichten beim Kaufvertrag, Absatz 2: „Der Käufer ist verpflichtet, dem Verkäufer den vereinbarten Kaufpreis zu zahlen und die gekaufte Sache abzunehmen."',
+    options: ['Kaufpreis zahlen UND die gekaufte Sache abnehmen', 'Sich für die Lieferung bedanken', 'Den Vertrag aufheben', 'Werbung für den Lieferanten machen'],
+    a: 0, e: '§ 433 Abs. 2 BGB nennt zwei Hauptpflichten des Käufers: Zahlung und Abnahme der Sache.' },
+
+  { tag: 3, topic: 'Vertragsschluss', q: 'Lesen Sie folgenden Gesetzestext. Wie kommt ein Kaufvertrag zustande?',
+    paragraph: '§ 145 BGB Bindung an den Antrag: „Wer einem anderen die Schließung eines Vertrags anträgt, ist an den Antrag gebunden, es sei denn, dass er die Gebundenheit ausgeschlossen hat." § 147 BGB Annahmefrist: „(1) Der einem Anwesenden gemachte Antrag kann nur sofort angenommen werden. (2) Der einem Abwesenden gemachte Antrag kann nur bis zu dem Zeitpunkte angenommen werden, in welchem der Antragende den Eingang der Antwort unter regelmäßigen Umständen erwarten darf."',
+    options: ['Durch zwei übereinstimmende Willenserklärungen: Antrag und Annahme', 'Allein durch die Lieferung der Ware', 'Allein durch die Zahlung des Kaufpreises', 'Durch einseitige Bestellbestätigung des Verkäufers'],
+    a: 0, e: 'Antrag (Angebot) + Annahme = Vertrag. Geregelt in §§ 145 ff. BGB. Beide Erklärungen müssen sich decken (essentialia negotii).' },
+
+  { tag: 3, topic: 'Annahme mit Änderung', q: 'Lesen Sie folgenden Gesetzestext. Ein Lieferant bietet 100 Aktenordner für 422 € an. Der Käufer schreibt zurück: „Wir nehmen für 400 €." Was ist rechtlich passiert?',
+    paragraph: '§ 150 BGB Verspätete und abändernde Annahme, Absatz 2: „Eine Annahme unter Erweiterungen, Einschränkungen oder sonstigen Änderungen gilt als Ablehnung verbunden mit einem neuen Antrag."',
+    options: ['Die „Annahme" gilt als Ablehnung verbunden mit einem neuen Antrag — kein Vertrag, bis der Lieferant zustimmt', 'Ein Vertrag über 400 € ist geschlossen', 'Ein Vertrag über 422 € ist geschlossen', 'Der Vertrag ist nichtig'],
+    a: 0, e: '§ 150 Abs. 2 BGB ist eindeutig: Jede Änderung macht aus der „Annahme" einen neuen Antrag — der ursprüngliche Antragende muss diesem zustimmen, damit ein Vertrag entsteht.' },
+
+  { tag: 3, topic: 'Invitatio', q: 'Welche rechtliche Qualität hat die bloße Anzeige eines Aktenordners zum Preis von 4,99 € im Onlineshop des Lieferanten?',
+    options: ['Invitatio ad offerendum — unverbindliche Aufforderung an den Käufer, ein Angebot abzugeben', 'Bindendes Angebot, das durch Bestellen sofort zum Vertragsschluss führt', 'Bindende Annahme', 'Endgültiger Vertragsschluss'],
+    a: 0, e: 'Onlineshop-Anzeigen sind rechtlich keine Angebote, sondern nur Aufforderungen zum Bestellen. Der Käufer macht durch Bestellen den Antrag — der Shop kann ihn annehmen oder ablehnen.' },
+
+  { tag: 3, topic: 'AGB', q: 'Lesen Sie folgenden Gesetzestext. Was sind AGB nach BGB-Definition?',
+    paragraph: '§ 305 BGB Einbeziehung Allgemeiner Geschäftsbedingungen in den Vertrag, Absatz 1: „Allgemeine Geschäftsbedingungen sind alle für eine Vielzahl von Verträgen vorformulierten Vertragsbedingungen, die eine Vertragspartei (Verwender) der anderen Vertragspartei bei Abschluss eines Vertrags stellt."',
+    options: ['Vorformulierte Vertragsbedingungen für eine Vielzahl von Verträgen, die eine Partei der anderen stellt', 'Individuell ausgehandelte Klauseln zwischen zwei Vertragsparteien', 'Mündliche Absprachen ohne schriftliche Form', 'Gesetzliche Vorschriften ohne Vertragscharakter'],
+    a: 0, e: 'Definition aus § 305 Abs. 1 BGB: AGB sind „vorformuliert" UND „für eine Vielzahl von Verträgen" UND „gestellt" (nicht individuell ausgehandelt).' },
+
+  { tag: 3, topic: 'AGB-Einbeziehung', q: 'Lesen Sie folgenden Gesetzestext. Welche drei Voraussetzungen müssen für die wirksame Einbeziehung von AGB in einen Verbrauchervertrag erfüllt sein?',
+    paragraph: '§ 305 BGB Einbeziehung Allgemeiner Geschäftsbedingungen, Absatz 2: „Allgemeine Geschäftsbedingungen werden nur dann Bestandteil eines Vertrags, wenn der Verwender bei Vertragsschluss 1. die andere Vertragspartei ausdrücklich oder, wenn ein ausdrücklicher Hinweis wegen der Art des Vertragsschlusses nur unter unverhältnismäßigen Schwierigkeiten möglich ist, durch deutlich sichtbaren Aushang am Orte des Vertragsschlusses auf sie hinweist und 2. der anderen Vertragspartei die Möglichkeit verschafft, in zumutbarer Weise [...] von ihrem Inhalt Kenntnis zu nehmen, und wenn die andere Vertragspartei mit ihrer Geltung einverstanden ist."',
+    options: ['Hinweis bei Vertragsschluss, zumutbare Möglichkeit der Kenntnisnahme und Einverständnis der anderen Partei', 'Notarielle Beurkundung, Eintragung im Handelsregister und Veröffentlichung', 'Mündliche Erklärung, Bestätigung per E-Mail und schriftliche Annahme', 'Anwaltliche Beratung, Hinweis und Schriftform mit Stempel'],
+    a: 0, e: '§ 305 Abs. 2 BGB nennt genau diese drei Voraussetzungen: Hinweis, zumutbare Kenntnisnahme, Einverständnis. Bei B2B-Geschäften (HGB) reicht die Branchenüblichkeit aus.' },
+
+  // ===== TAG 4 — AUSFÜHREN VON BESTELLUNGEN (46-60) =====
+  { tag: 4, topic: 'Bestellpunktverfahren', q: 'Was kennzeichnet das Bestellpunktverfahren?',
+    options: ['Eine Bestellung wird ausgelöst, sobald der Lagerbestand den Meldebestand erreicht — verbrauchsgesteuert', 'Eine Bestellung erfolgt nur in festen Zeitintervallen, unabhängig vom Verbrauch', 'Eine Bestellung erfolgt einmal pro Jahr für den Gesamtbedarf', 'Der Lieferant entscheidet eigenständig, wann geliefert wird'],
+    a: 0, e: 'Bestellpunktverfahren = verbrauchsgesteuert. Sobald der Lagerbestand den Meldebestand erreicht, wird bestellt — unabhängig vom Datum.' },
+
+  { tag: 4, topic: 'Bestellrhythmusverfahren', q: 'Was kennzeichnet das Bestellrhythmusverfahren?',
+    options: ['Eine Bestellung erfolgt in festen Zeitintervallen, die Bestellmenge ist variabel', 'Eine Bestellung erfolgt bei Erreichen eines Meldebestands', 'Eine Bestellung erfolgt nur, wenn der Lieferant anruft', 'Just-in-Time-Lieferung jeden Werktag'],
+    a: 0, e: 'Rhythmus = zeitgesteuert: zu festen Terminen wird bestellt, Menge richtet sich nach dem Auffüllbedarf bis zum Soll-Bestand.' },
+
+  { tag: 4, topic: 'JIT-Voraussetzung', q: 'Welche Voraussetzung ist für funktionierende Just-in-Time-Beschaffung unverzichtbar?',
+    options: ['Sehr zuverlässige Lieferanten und enge IT-Integration entlang der Lieferkette', 'Ein großes eigenes Lager als Puffer', 'Sehr niedriger Einkaufspreis', 'Wöchentliche Anrufe beim Lieferanten'],
+    a: 0, e: 'JIT lebt von Lieferzuverlässigkeit und schneller Datenkommunikation (oft EDI). Fällt der Lieferant aus, fällt die Produktion sofort aus.' },
+
+  { tag: 4, topic: 'Mindestbestand', q: 'Welche Funktion hat der Mindestbestand?',
+    options: ['Er ist ein Sicherheitspuffer, der nie unterschritten werden sollte — er federt Lieferunterbrechungen und Bedarfsspitzen ab', 'Er gibt den höchsten erlaubten Lagerbestand an', 'Er ist der durchschnittliche Tagesverbrauch', 'Er löst automatisch eine Bestellung aus'],
+    a: 0, e: 'Mindestbestand = Eiserne Reserve. Unterschreitung deutet auf zu spätes Bestellen oder Lieferverzug hin.' },
+
+  { tag: 4, topic: 'Meldebestand', q: 'Welche Formel berechnet den Meldebestand korrekt?',
+    options: ['Meldebestand = Mindestbestand + (Tagesverbrauch × Lieferzeit in Tagen)', 'Meldebestand = Höchstbestand − Mindestbestand', 'Meldebestand = Tagesverbrauch × Lagerumschlagshäufigkeit', 'Meldebestand = Bruttobedarf − Lagerbestand'],
+    a: 0, e: 'Meldebestand = Mindestbestand + (Tagesverbrauch × Lieferzeit). So bleibt während der Lieferzeit noch ein Puffer bis zur Mindestschwelle.' },
+
+  { tag: 4, topic: 'Meldebestand Praxis', q: 'Berechnen Sie den Meldebestand: Tagesverbrauch 50 Blatt, Lieferzeit 5 Tage, Mindestbestand 100 Blatt.',
+    options: ['350 Blatt', '250 Blatt', '300 Blatt', '400 Blatt'],
+    a: 0, e: 'Meldebestand = 100 + (50 × 5) = 100 + 250 = 350 Blatt. Bei Erreichen dieser Schwelle muss neu bestellt werden.' },
+
+  { tag: 4, topic: 'Höchstbestand', q: 'Berechnen Sie den Höchstbestand: Bestellmenge 1.000 Stück, Mindestbestand 100 Stück.',
+    options: ['1.100 Stück', '900 Stück', '1.000 Stück', '1.200 Stück'],
+    a: 0, e: 'Höchstbestand = Mindestbestand + Bestellmenge = 100 + 1.000 = 1.100 Stück — der maximale Lagerstand direkt nach Lieferung.' },
+
+  { tag: 4, topic: 'Andler-Formel', q: 'Wie lautet die Andler-Formel zur Berechnung der optimalen Bestellmenge?',
+    options: ['x = √(2 × Jahresbedarf × Bestellkosten / (Einkaufspreis × Lagerkostensatz))', 'x = Jahresbedarf × Einkaufspreis', 'x = Jahresbedarf / Bestellkosten', 'x = Bestellkosten × Lagerkostensatz'],
+    a: 0, e: 'Andler: Wurzel aus 2 × Jahresbedarf × Bestellkosten geteilt durch (Einkaufspreis × Lagerkostensatz). Minimiert Lager- und Bestellkosten gemeinsam.' },
+
+  { tag: 4, topic: 'Andler Praxis', q: 'Berechnen Sie die optimale Bestellmenge nach Andler: Jahresbedarf 12.000 Stück, Bestellkosten 40 € pro Bestellung, Einkaufspreis 2,50 €/Stück, Lagerkostensatz 20 %.',
+    options: ['Ca. 1.386 Stück', 'Ca. 1.000 Stück', 'Ca. 1.500 Stück', 'Ca. 2.000 Stück'],
+    a: 0, e: 'x = √(2 × 12.000 × 40 / (2,50 × 0,20)) = √(960.000 / 0,5) = √1.920.000 ≈ 1.386 Stück. Pro Jahr also ≈ 8,7 Bestellungen.' },
+
+  { tag: 4, topic: 'Bestellung Form', q: 'Welche Form sollte eine Bestellung im Geschäftsverkehr typischerweise haben?',
+    options: ['Schriftlich nach DIN 5008 — Beweissicherheit und klare Bezugnahme auf das Angebot', 'Ausschließlich mündlich per Telefon', 'Per WhatsApp mit Emojis', 'Nur per Handzeichen am Empfang'],
+    a: 0, e: 'Schriftform nach DIN 5008 ist Standard. Auch wenn mündliche Bestellungen rechtlich gültig wären — die Schriftform schafft Beweissicherheit bei Streitigkeiten.' },
+
+  { tag: 4, topic: 'Mahnwesen', q: 'Wie viele kaufmännische Mahnstufen sind im Geschäftsverkehr üblich, und wie lautet ihre Reihenfolge?',
+    options: ['Drei Stufen: 1. Erinnerung, 2. Mahnung, 3. letzte Mahnung mit Androhung rechtlicher Schritte', 'Eine einzige Mahnung mit sofortigem Gerichtsbescheid', 'Zwei Stufen: Erinnerung und Inkasso', 'Vier Stufen: 1. Anruf, 2. SMS, 3. Brief, 4. Klage'],
+    a: 0, e: 'Drei Mahnstufen: 1. freundliche Erinnerung mit neuer Frist, 2. Mahnung mit deutlicherer Frist, 3. letzte Mahnung mit Androhung von Rücktritt, Schadensersatz und gerichtlichem Mahnverfahren.' },
+
+  { tag: 4, topic: 'Verzug ohne Mahnung', q: 'Lesen Sie folgenden Gesetzestext. Wann tritt Schuldnerverzug auch OHNE Mahnung ein?',
+    paragraph: '§ 286 BGB Verzug des Schuldners, Absatz 2: „Der Mahnung bedarf es nicht, wenn 1. für die Leistung eine Zeit nach dem Kalender bestimmt ist, 2. der Leistung ein Ereignis vorauszugehen hat und eine angemessene Zeit für die Leistung in der Weise bestimmt ist, dass sie sich von dem Ereignis an nach dem Kalender berechnen lässt, 3. der Schuldner die Leistung ernsthaft und endgültig verweigert, 4. aus besonderen Gründen unter Abwägung der beiderseitigen Interessen der sofortige Eintritt des Verzugs gerechtfertigt ist."',
+    options: ['Wenn der Liefertermin kalendermäßig fest bestimmt war (z. B. Lieferung bis 15.05.2026) — dann tritt der Verzug automatisch am Folgetag ein', 'Nie — eine Mahnung ist immer erforderlich', 'Nur bei Beträgen über 1.000 €', 'Nur wenn der Schuldner Kaufmann ist'],
+    a: 0, e: '§ 286 Abs. 2 Nr. 1 BGB: Bei kalendermäßig bestimmtem Liefertermin tritt der Verzug automatisch ein — keine Mahnung nötig.' },
+
+  { tag: 4, topic: 'Anfechtung', q: 'Lesen Sie folgenden Gesetzestext. Welche Wirkung hat eine wirksame Anfechtung?',
+    paragraph: '§ 142 BGB Wirkung der Anfechtung, Absatz 1: „Wird ein anfechtbares Rechtsgeschäft angefochten, so ist es als von Anfang an nichtig anzusehen."',
+    options: ['Das Rechtsgeschäft wird rückwirkend (von Anfang an) nichtig — als wäre es nie geschlossen worden', 'Das Rechtsgeschäft bleibt zunächst wirksam und endet erst ab dem Anfechtungszeitpunkt', 'Das Rechtsgeschäft wird teurer', 'Das Rechtsgeschäft wird automatisch um ein Jahr verlängert'],
+    a: 0, e: '§ 142 Abs. 1 BGB: Anfechtung wirkt ex tunc, also rückwirkend. Das Rechtsgeschäft gilt als von Anfang an nichtig.' },
+
+  { tag: 4, topic: 'Arglistige Täuschung', q: 'Lesen Sie folgenden Gesetzestext. Was berechtigt nach diesem Paragraphen zur Anfechtung?',
+    paragraph: '§ 123 BGB Anfechtbarkeit wegen Täuschung oder Drohung, Absatz 1: „Wer zur Abgabe einer Willenserklärung durch arglistige Täuschung oder widerrechtlich durch Drohung bestimmt worden ist, kann die Erklärung anfechten."',
+    options: ['Arglistige Täuschung oder widerrechtliche Drohung — beide berechtigen zur Anfechtung der Willenserklärung', 'Nur ein einfacher Versehensfehler ohne weiteres', 'Nur ein Preisirrtum ab 1.000 €', 'Nur die nachträgliche Reue über den Vertrag'],
+    a: 0, e: '§ 123 BGB unterscheidet zwei Tatbestände: arglistige Täuschung (bewusste Irreführung) und widerrechtliche Drohung. Beide ermöglichen Anfechtung.' },
+
+  { tag: 4, topic: 'Nichtigkeit/Anfechtung', q: 'Worin besteht der zentrale Unterschied zwischen einem NICHTIGEN und einem ANFECHTBAREN Rechtsgeschäft?',
+    options: ['Nichtig = von Anfang an unwirksam ohne weiteres Zutun; anfechtbar = zunächst wirksam, wird durch Anfechtungserklärung rückwirkend nichtig', 'Es gibt keinen Unterschied — beide Begriffe sind synonym', 'Nichtig = nur bei Verbrauchern; anfechtbar = nur bei Kaufleuten', 'Nichtig = schriftlich; anfechtbar = mündlich'],
+    a: 0, e: 'Nichtigkeit (z. B. § 105, § 134, § 138 BGB) wirkt automatisch von Anfang an. Anfechtbarkeit (z. B. § 119, § 123 BGB) muss aktiv erklärt werden und wirkt dann rückwirkend (§ 142 BGB).' }
+];
+
+// Shuffle-Mechanik: pro Frage werden die Anzeige-Positionen der Antworten zufällig
+function mqShuffleAnswers() {
+  MQ_QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+function mqOrigIndex(qi, displayIdx) { return MQ_QUESTIONS[qi].shuffled[displayIdx]; }
+function mqDisplayCorrectIdx(qi) { return MQ_QUESTIONS[qi].shuffled.indexOf(MQ_QUESTIONS[qi].a); }
+
+let mqAnswers = [];
+let mqState = 'start'; // 'start' | 'running' | 'result'
+
+function mqIsCorrect(qi) {
+  if (mqAnswers[qi] === null || mqAnswers[qi] === undefined) return false;
+  return mqOrigIndex(qi, mqAnswers[qi]) === MQ_QUESTIONS[qi].a;
+}
+
+function mqIhkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',  color: '#EF4444', bestanden: false };
+}
+
+function mqPickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function startMorgenQuiz() {
+  mqShuffleAnswers();
+  mqAnswers = new Array(MQ_QUESTIONS.length).fill(null);
+  mqState = 'start';
+  const startWitz = mqPickRandom(MQ_WITZE_START);
+  const modal = document.getElementById('morgenQuizModal');
+  modal.innerHTML = `
+    <h2>🌅 Wiederholungs-Morgenquiz</h2>
+    <p class="mq-sub">60 Fragen aus Präsentation und Handout der Kurstage 1 bis 4. Die Antwortreihenfolge wird jedes Mal zufällig neu gemischt.</p>
+    <div class="quiz-witz">${startWitz}</div>
+    <ul style="color: var(--bfw-ink-soft); font-size: 0.95rem; line-height: 1.7; padding-left: 1.3rem; margin: 1rem 0;">
+      <li><strong>15 Fragen pro Tag</strong> — Tag 1 bis Tag 4 nacheinander</li>
+      <li><strong>Sofortige Auswertung</strong> nach jeder Antwort mit Erklärung</li>
+      <li><strong>IHK-Notenschlüssel</strong> am Ende</li>
+      <li>Wenn ein Gesetzestext oder Sachverhalt zitiert ist, lesen Sie ihn vollständig — die Lösung steht im Text!</li>
+    </ul>
+    <div class="quiz-controls">
+      <button class="btn-quiz ghost" onclick="closeMorgenQuiz()">Abbrechen</button>
+      <button class="btn-quiz primary" onclick="mqRenderRunning()">Los gehts →</button>
+    </div>
+  `;
+  document.getElementById('morgenQuizOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+}
+
+function closeMorgenQuiz() {
+  document.getElementById('morgenQuizOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function mqRenderRunning() {
+  mqState = 'running';
+  const modal = document.getElementById('morgenQuizModal');
+
+  // Gruppiere Fragen nach Tag für Block-Header
+  let blocks = '';
+  let lastTag = 0;
+  MQ_QUESTIONS.forEach((qd, i) => {
+    if (qd.tag !== lastTag) {
+      blocks += `<div class="mq-block-header">${MQ_TAG_LABEL[qd.tag]}</div>`;
+      lastTag = qd.tag;
+    }
+    blocks += mqRenderQuestion(i);
+  });
+
+  modal.innerHTML = `
+    <h2>🌅 Wiederholungs-Morgenquiz · Tag 1–4</h2>
+    <div class="quiz-score">
+      <div>Beantwortet: <strong id="mqAnswered">0</strong> / ${MQ_QUESTIONS.length}</div>
+      <div>Richtig: <strong id="mqCorrect">0</strong></div>
+    </div>
+    <div class="quiz-progress"><div id="mqProgressBar"></div></div>
+    <div id="mqQuiz">${blocks}</div>
+    <div class="quiz-controls">
+      <button class="btn-quiz danger" onclick="closeMorgenQuiz()">Schließen</button>
+      <button class="btn-quiz primary" onclick="mqFinish()">Jetzt auswerten</button>
+    </div>
+  `;
+  window.scrollTo(0, 0);
+}
+
+function mqRenderQuestion(qi) {
+  const qd = MQ_QUESTIONS[qi];
+  let opts = '';
+  qd.shuffled.forEach((origIdx, j) => {
+    const letter = String.fromCharCode(65 + j);
+    opts += `<div class="mq-option" id="mq-opt-${qi}-${j}" onclick="mqAnswer(${qi}, ${j})">
+      <div class="mq-marker">${letter}</div>
+      <div>${qd.options[origIdx]}</div>
+    </div>`;
+  });
+  const paragraphBlock = qd.paragraph
+    ? `<div class="mq-paragraph"><span class="mq-paragraph-label">Gesetzestext / Sachverhalt zum Mitlesen</span>${qd.paragraph}</div>`
+    : '';
+  return `<div class="mq-question" id="mq-q-${qi}">
+    <span class="mq-q-num">Frage ${qi + 1}</span><span class="mq-q-topic">${qd.topic}</span>
+    <p class="mq-q-text">${qd.q}</p>
+    ${paragraphBlock}
+    <div class="mq-options">${opts}</div>
+  </div>`;
+}
+
+function mqAnswer(qi, oi) {
+  if (mqAnswers[qi] !== null) return;
+  mqAnswers[qi] = oi;
+  const q = document.getElementById(`mq-q-${qi}`);
+  const opts = q.querySelectorAll('.mq-option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  const correctDisplayIdx = mqDisplayCorrectIdx(qi);
+  const userIsCorrect = (oi === correctDisplayIdx);
+  opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+  if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+
+  const exp = document.createElement('div');
+  exp.className = 'mq-exp';
+  exp.innerHTML = `<strong>${userIsCorrect ? '✓ Richtig.' : '✗ Falsch.'}</strong> ${MQ_QUESTIONS[qi].e}`;
+  q.appendChild(exp);
+  q.classList.add('locked');
+
+  mqUpdateScore();
+
+  const answered = mqAnswers.filter(a => a !== null).length;
+  if (answered === MQ_QUESTIONS.length) {
+    setTimeout(mqFinish, 800);
+  }
+}
+
+function mqUpdateScore() {
+  const answered = mqAnswers.filter(a => a !== null).length;
+  const correct = mqAnswers.filter((a, i) => mqIsCorrect(i)).length;
+  document.getElementById('mqAnswered').textContent = answered;
+  document.getElementById('mqCorrect').textContent = correct;
+  document.getElementById('mqProgressBar').style.width = `${(answered / MQ_QUESTIONS.length) * 100}%`;
+}
+
+function mqFinish() {
+  // Decke alle noch unbeantworteten Fragen auf
+  for (let i = 0; i < MQ_QUESTIONS.length; i++) {
+    if (mqAnswers[i] === null) {
+      const q = document.getElementById(`mq-q-${i}`);
+      if (!q) continue;
+      const opts = q.querySelectorAll('.mq-option');
+      opts.forEach(o => o.classList.add('locked'));
+      opts[mqDisplayCorrectIdx(i)].classList.add('correct');
+      if (!q.querySelector('.mq-exp')) {
+        const exp = document.createElement('div');
+        exp.className = 'mq-exp';
+        exp.innerHTML = `<strong>Nicht beantwortet.</strong> ${MQ_QUESTIONS[i].e}`;
+        q.appendChild(exp);
+      }
+      q.classList.add('locked');
+    }
+  }
+  mqShowResult();
+}
+
+function mqShowResult() {
+  mqState = 'result';
+  const total = MQ_QUESTIONS.length;
+  const correct = mqAnswers.filter((a, i) => mqIsCorrect(i)).length;
+  const answered = mqAnswers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = mqIhkNote(pct);
+  const endWitz = mqPickRandom(MQ_WITZE_ENDE);
+
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `
+    <tr class="${s.stufe === note.num ? 'active' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const resultHTML = `
+    <h2 style="text-align: center;">🎉 Quiz ausgewertet</h2>
+    <div class="mq-result">
+      <div class="mq-big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="mq-grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div class="mq-bestanden" style="color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'};">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="color: var(--bfw-warn); font-size: 0.95rem; margin-bottom: 1rem;">${total - answered} Fragen wurden nicht beantwortet — als falsch gewertet.</div>` : ''}
+      <table class="mq-skala">
+        <thead><tr><th>Note</th><th>Bezeichnung</th><th>Prozentbereich</th></tr></thead>
+        <tbody>${skalaRows}</tbody>
+      </table>
+    </div>
+    <div class="quiz-witz">${endWitz}</div>
+    <div class="mq-result-buttons">
+      <button class="btn-quiz ghost" onclick="document.getElementById('mqAnswersSection').scrollIntoView({behavior:'smooth'})">↓ Antworten im Detail</button>
+      <button class="btn-quiz primary" onclick="startMorgenQuiz()">Neu mischen &amp; nochmal</button>
+      <button class="btn-quiz danger" onclick="closeMorgenQuiz()">Schließen</button>
+    </div>
+  `;
+
+  // Result-Box oben einfügen
+  const modal = document.getElementById('morgenQuizModal');
+  const existingQuiz = document.getElementById('mqQuiz');
+  if (existingQuiz) {
+    // Im Running-Modus: Result oben einfügen, Quiz drunter lassen (Antworten weiter sichtbar)
+    modal.innerHTML = resultHTML + `<div id="mqAnswersSection" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--bfw-border);"><h3 style="color: var(--bfw-primary-dark); margin-bottom: 1rem;">Alle Fragen mit Lösungen</h3>${existingQuiz.outerHTML}</div>`;
+  } else {
+    modal.innerHTML = resultHTML;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Schließen mit Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('morgenQuizOverlay').classList.contains('active')) {
+    closeMorgenQuiz();
+  }
+});
 
 // Auto-Login wenn schon freigeschaltet
 if (localStorage.getItem(STORAGE_KEY) === '1') {
