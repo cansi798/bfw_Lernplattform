@@ -334,6 +334,25 @@ footer a:hover { text-decoration: underline; }
   box-shadow: 0 8px 20px rgba(245,158,11,0.35);
 }
 
+/* Variante: Quiz 2 — Tag 5 bis Tag 7 (Indigo/Violett, „Abend-Edition") */
+.morgen-card-2 {
+  background: linear-gradient(135deg, #DBEAFE 0%, #E0E7FF 50%, #FBCFE8 100%);
+  border-color: #6366F1;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.18);
+}
+.morgen-card-2::before {
+  background: radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%);
+}
+.morgen-card-2 h3 { color: #3730A3; }
+.morgen-card-2 .sun-icon { box-shadow: 0 4px 12px rgba(99,102,241,0.30); }
+.morgen-card-2 .btn-start-quiz {
+  background: #6366F1;
+}
+.morgen-card-2 .btn-start-quiz:hover {
+  background: #4F46E5;
+  box-shadow: 0 8px 20px rgba(99,102,241,0.40);
+}
+
 /* Overlay */
 .quiz-overlay {
   display: none; position: fixed; inset: 0;
@@ -583,6 +602,17 @@ footer a:hover { text-decoration: underline; }
       <button class="btn-start-quiz" onclick="startMorgenQuiz()">Quiz starten →</button>
     </div>
 
+    <div class="morgen-card morgen-card-2">
+      <div class="mq-info">
+        <div class="sun-icon">🌇</div>
+        <div>
+          <h3>Wiederholungs-Morgenquiz · Tag 5 bis Tag 7</h3>
+          <div class="mq-desc">60 Fragen aus Präsentation und Handout der Kurstage 5 bis 7<br>· Wareneingang &amp; § 377 HGB · Kaufvertragsstörungen · Eingangsrechnungen ·</div>
+        </div>
+      </div>
+      <button class="btn-start-quiz" onclick="startMorgenQuiz2()">Quiz starten →</button>
+    </div>
+
     <h2 class="section-title">Kurstage</h2>
     <div class="tage-grid" id="tageGrid">
       <!-- wird per JS befüllt -->
@@ -599,6 +629,11 @@ footer a:hover { text-decoration: underline; }
 <!-- MORGENQUIZ-OVERLAY -->
 <div id="morgenQuizOverlay" class="quiz-overlay">
   <div class="quiz-modal" id="morgenQuizModal"><!-- per JS befüllt --></div>
+</div>
+
+<!-- MORGENQUIZ-OVERLAY 2 — Tag 5 bis 7 -->
+<div id="morgenQuizOverlay2" class="quiz-overlay">
+  <div class="quiz-modal" id="morgenQuizModal2"><!-- per JS befüllt --></div>
 </div>
 
 <script>
@@ -1253,10 +1288,517 @@ function mqShowResult() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Schließen mit Escape
+// =================================================================
+// MORGENQUIZ 2 — Wiederholung Tag 5 bis Tag 7 (60 Fragen)
+// Aus Präsentation und Handout der Kurstage 5, 6 und 7
+// =================================================================
+
+const MQ2_WITZE_START = [
+  'Guten Morgen-Edition Zwei! Heute prüfen wir Wareneingang, Kaufvertragsstörungen und Eingangsrechnungen. Eselsbrücke fürs Aufwachen: „Wer schweigt, hat zugestimmt" — also lieber aufwachen und antworten. Auf gehts!',
+  'Ein Aktenordner, ein Spediteur und § 447 BGB sitzen in einem Paket. Wer trägt die Gefahr? Genau — der Käufer. Damit ist der erste Punkt schon erklärt. Viel Spaß!',
+  'Frage zum Aufwärmen: Was sagt der Lagerist morgens zum Kapitalbindungskosten-Posten? — „Du bist da, aber niemand sieht dich. So wie ich um 6 Uhr."',
+  'Tag 5 bis 7 in einem Satz: Erst kommt die Ware (und Sie prüfen sie schnell), dann gibt es Ärger (Verzug oder Mangel), und am Ende kommt die Rechnung — die natürlich geprüft werden muss. Klingt machbar? Dann los!',
+  'Eselsbrücken-Festival heute: SAS (Schuldner-Annahme-Schlechtleistung) und EVE-W (Einfach-Verlängert-Erweitert-Weitergeleitet). Wer das kann, hat schon die halbe IHK-Prüfung Teil 2 in der Tasche.',
+  'Warum trinkt der Kaufmann jeden Morgen Kaffee „mit Vorbehalt"? — Falls die innere Kontrolle einen verdeckten Mangel ergibt. Vorbehalt sichert Mängelrechte — auch beim Frühstück.'
+];
+
+const MQ2_WITZE_ENDE = [
+  'Geschafft! Wenn 60 Fragen ein Drei-Punkt-Vergleich wären — Bestellung, Wareneingang und Rechnung haben gestimmt. Sie dürfen heute zahlen. Mit Skonto natürlich.',
+  'Quiz beendet. Sie haben gerade mehr §§ verarbeitet als ein durchschnittliches Bürgerliches Gesetzbuch an einem Montagmorgen. Belohnung: ein Kaffee — diesmal ohne Vorbehalt.',
+  'Sehr gut! Falls die Note nicht passt: das ist nur ein verdeckter Mangel der Tagesform. Sie können unverzüglich nach Entdeckung nochmal antreten — § 377 HGB sinngemäß.',
+  'Ende — und falls Sie sich gerade fragen, ob Sie heute den Lagerzinssatz von 8 % korrekt eingegeben haben: das hängt vom Ø Lagerwert ab. Und der schwankt. So wie Ihre Konzentration nach 60 Fragen.',
+  'Glückwunsch! Sie sind jetzt offiziell verzugsfest, mängelrügenfest und rechnungsprüfungsfest. Wenden Sie diese Fähigkeiten nur zum Guten an — und nicht, um an Familienfeiern den § 447 BGB wörtlich zu zitieren.',
+  'Quiz fertig. Hinweis: Verzugszinsen werden nicht für die Antwortzeit gewährt. Aber Sie können sich selbst eine Gutschrift schreiben für jede richtige Antwort — ganz im Sinne der sachlichen Rechnungsprüfung.'
+];
+
+const MQ2_TAG_LABEL = {
+  5: 'Tag 5 — Annahme und Lagerung der Waren (18.05.)',
+  6: 'Tag 6 — Kaufvertragsstörungen (19.05.)',
+  7: 'Tag 7 — Eingangsrechnungen (20.05.)'
+};
+
+const MQ2_QUESTIONS = [
+  // ===== TAG 5 — ANNAHME UND LAGERUNG DER WAREN (1-20) =====
+  { tag: 5, topic: 'Wareneingang', q: 'In welcher Reihenfolge laufen die vier Schritte der Wareneingangskontrolle ab?',
+    options: ['Annahme → äußere Kontrolle → innere Kontrolle → Erfassung im System', 'Annahme → Erfassung → äußere → innere Kontrolle', 'Innere Kontrolle → Annahme → Erfassung → äußere Kontrolle', 'Erfassung → äußere → innere → Annahme'],
+    a: 0, e: 'Klassischer Ablauf: Erst annehmen, dann vor dem Fahrer äußerlich prüfen (Paketzahl, Schäden), nach Abfahrt innen prüfen (Inhalt mit Bestellung/Lieferschein vergleichen), zuletzt im System erfassen und einlagern.' },
+
+  { tag: 5, topic: 'Wareneingang', q: 'Was leistet die äußere Wareneingangskontrolle und warum erfolgt sie noch in Anwesenheit des Fahrers?',
+    options: ['Sichtprüfung der Verpackung und Anzahl der Pakete vor dem Fahrer — der Fahrer ist Zeuge bei Transportschäden', 'Auspacken aller Pakete und Vergleich mit der Bestellung', 'Buchung im Warenwirtschaftssystem', 'Schreiben einer Mängelrüge an den Lieferanten'],
+    a: 0, e: 'Die äußere Kontrolle sichert gegen Transportschäden: Paketzahl zählen, sichtbare Beschädigungen protokollieren — solange der Fahrer noch anwesend ist und als Zeuge dient.' },
+
+  { tag: 5, topic: 'Wareneingang', q: 'Was wird in der inneren Wareneingangskontrolle geprüft?',
+    options: ['Menge, Beschaffenheit und Identität des Inhalts im Vergleich zu Lieferschein und Bestellung', 'Nur die äußere Verpackung der Pakete', 'Die Bonität des Lieferanten', 'Das Ablaufdatum der Bestellung'],
+    a: 0, e: 'Innere Kontrolle = Inhalt prüfen nach Abfahrt des Fahrers. Drei Dimensionen: stimmt die Menge, stimmt die Beschaffenheit (Qualität, Spezifikation), stimmt die Identität (richtiger Artikel)?' },
+
+  { tag: 5, topic: 'Wareneingang', q: 'Eine Sachbearbeiterin nimmt eine Palette an, deren Folie an mehreren Stellen aufgerissen ist. Was tut sie korrekt?',
+    options: ['Lieferschein „unter Vorbehalt der Mängelprüfung" unterschreiben und sichtbare Schäden dokumentieren', 'Lieferschein normal unterschreiben — innen wird sicher nichts beschädigt sein', 'Annahme komplett verweigern, ohne den Lieferanten zu informieren', 'Den Karton wieder zurück in den LKW stellen'],
+    a: 0, e: 'Bei sichtbaren Beschädigungen wird der Lieferschein „mit Vorbehalt" unterschrieben — das sichert die Mängelrechte, falls sich beim Auspacken weitere Schäden zeigen.' },
+
+  { tag: 5, topic: '§ 377 HGB', q: 'Für welche Kaufverträge gilt die Rügeobliegenheit aus § 377 HGB?',
+    options: ['Handelskauf — Kaufverträge zwischen zwei Kaufleuten (B2B)', 'Nur Verbrauchergeschäfte (B2C)', 'Nur Behördenaufträge', 'Nur Auslandsgeschäfte'],
+    a: 0, e: '§ 377 HGB greift nur, wenn beide Vertragspartner Kaufleute sind. Bei einem Verbrauchergeschäft (B2C) gibt es keine Rügepflicht.' },
+
+  { tag: 5, topic: '§ 377 HGB', q: 'Lesen Sie den Auszug. Was schuldet der Käufer beim Handelskauf nach diesem Paragraphen?',
+    paragraph: '§ 377 HGB (sinngemäß): „Der Käufer hat die Ware unverzüglich nach Ablieferung zu untersuchen, soweit dies nach ordnungsmäßigem Geschäftsgang tunlich ist, und, falls sich ein Mangel zeigt, dem Verkäufer unverzüglich Anzeige zu machen."',
+    options: ['Zwei Pflichten: unverzügliche Untersuchung der Ware UND unverzügliche Mängelanzeige bei Funden', 'Nur sofortige Bezahlung der Rechnung', 'Nur das Verpacken der Ware in das eigene Lager', 'Schreiben eines Berichts an die zuständige Industrie- und Handelskammer'],
+    a: 0, e: '§ 377 HGB verlangt zwei Schritte: prüfen UND, falls Mangel auftritt, anzeigen — beides unverzüglich. Ohne die Untersuchung kein Rügetatbestand.' },
+
+  { tag: 5, topic: '§ 377 HGB', q: 'Was ist die Rechtsfolge, wenn der Käufer eines Handelskaufs die rechtzeitige Mängelrüge versäumt?',
+    options: ['Die Ware gilt als genehmigt — alle Mängelrechte (Nacherfüllung, Rücktritt, Minderung, Schadensersatz) sind verloren (§ 377 Abs. 2 HGB)', 'Es wird automatisch eine neue Lieferung beauftragt', 'Der Lieferant zahlt eine Vertragsstrafe', 'Die Frist beginnt einfach von vorne'],
+    a: 0, e: 'Genehmigungsfiktion nach § 377 Abs. 2 HGB: Ohne rechtzeitige Rüge gilt die Ware als vertragsgemäß — sämtliche Mängelrechte sind weg. Schweigen kostet Geld.' },
+
+  { tag: 5, topic: '§ 377 HGB', q: 'Wie wird der Begriff „unverzüglich" in § 377 HGB rechtlich konkretisiert?',
+    options: ['Ohne schuldhaftes Zögern (§ 121 BGB) — in der Praxis meist 1 bis 2 Werktage', 'Innerhalb von genau 24 Stunden, auch an Sonntagen', 'Innerhalb eines Monats', 'Innerhalb eines Jahres ab Vertragsschluss'],
+    a: 0, e: '§ 121 BGB definiert „unverzüglich" als „ohne schuldhaftes Zögern". Die Rechtsprechung akzeptiert in der Praxis 1-2 Werktage, bei komplexer Prüfung auch eine Woche.' },
+
+  { tag: 5, topic: 'Mängel', q: 'Was charakterisiert einen offenen Mangel im Sinne der Wareneingangsprüfung?',
+    options: ['Er ist bei der üblichen Wareneingangsprüfung sofort erkennbar (z.B. falsche Stückzahl, sichtbare Beschädigung)', 'Er liegt im Inneren der Maschine und zeigt sich erst nach Wochen', 'Er ist nur mit einem Labortest feststellbar', 'Er ist nur den Mitarbeitern des Lieferanten bekannt'],
+    a: 0, e: 'Offene Mängel = sofort sichtbar bei üblicher Prüfung. Klassische Beispiele: Mengenabweichung, falsche Farbe, sichtbare Beschädigungen am Produkt.' },
+
+  { tag: 5, topic: 'Mängel', q: 'Eine Bürokraft entdeckt nach drei Wochen, dass die gelieferten Druckerpatronen alle leer sind. Welche Mängelart liegt vor und wann ist zu rügen?',
+    options: ['Verdeckter Mangel — er muss unverzüglich nach Entdeckung gerügt werden', 'Offener Mangel — die Rüge ist nach drei Wochen verfristet', 'Kein Mangel, weil die Patronen geliefert wurden', 'Es muss erst die Mehrwertsteuer geklärt werden'],
+    a: 0, e: 'Verdeckte Mängel zeigen sich erst später (oft im Gebrauch). Auch sie müssen gerügt werden — unverzüglich ab Entdeckung, nicht ab Lieferung.' },
+
+  { tag: 5, topic: 'Mängelrüge', q: 'Welche fünf Bestandteile sollten in einer vollständigen Mängelrüge enthalten sein?',
+    options: ['Bezug auf Lieferung (Lieferschein/Bestell-Nr.), genaue Mängelbeschreibung, gewähltes Gewährleistungsrecht, Frist für Reaktion, Datum/Unterschrift', 'Wetterbericht, Lieblingsfarbe der Sachbearbeiterin, Werbeflyer, Branchenstatistik, Gerichtsstand', 'Nur eine SMS an den Vertriebsleiter', 'Nur eine telefonische Mitteilung mit Datum'],
+    a: 0, e: 'Standard-Inhalt: 1) Bezug, 2) Beschreibung, 3) konkretes Recht (Nacherfüllung/Minderung/Rücktritt/Schadensersatz), 4) Frist, 5) Datum + Unterschrift — schriftlich für Beweissicherheit.' },
+
+  { tag: 5, topic: 'Lager-Funktionen', q: 'Was leistet die Sicherungsfunktion eines Lagers?',
+    options: ['Sie schützt die Versorgung gegen Lieferunterbrechungen, Streiks und Bedarfsspitzen', 'Sie ersetzt die Brandschutzversicherung des Gebäudes', 'Sie verbessert die Lichtverhältnisse im Bürogebäude', 'Sie überwacht den Personalbestand'],
+    a: 0, e: 'Sicherungsfunktion = Versorgungssicherheit gegen Risiken (Streik, Engpässe, Spitzenbedarf). Eine der vier Hauptfunktionen des Lagers.' },
+
+  { tag: 5, topic: 'Lager-Funktionen', q: 'Was beschreibt die Bereitstellungsfunktion des Lagers am besten?',
+    options: ['Material steht jederzeit für Produktion oder Verkauf bereit — kein Warten auf Lieferanten', 'Bereitstellung von Personal für die Lagerarbeit', 'Bereitstellung des Lagerschlüssels nur an den Geschäftsführer', 'Bereitstellung von Versicherungsverträgen für die Buchhaltung'],
+    a: 0, e: 'Bereitstellungsfunktion: Sofortzugriff auf das benötigte Material — Voraussetzung für eine reibungslose Produktion oder einen lückenlosen Verkauf.' },
+
+  { tag: 5, topic: 'Lager-Funktionen', q: 'Ein Unternehmen kauft Druckerpapier in großen Quartalsmengen ein, verbraucht es aber kontinuierlich täglich. Welche Lagerfunktion erfüllt das Lager hier?',
+    options: ['Überbrückungsfunktion — sie überbrückt die zeitliche Differenz zwischen Beschaffung und Verbrauch', 'Spekulationsfunktion — Wette auf Preisanstiege', 'Veredelungsfunktion — die Ware verbessert sich durch Lagerung', 'Sicherungsfunktion — Schutz vor Lieferengpässen'],
+    a: 0, e: 'Überbrückungsfunktion: Wenn Einkauf und Verbrauch zeitlich auseinanderfallen, übernimmt das Lager die Pufferung. Klassisches Beispiel: Quartalskauf, Tagesverbrauch.' },
+
+  { tag: 5, topic: 'Lagerformen', q: 'Welcher Vorteil spricht typischerweise für ein Eigenlager?',
+    options: ['Volle Kontrolle über alle Lagerprozesse und Aufbau eigenen Know-hows', 'Keine Investition in Gebäude oder Einrichtung notwendig', 'Vollständig variable Kosten ohne jeden Fixkostenanteil', 'Maximale Flexibilität bei stark schwankender Auslastung'],
+    a: 0, e: 'Eigenlager bedeutet maximale Kontrolle und eigenes Personal-Know-how — aber dafür hohe Investitionen und Fixkosten. Die anderen drei Optionen sind klassische Fremdlager-Vorteile.' },
+
+  { tag: 5, topic: 'Lagerformen', q: 'Wann ist ein Fremdlager bei einem Logistikdienstleister meist die bessere Wahl?',
+    options: ['Bei schwankendem oder kleinem Bedarf — keine eigene Investition, variable Kosten, Mengenflexibilität', 'Wenn man unbedingt volle Kontrolle über die Lagerprozesse haben möchte', 'Wenn das Lager das strategische Herzstück des Geschäfts ist', 'Wenn man eigenes spezialisiertes Personal aufbauen will'],
+    a: 0, e: 'Fremdlager passt zu schwankendem/kleinem Bedarf: variable Kosten statt hoher Fixkosten, Anpassung an Mengen, kein Investitionsrisiko.' },
+
+  { tag: 5, topic: 'Lagerarten', q: 'Was kennzeichnet ein Hochregallager und wo wird es typischerweise eingesetzt?',
+    options: ['Regalsysteme bis ca. 50 m Höhe, meist automatisiert — maximale Raumnutzung auf kleiner Grundfläche, typisch für große Distributionszentren', 'Ein Lager im Dachgeschoss eines Bürogebäudes', 'Ein Lager mit besonders hohen Mietkosten', 'Ein Lager nur für Akten und Aktenordner'],
+    a: 0, e: 'Hochregallager: bis zu 50 m hoch, automatisiert (Regalbediengeräte), enorme Stellplatzkapazität auf wenig Grundfläche. Hohe Investition, lohnt sich bei großvolumigem Umschlag.' },
+
+  { tag: 5, topic: 'Lagerkennzahlen', q: 'Anfangsbestand 3.000 Stück, Endbestand 5.000 Stück. Wie hoch ist der durchschnittliche Lagerbestand nach der einfachen Formel?',
+    options: ['4.000 Stück', '8.000 Stück', '2.000 Stück', '15.000 Stück'],
+    a: 0, e: 'Formel: Ø Lagerbestand = (AB + EB) / 2 = (3.000 + 5.000) / 2 = 4.000 Stück.' },
+
+  { tag: 5, topic: 'Lagerkennzahlen', q: 'Jahresverbrauch 24.000 Stück, durchschnittlicher Lagerbestand 3.000 Stück. Wie hoch ist die Lagerumschlagshäufigkeit (LUH)?',
+    options: ['8 — das Lager wird 8-mal pro Jahr komplett umgeschlagen', '6', '12', '2'],
+    a: 0, e: 'LUH = Jahresverbrauch / Ø Lagerbestand = 24.000 / 3.000 = 8. Interpretation: Das Lager wird achtmal pro Jahr komplett umgeschlagen.' },
+
+  { tag: 5, topic: 'Lagerkennzahlen', q: 'Ø Lagerwert 40.000 €, Lagerzinssatz 10 %. Wie hoch sind die Lagerzinsen pro Jahr nach der vereinfachten Formel?',
+    options: ['4.000 €', '400 €', '40.000 €', '14.000 €'],
+    a: 0, e: 'Lagerzinsen = Ø Lagerwert × Lagerzinssatz = 40.000 € × 0,10 = 4.000 € pro Jahr — die „versteckten" Kosten der Kapitalbindung.' },
+
+  // ===== TAG 6 — KAUFVERTRAGSSTÖRUNGEN (21-40) =====
+  { tag: 6, topic: 'Überblick', q: 'Was versteht man rechtlich unter einer Leistungsstörung?',
+    options: ['Die geschuldete Leistung wird nicht, nicht rechtzeitig oder nicht ordnungsgemäß erbracht', 'Ein Telefonat zwischen Vertriebspartnern', 'Eine Werbeunterbrechung im Fernsehen', 'Ein Streit zwischen Lagerarbeitern'],
+    a: 0, e: 'Leistungsstörung ist der Sammelbegriff für jede Pflichtverletzung im Schuldverhältnis. Drei Hauptarten im Kaufrecht: Schuldnerverzug, Annahmeverzug, Schlechtleistung.' },
+
+  { tag: 6, topic: 'Überblick', q: 'Welche drei Hauptarten von Kaufvertragsstörungen unterscheidet das Handout (Eselsbrücke „SAS")?',
+    options: ['Schuldnerverzug — Annahmeverzug — Schlechtleistung', 'Streik — Aufregung — Schadensersatz', 'Saldo — Annullierung — Storno', 'Skonto — Anbietung — Subvention'],
+    a: 0, e: '„SAS" = Schuldnerverzug (Verkäufer zu spät oder Käufer zahlt zu spät), Annahmeverzug (Käufer nimmt nicht ab), Schlechtleistung (Ware mangelhaft).' },
+
+  { tag: 6, topic: 'Überblick', q: 'Welche Störung liegt vor, wenn der Lieferant einen kalendermäßig vereinbarten Liefertermin nicht einhält?',
+    options: ['Schuldnerverzug / Lieferungsverzug', 'Annahmeverzug', 'Schlechtleistung', 'Höhere Gewalt'],
+    a: 0, e: 'Verspätete Lieferung trotz fixen Termins = Schuldnerverzug. Bei kalendermäßig bestimmtem Termin braucht es nicht einmal eine Mahnung (§ 286 Abs. 2 BGB).' },
+
+  { tag: 6, topic: 'Überblick', q: 'Welche Störung liegt vor, wenn der Käufer die ordnungsgemäß angebotene Ware grundlos nicht annimmt?',
+    options: ['Annahmeverzug (Gläubigerverzug)', 'Schuldnerverzug', 'Schlechtleistung', 'Mängelrüge'],
+    a: 0, e: 'Verweigerte Annahme trotz ordnungsgemäßen Angebots = Gläubigerverzug / Annahmeverzug nach §§ 293 ff. BGB.' },
+
+  { tag: 6, topic: 'Lieferungsverzug', q: 'Lesen Sie den Auszug. Welche drei Voraussetzungen müssen kumulativ erfüllt sein, damit Schuldnerverzug eintritt?',
+    paragraph: '§ 286 BGB Verzug des Schuldners (sinngemäß): „Leistet der Schuldner auf eine Mahnung des Gläubigers nicht, die nach dem Eintritt der Fälligkeit erfolgt, so kommt er durch die Mahnung in Verzug. (...) Der Schuldner kommt nicht in Verzug, solange die Leistung infolge eines Umstands unterbleibt, den er nicht zu vertreten hat."',
+    options: ['Fälligkeit der Leistung + Mahnung + Vertretenmüssen', 'Bestellung + Lieferung + Zahlung', 'Vertrag + Geld + Übergabe', 'Kaufmannseigenschaft + Steuernummer + Schriftform'],
+    a: 0, e: '§ 286 BGB nennt drei Bausteine: Die Leistung muss fällig sein, der Gläubiger muss mahnen, und der Schuldner muss den Verzug verschuldet haben (vermutet, § 276 BGB).' },
+
+  { tag: 6, topic: 'Lieferungsverzug', q: 'Wann ist eine Mahnung nach § 286 Abs. 2 BGB entbehrlich?',
+    options: ['Bei einem kalendermäßig bestimmten oder berechenbaren Liefertermin sowie bei ernsthafter, endgültiger Leistungsverweigerung', 'Nur an Sonn- und Feiertagen', 'Bei Beträgen unter 100 €', 'Nie — Mahnung ist immer Pflicht'],
+    a: 0, e: '§ 286 Abs. 2 BGB nennt 4 Fälle, in denen keine Mahnung nötig ist: kalendermäßige Bestimmung, kalendermäßige Berechenbarkeit, ernsthafte Verweigerung, sonstige besondere Gründe.' },
+
+  { tag: 6, topic: 'Lieferungsverzug', q: 'Bei Geldschulden tritt Schuldnerverzug auch ohne Mahnung ein. Nach welcher Frist?',
+    options: ['Spätestens 30 Tage nach Fälligkeit und Zugang einer Rechnung (§ 286 Abs. 3 BGB)', 'Sofort am Tag der Rechnungsstellung', 'Nach 60 Tagen', 'Nach 1 Jahr'],
+    a: 0, e: '§ 286 Abs. 3 BGB: 30-Tage-Regel für Geldschulden. Wichtig im Bürokontext — der säumige Käufer kommt automatisch in Verzug, auch ohne separate Mahnung.' },
+
+  { tag: 6, topic: 'Lieferungsverzug', q: 'Was bedeutet „Vertretenmüssen" im Sinne von § 276 BGB und wie ist die Beweislast verteilt?',
+    options: ['Vorsatz oder Fahrlässigkeit des Schuldners — wird beim Verzug vermutet, der Schuldner muss sich entlasten', 'Vertretung durch einen Anwalt im Gerichtsverfahren', 'Persönliche Anwesenheit bei der Vertragsverhandlung', 'Steuerliche Vertretung beim Finanzamt'],
+    a: 0, e: 'Vertretenmüssen = Verschulden (Vorsatz oder Fahrlässigkeit, § 276 BGB). Bei Verzug wird es vermutet — der Schuldner muss beweisen, dass er den Verzug nicht zu vertreten hat (Beweislastumkehr).' },
+
+  { tag: 6, topic: 'Verzugszinsen', q: 'Welcher Zinssatz gilt bei Verzug zwischen zwei Unternehmern (B2B, kein Verbraucher beteiligt) nach § 288 Abs. 2 BGB?',
+    options: ['Basiszinssatz + 9 Prozentpunkte', 'Basiszinssatz + 5 Prozentpunkte', 'Fix 5 % pro Jahr', 'Fix 12 % pro Jahr'],
+    a: 0, e: 'B2B: Basiszins + 9 %-Punkte (§ 288 II BGB). Der höhere Aufschlag im Geschäftsverkehr soll Druck zur pünktlichen Zahlung schaffen.' },
+
+  { tag: 6, topic: 'Verzugszinsen', q: 'Welcher Zinssatz gilt bei Verzug gegenüber einem Verbraucher (B2C) nach § 288 Abs. 1 BGB?',
+    options: ['Basiszinssatz + 5 Prozentpunkte', 'Basiszinssatz + 9 Prozentpunkte', 'Fix 9 % pro Jahr', 'Es gelten keine gesetzlichen Verzugszinsen bei Verbrauchern'],
+    a: 0, e: 'B2C: Basiszins + 5 %-Punkte (§ 288 I BGB). Niedrigerer Aufschlag im Verbraucherverkehr, um Privatpersonen nicht übermäßig zu belasten.' },
+
+  { tag: 6, topic: 'Verzugszinsen', q: 'Welche Formel gilt für die Berechnung von Verzugszinsen im kaufmännischen Verkehr?',
+    options: ['Forderung × Zinssatz × Tage / 360', 'Forderung × Tage / Monate', 'Forderung × Zinssatz × Tage / 365', 'Forderung + Zinssatz + Tage'],
+    a: 0, e: 'Standardformel mit kaufmännischem Jahr (360 Tage). Im B2C-Bereich wird teils mit 365 gerechnet — in der IHK-Prüfung Teil 2 gilt aber 360 Tage.' },
+
+  { tag: 6, topic: 'Verzugszinsen', q: 'Eine Rechnung über 12.000 € ist im B2B-Verhältnis seit 60 Tagen nicht beglichen. Basiszinssatz 3,62 %, Verzugszinssatz damit 12,62 %. Wie hoch sind die Verzugszinsen?',
+    options: ['252,40 €', '126,20 €', '504,80 €', '1.514,40 €'],
+    a: 0, e: 'Zinsen = 12.000 × 0,1262 × 60 / 360 = 252,40 €. Schritt für Schritt: 12.000 × 0,1262 = 1.514,40 (für 360 Tage); davon ein Sechstel = 252,40 €.' },
+
+  { tag: 6, topic: 'Käuferrechte', q: 'Welche vier Rechte räumt § 437 BGB dem Käufer einer mangelhaften Sache ein?',
+    options: ['Nacherfüllung, Rücktritt, Minderung, Schadensersatz', 'Rückgabe, Tausch, Reparatur, Reklamation', 'Mahnung, Klage, Vollstreckung, Insolvenz', 'Anfrage, Bestellung, Lieferung, Zahlung'],
+    a: 0, e: '§ 437 BGB ist die zentrale Norm: 1) Nacherfüllung (§ 439), 2) Rücktritt (§§ 323, 326), 3) Minderung (§ 441), 4) Schadensersatz (§§ 280, 281).' },
+
+  { tag: 6, topic: 'Käuferrechte', q: 'Warum hat die Nacherfüllung (§ 439 BGB) Vorrang vor Rücktritt und Minderung?',
+    options: ['Der Verkäufer soll die Chance erhalten, den Mangel zu beheben, bevor schärfere Rechte greifen — erst bei erfolglosem Fristablauf folgen Rücktritt/Minderung', 'Weil sie für den Käufer immer billiger ist', 'Weil sie steuerrechtlich begünstigt ist', 'Weil Verbraucher keinen Rücktritt erklären dürfen'],
+    a: 0, e: 'Vorrang der Nacherfüllung schützt den Verkäufer: Er darf zuerst nachbessern oder ersatzliefern. Die Rechtsprechung akzeptiert in der Regel eine 14-tägige Frist als angemessen.' },
+
+  { tag: 6, topic: 'Käuferrechte', q: 'Welche zwei Formen der Nacherfüllung nennt § 439 BGB und wer hat das Wahlrecht?',
+    options: ['Nachbesserung (Reparatur) oder Ersatzlieferung — das Wahlrecht hat grundsätzlich der Käufer', 'Geldrückgabe oder Gutschrift — das Wahlrecht hat der Verkäufer', 'Tausch oder Stornierung — das Wahlrecht hat das Finanzamt', 'Mahnung oder Klage — das Wahlrecht hat das Gericht'],
+    a: 0, e: '§ 439 BGB: Nachbesserung (Reparatur des Mangels) oder Ersatzlieferung (mangelfreie Sache). Das Wahlrecht liegt grundsätzlich beim Käufer.' },
+
+  { tag: 6, topic: 'Käuferrechte', q: 'Wie wird der geminderte Kaufpreis nach § 441 Abs. 3 BGB berechnet?',
+    options: ['Geminderter Preis = Kaufpreis × (Wert mangelhaft / Wert mangelfrei)', 'Geminderter Preis = Kaufpreis − Mangelbetrag', 'Geminderter Preis = Kaufpreis / 2', 'Geminderter Preis = Kaufpreis × Schadenshöhe'],
+    a: 0, e: 'Verhältnisformel: Der Kaufpreis wird im Verhältnis Wert mangelhaft zu Wert mangelfrei herabgesetzt. Keine bloße Differenz, sondern eine Quote.' },
+
+  { tag: 6, topic: 'Käuferrechte', q: 'Ein Multifunktionsdrucker für 800 € weist einen Mangel auf. Wert mangelfrei: 800 €, Wert mangelhaft: 600 €. Wie hoch ist der geminderte Kaufpreis?',
+    options: ['600 €', '200 €', '400 €', '800 €'],
+    a: 0, e: 'Formel: 800 × (600/800) = 600 €. Der Käufer kann also 200 € zurückfordern.' },
+
+  { tag: 6, topic: 'Kaufvertragsarten', q: 'Was kennzeichnet einen Handelskauf und welche besondere Pflicht gilt zusätzlich?',
+    options: ['Beidseitig Kaufleute (B2B); zusätzliche Rügepflicht nach § 377 HGB', 'Kauf in einem Einzelhandelsgeschäft', 'Kauf im Online-Versand', 'Kauf von Aktien an der Börse'],
+    a: 0, e: 'Handelskauf nach §§ 373 ff. HGB: Beide Parteien sind Kaufleute. Zusätzliche Last: § 377 HGB Rügepflicht — unverzüglich prüfen und Mängel anzeigen.' },
+
+  { tag: 6, topic: 'Kaufvertragsarten', q: 'Wie definiert § 474 BGB den Verbrauchsgüterkauf?',
+    options: ['Kauf einer beweglichen Sache durch einen Verbraucher (§ 13 BGB) von einem Unternehmer (§ 14 BGB)', 'Kauf zwischen zwei Verbrauchern auf einem Flohmarkt', 'Kauf eines Grundstücks durch einen Verbraucher', 'Kauf von Verbrauchsgütern in der Industrie'],
+    a: 0, e: '§ 474 BGB: B2C-Kauf einer beweglichen Sache. Ergänzende Schutzregeln (§§ 475 ff. BGB) — z.B. Beweislastumkehr (§ 477) und Mindestverjährung (§ 476).' },
+
+  { tag: 6, topic: 'Kaufvertragsarten', q: 'Was regelt die Beweislastumkehr nach § 477 BGB beim Verbrauchsgüterkauf?',
+    options: ['In den ersten 12 Monaten nach Übergabe wird vermutet, dass ein auftretender Mangel bereits bei Übergabe vorlag', 'Der Käufer muss seine Identität bei jedem Vertrag neu nachweisen', 'Der Verkäufer haftet gar nicht', 'Es gibt keine Verjährung'],
+    a: 0, e: '§ 477 BGB schützt Verbraucher: In den ersten 12 Monaten muss der Unternehmer beweisen, dass der Mangel noch nicht bei Übergabe vorlag — eine erhebliche Erleichterung für den Käufer.' },
+
+  // ===== TAG 7 — EINGANGSRECHNUNGEN (41-60) =====
+  { tag: 7, topic: 'Erfüllung', q: 'Lesen Sie den Auszug. Wann erlischt nach § 362 BGB ein Schuldverhältnis?',
+    paragraph: '§ 362 BGB Erlöschen durch Leistung, Abs. 1: „Das Schuldverhältnis erlischt, wenn die geschuldete Leistung an den Gläubiger bewirkt wird."',
+    options: ['Sobald die geschuldete Leistung an den Gläubiger bewirkt wird', 'Erst mit notarieller Beurkundung', 'Erst nach Ablauf der Verjährungsfrist', 'Erst nach Eintragung im Handelsregister'],
+    a: 0, e: '§ 362 BGB ist der zentrale Erfüllungstatbestand: Mit ordnungsgemäßer Bewirkung der Leistung ist die Pflicht erfüllt und das Schuldverhältnis erlischt.' },
+
+  { tag: 7, topic: 'Erfüllung', q: 'Welche Pflichten hat der Verkäufer nach § 433 Abs. 1 BGB beim Kaufvertrag?',
+    options: ['Übergabe der Sache UND Verschaffung des Eigentums — beides frei von Sach- und Rechtsmängeln', 'Nur Beratung des Käufers', 'Nur Werbung für das Produkt', 'Nur Schreiben der Rechnung'],
+    a: 0, e: '§ 433 Abs. 1 BGB: Übergabe + Eigentumsverschaffung + Mangelfreiheit. Drei Hauptpflichten — alle drei sind klausurrelevant.' },
+
+  { tag: 7, topic: 'Erfüllung', q: 'Welche Pflichten hat der Käufer nach § 433 Abs. 2 BGB?',
+    options: ['Zahlung des Kaufpreises UND Abnahme der gekauften Sache', 'Nur Bezahlen', 'Nur Werbung machen', 'Nur eine Bestellbestätigung schicken'],
+    a: 0, e: '§ 433 Abs. 2 BGB: Zwei Käufer-Pflichten — Kaufpreis zahlen und Sache abnehmen. Beide Punkte sind klausurklassisch.' },
+
+  { tag: 7, topic: 'Gutgläubiger Erwerb', q: 'Was regelt § 932 BGB?',
+    options: ['Den Eigentumserwerb an einer beweglichen Sache vom Nichtberechtigten, wenn der Erwerber gutgläubig ist', 'Den Vorsteuerabzug bei Eingangsrechnungen', 'Die Rügepflicht beim Handelskauf', 'Die Anfechtung wegen Irrtums'],
+    a: 0, e: '§ 932 BGB durchbricht den Grundsatz „nemo dat quod non habet" — gutgläubiger Erwerb beweglicher Sachen vom Nichtberechtigten ist möglich. Schutz des Rechtsverkehrs.' },
+
+  { tag: 7, topic: 'Gutgläubiger Erwerb', q: 'Lesen Sie den Auszug. Welche zentrale Ausnahme regelt § 935 BGB zum gutgläubigen Erwerb?',
+    paragraph: '§ 935 BGB Kein gutgläubiger Erwerb von abhandengekommenen Sachen, Abs. 1: „Der Erwerb des Eigentums auf Grund der §§ 932 bis 934 tritt nicht ein, wenn die Sache dem Eigentümer gestohlen worden, verloren gegangen oder sonst abhanden gekommen war."',
+    options: ['Bei gestohlenen, verlorenen oder sonst abhandengekommenen Sachen ist gutgläubiger Erwerb ausgeschlossen — Ausnahme nur in öffentlicher Versteigerung', 'Gutgläubiger Erwerb gilt nur bei Bargeschäften', 'Gutgläubiger Erwerb gilt nur zwischen Kaufleuten', 'Es gibt keine Ausnahmen zu § 932 BGB'],
+    a: 0, e: '§ 935 BGB schützt den ursprünglichen Eigentümer bei „abhandengekommenen" Sachen. Einzige Ausnahme: öffentliche Versteigerung — hier ist auch bei Diebesgut gutgläubiger Erwerb möglich.' },
+
+  { tag: 7, topic: 'Eigentumsvorbehalt', q: 'Was ist die Grundidee des einfachen Eigentumsvorbehalts (§ 449 BGB)?',
+    options: ['Das Eigentum geht erst mit vollständiger Bezahlung des Kaufpreises auf den Käufer über — bis dahin bleibt der Verkäufer Eigentümer, der Käufer ist nur Besitzer', 'Der Käufer hat ein Vorbehaltsrecht gegen Mängelrügen', 'Der Verkäufer behält sich das Recht auf Kündigung vor', 'Der Käufer darf den Vertrag jederzeit aufheben'],
+    a: 0, e: 'Einfacher EV: Klassisches Sicherungsmittel des Verkäufers. Übergabe sofort, aber Eigentum erst mit vollständiger Bezahlung — der Käufer ist bis dahin „nur" rechtmäßiger Besitzer.' },
+
+  { tag: 7, topic: 'Eigentumsvorbehalt', q: 'Was kennzeichnet den erweiterten Eigentumsvorbehalt (Kontokorrent-Vorbehalt)?',
+    options: ['Das Eigentum geht erst über, wenn ALLE offenen Forderungen aus der laufenden Geschäftsverbindung beglichen sind', 'Das Eigentum geht nur mit der konkreten Lieferung über', 'Der Käufer darf weiterverkaufen', 'Der Vorbehalt geht auf einen Dritten über'],
+    a: 0, e: 'Erweiterter EV / Kontokorrent-Vorbehalt: Sicherheit nicht nur für die konkrete Lieferung, sondern für die ganze Geschäftsbeziehung. Schutz auch bei Insolvenz.' },
+
+  { tag: 7, topic: 'Eigentumsvorbehalt', q: 'Was kennzeichnet den verlängerten Eigentumsvorbehalt?',
+    options: ['Der Käufer darf die Ware weiterverkaufen; die Forderungen aus dem Weiterverkauf werden im Voraus an den Lieferanten abgetreten (§ 398 BGB)', 'Das Eigentum geht überhaupt nicht über', 'Der Käufer darf die Ware nicht verarbeiten', 'Der Vorbehalt gilt nur für ein Jahr'],
+    a: 0, e: 'Verlängerter EV: Klassisch im Großhandel — der Wiederverkäufer darf verkaufen, sichert aber per Vorausabtretung die Kundenforderung dem Lieferanten zu. Schutz gegen Insolvenz.' },
+
+  { tag: 7, topic: 'Eigentumsvorbehalt', q: 'Was beschreibt der weitergeleitete Eigentumsvorbehalt?',
+    options: ['Das Vorbehaltsrecht wird auf einen Dritten übertragen, z.B. bei Verarbeitung der Ware in das Produkt eines anderen Eigentümers', 'Das Vorbehaltsrecht wird per Post weitergeleitet', 'Der Vorbehalt wird in der Eigentumsregister-Datenbank eingetragen', 'Der Käufer leitet den Vorbehalt an seinen Steuerberater weiter'],
+    a: 0, e: 'Weitergeleiteter EV: Bei Verbindung oder Verarbeitung wechselt das Sicherungsrecht zum neuen Produkt oder zum Eigentümer des Hauptbestandteils. Komplexer Fall, aber klausurrelevant.' },
+
+  { tag: 7, topic: 'Eigentumsvorbehalt', q: 'Welche Eselsbrücke nennt das Handout für die vier Formen des Eigentumsvorbehalts?',
+    options: ['„EVE-W": Einfach — Verlängert — Erweitert — Weitergeleitet', '„ABCD": Auf Bezahlung Ca. Drei Tage', '„MwSt": Mehrwertsteuer-Stufen-Test', '„BGB": Beispielsweise Gut Bezahlt'],
+    a: 0, e: '„EVE-W" hilft die vier Formen zu merken: Einfacher, Verlängerter, Erweiterter, Weitergeleiteter Eigentumsvorbehalt.' },
+
+  { tag: 7, topic: 'Erfüllungsort', q: 'Was ist eine Holschuld nach § 269 BGB und warum gilt sie als gesetzlicher Regelfall?',
+    options: ['Erfüllungsort ist beim Schuldner (Verkäufer) — der Käufer holt die Ware ab. Gilt mangels anderer Vereinbarung als Regelfall', 'Erfüllungsort ist beim Gläubiger — der Verkäufer bringt die Ware', 'Es ist eine besondere Form des Versendungskaufs', 'Der Käufer schickt die Ware per Post zurück'],
+    a: 0, e: '§ 269 BGB: Mangels anderer Vereinbarung ist die Schuld eine Holschuld. In der Praxis wird meist anders vereinbart (Bring- oder Schickschuld), doch die gesetzliche Vermutung ist die Holschuld.' },
+
+  { tag: 7, topic: 'Erfüllungsort', q: 'Wodurch unterscheidet sich eine Bringschuld von einer Schickschuld?',
+    options: ['Bei der Bringschuld ist der Erfüllungsort beim Gläubiger; der Verkäufer bringt die Ware persönlich. Bei der Schickschuld bleibt der Erfüllungsort beim Schuldner, der Versand erfolgt aber auf Käufergefahr', 'Es gibt keinen Unterschied — beide Begriffe sind synonym', 'Bringschuld ist immer B2C, Schickschuld immer B2B', 'Bei der Bringschuld muss der Käufer abholen, bei der Schickschuld der Verkäufer'],
+    a: 0, e: 'Bringschuld = Lieferung zum Käufer auf Risiko des Verkäufers. Schickschuld / Versendungskauf = Versand durch Spediteur auf Risiko des Käufers (§ 447 BGB).' },
+
+  { tag: 7, topic: 'Gefahrübergang', q: 'Lesen Sie den Auszug. Wann geht die Preisgefahr nach der Grundregel des § 446 BGB auf den Käufer über?',
+    paragraph: '§ 446 BGB Gefahr- und Lastenübergang, Satz 1: „Mit der Übergabe der verkauften Sache geht die Gefahr des zufälligen Untergangs und der zufälligen Verschlechterung auf den Käufer über."',
+    options: ['Mit der Übergabe der verkauften Sache an den Käufer', 'Erst mit der Eintragung im Handelsregister', 'Erst mit der vollständigen Bezahlung', 'Erst mit Ablauf der Verjährungsfrist'],
+    a: 0, e: '§ 446 BGB ist die Grundregel: Übergabe = Gefahrübergang. Bis dahin trägt der Verkäufer das Risiko (z.B. wenn die Ware in seinem Lager noch brennt).' },
+
+  { tag: 7, topic: 'Gefahrübergang', q: 'Wann geht beim B2B-Versendungskauf die Preisgefahr nach § 447 BGB auf den Käufer über?',
+    options: ['Bereits mit der Übergabe an den Spediteur, Frachtführer oder die zur Versendung bestimmte Person', 'Erst mit Ankunft der Ware beim Käufer', 'Erst mit Bezahlung der Rechnung', 'Erst mit der Wareneingangskontrolle beim Käufer'],
+    a: 0, e: '§ 447 BGB: Sondervorschrift für den Versendungskauf. Schon mit Übergabe an den Frachtführer geht die Gefahr über — Transportrisiko liegt damit beim Käufer.' },
+
+  { tag: 7, topic: 'Gefahrübergang', q: 'Wann geht beim Versendungskauf gegenüber einem Verbraucher (B2C) die Gefahr auf den Käufer über?',
+    options: ['Erst mit Übergabe an den Verbraucher (§ 475 Abs. 2 BGB) — § 447 BGB ist hier nicht anwendbar', 'Schon mit Übergabe an den Spediteur', 'Mit Auftragserteilung', 'Mit Rechnungsstellung'],
+    a: 0, e: '§ 475 Abs. 2 BGB schützt den Verbraucher: Gefahrübergang erst mit Übergabe an den Verbraucher. Bei Online-Bestellungen trägt der Händler das Transportrisiko.' },
+
+  { tag: 7, topic: 'Pflichtangaben', q: 'Welche Angabe muss nach § 14 Abs. 4 Nr. 2 UStG zwingend auf einer Rechnung stehen, damit der Vorsteuerabzug möglich ist?',
+    options: ['Steuernummer ODER Umsatzsteuer-Identifikationsnummer des leistenden Unternehmers', 'Lieblingsfarbe des Geschäftsführers', 'Handynummer des Sachbearbeiters', 'Firmen-Slogan in Großbuchstaben'],
+    a: 0, e: '§ 14 Abs. 4 Nr. 2 UStG verlangt eines von beidem: Steuernummer ODER USt-IdNr. Fehlt beides, ist der Vorsteuerabzug gefährdet.' },
+
+  { tag: 7, topic: 'Pflichtangaben', q: 'Welche Anforderung stellt § 14 Abs. 4 Nr. 4 UStG an die Rechnungsnummer?',
+    options: ['Fortlaufende, einmalige Nummer — jede Rechnung muss eindeutig identifizierbar sein', 'Beliebige Zahlenfolge ohne Systematik', 'Die Telefonnummer des Lieferanten', 'Eine Zufallszahl ohne Bezug zum Geschäftsvorgang'],
+    a: 0, e: 'Rechnungsnummer muss fortlaufend und einmalig sein. Doppelte Nummern oder Lücken sind problematisch — bei Steuerprüfungen muss die Systematik nachvollziehbar sein.' },
+
+  { tag: 7, topic: 'Pflichtangaben', q: 'Bis zu welchem Bruttobetrag gelten die vereinfachten Pflichtangaben einer Kleinbetragsrechnung nach § 33 UStDV?',
+    options: ['Bis 250 € brutto', 'Bis 50 € brutto', 'Bis 1.000 € brutto', 'Es gibt keine Wertgrenze'],
+    a: 0, e: 'Kleinbetragsrechnung: bis 250 € brutto reichen vereinfachte Angaben (z.B. ohne Empfängername). Praktisch für Tankquittungen, kleine Büroartikel.' },
+
+  { tag: 7, topic: 'Rechnungsprüfung', q: 'Welche drei Prüfungsstufen werden bei einer Eingangsrechnung typischerweise nacheinander durchgeführt?',
+    options: ['Formelle Prüfung → sachliche Prüfung → rechnerische Prüfung', 'Rechnerische → sachliche → formelle Prüfung', 'Nur eine Pauschalprüfung in einem Schritt', 'Optische → akustische → haptische Prüfung'],
+    a: 0, e: 'Reihenfolge: 1) formell (Sind alle Pflichtangaben da?), 2) sachlich (Stimmt es mit Bestellung/Wareneingang überein?), 3) rechnerisch (Sind die Beträge richtig?).' },
+
+  { tag: 7, topic: 'Rechnungsprüfung', q: 'Welche drei Dokumente werden beim klassischen Drei-Punkt-Vergleich abgeglichen?',
+    options: ['Bestellung — Wareneingang/Lieferschein — Rechnung', 'Angebot — Anfrage — Bestätigung', 'Rechnung — Mahnung — Klage', 'Bestellung — Bezahlung — Buchung'],
+    a: 0, e: 'Drei-Punkt-Vergleich = Herzstück der sachlichen Rechnungsprüfung. Alle drei Dokumente müssen in Menge, Preis und Artikel übereinstimmen. Klassische Aufgabe der Sachbearbeitung.' }
+];
+
+function mq2ShuffleAnswers() {
+  MQ2_QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+function mq2OrigIndex(qi, displayIdx) { return MQ2_QUESTIONS[qi].shuffled[displayIdx]; }
+function mq2DisplayCorrectIdx(qi) { return MQ2_QUESTIONS[qi].shuffled.indexOf(MQ2_QUESTIONS[qi].a); }
+
+let mq2Answers = [];
+let mq2State = 'start';
+
+function mq2IsCorrect(qi) {
+  if (mq2Answers[qi] === null || mq2Answers[qi] === undefined) return false;
+  return mq2OrigIndex(qi, mq2Answers[qi]) === MQ2_QUESTIONS[qi].a;
+}
+
+function mq2IhkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',  color: '#EF4444', bestanden: false };
+}
+
+function mq2PickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function startMorgenQuiz2() {
+  mq2ShuffleAnswers();
+  mq2Answers = new Array(MQ2_QUESTIONS.length).fill(null);
+  mq2State = 'start';
+  const startWitz = mq2PickRandom(MQ2_WITZE_START);
+  const modal = document.getElementById('morgenQuizModal2');
+  modal.innerHTML = `
+    <h2>🌇 Wiederholungs-Morgenquiz · Tag 5–7</h2>
+    <p class="mq-sub">60 Fragen aus Präsentation und Handout der Kurstage 5 bis 7. Die Antwortreihenfolge wird jedes Mal zufällig neu gemischt.</p>
+    <div class="quiz-witz">${startWitz}</div>
+    <ul style="color: var(--bfw-ink-soft); font-size: 0.95rem; line-height: 1.7; padding-left: 1.3rem; margin: 1rem 0;">
+      <li><strong>20 Fragen pro Tag</strong> — Tag 5, Tag 6 und Tag 7 nacheinander</li>
+      <li><strong>Sofortige Auswertung</strong> nach jeder Antwort mit Erklärung</li>
+      <li><strong>IHK-Notenschlüssel</strong> am Ende</li>
+      <li>Wenn ein Gesetzestext oder Sachverhalt zitiert ist, lesen Sie ihn vollständig — die Lösung steht im Text!</li>
+    </ul>
+    <div class="quiz-controls">
+      <button class="btn-quiz ghost" onclick="closeMorgenQuiz2()">Abbrechen</button>
+      <button class="btn-quiz primary" onclick="mq2RenderRunning()">Los gehts →</button>
+    </div>
+  `;
+  document.getElementById('morgenQuizOverlay2').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+}
+
+function closeMorgenQuiz2() {
+  document.getElementById('morgenQuizOverlay2').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function mq2RenderRunning() {
+  mq2State = 'running';
+  const modal = document.getElementById('morgenQuizModal2');
+
+  let blocks = '';
+  let lastTag = 0;
+  MQ2_QUESTIONS.forEach((qd, i) => {
+    if (qd.tag !== lastTag) {
+      blocks += `<div class="mq-block-header">${MQ2_TAG_LABEL[qd.tag]}</div>`;
+      lastTag = qd.tag;
+    }
+    blocks += mq2RenderQuestion(i);
+  });
+
+  modal.innerHTML = `
+    <h2>🌇 Wiederholungs-Morgenquiz · Tag 5–7</h2>
+    <div class="quiz-score">
+      <div>Beantwortet: <strong id="mq2Answered">0</strong> / ${MQ2_QUESTIONS.length}</div>
+      <div>Richtig: <strong id="mq2Correct">0</strong></div>
+    </div>
+    <div class="quiz-progress"><div id="mq2ProgressBar"></div></div>
+    <div id="mq2Quiz">${blocks}</div>
+    <div class="quiz-controls">
+      <button class="btn-quiz danger" onclick="closeMorgenQuiz2()">Schließen</button>
+      <button class="btn-quiz primary" onclick="mq2Finish()">Jetzt auswerten</button>
+    </div>
+  `;
+  window.scrollTo(0, 0);
+}
+
+function mq2RenderQuestion(qi) {
+  const qd = MQ2_QUESTIONS[qi];
+  let opts = '';
+  qd.shuffled.forEach((origIdx, j) => {
+    const letter = String.fromCharCode(65 + j);
+    opts += `<div class="mq-option" id="mq2-opt-${qi}-${j}" onclick="mq2Answer(${qi}, ${j})">
+      <div class="mq-marker">${letter}</div>
+      <div>${qd.options[origIdx]}</div>
+    </div>`;
+  });
+  const paragraphBlock = qd.paragraph
+    ? `<div class="mq-paragraph"><span class="mq-paragraph-label">Gesetzestext / Sachverhalt zum Mitlesen</span>${qd.paragraph}</div>`
+    : '';
+  return `<div class="mq-question" id="mq2-q-${qi}">
+    <span class="mq-q-num">Frage ${qi + 1}</span><span class="mq-q-topic">${qd.topic}</span>
+    <p class="mq-q-text">${qd.q}</p>
+    ${paragraphBlock}
+    <div class="mq-options">${opts}</div>
+  </div>`;
+}
+
+function mq2Answer(qi, oi) {
+  if (mq2Answers[qi] !== null) return;
+  mq2Answers[qi] = oi;
+  const q = document.getElementById(`mq2-q-${qi}`);
+  const opts = q.querySelectorAll('.mq-option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  const correctDisplayIdx = mq2DisplayCorrectIdx(qi);
+  const userIsCorrect = (oi === correctDisplayIdx);
+  opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+  if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+
+  const exp = document.createElement('div');
+  exp.className = 'mq-exp';
+  exp.innerHTML = `<strong>${userIsCorrect ? '✓ Richtig.' : '✗ Falsch.'}</strong> ${MQ2_QUESTIONS[qi].e}`;
+  q.appendChild(exp);
+  q.classList.add('locked');
+
+  mq2UpdateScore();
+
+  const answered = mq2Answers.filter(a => a !== null).length;
+  if (answered === MQ2_QUESTIONS.length) {
+    setTimeout(mq2Finish, 800);
+  }
+}
+
+function mq2UpdateScore() {
+  const answered = mq2Answers.filter(a => a !== null).length;
+  const correct = mq2Answers.filter((a, i) => mq2IsCorrect(i)).length;
+  document.getElementById('mq2Answered').textContent = answered;
+  document.getElementById('mq2Correct').textContent = correct;
+  document.getElementById('mq2ProgressBar').style.width = `${(answered / MQ2_QUESTIONS.length) * 100}%`;
+}
+
+function mq2Finish() {
+  for (let i = 0; i < MQ2_QUESTIONS.length; i++) {
+    if (mq2Answers[i] === null) {
+      const q = document.getElementById(`mq2-q-${i}`);
+      if (!q) continue;
+      const opts = q.querySelectorAll('.mq-option');
+      opts.forEach(o => o.classList.add('locked'));
+      opts[mq2DisplayCorrectIdx(i)].classList.add('correct');
+      if (!q.querySelector('.mq-exp')) {
+        const exp = document.createElement('div');
+        exp.className = 'mq-exp';
+        exp.innerHTML = `<strong>Nicht beantwortet.</strong> ${MQ2_QUESTIONS[i].e}`;
+        q.appendChild(exp);
+      }
+      q.classList.add('locked');
+    }
+  }
+  mq2ShowResult();
+}
+
+function mq2ShowResult() {
+  mq2State = 'result';
+  const total = MQ2_QUESTIONS.length;
+  const correct = mq2Answers.filter((a, i) => mq2IsCorrect(i)).length;
+  const answered = mq2Answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = mq2IhkNote(pct);
+  const endWitz = mq2PickRandom(MQ2_WITZE_ENDE);
+
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `
+    <tr class="${s.stufe === note.num ? 'active' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const resultHTML = `
+    <h2 style="text-align: center;">🎉 Quiz ausgewertet</h2>
+    <div class="mq-result">
+      <div class="mq-big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="mq-grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div class="mq-bestanden" style="color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'};">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="color: var(--bfw-warn); font-size: 0.95rem; margin-bottom: 1rem;">${total - answered} Fragen wurden nicht beantwortet — als falsch gewertet.</div>` : ''}
+      <table class="mq-skala">
+        <thead><tr><th>Note</th><th>Bezeichnung</th><th>Prozentbereich</th></tr></thead>
+        <tbody>${skalaRows}</tbody>
+      </table>
+    </div>
+    <div class="quiz-witz">${endWitz}</div>
+    <div class="mq-result-buttons">
+      <button class="btn-quiz ghost" onclick="document.getElementById('mq2AnswersSection').scrollIntoView({behavior:'smooth'})">↓ Antworten im Detail</button>
+      <button class="btn-quiz primary" onclick="startMorgenQuiz2()">Neu mischen &amp; nochmal</button>
+      <button class="btn-quiz danger" onclick="closeMorgenQuiz2()">Schließen</button>
+    </div>
+  `;
+
+  const modal = document.getElementById('morgenQuizModal2');
+  const existingQuiz = document.getElementById('mq2Quiz');
+  if (existingQuiz) {
+    modal.innerHTML = resultHTML + `<div id="mq2AnswersSection" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--bfw-border);"><h3 style="color: var(--bfw-primary-dark); margin-bottom: 1rem;">Alle Fragen mit Lösungen</h3>${existingQuiz.outerHTML}</div>`;
+  } else {
+    modal.innerHTML = resultHTML;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Schließen mit Escape — beide Overlays
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape' && document.getElementById('morgenQuizOverlay').classList.contains('active')) {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('morgenQuizOverlay').classList.contains('active')) {
     closeMorgenQuiz();
+  }
+  if (document.getElementById('morgenQuizOverlay2').classList.contains('active')) {
+    closeMorgenQuiz2();
   }
 });
 
