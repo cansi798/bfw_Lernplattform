@@ -83,7 +83,7 @@ c) Was bedeutet Work-Life-Balance, und mit welchen Maßnahmen können Unternehme
 
 ## Aufgabe 6 — Mobbing erkennen und bekämpfen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Mobbing am Arbeitsplatz Maßnahmen"](https://www.youtube.com/watch?v=kJoEJnJWDxk) (https://www.youtube.com/watch?v=kJoEJnJWDxk)
+📺 **Vorbereitungsvideo:** [YouTube: „Mobbing am Arbeitsplatz Maßnahmen"](https://www.youtube.com/watch?v=0pkDDZFygNQ) (https://www.youtube.com/watch?v=0pkDDZFygNQ)
 📺 **Ergänzend:** [YouTube: „Suchtprävention Betrieb"](https://www.youtube.com/watch?v=lx76ljNXP8I) (https://www.youtube.com/watch?v=lx76ljNXP8I)
 
 **Sozialform:** Partnerarbeit

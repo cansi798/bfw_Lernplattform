@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Ablageorte und Zugriffshäufigkeit
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ablage Registratur Büro Grundlagen"](https://www.youtube.com/watch?v=bI5y54iS6tk) (https://www.youtube.com/watch?v=bI5y54iS6tk)
+📺 **Vorbereitungsvideo:** [YouTube: „Ablage Registratur Büro Grundlagen"](https://www.youtube.com/watch?v=t-yOsZ8tDf4) (https://www.youtube.com/watch?v=t-yOsZ8tDf4)
 
 **Sozialform:** Einzelarbeit
 
@@ -39,7 +39,7 @@ c) Unterscheiden Sie Einzelakte und Sammelakte und nennen Sie je ein Beispiel.
 
 ## Aufgabe 3 — Arten der Registratur vergleichen
 
-📺 **Vorbereitungsvideo:** [YouTube: „liegende stehende hängende Registratur"](https://www.youtube.com/watch?v=dsNZ40TkPPk) (https://www.youtube.com/watch?v=dsNZ40TkPPk)
+📺 **Vorbereitungsvideo:** [YouTube: „liegende stehende hängende Registratur"](https://www.youtube.com/watch?v=bI5y54iS6tk) (https://www.youtube.com/watch?v=bI5y54iS6tk)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -55,7 +55,7 @@ c) Worin unterscheiden sich Hängeregistratur und Pendelregistratur in Übersich
 
 ## Aufgabe 4 — Alphabetische Ordnung nach DIN 5007
 
-📺 **Vorbereitungsvideo:** [YouTube: „alphabetische Sortierung DIN 5007"](https://www.youtube.com/watch?v=jZz5wppOvcc) (https://www.youtube.com/watch?v=jZz5wppOvcc)
+📺 **Vorbereitungsvideo:** [YouTube: „alphabetische Sortierung DIN 5007"](https://www.youtube.com/watch?v=aP1EqOWewNI) (https://www.youtube.com/watch?v=aP1EqOWewNI)
 
 **Sozialform:** Einzelarbeit
 
@@ -69,7 +69,7 @@ c) Wie werden Umlaute (ä, ö, ü) und „ß" bei der Sortierung nach DIN 5007 (
 
 ## Aufgabe 5 — Ordnungssystem wählen und Aktenplan
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ordnungssysteme Aktenplan Dezimalklassifikation"](https://www.youtube.com/watch?v=dB2aCCutTbY) (https://www.youtube.com/watch?v=dB2aCCutTbY)
+📺 **Vorbereitungsvideo:** [YouTube: „Ordnungssysteme Aktenplan Dezimalklassifikation"](https://www.youtube.com/watch?v=Q_jSSpPFAiI) (https://www.youtube.com/watch?v=Q_jSSpPFAiI)
 
 **Sozialform:** Partnerarbeit
 

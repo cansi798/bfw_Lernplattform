@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Ablauf des Postausgangs
 
-📺 **Vorbereitungsvideo:** [YouTube: „Postausgang Ablauf Poststelle"](https://www.youtube.com/watch?v=KVr3ZLMX2oo) (https://www.youtube.com/watch?v=KVr3ZLMX2oo)
+📺 **Vorbereitungsvideo:** [YouTube: „Postausgang Ablauf Poststelle"](https://www.youtube.com/watch?v=D6n_qJ4OOrs) (https://www.youtube.com/watch?v=D6n_qJ4OOrs)
 
 **Sozialform:** Einzelarbeit
 
@@ -55,7 +55,7 @@ d) Was geschieht beim Schritt „Kuvertieren und Verschließen" und wie kann er 
 
 ## Aufgabe 4 — Frankieren und Aufgeben (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Frankiermaschine Frankierarten Büro"](https://www.youtube.com/watch?v=W8YphMwpR-w) (https://www.youtube.com/watch?v=W8YphMwpR-w)
+📺 **Vorbereitungsvideo:** [YouTube: „Frankiermaschine Frankierarten Büro"](https://www.youtube.com/watch?v=eZGGxDmgxVg) (https://www.youtube.com/watch?v=eZGGxDmgxVg)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -72,8 +72,8 @@ d) Welchen Dienstleister empfehlen Sie für ein eiliges, vertrauliches Vertragso
 
 ## Aufgabe 5 — Poststraße und moderne Praxis
 
-📺 **Vorbereitungsvideo:** [YouTube: „Poststraße Kuvertierstraße Funktion"](https://www.youtube.com/watch?v=CEXT0fCm6gk) (https://www.youtube.com/watch?v=CEXT0fCm6gk)
-📺 **Ergänzend:** [YouTube: „Hybridpost Online Frankierung erklärt"](https://www.youtube.com/watch?v=qQtCJs926J4) (https://www.youtube.com/watch?v=qQtCJs926J4)
+📺 **Vorbereitungsvideo:** [YouTube: „Poststraße Kuvertierstraße Funktion"](https://www.youtube.com/watch?v=J6Im1kKtur4) (https://www.youtube.com/watch?v=J6Im1kKtur4)
+📺 **Ergänzend:** [YouTube: „Hybridpost Online Frankierung erklärt"](https://www.youtube.com/watch?v=vP4F-YRbUz0) (https://www.youtube.com/watch?v=vP4F-YRbUz0)
 
 **Sozialform:** Plenumsdiskussion
 

@@ -23,7 +23,7 @@ c) Geben Sie drei Beispiele für Arbeitsmittel, die an die Maße des menschliche
 
 ## Aufgabe 2 — Anforderungen an den Bürostuhl
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ergonomischer Bürostuhl richtig einstellen"](https://www.youtube.com/watch?v=eohM_h-U9lQ) (https://www.youtube.com/watch?v=eohM_h-U9lQ)
+📺 **Vorbereitungsvideo:** [YouTube: „Ergonomischer Bürostuhl richtig einstellen"](https://www.youtube.com/watch?v=i1UyIAHs6mo) (https://www.youtube.com/watch?v=i1UyIAHs6mo)
 
 **Sozialform:** Partnerarbeit
 
@@ -54,7 +54,7 @@ d) Welche Körperwinkel sollen beim aufrechten Sitzen jeweils etwa 90° betragen
 
 ## Aufgabe 4 — Mängel am Bildschirmarbeitsplatz erkennen (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsplatz ergonomisch Fehler vermeiden"](https://www.youtube.com/watch?v=9ZFWxEGrf7M) (https://www.youtube.com/watch?v=9ZFWxEGrf7M)
+📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsplatz ergonomisch Fehler vermeiden"](https://www.youtube.com/watch?v=Ac5dMsWMhnE) (https://www.youtube.com/watch?v=Ac5dMsWMhnE)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -70,7 +70,7 @@ c) Erläutern Sie, warum ein Laptop im Dauereinsatz eine Dockingstation mit exte
 
 ## Aufgabe 5 — Dynamisches Sitzen, Steh-Sitz-Dynamik & Sitzmechaniken
 
-📺 **Vorbereitungsvideo:** [YouTube: „Dynamisches Sitzen Steh-Sitz-Dynamik"](https://www.youtube.com/watch?v=RTSjmQjDiEE) (https://www.youtube.com/watch?v=RTSjmQjDiEE)
+📺 **Vorbereitungsvideo:** [YouTube: „Dynamisches Sitzen Steh-Sitz-Dynamik"](https://www.youtube.com/watch?v=B2DjV7bCSAE) (https://www.youtube.com/watch?v=B2DjV7bCSAE)
 
 **Sozialform:** Einzelarbeit
 

@@ -51,7 +51,7 @@ c) Was versteht man unter Reflex- und Direktblendung, und wie lassen sich Reflex
 
 ## Aufgabe 4 — Lärm und Akustik im Großraumbüro (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Lärm im Büro Dezibel Schallschutz"](https://www.youtube.com/watch?v=x3LLYB5JAhw) (https://www.youtube.com/watch?v=x3LLYB5JAhw)
+📺 **Vorbereitungsvideo:** [YouTube: „Lärm im Büro Dezibel Schallschutz"](https://www.youtube.com/watch?v=TTavJivd330) (https://www.youtube.com/watch?v=TTavJivd330)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -67,7 +67,7 @@ c) Nennen Sie vier konkrete Maßnahmen zur Lärmminderung für dieses Großraumb
 
 ## Aufgabe 5 — Farbgestaltung und Sicherheitszeichen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Farbpsychologie Büro Wirkung Farben"](https://www.youtube.com/watch?v=aKkRtB-DZtE) (https://www.youtube.com/watch?v=aKkRtB-DZtE)
+📺 **Vorbereitungsvideo:** [YouTube: „Farbpsychologie Büro Wirkung Farben"](https://www.youtube.com/watch?v=MBq3K-d3YTA) (https://www.youtube.com/watch?v=MBq3K-d3YTA)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -81,7 +81,7 @@ c) Ordnen Sie den Sicherheitszeichen die richtige Farbe zu: Verbotszeichen, Warn
 
 ## Aufgabe 6 — Pflanzen, Strahlung und Gefahrstoffe
 
-📺 **Vorbereitungsvideo:** [YouTube: „Pflanzen im Büro Wirkung Raumklima"](https://www.youtube.com/watch?v=mU6sem1erMk) (https://www.youtube.com/watch?v=mU6sem1erMk)
+📺 **Vorbereitungsvideo:** [YouTube: „Pflanzen im Büro Wirkung Raumklima"](https://www.youtube.com/watch?v=kInliFmUtKY) (https://www.youtube.com/watch?v=kInliFmUtKY)
 
 **Sozialform:** Einzelarbeit
 

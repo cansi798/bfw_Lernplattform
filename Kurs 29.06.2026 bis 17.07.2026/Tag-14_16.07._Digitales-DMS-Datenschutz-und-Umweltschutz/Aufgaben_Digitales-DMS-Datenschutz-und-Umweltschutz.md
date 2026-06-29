@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Dokumentenmanagementsystem (DMS)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagementsystem DMS einfach erklärt"](https://www.youtube.com/watch?v=cEBooQppYKI) (https://www.youtube.com/watch?v=cEBooQppYKI)
+📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagementsystem DMS einfach erklärt"](https://www.youtube.com/watch?v=D0oC16dJTdw) (https://www.youtube.com/watch?v=D0oC16dJTdw)
 
 **Sozialform:** Einzelarbeit
 
@@ -85,7 +85,7 @@ d) Welches Symbol kennzeichnet Elektrogeräte nach dem ElektroG und was darf dam
 
 ## Aufgabe 6 — Nachhaltiges Wirtschaften & Green IT
 
-📺 **Vorbereitungsvideo:** [YouTube: „Nachhaltigkeit Unternehmen Umweltsiegel Blauer Engel"](https://www.youtube.com/watch?v=zB-njPQZJcQ) (https://www.youtube.com/watch?v=zB-njPQZJcQ)
+📺 **Vorbereitungsvideo:** [YouTube: „Nachhaltigkeit Unternehmen Umweltsiegel Blauer Engel"](https://www.youtube.com/watch?v=gONwhhLYtQc) (https://www.youtube.com/watch?v=gONwhhLYtQc)
 
 **Sozialform:** Einzelarbeit
 

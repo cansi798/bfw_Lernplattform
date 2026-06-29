@@ -127,7 +127,7 @@ d) Nennen Sie drei Ordnungssysteme der Ablage.
 
 ### Aufgabe 6 — Digitales DMS, Datenschutz & Umweltschutz (Tag 14) — Komplexe Handlungsaufgabe
 
-📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagement DSGVO Büro"](https://www.youtube.com/watch?v=XQyH0yRzL34) (https://www.youtube.com/watch?v=XQyH0yRzL34)
+📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagement DSGVO Büro"](https://www.youtube.com/watch?v=C2zRNkHBmdA) (https://www.youtube.com/watch?v=C2zRNkHBmdA)
 
 **Sozialform:** Gruppenarbeit (Handlungssituation)
 

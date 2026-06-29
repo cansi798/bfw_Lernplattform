@@ -68,7 +68,7 @@ d) Ein empfangener Handelsbrief wurde im Jahr 2025 empfangen. Bis wann muss er a
 
 ## Aufgabe 5 — Schriftgutkatalog erstellen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Schriftgutkatalog Aktenplan"](https://www.youtube.com/watch?v=h-lYj7edwQk) (https://www.youtube.com/watch?v=h-lYj7edwQk)
+📺 **Vorbereitungsvideo:** [YouTube: „Schriftgutkatalog Aktenplan"](https://www.youtube.com/watch?v=JnbejlXR55Q) (https://www.youtube.com/watch?v=JnbejlXR55Q)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -84,7 +84,7 @@ c) Tragen Sie für die folgenden Schriftstücke Wertigkeitsstufe und (sofern vor
 
 ## Aufgabe 6 — Ablageorte und Registraturarten
 
-📺 **Vorbereitungsvideo:** [YouTube: „Zentrale dezentrale Ablage Registratur"](https://www.youtube.com/watch?v=D2clvM7Bqfs) (https://www.youtube.com/watch?v=D2clvM7Bqfs)
+📺 **Vorbereitungsvideo:** [YouTube: „Zentrale dezentrale Ablage Registratur"](https://www.youtube.com/watch?v=ldee6qhCJe8) (https://www.youtube.com/watch?v=ldee6qhCJe8)
 
 **Sozialform:** Einzelarbeit
 

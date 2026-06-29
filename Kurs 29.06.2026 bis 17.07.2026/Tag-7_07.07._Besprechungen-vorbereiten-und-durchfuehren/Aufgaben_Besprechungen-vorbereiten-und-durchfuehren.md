@@ -39,7 +39,7 @@ c) Welche Aspekte betreffen die Technik bzw. den Raum? Nennen Sie zwei Beispiele
 
 ## Aufgabe 3 — Tagesordnung erstellen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Tagesordnung TOP erstellen"](https://www.youtube.com/watch?v=zXpQY4gw5GI) (https://www.youtube.com/watch?v=zXpQY4gw5GI)
+📺 **Vorbereitungsvideo:** [YouTube: „Tagesordnung TOP erstellen"](https://www.youtube.com/watch?v=_KZaG_BxFwo) (https://www.youtube.com/watch?v=_KZaG_BxFwo)
 
 **Sozialform:** Einzelarbeit
 

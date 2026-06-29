@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Bedeutung des Posteingangs
 
-📺 **Vorbereitungsvideo:** [YouTube: „Posteingang Poststelle Büro"](https://www.youtube.com/watch?v=XapW4h5kvx0) (https://www.youtube.com/watch?v=XapW4h5kvx0)
+📺 **Vorbereitungsvideo:** [YouTube: „Posteingang Poststelle Büro"](https://www.youtube.com/watch?v=pl5Fh5UYD4k) (https://www.youtube.com/watch?v=pl5Fh5UYD4k)
 
 **Sozialform:** Einzelarbeit
 
@@ -72,7 +72,7 @@ c) Wie unterscheidet man am Anschriftenfeld Geschäftspost von Privatpost?
 
 ## Aufgabe 5 — Kontrollieren und Stempeln
 
-📺 **Vorbereitungsvideo:** [YouTube: „Posteingangsstempel Leerkontrolle Anlagenkontrolle"](https://www.youtube.com/watch?v=fvS95J-Sg8M) (https://www.youtube.com/watch?v=fvS95J-Sg8M)
+📺 **Vorbereitungsvideo:** [YouTube: „Posteingangsstempel Leerkontrolle Anlagenkontrolle"](https://www.youtube.com/watch?v=ozeSSMQOmhw) (https://www.youtube.com/watch?v=ozeSSMQOmhw)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -87,7 +87,7 @@ d) Nennen Sie zwei Zwecke, die der Posteingangsstempel erfüllt.
 
 ## Aufgabe 6 — Verteilen, digitaler Posteingang und Wertsendungen
 
-📺 **Vorbereitungsvideo:** [YouTube: „digitaler Posteingang Scannen OCR Dokumentenmanagement"](https://www.youtube.com/watch?v=vC38m6E-DQ0+Dokumentenmanagement) (https://www.youtube.com/watch?v=vC38m6E-DQ0+Dokumentenmanagement)
+📺 **Vorbereitungsvideo:** [YouTube: „digitaler Posteingang Scannen OCR Dokumentenmanagement"](https://www.youtube.com/watch?v=OlW_8DlDyO4) (https://www.youtube.com/watch?v=OlW_8DlDyO4)
 📺 **Ergänzend:** [YouTube: „Einschreiben Wertbrief Nachnahme Posteingang"](https://www.youtube.com/watch?v=eEuG1GNZGOw) (https://www.youtube.com/watch?v=eEuG1GNZGOw)
 
 **Sozialform:** Partnerarbeit

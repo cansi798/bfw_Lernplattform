@@ -37,7 +37,7 @@ c) Was ist die "stille Stunde" und worauf sollten Sie bei ihrer Planung achten?
 
 ## Aufgabe 3 — Leistungskurve und Pausen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Leistungskurve Biorhythmus Arbeit"](https://www.youtube.com/watch?v=BzziXcCI8p0) (https://www.youtube.com/watch?v=BzziXcCI8p0)
+📺 **Vorbereitungsvideo:** [YouTube: „Leistungskurve Biorhythmus Arbeit"](https://www.youtube.com/watch?v=cbce4LWmUec) (https://www.youtube.com/watch?v=cbce4LWmUec)
 
 **Sozialform:** Einzelarbeit
 
@@ -65,7 +65,7 @@ c) Beim Eisenhower-Prinzip werden Aufgaben nach zwei Kriterien sortiert. Nennen 
 
 ## Aufgabe 5 — Pareto, ABC-Analyse und Salamitaktik
 
-📺 **Vorbereitungsvideo:** [YouTube: „Pareto Prinzip ABC Analyse Aufgaben"](https://www.youtube.com/watch?v=yaVkudeTUKo) (https://www.youtube.com/watch?v=yaVkudeTUKo)
+📺 **Vorbereitungsvideo:** [YouTube: „Pareto Prinzip ABC Analyse Aufgaben"](https://www.youtube.com/watch?v=s6bKuWyEumI) (https://www.youtube.com/watch?v=s6bKuWyEumI)
 
 **Sozialform:** Partnerarbeit
 

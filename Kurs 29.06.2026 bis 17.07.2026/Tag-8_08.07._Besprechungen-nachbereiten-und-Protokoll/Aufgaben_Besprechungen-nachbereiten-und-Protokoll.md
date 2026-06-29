@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Besprechungen nachbereiten
 
-📺 **Vorbereitungsvideo:** [YouTube: „Besprechung nachbereiten To-do-Liste"](https://www.youtube.com/watch?v=1KSQOvp4BJs) (https://www.youtube.com/watch?v=1KSQOvp4BJs)
+📺 **Vorbereitungsvideo:** [YouTube: „Besprechung nachbereiten To-do-Liste"](https://www.youtube.com/watch?v=RCm60qyA7ig) (https://www.youtube.com/watch?v=RCm60qyA7ig)
 
 **Sozialform:** Einzelarbeit
 
@@ -55,7 +55,7 @@ c) Für welche Anlässe eignet sich das Beschluss-/Ergebnisprotokoll besonders?
 
 ## Aufgabe 4 — Protokollrahmen nach DIN 5008
 
-📺 **Vorbereitungsvideo:** [YouTube: „Protokollkopf Protokollfuß DIN 5008"](https://www.youtube.com/watch?v=WREpAUH4cs8) (https://www.youtube.com/watch?v=WREpAUH4cs8)
+📺 **Vorbereitungsvideo:** [YouTube: „Protokollkopf Protokollfuß DIN 5008"](https://www.youtube.com/watch?v=0hPEBUHJw94) (https://www.youtube.com/watch?v=0hPEBUHJw94)
 
 **Sozialform:** Partnerarbeit
 

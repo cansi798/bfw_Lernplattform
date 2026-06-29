@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Bedeutung der Büroraumplanung
 
-📺 **Vorbereitungsvideo:** [YouTube: „Büroraumplanung Grundlagen"](https://www.youtube.com/watch?v=_m_EtsDQ-DQ) (https://www.youtube.com/watch?v=_m_EtsDQ-DQ)
+📺 **Vorbereitungsvideo:** [YouTube: „Büroraumplanung Grundlagen"](https://www.youtube.com/watch?v=bLAU4y6LZIE) (https://www.youtube.com/watch?v=bLAU4y6LZIE)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Wofür dient die DGUV Information 215-441 in der Büroraumplanung?
 
 ## Aufgabe 2 — Die sechs Teilflächen eines Büros
 
-📺 **Vorbereitungsvideo:** [YouTube: „Flächenarten Büroarbeitsplatz"](https://www.youtube.com/watch?v=oDpZqj8kUsg) (https://www.youtube.com/watch?v=oDpZqj8kUsg)
+📺 **Vorbereitungsvideo:** [YouTube: „Flächenarten Büroarbeitsplatz"](https://www.youtube.com/watch?v=VPbqRFKejZc) (https://www.youtube.com/watch?v=VPbqRFKejZc)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Erläutern Sie, warum die Bewegungsfläche für die Gesundheit der Beschäfti
 
 ## Aufgabe 3 — Flächenbedarf berechnen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Quadratmeter pro Arbeitsplatz Büro"](https://www.youtube.com/watch?v=NpMMa7LZork) (https://www.youtube.com/watch?v=NpMMa7LZork)
+📺 **Vorbereitungsvideo:** [YouTube: „Quadratmeter pro Arbeitsplatz Büro"](https://www.youtube.com/watch?v=c2hw_4zkguI) (https://www.youtube.com/watch?v=c2hw_4zkguI)
 
 **Sozialform:** Einzelarbeit
 
@@ -72,7 +72,7 @@ c) Welche Maßnahme kann den Geräuschpegel in einem Gruppenbüro senken?
 ## Aufgabe 5 — Moderne Bürokonzepte
 
 📺 **Vorbereitungsvideo:** [YouTube: „Desksharing non-territoriales Büro"](https://www.youtube.com/watch?v=UvmJ4uPJ7xI) (https://www.youtube.com/watch?v=UvmJ4uPJ7xI)
-📺 **Ergänzend:** [YouTube: „New Work Open Space Büro"](https://www.youtube.com/watch?v=lIc7G7uLaEA) (https://www.youtube.com/watch?v=lIc7G7uLaEA)
+📺 **Ergänzend:** [YouTube: „New Work Open Space Büro"](https://www.youtube.com/watch?v=2jEGLP3pD8o) (https://www.youtube.com/watch?v=2jEGLP3pD8o)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -86,7 +86,7 @@ c) Diskutieren Sie: Welche Auswirkung hat zunehmendes Homeoffice/mobiles Arbeite
 
 ## Aufgabe 6 — Büroform situativ zuordnen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Kombibüro Gruppenbüro Unterschied"](https://www.youtube.com/watch?v=eTgZQb1RBxo) (https://www.youtube.com/watch?v=eTgZQb1RBxo)
+📺 **Vorbereitungsvideo:** [YouTube: „Kombibüro Gruppenbüro Unterschied"](https://www.youtube.com/watch?v=fyz6BJ8nvmI) (https://www.youtube.com/watch?v=fyz6BJ8nvmI)
 
 **Sozialform:** Einzelarbeit
 

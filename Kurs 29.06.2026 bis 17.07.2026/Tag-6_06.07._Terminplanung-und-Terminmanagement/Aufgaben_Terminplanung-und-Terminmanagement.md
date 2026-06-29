@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Was ist ein Termin?
 
-📺 **Vorbereitungsvideo:** [YouTube: „Terminplanung Büro Grundlagen"](https://www.youtube.com/watch?v=U4t_gWVZWHU) (https://www.youtube.com/watch?v=U4t_gWVZWHU)
+📺 **Vorbereitungsvideo:** [YouTube: „Terminplanung Büro Grundlagen"](https://www.youtube.com/watch?v=EvddmXzK8Nk) (https://www.youtube.com/watch?v=EvddmXzK8Nk)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Welche fünf Fragen sollte man sich über einen einzuplanenden Termin stellen
 
 ## Aufgabe 2 — Terminarten unterscheiden
 
-📺 **Vorbereitungsvideo:** [YouTube: „feste und variable Termine"](https://www.youtube.com/watch?v=GycqxfgetXg) (https://www.youtube.com/watch?v=GycqxfgetXg)
+📺 **Vorbereitungsvideo:** [YouTube: „feste und variable Termine"](https://www.youtube.com/watch?v=xn-4pj5RxNk) (https://www.youtube.com/watch?v=xn-4pj5RxNk)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Was ist ein Serientermin? Nennen Sie zwei Beispiele.
 
 ## Aufgabe 3 — Terminüberwachung und Fristen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Terminüberwachung Wiedervorlage Büro"](https://www.youtube.com/watch?v=-CiCarsMM94) (https://www.youtube.com/watch?v=-CiCarsMM94)
+📺 **Vorbereitungsvideo:** [YouTube: „Terminüberwachung Wiedervorlage Büro"](https://www.youtube.com/watch?v=_RbM-GuFKik) (https://www.youtube.com/watch?v=_RbM-GuFKik)
 
 **Sozialform:** Einzelarbeit
 
@@ -69,7 +69,7 @@ c) Frau Elling und Herr Lembke möchten beide in der ersten Sommerferienwoche Ur
 
 ## Aufgabe 5 — Hilfsmittel und digitale Tools
 
-📺 **Vorbereitungsvideo:** [YouTube: „elektronischer Terminkalender Outlook"](https://www.youtube.com/watch?v=tScB3s_QBAw) (https://www.youtube.com/watch?v=tScB3s_QBAw)
+📺 **Vorbereitungsvideo:** [YouTube: „elektronischer Terminkalender Outlook"](https://www.youtube.com/watch?v=U4t_gWVZWHU) (https://www.youtube.com/watch?v=U4t_gWVZWHU)
 📺 **Ergänzend:** [YouTube: „Doodle Terminabfrage erstellen"](https://www.youtube.com/watch?v=ev0qrLCcfR8) (https://www.youtube.com/watch?v=ev0qrLCcfR8)
 
 **Sozialform:** Partnerarbeit
