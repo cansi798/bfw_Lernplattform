@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 9 — Kommunikationsformen & Teamarbeit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 9 · 09.07.2026 · 30 Fragen</span>
+  <h1>Quiz: Kommunikationsformen &amp; Teamarbeit</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Kommunikationsformen-und-Teamarbeit.html</strong> und dem <strong>Handout_Kommunikationsformen-und-Teamarbeit.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067) · Kurs 29.06.–17.07.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Kommunikationsmodelle (1-10) ===
+  { topic: "Grundlagen", q: "Was beschreibt das Sender-Empfänger-Modell?",
+    options: ["Nur die Lagerung von Daten", "Die Übertragung einer Nachricht vom Sender zum Empfänger über einen Kanal", "Die Berechnung von Bürofläche", "Die Ablage von Schriftstücken"],
+    a: 1, e: "Das Sender-Empfänger-Modell beschreibt Kommunikation als Übertragung einer Nachricht vom Sender (encodieren) zum Empfänger (decodieren)." },
+  { topic: "Grundlagen", q: "Wie nennt man das Verschlüsseln einer Absicht in Worte, Tonfall und Körpersprache durch den Sender?",
+    options: ["Encodieren", "Decodieren", "Protokollieren", "Archivieren"],
+    a: 0, e: "Das Verschlüsseln der Absicht in Zeichen durch den Sender heißt Encodieren; der Empfänger entschlüsselt sie beim Decodieren." },
+  { topic: "Grundlagen", q: "Was versteht man unter „Rauschen" in der Kommunikation?",
+    options: ["Eine besonders laute Stimme", "Die Lautstärke des Senders", "Jede Störung, die die Übertragung der Nachricht beeinträchtigt", "Ein technisches Aufnahmegerät"],
+    a: 2, e: "Rauschen ist jede Störung (Lärm, Ablenkung, unklare Worte, Vorurteile), die die Übertragung der Nachricht beeinträchtigt." },
+  { topic: "Grundlagen", q: "Warum kann eine Nachricht beim Empfänger anders ankommen als gemeint?",
+    options: ["Weil Nachrichten immer falsch sind", "Weil der Kanal nie funktioniert", "Weil Empfänger keine Sprache verstehen", "Weil Encodieren und Decodieren subjektiv sind (Vorwissen, Stimmung, Erfahrung)"],
+    a: 3, e: "Encodieren und Decodieren erfolgen subjektiv; unterschiedliches Vorwissen und Stimmungen führen zu Missverständnissen." },
+  { topic: "Schulz von Thun", q: "Wie viele Seiten hat eine Nachricht nach Schulz von Thun?",
+    options: ["Zwei", "Vier", "Sechs", "Drei"],
+    a: 1, e: "Nach Schulz von Thun hat jede Nachricht vier Seiten: Sache, Selbstoffenbarung, Beziehung und Appell." },
+  { topic: "Schulz von Thun", q: "Welche Ebene einer Nachricht enthält den reinen Sachinhalt (die Information)?",
+    options: ["Die Sachebene", "Die Appellebene", "Die Beziehungsebene", "Die Selbstoffenbarungsebene"],
+    a: 0, e: "Die Sachebene enthält die reine Information — worüber der Sender informiert." },
+  { topic: "Schulz von Thun", q: "Auf welcher Ebene zeigt sich, was der Sender vom Empfänger hält und wie er zu ihm steht?",
+    options: ["Sachebene", "Appellebene", "Beziehungsebene", "Selbstoffenbarungsebene"],
+    a: 2, e: "Die Beziehungsebene zeigt, wie Sender und Empfänger zueinander stehen; sie löst oft Konflikte aus." },
+  { topic: "Schulz von Thun", q: "Was drückt die Appellebene einer Nachricht aus?",
+    options: ["Was der Sender über sich preisgibt", "Den reinen Sachinhalt", "Die Stimmung des Empfängers", "Wozu der Sender den Empfänger veranlassen will"],
+    a: 3, e: "Die Appellebene drückt aus, wozu der Sender den Empfänger bewegen möchte (Aufforderung, Wunsch)." },
+  { topic: "Watzlawick", q: "Welches Axiom stammt von Paul Watzlawick?",
+    options: ["Kommunikation ist immer fehlerfrei", "Man kann nicht nicht kommunizieren", "Schweigen ist keine Kommunikation", "Nur Worte sind Kommunikation"],
+    a: 1, e: "Watzlawick: „Man kann nicht nicht kommunizieren" — auch Schweigen, Mimik oder Nicht-Antworten sind Botschaften." },
+  { topic: "Watzlawick", q: "Was besagt das Axiom vom Inhalts- und Beziehungsaspekt?",
+    options: ["Jede Kommunikation hat einen Inhalts- und einen Beziehungsaspekt, wobei die Beziehung den Inhalt bestimmt", "Inhalt ist immer wichtiger als Beziehung", "Beziehungen spielen in der Kommunikation keine Rolle", "Inhalt und Beziehung sind dasselbe"],
+    a: 0, e: "Jede Kommunikation hat einen Inhalts- und einen Beziehungsaspekt; die Beziehung bestimmt, wie der Inhalt verstanden wird." },
+
+  // === Block B: verbal / nonverbal / paraverbal (11-14) ===
+  { topic: "Kommunikationsebenen", q: "Was gehört zur verbalen Kommunikation?",
+    options: ["Die Gestik", "Der Tonfall", "Die Wortwahl und der Inhalt des Gesagten", "Die Mimik"],
+    a: 2, e: "Verbale Kommunikation ist der inhaltliche Teil: die gesprochenen oder geschriebenen Worte." },
+  { topic: "Kommunikationsebenen", q: "Welches Element zählt zur nonverbalen Kommunikation?",
+    options: ["Die Lautstärke", "Das Sprechtempo", "Die Wortwahl", "Mimik, Gestik und Blickkontakt"],
+    a: 3, e: "Nonverbale Kommunikation ist Körpersprache ohne Worte: Mimik, Gestik, Körperhaltung, Blickkontakt." },
+  { topic: "Kommunikationsebenen", q: "Was beschreibt die paraverbale Kommunikation?",
+    options: ["Den geschriebenen Text", "Die Art des Sprechens: Tonfall, Lautstärke, Sprechtempo, Pausen", "Die Körperhaltung", "Die Wortwahl"],
+    a: 1, e: "Paraverbale Kommunikation ist die Art des Sprechens — Tonfall, Lautstärke, Sprechtempo, Betonung und Pausen." },
+  { topic: "Kommunikationsebenen", q: "Was passiert bei Inkongruenz (Wort und Körpersprache widersprechen sich)?",
+    options: ["Es entsteht eine widersprüchliche Doppelbotschaft; Empfänger glauben eher Körpersprache und Stimme", "Die Nachricht wird besonders glaubwürdig", "Es ändert sich nichts", "Der Inhalt wird automatisch korrekt verstanden"],
+    a: 0, e: "Bei Inkongruenz entsteht eine widersprüchliche Doppelbotschaft; im Zweifel glauben Empfänger der nonverbalen/paraverbalen Ebene." },
+
+  // === Block C: Kommunikationsformen im Büro & E-Mail (15-22) ===
+  { topic: "Kommunikationsformen", q: "Welche Kommunikationsform eignet sich am besten für ein vertrauliches Kritikgespräch?",
+    options: ["Eine Rundmail an alle", "Ein öffentlicher Chat", "Das persönliche Gespräch", "Ein Aushang am schwarzen Brett"],
+    a: 2, e: "Vertrauliche Kritik gehört ins persönliche Gespräch — Tonfall und Mimik wirken mit, und es bleibt keine schriftliche Spur." },
+  { topic: "Kommunikationsformen", q: "Welche Form ist für eine verbindliche Bestellung mit Nachweis am besten geeignet?",
+    options: ["Ein kurzer Anruf ohne Notiz", "Eine Messenger-Nachricht", "Ein Gespräch in der Kaffeeküche", "Eine E-Mail (oder ein Brief)"],
+    a: 3, e: "Verbindliche, beweissichere Vorgänge gehören in die schriftliche Form (E-Mail oder Brief) — dokumentiert und nachweisbar." },
+  { topic: "Kommunikationsformen", q: "Wofür eignet sich eine Videokonferenz besonders?",
+    options: ["Für vertrauliche Einzelgespräche ohne Spur", "Für Besprechungen mit mehreren Standorten — spart Reisezeit, überträgt Bild und Ton", "Für rechtsverbindliche Verträge", "Für die dauerhafte Aktenablage"],
+    a: 1, e: "Videokonferenzen verbinden mehrere Standorte, sparen Reisezeit und übertragen Bild und Ton — ideal für verteilte Teams." },
+  { topic: "Telefon", q: "Was hält eine Telefonnotiz fest?",
+    options: ["Wer wann für wen anrief, worum es ging und was zu tun ist", "Nur die Telefonnummer", "Nur den Namen des Anrufers", "Den Aktenpreis"],
+    a: 0, e: "Die Telefonnotiz hält fest: wer, wann, für wen, worum es ging und was zu tun ist (z. B. Rückruf)." },
+  { topic: "E-Mail", q: "Warum müssen geschäftliche E-Mails Pflichtangaben enthalten?",
+    options: ["Weil das Finanzamt es verbietet", "Weil sie den postalischen Geschäftsbrief ersetzen und der Empfänger im gleichen Umfang informiert werden soll (EHUG)", "Weil sie sonst nicht versendet werden können", "Weil sie schöner aussehen"],
+    a: 1, e: "Geschäftliche E-Mails ersetzen den Geschäftsbrief; nach dem EHUG soll der Empfänger im gleichen Umfang über den Absender informiert werden." },
+  { topic: "E-Mail", q: "Wovon hängt der genaue Umfang der Pflichtangaben in einer Geschäfts-E-Mail ab?",
+    options: ["Von der Länge der E-Mail", "Von der Tageszeit", "Von der Rechtsform des Unternehmens", "Von der Anzahl der Empfänger"],
+    a: 2, e: "Welche Pflichtangaben eine E-Mail enthalten muss, hängt von der jeweiligen Rechtsform des Unternehmens ab." },
+  { topic: "E-Mail", q: "Welche Angabe zählt NICHT zu den Pflichtangaben in einem Geschäftsbrief/einer Geschäfts-E-Mail?",
+    options: ["Die Firma", "Die Rechtsform", "Das Registergericht", "Die Bankverbindung"],
+    a: 3, e: "Adresse, Telefon-/Faxnummer, Postfach und Bankverbindung zählen nicht zu den Pflichtangaben in einem Geschäftsbrief." },
+  { topic: "E-Mail-Knigge", q: "Welche Regel gehört zum E-Mail-Knigge?",
+    options: ["Ein aussagekräftiger Betreff und das Ankündigen/Beifügen von Anhängen", "Möglichst viele Empfänger in CC setzen", "Niemals eine Anrede verwenden", "Den Betreff leer lassen"],
+    a: 0, e: "Zum E-Mail-Knigge gehören u. a. ein aussagekräftiger Betreff, passende Anrede, sparsames CC/BCC und korrekt beigefügte Anhänge." },
+
+  // === Block D: Teamarbeit, Tuckman, Feedback (23-30) ===
+  { topic: "Teamarbeit", q: "Was unterscheidet ein Team von einer bloßen Gruppe?",
+    options: ["Ein Team ist immer kleiner als eine Gruppe", "Ein Team trägt Uniform", "Ein Team verfolgt ein gemeinsames Ziel mit ergänzenden Rollen und gemeinsamer Verantwortung", "Ein Team hat keine Regeln"],
+    a: 2, e: "Ein Team verfolgt ein gemeinsames Ziel, die Mitglieder ergänzen sich und fühlen sich gemeinsam verantwortlich." },
+  { topic: "Teamarbeit", q: "Welches ist ein typischer Nachteil der Teamarbeit?",
+    options: ["Weniger Ideen", "Keine Vertretung möglich", "Geringere Akzeptanz von Entscheidungen", "Höherer Abstimmungs- und Zeitaufwand sowie Konfliktpotenzial"],
+    a: 3, e: "Teamarbeit erfordert mehr Abstimmung und Zeit und birgt Konfliktpotenzial sowie die Gefahr des sozialen Faulenzens." },
+  { topic: "Teamarbeit", q: "Was bedeutet „soziales Faulenzen" (Trittbrettfahren)?",
+    options: ["Pausen im Team", "Einzelne reduzieren ihre Leistung, weil sie sich auf das Team verlassen", "Gemeinsames Mittagessen", "Besonders hohe Leistung Einzelner"],
+    a: 1, e: "Soziales Faulenzen bedeutet, dass Einzelne ihre Leistung zurückfahren, weil sie sich auf das Team verlassen." },
+  { topic: "Tuckman", q: "Wie lautet die richtige Reihenfolge der Teamphasen nach Tuckman?",
+    options: ["Storming, Forming, Performing, Norming, Adjourning", "Norming, Forming, Storming, Adjourning, Performing", "Performing, Storming, Forming, Norming, Adjourning", "Forming, Storming, Norming, Performing, Adjourning"],
+    a: 3, e: "Die Reihenfolge ist: Forming, Storming, Norming, Performing, Adjourning." },
+  { topic: "Tuckman", q: "Welche Tuckman-Phase ist durch Streit über Rollen und Aufgaben gekennzeichnet?",
+    options: ["Forming", "Storming", "Performing", "Adjourning"],
+    a: 1, e: "Die Storming-Phase (Konfliktphase) ist durch Auseinandersetzungen über Rollen, Aufgaben und Einfluss gekennzeichnet." },
+  { topic: "Tuckman", q: "Wie ist die Storming-Phase richtig einzuordnen?",
+    options: ["Als notwendiger, normaler Schritt der Teamentwicklung", "Als endgültiges Scheitern des Teams", "Als Zeichen, dass das Team aufgelöst werden muss", "Als Phase der höchsten Leistung"],
+    a: 0, e: "Die Storming-Phase ist kein Scheitern, sondern ein notwendiger Schritt; danach folgen Norming und Performing." },
+  { topic: "Tuckman", q: "Was geschieht in der Performing-Phase?",
+    options: ["Das Team lernt sich gerade erst kennen", "Das Team arbeitet effizient, selbstorganisiert und zielgerichtet", "Das Team streitet über Rollen", "Das Team wird aufgelöst"],
+    a: 1, e: "In der Performing-Phase arbeitet das Team effizient, selbstorganisiert und konzentriert am gemeinsamen Ziel." },
+  { topic: "Feedback", q: "Welche Feedbackregel ist richtig?",
+    options: ["Ich-Botschaften verwenden, konkret und wertschätzend auf beobachtbares Verhalten bezogen", "Möglichst pauschal mit „immer" und „nie" formulieren", "Die Person abwerten statt das Verhalten beschreiben", "Feedback möglichst spät und allgemein geben"],
+    a: 0, e: "Gutes Feedback ist zeitnah, konkret, in Ich-Botschaften, beschreibend statt bewertend und wertschätzend." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

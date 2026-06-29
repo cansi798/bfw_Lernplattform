@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 5 — Zeitmanagement & Aufgabenplanung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 5 · 03.07.2026 · 30 Fragen</span>
+  <h1>Quiz: Zeitmanagement &amp; Aufgabenplanung</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Zeitmanagement-und-Aufgabenplanung.html</strong> und dem <strong>Handout_Zeitmanagement-und-Aufgabenplanung.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067) · Kurs 29.06.–17.07.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Grundlagen & Störungen (1-7) ===
+  { topic: "Grundlagen", q: "Worum geht es beim Zeitmanagement?",
+    options: ["Um die Verlängerung des Arbeitstages auf mehr als 24 Stunden", "Die persönlich vorhandene Zeit möglichst effektiv zu nutzen", "Um die Abschaffung aller Pausen", "Um das Delegieren sämtlicher Aufgaben"],
+    a: 1, e: "Beim Zeitmanagement geht es darum, die persönlich vorhandene Zeit mit Hilfsmitteln und Methoden möglichst effektiv zu nutzen." },
+  { topic: "Ziele", q: "Welches ist ein wichtiges Ziel des Zeitmanagements?",
+    options: ["Möglichst viele Überstunden anzusammeln", "Die Anzahl der Meetings zu maximieren", "Die Vermeidung von Stress und Überforderung", "Den Urlaub zu streichen"],
+    a: 2, e: "Zwei sehr wichtige Ziele sind die Vermeidung von Stress und Überforderung sowie die Steigerung der persönlichen Zufriedenheit (Work-Life-Balance)." },
+  { topic: "Grundlagen", q: "Was ist für ein optimales Zeitmanagement notwendig?",
+    options: ["Alle Aufgaben gleich behandeln", "Nie um Hilfe bitten", "Möglichst spät mit der Arbeit beginnen", "Zeitfresser erkennen, Wichtiges von Unwichtigem unterscheiden und Prioritäten setzen"],
+    a: 3, e: "Notwendig ist es, Zeitfresser zu erkennen, wichtige von unwichtigen Aufgaben zu unterscheiden und Prioritäten zu setzen." },
+  { topic: "Störungen", q: "Wie werden Störungen (Zeitdiebe) unterteilt?",
+    options: ["In äußere und innere Störungen", "In laute und leise Störungen", "In bezahlte und unbezahlte Störungen", "In digitale und analoge Störungen"],
+    a: 0, e: "Störungen lassen sich in äußere (von anderen/Umgebung) und innere (von der Person selbst verursachte) Störungen unterteilen." },
+  { topic: "Störungen", q: "Wodurch werden innere Störungen verursacht?",
+    options: ["Durch die Klimaanlage", "Durch die Person selbst", "Ausschließlich durch Kollegen", "Durch das Computersystem"],
+    a: 1, e: "Innere Störungen werden durch die Person selbst verursacht (z. B. Lustlosigkeit, fehlende Selbstdisziplin)." },
+  { topic: "Störungen", q: "Welches ist ein Beispiel für eine äußere Störung?",
+    options: ["Lustlosigkeit", "Fehlende Selbstdisziplin", "Klingelnde Telefone und Unterbrechung durch Kollegen", "Angstgefühle"],
+    a: 2, e: "Äußere Störungen kommen von außen, z. B. klingelnde Telefone, Unterbrechung durch Kollegen, Lärm oder technische Störungen." },
+  { topic: "Störungen", q: "Welches ist ein Beispiel für eine innere Störung?",
+    options: ["Ein unordentlicher Arbeitsplatz", "Wartezeiten am Gemeinschaftsdrucker", "Lärm durch Straßenverkehr", "Die Unfähigkeit, „nein” zu sagen"],
+    a: 3, e: "Innere Störungen sind z. B. Lustlosigkeit, Müdigkeit, fehlende Selbstdisziplin und die Unfähigkeit, „nein” zu sagen." },
+
+  // === Block B: Sägeblatteffekt & Leistungskurve (8-18) ===
+  { topic: "Sägeblatteffekt", q: "Wodurch entsteht der Sägeblatteffekt?",
+    options: ["Dadurch, dass mit jeder Unterbrechung die Konzentration abfällt und neu aufgebaut werden muss", "Durch zu lange Pausen", "Durch zu viel Tageslicht", "Durch das Arbeiten am Vormittag"],
+    a: 0, e: "Mit jeder Unterbrechung fällt die Leistungsfähigkeit ab und muss anschließend wieder aufgebaut werden — der Kurvenverlauf ähnelt einem Sägeblatt." },
+  { topic: "Sägeblatteffekt", q: "Wie viel Prozent der Zeit können durch Störungen verloren gehen?",
+    options: ["bis zu 5 %", "bis zu 28 %", "bis zu 50 %", "bis zu 75 %"],
+    a: 1, e: "Addiert man alle Leistungsverluste durch Störungen auf, können bis zu 28 % der Zeit verloren gehen." },
+  { topic: "Stille Stunde", q: "Was ist die „stille Stunde”?",
+    options: ["Die gesetzliche Mittagspause", "Eine Stunde ohne Strom im Büro", "Ein fest geplanter Termin mit sich selbst für ungestörtes Arbeiten an wichtigen Aufgaben", "Die Zeit nach Feierabend"],
+    a: 2, e: "Die stille Stunde ist ein fest eingeplanter Termin mit sich selbst, um ungestört an wichtigen Aufgaben zu arbeiten." },
+  { topic: "Stille Stunde", q: "Worauf sollten Sie bei der stillen Stunde achten?",
+    options: ["Sie für die E-Mail-Kontrolle nutzen", "Sie möglichst in die geschäftigste Zeit legen", "Das Telefon besonders laut stellen", "Das Telefon umstellen und sie in eine störungsarme Zeit legen"],
+    a: 3, e: "Stellen Sie das Telefon um/schalten Sie den Anrufbeantworter ein und legen Sie die stille Stunde in eine ohnehin störungsarme Zeit — für wichtige Aufgaben." },
+  { topic: "Leistungskurve", q: "Wann liegt das Leistungshoch eines Durchschnittsmenschen?",
+    options: ["zwischen 08:00 und 12:00 Uhr", "zwischen 14:00 und 16:00 Uhr", "erst nach 20:00 Uhr", "direkt nach der Mittagspause"],
+    a: 0, e: "Bei der durchschnittlichen Leistungskurve liegt das Leistungshoch zwischen 08:00 und 12:00 Uhr; wichtige Aufgaben gehören an den Vormittag." },
+  { topic: "Leistungskurve", q: "Wann kommt bei einem Durchschnittsmenschen das größte Leistungstief?",
+    options: ["am frühen Morgen", "nach der Mittagspause", "am Vormittag", "vor Arbeitsbeginn"],
+    a: 1, e: "Nach der Mittagspause kommt das größte Tief; deshalb eignen sich nachmittags eher Routineaufgaben." },
+  { topic: "Leistungskurve", q: "Welche Aufgaben sollten am Nachmittag (im Leistungstief) erledigt werden?",
+    options: ["Die wichtigsten A-Aufgaben", "Vertrauliche Verhandlungen", "Routineaufgaben wie die Ablage von Unterlagen", "Aufgaben, die volle Konzentration erfordern"],
+    a: 2, e: "Im Nachmittagstief eignen sich Routineaufgaben wie die Ablage von Unterlagen; volle Leistung wird am Vormittag gebraucht." },
+  { topic: "Biorhythmus", q: "Was kennzeichnet einen „Abendmenschen”?",
+    options: ["Er arbeitet überhaupt nicht", "Er hat sein Hoch direkt nach dem Aufstehen", "Er hat keine Leistungskurve", "Er hat seine höchste Leistungsfähigkeit am Nachmittag"],
+    a: 3, e: "Abendmenschen haben ihre höchste Leistungsfähigkeit am Nachmittag, Morgenmenschen am frühen Vormittag." },
+  { topic: "ArbZG", q: "Wie lang muss die Ruhepause laut § 4 ArbZG bei mehr als sechs bis neun Stunden Arbeitszeit mindestens sein?",
+    options: ["mindestens 30 Minuten", "mindestens 10 Minuten", "mindestens 60 Minuten", "keine Pause vorgeschrieben"],
+    a: 0, e: "Bei einer Arbeitszeit von mehr als sechs bis zu neun Stunden sind mindestens 30 Minuten Ruhepause vorgeschrieben." },
+  { topic: "ArbZG", q: "Wie lang muss die Ruhepause laut § 4 ArbZG bei mehr als neun Stunden Arbeitszeit mindestens sein?",
+    options: ["mindestens 30 Minuten", "mindestens 45 Minuten", "mindestens 15 Minuten", "mindestens 90 Minuten"],
+    a: 1, e: "Bei mehr als neun Stunden Arbeitszeit sind mindestens 45 Minuten Ruhepause vorgeschrieben; aufteilbar in 15-Minuten-Abschnitte." },
+  { topic: "Pausen", q: "Was gilt laut Lehrbuch NICHT als echte Pause?",
+    options: ["Ein paar Schritte gehen", "Die Augen für zwei bis drei Minuten schließen", "Das Brötchen essen und gleichzeitig E-Mails lesen", "Den Arbeitsplatz kurz verlassen"],
+    a: 2, e: "Wer beim Essen weiter E-Mails liest, ist gedanklich noch bei der Arbeit — das gilt nicht als Pause." },
+
+  // === Block C: Methoden (19-30) ===
+  { topic: "ABC-Analyse", q: "Wonach teilt die ABC-Analyse die Aufgaben ein?",
+    options: ["Nach dem Alphabet der Aufgabennamen", "Nach der Dauer der Aufgabe", "Nach dem Erstellungsdatum", "Nach ihrer Priorität (Wichtigkeit) in A, B und C"],
+    a: 3, e: "Die ABC-Analyse teilt Aufgaben nach ihrer Priorität ein: A = hohe, B = mittlere, C = niedrige Priorität." },
+  { topic: "ABC-Analyse", q: "Was gilt für A-Aufgaben?",
+    options: ["Wichtigste Aufgaben (Muss): morgens beginnen, selbst erledigen und nicht delegieren", "Sie sind die unwichtigsten Aufgaben", "Sie sollten immer delegiert werden", "Sie werden grundsätzlich abends erledigt"],
+    a: 0, e: "A-Aufgaben haben hohe Priorität (Muss-Aufgaben); man beginnt morgens ausgeruht mit ihnen und erledigt sie selbst, ohne zu delegieren." },
+  { topic: "Delegation", q: "Welche Aufgaben sollte man laut Eisenhower-Prinzip delegieren?",
+    options: ["Wichtige und dringende Aufgaben", "Dringende, aber nicht wichtige Aufgaben", "Alle A-Aufgaben", "Nur die wichtigsten strategischen Aufgaben"],
+    a: 1, e: "Dringende, aber weniger wichtige Aufgaben (Feld 3), z. B. eine Software-Neuinstallation, können an andere delegiert werden." },
+  { topic: "Selbstmanagement", q: "Was versteht man unter Selbstmanagement?",
+    options: ["Die Verwaltung der Firmenkasse", "Das Delegieren aller eigenen Aufgaben", "Die Kontrolle der Kollegen", "Dass jeder die Verantwortung für die eigene Entwicklung übernimmt und sein Verhalten zielgerichtet steuert"],
+    a: 3, e: "Beim Selbstmanagement übernimmt jeder die Verantwortung für die eigene Entwicklung und steuert sein Verhalten so, dass die gesetzten Ziele erreicht werden." },
+  { topic: "Eisenhower", q: "Welche Regel stellte Eisenhower zusätzlich auf?",
+    options: ["Dringlichkeit geht vor Wichtigkeit", "Alles sofort erledigen", "Nichts delegieren", "Wichtigkeit geht vor Dringlichkeit"],
+    a: 3, e: "Eisenhower sortierte Aufgaben nach Dringlichkeit und Wichtigkeit und stellte die Regel auf: Wichtigkeit geht vor Dringlichkeit." },
+  { topic: "Eisenhower", q: "Was ist mit Aufgaben zu tun, die wichtig UND dringend sind (Feld 1)?",
+    options: ["Sofort und selbst erledigen", "In den Papierkorb werfen", "An Kollegen delegieren", "Auf unbestimmte Zeit verschieben"],
+    a: 0, e: "Aufgaben des Feldes 1 (wichtig + dringend), z. B. Notfälle oder Abgabetermine, müssen sofort und selbst erledigt werden." },
+  { topic: "Eisenhower", q: "Was geschieht mit Aufgaben, die weder wichtig noch dringend sind (Feld 4)?",
+    options: ["Sie werden sofort selbst erledigt", "Sie kommen in den Papierkorb", "Sie werden zur Chefsache erklärt", "Sie erhalten höchste Priorität"],
+    a: 1, e: "Alles, was weder wichtig noch dringend ist (Feld 4), kann in den Papierkorb." },
+  { topic: "ALPEN-Methode", q: "Wofür stehen die Buchstaben der ALPEN-Methode?",
+    options: ["Anfangen, Lernen, Pausieren, Essen, Nachdenken", "Analyse, Logik, Plan, Erfolg, Nutzen", "Abwarten, Loslegen, Prüfen, Erledigen, Notieren", "Aufgaben aufschreiben, Länge schätzen, Pufferzeiten, Entscheidungen/Prioritäten, Nachkontrolle"],
+    a: 3, e: "ALPEN = Aufgaben aufschreiben, Länge der Tätigkeiten schätzen, Pufferzeiten einplanen, Entscheidungen über Prioritäten treffen (delegieren), Nachkontrolle." },
+  { topic: "ALPEN-Methode", q: "Wie viel Prozent der verfügbaren Zeit sollte man bei der ALPEN-Methode verplanen?",
+    options: ["ca. 60 %", "100 %", "ca. 90 %", "ca. 30 %"],
+    a: 0, e: "Man sollte nur ca. 60 % der Zeit verplanen; der Rest bleibt als Reserve für Unvorhergesehenes, sonst gerät der Plan durcheinander." },
+  { topic: "Pareto-Prinzip", q: "Was besagt das Pareto-Prinzip (80/20-Regel) im Zeitmanagement?",
+    options: ["80 % der Zeit bewirken 80 % des Erfolgs", "20 % der eingesetzten Zeit bewirken 80 % des Erfolgs", "Man muss 100 % aller Aufgaben perfekt erledigen", "Jede Aufgabe ist gleich wichtig"],
+    a: 1, e: "Nach dem Pareto-Prinzip bewirken 20 % der eingesetzten Zeit 80 % des Erfolgs; die restlichen 80 % der Zeit nur noch 20 % des Erfolgs." },
+  { topic: "To-do-Liste", q: "Worin unterscheiden sich To-do-Liste und Checkliste?",
+    options: ["Sie sind völlig identisch", "Die Checkliste ist zukunftsbezogen, die To-do-Liste vergangenheitsbezogen", "Die To-do-Liste ist zukunftsbezogen („Was ist zu tun?”), die Checkliste vergangenheitsbezogen (prüft, ob alles erledigt wurde)", "Beide prüfen nur die Vergangenheit"],
+    a: 2, e: "Die To-do-Liste ist mit „Was ist zu tun?” zukunftsbezogen; die Checkliste prüft die Vollständigkeit/Reihenfolge und ist damit vergangenheitsbezogen." },
+  { topic: "Salamitaktik", q: "Was versteht man unter der Salamitaktik?",
+    options: ["Aufgaben werden grundsätzlich an Kollegen delegiert", "Alle Aufgaben werden gleichzeitig begonnen", "Eine große, schwierige Aufgabe wird in kleine, überschaubare Schritte zerlegt und Schritt für Schritt erledigt", "Schwierige Aufgaben werden gar nicht erst begonnen"],
+    a: 2, e: "Bei der Salamitaktik zerlegt man eine große Aufgabe in kleine Schritte (Salamischeiben) und erledigt sie nacheinander — das schafft regelmäßige Erfolgserlebnisse." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

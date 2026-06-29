@@ -13,7 +13,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TEMPLATES = ROOT / "templates"
-KURS_DIR = ROOT / "Kurs 11.05.2026 bis 22.05.2026"
+# Alle Kursverzeichnisse (Format: "Kurs <von> bis <bis>")
+KURS_DIRS = sorted(p for p in ROOT.glob("Kurs *") if p.is_dir())
 
 
 def build(tex_file: Path, engine: str = "xelatex") -> bool:
@@ -56,8 +57,10 @@ def main():
         ok = build(f)
         sys.exit(0 if ok else 1)
 
-    # Alle .tex unter Kurs ... bauen
-    tex_files = sorted(KURS_DIR.rglob("*.tex"))
+    # Alle .tex unter allen Kursverzeichnissen bauen
+    tex_files = []
+    for kurs in KURS_DIRS:
+        tex_files.extend(sorted(kurs.rglob("*.tex")))
     if not tex_files:
         print("Keine .tex gefunden.")
         return

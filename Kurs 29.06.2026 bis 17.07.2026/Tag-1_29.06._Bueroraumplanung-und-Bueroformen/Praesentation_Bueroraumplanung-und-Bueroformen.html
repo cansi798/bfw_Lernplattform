@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 1 — Büroraumplanung & Büroformen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 1 · 29.06.2026</span>
+    <h1>Büroraumplanung &amp; Büroformen</h1>
+    <p class="subtitle">Wie der Raum die Arbeit prägt — Flächen, Formen und moderne Konzepte</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 1 (S. 59–67)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>die <strong>Bedeutung der Büroraumplanung</strong> für Produktivität und Gesundheit erklären</li>
+      <li>die <strong>sechs Teilflächen</strong> eines Büros benennen und ihren Zweck erläutern</li>
+      <li>den <strong>Quadratmeterbedarf</strong> je Arbeitsplatz ermitteln und einordnen</li>
+      <li>die klassischen <strong>Büroformen</strong> (Zellen-, Gruppen-, Großraum-, Kombibüro) vergleichen</li>
+      <li>moderne Konzepte (<strong>reversibles Büro, Desksharing, Open-Space</strong>) einordnen</li>
+      <li>für eine Situation eine begründete <strong>Empfehlung</strong> für eine Büroform geben</li>
+    </ul>
+  </section>
+
+  <!-- 3. Was ist Büroraumplanung? -->
+  <section class="slide">
+    <h2>Warum Büroraumplanung wichtig ist</h2>
+    <p>Die Raumgestaltung eines Büros wirkt sich entscheidend auf <strong>Produktivität</strong> und <strong>Arbeitszufriedenheit</strong> aus. Büroflächen verursachen außerdem hohe Kosten — Grund genug, die räumlichen Ressourcen sorgfältig zu planen.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Leitfaden ist die <strong>DGUV Information 215-441 „Büroraumplanung”</strong>. Sie konkretisiert die sicherheitstechnischen, arbeitsmedizinischen, ergonomischen und arbeitspsychologischen Anforderungen.
+    </div>
+    <p class="muted">Buchverweis: S. 59</p>
+  </section>
+
+  <!-- 4. Sechs Teilflächen - Diagramm -->
+  <section class="slide">
+    <h2>Die sechs Teilflächen eines Büros</h2>
+    <div class="figure" id="fig-teilflaechen"></div>
+    <p class="caption">Erst die <em>Addition</em> aller sechs Teilflächen ergibt den Platzbedarf eines Arbeitsplatzes.</p>
+  </section>
+
+  <!-- 5. Teilflächen im Detail -->
+  <section class="slide">
+    <h2>Teilflächen — was gehört wozu?</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Stellfläche</div>Boden für Schreibtisch, Schrank, Regal, Pflanzen.</div>
+      <div class="card teal"><div class="card-title">Bewegungsfläche</div>Freie Fläche für wechselnde Arbeitshaltungen.</div>
+      <div class="card teal"><div class="card-title">Funktionsfläche</div>Überdeckt beim Öffnen von Schranktür/Schublade.</div>
+      <div class="card amber"><div class="card-title">Benutzerfläche</div>Fläche am persönlichen Arbeitsplatz.</div>
+      <div class="card amber"><div class="card-title">Verkehrswegefläche</div>Wege für Personen und Materialtransport.</div>
+      <div class="card amber"><div class="card-title">Besucher-/Besprechungsfläche</div>Plätze für Besucher und Besprechungen.</div>
+    </div>
+  </section>
+
+  <!-- 6. Flächenbedarf -->
+  <section class="slide">
+    <h2>Quadratmeterbedarf je Arbeitsplatz</h2>
+    <table>
+      <thead><tr><th>Arbeitsplatztyp</th><th>Flächenbedarf</th></tr></thead>
+      <tbody>
+        <tr><td>Bildschirmarbeitsplatz (Einzel)</td><td>8 – 10 m²</td></tr>
+        <tr><td>Arbeitsplatz im Großraumbüro</td><td>ca. 12 – 15 m²</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🧮 Rechenbeispiel</span>
+      Ein Raum von 60 m² fasst bei 10 m²/Platz rechnerisch <strong>6 Bildschirmarbeitsplätze</strong>. Im Großraum (12 m²/Platz) wären es nur 5 — die zusätzlichen <strong>Verkehrswege</strong> kosten Fläche.
+    </div>
+  </section>
+
+  <!-- 7. Büroformen Überblick -->
+  <section class="slide">
+    <h2>Büroformen im Überblick</h2>
+    <p>Büroflächen können sehr unterschiedlich gestaltet sein. <strong>Keine Form ist universell „die beste”</strong> — jede passt zu bestimmten Tätigkeiten.</p>
+    <div class="figure" id="fig-bueroformen"></div>
+    <p class="caption">Vier klassische Büroformen — von der Ruhezelle bis zum kostengünstigen Großraum.</p>
+  </section>
+
+  <!-- 8. Zellenbüro -->
+  <section class="slide">
+    <h2>Das Zellenbüro (1–3 Personen)</h2>
+    <p>Die klassische Büroform, in deutschen Unternehmen oft anzutreffen und sehr beliebt.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Vorteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Konzentriertes Arbeiten</li>
+          <li>Vertrauliche Gespräche möglich</li>
+          <li>Umgebung selbst regulierbar (Licht, Klima)</li>
+          <li>Individuelle Gestaltung</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Nachteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Gefühl der Isolation</li>
+          <li>Hoher Flächenbedarf</li>
+          <li>Kommunikation nur über Technik/Termine</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Heute vor allem für Führungskräfte — oft ein <strong>Statussymbol</strong>.</p>
+  </section>
+
+  <!-- 9. Gruppenbüro -->
+  <section class="slide">
+    <h2>Das Gruppenbüro (3 bis ca. 25 Plätze)</h2>
+    <p>Ein großer Raum, durch Trennwände unterteilt — meist von einer Abteilung oder einem Team genutzt. Ideal für projektorientiertes Arbeiten.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Vorteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Intensive Kommunikation &amp; Kooperation</li>
+          <li>Schneller Informationsfluss, kurze Wege</li>
+          <li>Hohe Transparenz → leichte Vertretung</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Nachteile / Abhilfe</div>
+        <ul style="margin-left: 1rem;">
+          <li>Hoher Geräuschpegel</li>
+          <li>Abhilfe: Telefon-/Arbeitszellen</li>
+          <li>Schallabsorbierende Decken, Teppiche</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Der Übergang zum Großraumbüro ist fließend.</p>
+  </section>
+
+  <!-- 10. Großraumbüro -->
+  <section class="slide">
+    <h2>Das Großraumbüro (400 m² bis mehrere tausend m²)</h2>
+    <p>Oft eine ganze Etage für 25 bis mehrere hundert Mitarbeitende, gegliedert durch Stellwände, Schränke und Pflanzen.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Vorteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kostengünstig (effiziente Fläche, weniger Geräte)</li>
+          <li>Hohe Flexibilität bei Umstrukturierung</li>
+          <li>Informeller Wissensaustausch</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Nachteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Mangelnde Privatsphäre, Kontrollgefühl</li>
+          <li>Klimaanlage nötig (nicht selbst regulierbar)</li>
+          <li>Höherer Krankenstand, geringere Produktivität</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Häufig genutzt für <strong>Call-Center</strong>.</p>
+  </section>
+
+  <!-- 11. Kombibüro -->
+  <section class="slide">
+    <h2>Das Kombibüro</h2>
+    <p>Kleine Einzelbüros an der Fensterfront + eine zentrale <strong>Multifunktionszone</strong> (Besprechung, Archiv, Pause, temporäre Plätze) statt eines Flurs.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kerngedanke</span>
+      Das Kombibüro <strong>vereint die Vorteile</strong> von Zellen- und Großraumbüro: störungsfreie Einzelarbeit <em>und</em> gelegentliche Teamarbeit.
+    </div>
+    <ul>
+      <li>Raumhohe, <strong>versetzbare Wände</strong> → schneller Umbau (Einzel- zu Doppelbüro)</li>
+      <li>Glaswände lassen Licht ein — können aber das Gefühl der Beobachtung verstärken</li>
+      <li>Wichtig: Einzelbüros <strong>nicht zu klein</strong> zuschneiden</li>
+    </ul>
+  </section>
+
+  <!-- 12. Büroformen Vergleich Tabelle -->
+  <section class="slide">
+    <h2>Büroformen im direkten Vergleich</h2>
+    <table>
+      <thead><tr><th>Büroform</th><th>Stärke</th><th>Schwäche</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Zellenbüro</strong></td><td>Ruhe, Vertraulichkeit</td><td>Isolation, viel Fläche</td></tr>
+        <tr><td><strong>Gruppenbüro</strong></td><td>Kommunikation, Team</td><td>Lärm, wenig Privatsphäre</td></tr>
+        <tr><td><strong>Großraumbüro</strong></td><td>Kosten, Flexibilität</td><td>Kontrollgefühl, Krankenstand</td></tr>
+        <tr><td><strong>Kombibüro</strong></td><td>Einzel- + Teamarbeit</td><td>Beobachtungsgefühl, Baukosten</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>Zelle = Ruhe · Gruppe = Reden · Großraum = Sparen · Kombi = Beides.</strong>
+    </div>
+  </section>
+
+  <!-- 13. Reversibles Büro -->
+  <section class="slide">
+    <h2>Das reversible Büro</h2>
+    <p>Bei der Planung von Bürogebäuden wird immer stärker auf <strong>Variabilität und Flexibilität</strong> geachtet.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Merkmale</div>
+        <ul style="margin-left: 1rem;">
+          <li>Anpassung mit geringem Aufwand</li>
+          <li>Flexible Wandsysteme statt fester Wände</li>
+          <li>Möbel, Strom, Licht leicht änderbar</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Nutzen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Jede Etage kann andere Büroform aufnehmen</li>
+          <li>Schnelle Reaktion auf Veränderungen</li>
+          <li>Kostengünstige Umgestaltung</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. Non-territoriales Büro -->
+  <section class="slide">
+    <h2>Non-territoriales Büro (Desksharing)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Prinzip</span>
+      Die Anzahl der Arbeitsplätze ist <strong>kleiner</strong> als die Zahl der Beschäftigten. Bei Arbeitsbeginn sucht man sich den nächsten freien Platz — oft per Buchungssoftware.
+    </div>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Vorteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Bessere Flächenauslastung</li>
+          <li>Kosteneinsparung (Fläche, Möbel, Technik, Energie, Reinigung)</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Zu beachten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Keine feste Anlaufstelle für Kunden/Kollegen</li>
+          <li>Arbeitsplatz neu an Körpergröße anpassen</li>
+          <li>Persönliches im fahrbaren Rollcontainer</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Besonders geeignet für Gruppen- und Kombibüros.</p>
+  </section>
+
+  <!-- 15. Open-Space / Homeoffice / New Work -->
+  <section class="slide">
+    <h2>Open-Space, Homeoffice &amp; New Work</h2>
+    <p>Die Arbeitswelt wandelt sich — mehr Projektarbeit, mehr Austausch, mehr Mobilität.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Open-Space &amp; New Work</div>
+        <p style="font-size: 1rem;">Offene Flächen mit Zonen für Fokus, Begegnung und Rückzug. Idee: selbstbestimmtes, vernetztes Arbeiten.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Homeoffice / mobiles Arbeiten</div>
+        <p style="font-size: 1rem;">Weniger gleichzeitig belegte Plätze → geringerer Flächenbedarf → Desksharing wird wirtschaftlich attraktiv.</p>
+      </div>
+    </div>
+    <p class="muted">Voraussetzung: klare Regeln, verlässliche Technik, durchdachte Raumplanung.</p>
+  </section>
+
+  <!-- 16. Ergonomie-Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Vom Raum zum Arbeitsplatz</h2>
+    <p>Ist die Büroform gewählt, geht es um die konkrete <strong>Ausstattung</strong> des Arbeitsplatzes.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">🔭 Brücke zu Tag 2</span>
+      <strong>Ergonomie</strong> passt die Arbeit an den Menschen an: Bürostuhl (DIN EN 1335), Arbeitstisch, Bildschirmposition, Steh-Sitz-Dynamik. Ziel ist der Schutz der Gesundheit.
+    </div>
+    <ul>
+      <li>Bürostuhl: verstellbare Sitzhöhe, Rollen, Lehne — geprüft per GS-/CE-Zeichen</li>
+      <li>Arbeitstisch: höhenverstellbar, reflexionsarm, genügend Beinfreiheit</li>
+      <li>Dynamisches Sitzen + Steh-Sitz-Wechsel (60 % sitzen, 30 % stehen, 10 % gehen)</li>
+    </ul>
+  </section>
+
+  <!-- 17. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 1</h2>
+    <ol class="numlist">
+      <li>Büroraumplanung beeinflusst <strong>Produktivität, Gesundheit und Zufriedenheit</strong> (DGUV 215-441).</li>
+      <li>Ein Arbeitsplatz besteht aus <strong>sechs Teilflächen</strong> — der Bedarf ergibt sich aus ihrer Addition.</li>
+      <li><strong>Flächenbedarf</strong>: Bildschirmarbeitsplatz 8–10 m², Großraum ca. 12–15 m².</li>
+      <li>Vier klassische <strong>Büroformen</strong>: Zelle, Gruppe, Großraum, Kombi — je eigene Stärken.</li>
+      <li>Moderne Konzepte: <strong>reversibles Büro</strong> und <strong>Desksharing</strong>.</li>
+      <li><strong>Open-Space, Homeoffice, New Work</strong> verändern den Flächenbedarf.</li>
+    </ol>
+  </section>
+
+  <!-- 18. Praxisbeispiel -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Büroform wählen</h2>
+    <p>Die <em>Lindner &amp; Partner GmbH</em> (Steuerberatung, 18 Personen) zieht um.</p>
+    <ol class="numlist">
+      <li><strong>Tätigkeiten analysieren</strong>: konzentrierte Aktenarbeit, Teamprojekte, vertrauliche Gespräche.</li>
+      <li><strong>Anforderungen ableiten</strong>: Ruhe + Vertraulichkeit <em>und</em> Kooperation nötig.</li>
+      <li><strong>Formen abwägen</strong>: Zelle = zu isoliert für Team, Großraum = zu laut für Vertrauliches.</li>
+      <li><strong>Entscheidung</strong>: <strong>Kombibüro</strong> — Einzelbüros + Multifunktionszone.</li>
+      <li><strong>Flächen prüfen</strong>: Teilflächen je Platz addieren, Verkehrswege einplanen.</li>
+      <li><strong>Akustik sichern</strong>: schallabsorbierende Decken, Rückzugszonen.</li>
+    </ol>
+    <p class="muted">So treffen Sie als Bürokaufleute eine nachvollziehbare, begründete Raumentscheidung.</p>
+  </section>
+
+  <!-- 19. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Sechs Teilflächen benennen</li>
+          <li>Flächenbedarf einordnen/berechnen</li>
+          <li>Büroformen charakterisieren</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Büroform situativ empfehlen</li>
+          <li>Vor- und Nachteile abwägen</li>
+          <li>Moderne Konzepte beurteilen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 20. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Wie war Ihr bisheriger Arbeitsplatz gestaltet? Was hat gestört, was war gut?</li>
+      <li>In welcher Büroform würden Sie persönlich am liebsten arbeiten — und warum?</li>
+      <li>Würden Sie Desksharing akzeptieren? Was wäre für Sie Bedingung?</li>
+      <li>Großraumbüro ist günstig, aber oft unbeliebt — wie ließe sich der Konflikt entschärfen?</li>
+    </ol>
+  </section>
+
+  <!-- 21. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 2 (30.06.)</h2>
+    <p class="subtitle">Büroausstattung &amp; ergonomischer Bildschirmarbeitsplatz</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Ergonomie</strong> — die Arbeit an den Menschen anpassen</li>
+      <li><strong>Der Bürostuhl</strong> — Anforderungen nach DIN EN 1335</li>
+      <li><strong>Der Arbeitstisch</strong> — Maße, Höhenverstellung, Steh-Sitz</li>
+      <li><strong>So sitzen Sie richtig</strong> — Bildschirm, Tastatur, Sitzhaltung</li>
+      <li><strong>Prüfsiegel</strong> — GS-Zeichen und CE-Kennzeichnung</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Bueroraumplanung-und-Bueroformen.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Bueroraumplanung-und-Bueroformen.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 21</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Sechs Teilflächen
+  const c1 = document.getElementById('fig-teilflaechen');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 280');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '280');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const flaechen = ['Stellfläche', 'Bewegungs-\nfläche', 'Funktions-\nfläche', 'Benutzer-\nfläche', 'Verkehrs-\nwegefläche', 'Besucher-\nfläche'];
+    const colors = ['#ECFEFF', '#ECFEFF', '#ECFEFF', '#FEF3C7', '#FEF3C7', '#FEF3C7'];
+    const stroke = ['#0F766E', '#0F766E', '#0F766E', '#F59E0B', '#F59E0B', '#F59E0B'];
+    let x = 30, y = 60;
+    flaechen.forEach((f, i) => {
+      const col = i % 3;
+      const row = Math.floor(i / 3);
+      const px = 30 + col * 290;
+      const py = 50 + row * 110;
+      box(rc, svg, px, py, 250, 80, colors[i], stroke[i]);
+      const lines = f.split('\n');
+      lines.forEach((ln, k) => {
+        text(svg, px + 125, py + (lines.length === 1 ? 47 : 36 + k * 22), ln, { bold: true, size: 17 });
+      });
+    });
+    text(svg, 450, 30, 'Summe der sechs Teilflächen = Flächenbedarf je Arbeitsplatz', { size: 16, bold: true, color: '#0F766E' });
+  });
+
+  // FIG: Büroformen-Vergleich
+  const c2 = document.getElementById('fig-bueroformen');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 230');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '230');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    const formen = [
+      { t: 'Zellenbüro', s: '1–3 Personen', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Gruppenbüro', s: '3–25 Plätze', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Großraumbüro', s: '25–mehrere 100', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Kombibüro', s: 'Zelle + Zone', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let x = 30;
+    formen.forEach((f) => {
+      box(rc, svg, x, 70, 190, 90, f.c, f.st);
+      text(svg, x + 95, 110, f.t, { bold: true, size: 18, color: f.st });
+      text(svg, x + 95, 138, f.s, { size: 14, color: '#475569' });
+      x += 215;
+    });
+    text(svg, 450, 35, 'Vier klassische Büroformen', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 200, 'weniger Personen ⟶ mehr Personen pro Raum', { size: 13, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

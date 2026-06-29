@@ -1,0 +1,388 @@
+\documentclass[11pt, a4paper]{article}
+
+% Gemeinsame Style-Definitionen (TEXINPUTS muss templates/ enthalten — siehe scripts/build_tex.py)
+\input{bfw-style.tex}
+
+\title{\vspace*{-1.5cm}\Huge\bfseries\color{bfwPrimaryDark}Tag~14: Digitales DMS, Datenschutz \& Umweltschutz\\[0.4em]
+  \large\color{bfwInkSoft}\textnormal{Dokumente digital verwalten, Daten schützen, nachhaltig wirtschaften}}
+\author{\textsf{Büroprozesse gestalten und Arbeitsvorgänge organisieren \textperiodcentered{} M-067}\\
+\textsf{\small\copyright\ Can Siebert\,\textperiodcentered\,2026}}
+\date{16.07.2026}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\vspace{1em}
+\begin{merksatz}[title={\bfseries Worum geht es heute?}]
+Modernes Büromanagement bedeutet, mit Informationen verantwortungsvoll umzugehen.
+Drei große Themen greifen dabei ineinander: Wir verwalten Dokumente \emph{digital}
+in einem Dokumentenmanagementsystem (DMS), wir \emph{schützen} die darin enthaltenen
+Daten nach den Vorgaben der EU-DSGVO und des BDSG, und wir handeln \emph{nachhaltig},
+indem wir Umweltgesetze beachten und Ressourcen schonen. In diesem Handout lernen Sie,
+wie revisionssichere Archivierung funktioniert, wie sich Datenschutz und Datensicherheit
+unterscheiden und welche gesetzlichen Grundlagen den betrieblichen Umweltschutz prägen.
+Das ist sowohl Berufsalltag als auch fester Bestandteil der IHK-Abschlussprüfung.
+\end{merksatz}
+
+\tableofcontents
+\vspace{1em}
+\hrule
+\vspace{1em}
+
+\section{Elektronische Dokumente und das DMS}
+
+Durch die zunehmende Nutzung elektronischer Medien stellt sich für jedes Unternehmen
+die Frage, wie elektronische Dokumente gespeichert und verwaltet werden. Wird kein
+Datenmanagementsystem genutzt, sollten Texte und Daten zumindest nach einem
+\emph{einheitlichen Dateiablagesystem} gespeichert werden: Die Ordnerstrukturen der
+elektronischen Ablage und der Papierablage sollten aufeinander abgestimmt und die
+Dateibenennung einheitlich geregelt sein.
+
+Als \emph{Datenträger} kommen für die magnetische Speicherung Festplatten und
+Magnetbänder zum Einsatz, als optische Speicher CD und DVD; mobil wird auf Speicherkarten
+und USB-Sticks gespeichert. Für große Datenmengen mit sehr langer Lebensdauer (zwischen
+30 und 100 Jahren) eignen sich auch heute noch Mikrofilme.
+
+Unternehmen mit hohem Schriftgutaufkommen nutzen zunehmend \emph{elektronische
+Dokumentenmanagementsysteme (DMS)}. Dabei werden ursprünglich papiergebundene
+Schriftstücke in elektronische Dokumente umgewandelt und datenbankgestützt digital
+archiviert.
+
+\begin{merksatz}
+Ein DMS wandelt Papierdokumente in elektronische Dokumente um und verwaltet sie
+zentral und datenbankgestützt. Es ist die technische Grundlage des \emph{papierlosen
+Büros}.
+\end{merksatz}
+
+\subsection{Vorteile eines DMS}
+
+Ein DMS bietet einem Unternehmen unter anderem folgende Vorteile:
+
+\begin{itemize}
+  \item schneller Zugriff auf Dokumente und Informationen (Volltextsuche),
+  \item Wegfall von Verteilerkopien,
+  \item der Verlust von Dokumenten wird reduziert,
+  \item geringer Platzbedarf für die Archivierung,
+  \item weitgehender Wegfall monotoner Ablagetätigkeiten,
+  \item unabhängiger Zugriff auf Dokumente, auch wenn diese gerade in Bearbeitung sind.
+\end{itemize}
+
+\subsection{Revisionssichere Archivierung, Workflow und Cloud}
+
+Der Gesetzgeber gibt für Unterlagen, für die eine \emph{Aufbewahrungsfrist} vorgesehen
+ist, die Regelung für eine elektronische Datenspeicherung vor (Auszug aus dem
+HGB \S~257~(3)). Damit ein DMS aufbewahrungspflichtige Unterlagen ersetzen darf, muss
+es \emph{revisionssicher} arbeiten. Die Anforderungen konkretisieren die \emph{GoBD}
+(Grundsätze zur ordnungsmäßigen Führung und Aufbewahrung von Büchern, Aufzeichnungen
+und Unterlagen in elektronischer Form).
+
+\begin{merksatz}[title={\bfseries Revisionssicher heißt}]
+Gespeicherte Dokumente sind \emph{unveränderbar}, \emph{vollständig}, \emph{nachvollziehbar}
+(Protokollierung) und über die gesamte Aufbewahrungsfrist \emph{wiederauffindbar}.
+\end{merksatz}
+
+Moderne DMS bieten darüber hinaus:
+\begin{itemize}
+  \item \textbf{Workflow:} Dokumente durchlaufen automatisch definierte Bearbeitungs- und Freigabeschritte (z.\,B.\ Rechnungsprüfung, Freigabe, Buchung).
+  \item \textbf{Versionierung:} jede Änderung wird als neue Version gespeichert; ältere Stände bleiben nachvollziehbar erhalten.
+  \item \textbf{Cloud-DMS:} Das System wird als Online-Dienst genutzt; der Zugriff ist ortsunabhängig (wichtig für Homeoffice und mobiles Arbeiten), erfordert aber besondere Aufmerksamkeit für Datenschutz und Vertragsgestaltung.
+\end{itemize}
+
+\begin{eselsbruecke}
+\textbf{„Unveränderbar, Vollständig, Nachvollziehbar, Wiederauffindbar”} --- mit
+\emph{U-V-N-W} merken Sie sich die vier Kernanforderungen der revisionssicheren
+Archivierung.
+\end{eselsbruecke}
+
+\section{Datenschutz und Datensicherheit}
+
+Jedes Unternehmen ist verpflichtet, für die Sicherheit der gespeicherten Daten zu
+sorgen. Durch geeignete Maßnahmen lassen sich Bedienungsfehler, technische Störungen,
+Datenverluste und Datenmissbrauch verhindern oder ausschließen. Die beiden zentralen
+Begriffe sind dabei sauber zu unterscheiden:
+
+\begin{center}
+\begin{tabular}{p{2.6cm} p{5.1cm} p{4.4cm}}
+\toprule
+ & \textbf{Datenschutz} & \textbf{Datensicherheit}\\
+\midrule
+Geschützt wird & natürliche Personen & Hard-, Software, Daten\\
+Gefahr & Verletzung von Persönlichkeitsrechten & Verlust, Zerstörung, Missbrauch durch Unbefugte\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\medskip
+Alle Maßnahmen erfolgen unter Beachtung der \emph{EU-Datenschutz-Grundverordnung
+(EU-DSGVO)} und des \emph{Bundesdatenschutzgesetzes (BDSG)}.
+
+\begin{eselsbruecke}
+\textbf{Daten\underline{schutz} schützt Menschen, Daten\underline{sicherheit} sichert
+Technik.} Wer schützt wen --- das ist die häufigste Verwechslung in der Prüfung.
+\end{eselsbruecke}
+
+\subsection{Personenbezogene Daten und Rechtsgrundlagen}
+
+Der \textbf{Datenschutz} beschreibt die Maßnahmen, die ergriffen werden, um personen-
+und unternehmensbezogene Daten vor Diebstahl und Missbrauch zu schützen.
+\emph{Personenbezogene Daten} sind nach Art.~4 Nr.~1 EU-DSGVO „alle Informationen, die
+sich auf eine identifizierte oder identifizierbare natürliche Person beziehen”. Eine
+Person ist z.\,B.\ identifizierbar über den Namen, die E-Mail-Adresse, Bankdaten, die
+Kreditkartennummer oder die IP-Adresse.
+
+\subsection{Der Datenschutzbeauftragte}
+
+Unternehmen müssen einen \emph{Datenschutzbeauftragten} ernennen, wenn ihr Kerngeschäft
+die Überwachung personenbezogener Daten ist (Art.~37 EU-DSGVO). Ergänzend gilt nach
+\S~38 BDSG (in der seit 2019 geltenden Fassung): Ein Datenschutzbeauftragter ist zu
+ernennen, wenn mindestens \emph{zwanzig Personen} ständig mit der automatisierten
+Verarbeitung personenbezogener Daten beschäftigt sind.
+
+Der Datenschutzbeauftragte hat eine Kontroll- und Beratungsfunktion. Er ist der
+Unternehmensleitung unmittelbar unterstellt, hinsichtlich seiner Kontrollaufgaben aber
+weisungsfrei und genießt besonderen Kündigungsschutz. Wichtig: Der Leiter der
+IT-Abteilung kann in der Regel \emph{nicht} Datenschutzbeauftragter werden, da er sich
+sonst in bestimmten Bereichen selbst kontrollieren müsste (Interessenkonflikt). Zu
+seinen Aufgaben gehören:
+
+\begin{itemize}
+  \item Unterrichtung und Beratung der Unternehmensleitung zu allen Datenschutzvorschriften,
+  \item Überwachung der Einhaltung der Datenschutzvorschriften,
+  \item Sensibilisierung und Schulung der mit der Verarbeitung beschäftigten Mitarbeiter,
+  \item Zusammenarbeit mit der Aufsichtsbehörde,
+  \item Beratung bei der Datenschutz-Folgenabschätzung.
+\end{itemize}
+
+\subsection{Rechte der Betroffenen}
+
+\emph{Betroffene} sind die Personen, deren Daten erhoben, verarbeitet und genutzt werden.
+Die EU-DSGVO gewährt ihnen folgende Rechte:
+
+\begin{center}
+\begin{tabular}{p{5.2cm} p{6.6cm}}
+\toprule
+\textbf{Recht (Artikel)} & \textbf{Bedeutung}\\
+\midrule
+Auskunftsrecht (Art.~15) & Information über Art, Empfänger und Zweck der gespeicherten Daten\\
+Recht auf Berichtigung (Art.~16) & Korrektur falscher personenbezogener Daten\\
+Recht auf Löschung (Art.~17) & „Recht auf Vergessenwerden” bei unzulässiger Speicherung\\
+Recht auf Einschränkung (Art.~18) & Verarbeitung wird während einer Prüfung ausgesetzt\\
+Recht auf Datenübertragbarkeit (Art.~20) & Herausgabe der Daten in maschinenlesbarem Format\\
+Widerspruchsrecht (Art.~21) & Widerspruch gegen die Verarbeitung jederzeit möglich\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Weitere Maßnahmen und Aufbewahrung vs.\ Löschpflicht}
+
+Neben dem Datenschutzbeauftragten sind weitere \emph{technisch-organisatorische
+Maßnahmen} nötig: passwortgeschützte Benutzerkonten, Antivirenschutz auf jedem Rechner
+im Netzwerk, Firewalls zum Schutz vor unerlaubten Zugriffen sowie Sensibilisierung und
+Schulung der Mitarbeiter (häufig durch eine zu unterzeichnende Datenschutzerklärung).
+
+Zum Datenschutz gehört auch der Umgang mit Unterlagen, deren Aufbewahrungsfrist
+abgelaufen ist: Diese Schriftstücke \emph{dürfen} (und müssen aus Datenschutzgründen)
+vernichtet werden. Eine sichere Vernichtung gelingt mit \emph{Aktenvernichtern}
+(Streifenschnitt oder --- sicherer --- Partikelschnitt).
+
+\begin{beispiel}
+\textbf{Aufbewahrung vs.\ Löschpflicht:} Eine Rechnung muss handels- und steuerrechtlich
+mehrere Jahre aufbewahrt werden --- so lange darf sie \emph{nicht} gelöscht werden.
+Ist die Frist abgelaufen und werden die Daten nicht mehr benötigt, greift dagegen die
+\emph{Löschpflicht} aus dem Datenschutz: Die Unterlagen sind dann zu vernichten.
+\end{beispiel}
+
+\section{Datensicherung}
+
+Die \textbf{Datensicherung} umfasst alle Maßnahmen zum Schutz von Daten, Datenträgern
+und Programmen vor Übertragungsfehlern, Verfälschungen, Vernichtung, Diebstahl und
+unberechtigtem Zugriff. Sie ist in fünf Bereichen zu gewährleisten:
+
+\begin{center}
+\begin{tabular}{p{3.4cm} p{8.4cm}}
+\toprule
+\textbf{Gefahrenbereich} & \textbf{Maßnahmen}\\
+\midrule
+Datenerfassung & Prüfziffernverfahren, Plausibilitätskontrolle\\
+Datenübertragung & Prüfbit (Paritätsbit), Übertragungsprotokolle, Verschlüsselung (Kryptographie)\\
+Datenträger & Schreibschutz, Backup nach dem Generationenprinzip, Archivierung (feuerfester Schrank)\\
+Rechnerausfall & Notstromanlage (USV), Plattenspiegelung (Duplexing)\\
+Computerkriminalität & Zugriffskontrolle, Passwort, Kennzahl (PIN), Virenschutzprogramme\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Backup nach dem Generationenprinzip}
+
+Von jedem Datenbestand müssen immer mindestens \emph{drei Generationen} aufeinander
+aufbauender Datensicherungen (Backups) vorhanden sein. Die älteste Sicherung heißt
+\emph{Großvater}, die zweitälteste \emph{Vater} und die jüngste \emph{Sohn}.
+
+\begin{beispiel}
+Montags werden alle Daten auf Band~1 gesichert (\glqq Sohn\grqq). Dienstags werden die
+Daten auf Band~2 gesichert (\glqq Sohn\grqq); Band~1 wird zum \glqq Vater\grqq.
+Mittwochs werden alle Daten auf Band~3 gesichert (\glqq Sohn\grqq); Band~2 wird
+\glqq Vater\grqq{} und Band~1 wird \glqq Großvater\grqq.
+\end{beispiel}
+
+Eine \emph{USV} (unterbrechungsfreie Stromversorgung) wird zwischen Computer und
+Steckdose geschaltet und versorgt den Rechner bei Stromausfall so lange weiter, bis
+die Daten aus dem Hauptspeicher gesichert sind.
+
+\section{Umweltschutz im Unternehmen}
+
+Alle Maßnahmen zum Schutz der Umwelt und zur Vermeidung von Umweltbelastungen werden
+als \emph{Umweltschutz} bezeichnet. Ein aktiver Umweltschutz wirkt sich oft auch
+wirtschaftlich positiv aus --- etwa wenn ein Unternehmen durch den Einsatz von
+Recyclingpapier zugleich die Umwelt entlastet und Kosten spart.
+
+\subsection{Gesetzliche Grundlagen}
+
+\subsubsection{Kreislaufwirtschaftsgesetz (KrWG)}
+
+Das \textbf{Kreislaufwirtschaftsgesetz (KrWG)} ist das Bundesgesetz zum Abfallrecht.
+Ziel ist es, Abfälle zu reduzieren und natürliche Ressourcen zu schonen. \S~6 KrWG legt
+die \emph{Abfallhierarchie} fest --- Vorrang hat stets die aus Umweltsicht beste
+Möglichkeit (\emph{Vermeidung vor Verwertung, Verwertung vor Beseitigung}):
+
+\begin{enumerate}
+  \item \textbf{Vermeidung} --- Abfälle in Menge und Schädlichkeit reduzieren (z.\,B.\ Mehrwegverpackungen, Nachfüllpackungen).
+  \item \textbf{Vorbereitung zur Wiederverwendung} --- Prüfung, Reinigung, Reparatur, damit Erzeugnisse erneut zum gleichen Zweck genutzt werden.
+  \item \textbf{Recycling} --- gebrauchte Materialien werden zum Rohstoff (Sekundärrohstoff) wiederverwertet (z.\,B.\ Altpapier zu Recyclingpapier).
+  \item \textbf{Sonstige Verwertung} --- insbesondere energetische Verwertung (Verbrennung mit Energiegewinnung).
+  \item \textbf{Beseitigung} --- z.\,B.\ Ablagerung auf Deponien.
+\end{enumerate}
+
+Zu unterscheiden sind: \emph{Wiederverwertung} (Altstoffe kommen im gleichartigen Prozess
+erneut zum Einsatz, z.\,B.\ Glas einschmelzen), \emph{Wiederverwendung} (ein gebrauchtes
+Produkt wird für denselben Zweck genutzt, z.\,B.\ Glaspfandflaschen) und
+\emph{Weiterverwendung} (ein gebrauchtes Produkt wird für einen anderen Zweck genutzt,
+z.\,B.\ alte Autoreifen als Schiffsfender).
+
+\subsubsection{Verpackungsgesetz (VerpackG)}
+
+Das \textbf{Verpackungsgesetz (VerpackG)} trat zum 1.~Januar 2019 in Kraft und löste die
+Verpackungsverordnung ab. Hersteller müssen sich bei der \emph{Zentralen Stelle
+Verpackungsregister} registrieren und sich an einem \emph{dualen Entsorgungssystem}
+(z.\,B.\ Grüner Punkt --- DSD) beteiligen, um für die Entsorgungskosten aufzukommen.
+Das duale System umfasst die drei Säulen \emph{Altpapier, Glas} sowie \emph{gelber
+Sack/gelbe Tonne}. Das VerpackG unterscheidet in \S~3 vier Verpackungstypen:
+
+\begin{itemize}
+  \item \textbf{Verkaufsverpackungen} (Bestandteil der Verkaufseinheit; auch Service- und Versandverpackungen),
+  \item \textbf{Umverpackungen} (enthalten mehrere Verkaufseinheiten),
+  \item \textbf{Transportverpackungen} (erleichtern Handhabung und Transport, z.\,B.\ Gitterboxen, Euro-Paletten).
+\end{itemize}
+
+\subsubsection{Elektro- und Elektronikgerätegesetz (ElektroG)}
+
+Das \textbf{Elektro- und Elektronikgerätegesetz (ElektroG)} regelt die umweltverträgliche
+Entsorgung von Elektro- und Elektronikgeräten. Private Haushalte dürfen Altgeräte
+\emph{nicht} über den Restmüll entsorgen; sie sind durch das Symbol der
+\emph{durchgestrichenen Mülltonne} gekennzeichnet. Hersteller müssen sich vor dem
+Inverkehrbringen bei der \glqq Gemeinsamen Stelle der Hersteller\grqq{} (Stiftung EAR)
+registrieren --- bei Verstößen drohen Bußgelder bis zu 100\,000,00~Euro. Große Händler
+(Verkaufs- bzw.\ Lagerfläche über 400~m\textsuperscript{2}) sind zur Rücknahme
+verpflichtet; kleine Geräte (Kantenlänge unter 25~cm) müssen sie immer kostenlos
+zurücknehmen.
+
+\subsection{Nachhaltiges Wirtschaften}
+
+Der Begriff \emph{Nachhaltigkeit} stammt aus der Forstwirtschaft: Es dürfen nicht mehr
+Bäume gefällt werden, als nachwachsen. Übertragen heißt das, heutige Bedürfnisse so zu
+befriedigen, dass den nachfolgenden Generationen alle Ressourcen in gleicher Menge und
+Qualität zur Verfügung stehen. Zum nachhaltigen Wirtschaften zählen umweltfreundliche
+Produkte, die Reduzierung des Energieverbrauchs, umweltschonende Produktionsverfahren,
+rationelle Ressourcenverwendung und fairer Handel (\emph{Fair Trade}).
+
+\subsubsection{Umweltfreundliche Produkte und Siegel}
+
+Beim Einkauf helfen \emph{Umweltprüfsiegel}, umweltfreundliche Produkte zu erkennen:
+
+\begin{center}
+\begin{tabular}{p{3.6cm} p{8.2cm}}
+\toprule
+\textbf{Siegel} & \textbf{Bedeutung}\\
+\midrule
+Blauer Engel & Umweltzeichen der Bundesregierung für umwelt- und gesundheitsfreundliche Produkte\\
+Energy Star & Kennzeichnung stromsparender IT-Geräte (US-Umweltbehörde EPA)\\
+EU-Umweltblume (Ecolabel) & EU-Siegel über den gesamten Lebenszyklus eines Produkts\\
+TCO Certified & nachhaltige Gestaltung, Herstellung und Verwendung von IT-Produkten\\
+FSC / PEFC & Holz- und Papierprodukte aus nachhaltig bewirtschafteten Wäldern\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{Energie sparen und Green IT}
+
+Einen großen Beitrag zum Klima- und Umweltschutz leistet die Verminderung des
+Energieverbrauchs. Im Büro helfen z.\,B.: Licht und Bildschirm beim Verlassen des Raums
+abschalten, den Drucker erst bei Bedarf einschalten, im Winter stoßlüften statt
+Kippstellung, Verkehrsflächen mit bewegungsgesteuertem Licht ausstatten, Geräte zum
+Feierabend komplett abschalten (Stand-by verbraucht weiter Strom!), auf LED umstellen
+und bei Neuanschaffungen auf Energieeffizienz achten.
+
+\emph{Green IT} bezeichnet den umwelt- und ressourcenschonenden Einsatz von
+Informationstechnik über den gesamten Lebenszyklus --- etwa durch energieeffiziente
+Server, Virtualisierung statt vieler Einzelrechner oder die bewusste Nutzung von
+Cloud-Diensten. Zusammen mit dem \emph{papierlosen Büro} (digitale Dokumente im DMS)
+schließt sich hier der Kreis zum ersten Themenblock dieses Tages.
+
+\section{Zusammenfassung}
+
+\begin{enumerate}
+  \item Ein \textbf{DMS} wandelt Papier in elektronische Dokumente um und verwaltet sie datenbankgestützt --- mit schnellem Zugriff, weniger Verlust und geringem Platzbedarf.
+  \item \textbf{Revisionssichere Archivierung} (HGB \S~257, GoBD) verlangt unveränderbare, vollständige, nachvollziehbare und wiederauffindbare Dokumente; Workflow, Versionierung und Cloud-DMS ergänzen moderne Systeme.
+  \item \textbf{Datenschutz} schützt natürliche Personen, \textbf{Datensicherheit} schützt Hard-, Software und Daten --- Grundlagen sind EU-DSGVO und BDSG.
+  \item Der \textbf{Datenschutzbeauftragte} (ab 20 Beschäftigten mit automatisierter Verarbeitung) kontrolliert und berät; Betroffene haben Rechte nach Art.~15--21 DSGVO.
+  \item \textbf{Datensicherung} sichert Daten in fünf Bereichen ab; das \textbf{Generationenprinzip} (Großvater--Vater--Sohn) verlangt mindestens drei Backup-Generationen.
+  \item \textbf{Umweltschutz}: KrWG (Abfallhierarchie), VerpackG (duales System) und ElektroG bilden den Rahmen; \textbf{nachhaltiges Wirtschaften} setzt auf Umweltsiegel, Energiesparen, papierloses Büro und Green IT.
+\end{enumerate}
+
+\newpage
+
+\section*{Glossar}
+\addcontentsline{toc}{section}{Glossar}
+
+\glossareintrag{DMS}{Dokumentenmanagementsystem; wandelt papiergebundene Schriftstücke in elektronische Dokumente um und verwaltet sie datenbankgestützt.}
+
+\glossareintrag{Revisionssichere Archivierung}{Speicherung, bei der Dokumente unveränderbar, vollständig, nachvollziehbar und über die Aufbewahrungsfrist wiederauffindbar sind (HGB \S~257, GoBD).}
+
+\glossareintrag{GoBD}{Grundsätze zur ordnungsmäßigen Führung und Aufbewahrung von Büchern, Aufzeichnungen und Unterlagen in elektronischer Form.}
+
+\glossareintrag{Workflow}{Automatisch gesteuerter Ablauf von Bearbeitungs- und Freigabeschritten eines Dokuments im DMS.}
+
+\glossareintrag{Versionierung}{Speicherung jeder Änderung als eigene Version, sodass ältere Stände nachvollziehbar bleiben.}
+
+\glossareintrag{Cloud-DMS}{Dokumentenmanagement als Online-Dienst mit ortsunabhängigem Zugriff.}
+
+\glossareintrag{Datenschutz}{Maßnahmen zum Schutz natürlicher Personen vor Verletzung ihrer Persönlichkeitsrechte durch Missbrauch personenbezogener Daten.}
+
+\glossareintrag{Datensicherheit}{Maßnahmen zum Schutz von Hard-, Software und Daten vor Verlust, Zerstörung und Missbrauch.}
+
+\glossareintrag{Personenbezogene Daten}{Alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen (Art.~4 Nr.~1 EU-DSGVO).}
+
+\glossareintrag{EU-DSGVO}{Europäische Datenschutz-Grundverordnung; zentrale Rechtsgrundlage des Datenschutzes.}
+
+\glossareintrag{BDSG}{Bundesdatenschutzgesetz; ergänzt die EU-DSGVO auf nationaler Ebene.}
+
+\glossareintrag{Datenschutzbeauftragter}{Person mit Kontroll- und Beratungsfunktion; verpflichtend ab 20 ständig mit automatisierter Datenverarbeitung Beschäftigten (\S~38 BDSG).}
+
+\glossareintrag{Generationenprinzip}{Backup-Verfahren mit mindestens drei aufeinander aufbauenden Sicherungen (Großvater--Vater--Sohn).}
+
+\glossareintrag{USV}{Unterbrechungsfreie Stromversorgung; überbrückt einen Stromausfall, bis Daten gesichert sind.}
+
+\glossareintrag{Kreislaufwirtschaftsgesetz}{Bundesgesetz zum Abfallrecht; legt in \S~6 die Abfallhierarchie fest.}
+
+\glossareintrag{Abfallhierarchie}{Rangfolge Vermeidung, Vorbereitung zur Wiederverwendung, Recycling, sonstige Verwertung, Beseitigung.}
+
+\glossareintrag{Verpackungsgesetz}{Regelt seit 2019 das Inverkehrbringen, die Rücknahme und Verwertung von Verpackungen (duales System).}
+
+\glossareintrag{ElektroG}{Elektro- und Elektronikgerätegesetz; regelt die umweltverträgliche Entsorgung von Elektrogeräten.}
+
+\glossareintrag{Nachhaltigkeit}{Grundsatz, heutige Bedürfnisse so zu befriedigen, dass künftige Generationen über dieselben Ressourcen verfügen.}
+
+\glossareintrag{Green IT}{Umwelt- und ressourcenschonender Einsatz von Informationstechnik über den gesamten Lebenszyklus.}
+
+\end{document}

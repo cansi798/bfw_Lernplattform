@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 7 — Sitzungen & Besprechungen vorbereiten und durchführen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 7 · 07.07.2026</span>
+    <h1>Sitzungen &amp; Besprechungen</h1>
+    <p class="subtitle">Vorbereiten und durchführen — wie gute Planung aus Meetings echte Ergebnisse macht</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 9 (S. 150–154)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>erklären, warum <strong>Vorbereitung</strong> über den Erfolg einer Sitzung entscheidet</li>
+      <li>die <strong>Vorbereitungsaspekte</strong> (Raum, Teilnehmer, TOP, Unterlagen ...) klären</li>
+      <li>eine präzise <strong>Tagesordnung</strong> und eine vollständige <strong>Einladung</strong> erstellen</li>
+      <li>den zeitlichen Ablauf als <strong>Countdown/Checkliste</strong> planen und Fristen beachten</li>
+      <li>eine Besprechung mit <strong>Rollen und Diskussionsregeln</strong> durchführen</li>
+      <li>elektronische und <strong>hybride Besprechungen</strong> vorbereiten und die Etikette einhalten</li>
+    </ul>
+  </section>
+
+  <!-- 3. Warum Vorbereitung -->
+  <section class="slide">
+    <h2>Warum Vorbereitung entscheidet</h2>
+    <p>Sollen Sitzungen <strong>zufriedenstellend und effektiv</strong> verlaufen, ist eine gute Planung unverzichtbar — auch bei kleinen Teambesprechungen.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">⚠️ Folgen mangelnder Vorbereitung</span>
+      Wichtige Inhalte werden nicht thematisiert · die Sitzung beginnt verspätet und braucht mehr Zeit · Ergebnisse und Beschlüsse werden nicht festgehalten, nicht nachverfolgt und schließlich <strong>vergessen</strong>.
+    </div>
+    <p class="muted">Buchverweis: S. 151</p>
+  </section>
+
+  <!-- 4. Rechtzeitig & Fristen -->
+  <section class="slide">
+    <h2>Rechtzeitig beginnen — Fristen beachten</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wöchentliche Teamsitzung</div>
+        <p style="font-size: 1.05rem;">In der Regel reicht ein Planungsbeginn <strong>2–3 Tage vorher</strong>. Der Zeitabstand hängt von Art der Sitzung und Bedingungen vor Ort ab.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Offizielle Sitzung (z. B. GmbH)</div>
+        <p style="font-size: 1.05rem;">Gesetzliche Fristen gelten: <strong>§ 51 GmbHG</strong> — Einladung mit einer Frist von <strong>mindestens einer Woche</strong>.</p>
+      </div>
+    </div>
+    <p class="muted">Je offizieller die Sitzung, desto früher und formaler die Vorbereitung.</p>
+  </section>
+
+  <!-- 5. Vorbereitungsaspekte -->
+  <section class="slide">
+    <h2>Vorbereitungsaspekte &amp; Leitfragen</h2>
+    <table>
+      <thead><tr><th>Aspekt</th><th>Leitfrage</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Datum/Uhrzeit</strong></td><td>Andere Sitzungen zum Termin? Teilnehmer verhindert?</td></tr>
+        <tr><td><strong>Raum</strong></td><td>Geeignet, verfügbar, reserviert? Welche Technik nötig?</td></tr>
+        <tr><td><strong>Teilnehmer</strong></td><td>Wer gehört dazu? Welche Unterlagen brauchen sie?</td></tr>
+        <tr><td><strong>Zeitbedarf</strong></td><td>Wie viel Zeit wird für die Durchführung benötigt?</td></tr>
+        <tr><td><strong>Unterlagen / Protokoll</strong></td><td>Welche Schriftstücke? Wer schreibt das Protokoll?</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Auch <strong>Verpflegung</strong> (Getränke, Snacks) gehört zur guten Vorbereitung.</p>
+  </section>
+
+  <!-- 6. Vorbereitungs-Countdown DIAGRAMM -->
+  <section class="slide">
+    <h2>Der Vorbereitungs-Countdown</h2>
+    <div class="figure" id="fig-countdown"></div>
+    <p class="caption">Eine Checkliste verhindert, dass etwas vergessen wird — von der Zielklärung bis zum Technik-Check.</p>
+  </section>
+
+  <!-- 7. Tagesordnung -->
+  <section class="slide">
+    <h2>Die Tagesordnung gestalten</h2>
+    <p>Jeder Tagesordnungspunkt (TOP) braucht ein klares <strong>Ziel</strong>: Information, Ideensammlung, Aussprache, Entscheidung oder Beschlussfassung.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">⚠️ Negativbeispiel</span>
+      Ein TOP heißt nur <strong>„Sortiment"</strong>. Unklar: Erweiterung? Produkte herausnehmen? Neu zusammenstellen? → Teilnehmer können sich nicht vorbereiten.
+    </div>
+    <p>Besser: <em>„Aussprache und Entscheidung über die Sortimentserweiterung der Warengruppe Handelswaren Bürotechnik (Anlagen 1 und 2)"</em>.</p>
+  </section>
+
+  <!-- 8. Sitzungsablauf Beispiel -->
+  <section class="slide">
+    <h2>Beispiel: Sitzungsablauf strukturieren</h2>
+    <p>Wiederkehrende Punkte erhalten einen festen Platz im Ablauf.</p>
+    <table>
+      <thead><tr><th>Uhrzeit</th><th>Punkt</th></tr></thead>
+      <tbody>
+        <tr><td>09:00</td><td>Protokoll der letzten Sitzung</td></tr>
+        <tr><td>09:05</td><td>Aktuelle Berichterstattung aus den Abteilungen</td></tr>
+        <tr><td>09:20</td><td>Schwerpunktthema</td></tr>
+        <tr><td>10:10</td><td>Pause</td></tr>
+        <tr><td>10:20</td><td>2–3 weitere, kürzere Themen</td></tr>
+        <tr><td>10:50 / 11:00</td><td>Ausblick, Verabredungen / Ende</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 9. Einladung -->
+  <section class="slide">
+    <h2>Die Einladung erstellen</h2>
+    <p>Die Einladung wird <strong>erst nach</strong> Abschluss der Vorbereitungen gestaltet — je präziser, desto besser können sich die Teilnehmer vorbereiten.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Pflichtangaben (1)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Art der Sitzung/Besprechung</li>
+          <li>Datum, Uhrzeit und Ort</li>
+          <li>voraussichtlicher Zeitbedarf</li>
+          <li>TOP mit Ziel</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Pflichtangaben (2)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Berichterstatter/Verantwortliche je TOP</li>
+          <li>Hinweis auf Anlagen</li>
+          <li>Anmeldung erforderlich?</li>
+          <li>Name des Protokollführers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Durchführung Einstieg -->
+  <section class="slide">
+    <h2>Die Durchführung</h2>
+    <p>Auch bei guter Planung kann eine Sitzung zäh verlaufen. Denn für das Gelingen ist <strong>nicht nur die Leitung</strong>, sondern sind auch die Teilnehmer verantwortlich.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kerngedanke</span>
+      Eine durchdachte Vorbereitung ist ein wesentlicher Baustein — aber die Durchführung braucht klare <strong>Rollen, Regeln und Steuerung</strong>.
+    </div>
+    <p class="muted">Buchverweis: S. 154</p>
+  </section>
+
+  <!-- 11. Rollen DIAGRAMM -->
+  <section class="slide">
+    <h2>Rollen in der Besprechung</h2>
+    <div class="figure" id="fig-rollen"></div>
+    <p class="caption">Leitung, Moderation und Protokollführung greifen ineinander — die Protokollführung wird schon in der Vorbereitung benannt.</p>
+  </section>
+
+  <!-- 12. Schwierige Teilnehmertypen -->
+  <section class="slide">
+    <h2>Schwierige Teilnehmertypen steuern</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Dauerredner</div>
+        <p style="font-size: 1rem;">Hat zu allem etwas zu sagen. → <strong>Freundlich begrenzen</strong>, auf Zeit und Thema verweisen.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Desinteressierter</div>
+        <p style="font-size: 1rem;">Schaut immer wieder auf die Uhr. → <strong>Gezielt einbinden</strong>, nach seiner Meinung fragen.</p>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Abteilungswitzbold</div>
+        <p style="font-size: 1rem;">Zieht Beiträge ins Lächerliche. → <strong>Sachlich zurückführen</strong>, Beiträge wertschätzen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. Grundsätze -->
+  <section class="slide">
+    <h2>Grundsätze für die Durchführung</h2>
+    <ul class="checklist">
+      <li>Die Sitzung beginnt <strong>pünktlich</strong> — der Zeitrahmen wird eingehalten.</li>
+      <li>Die <strong>Tagesordnung</strong> ist Leitfaden: zielorientiert, keine Binnengespräche.</li>
+      <li>Strukturierter Ablauf je TOP: <strong>fragen – zuhören – klären – festhalten</strong>.</li>
+      <li>Kommunikation ist <strong>offen und respektvoll</strong> — niemandem ins Wort fallen, Konsens suchen.</li>
+      <li>Jeder bemüht sich um <strong>kurze Beiträge</strong>.</li>
+    </ul>
+  </section>
+
+  <!-- 14. Elektronische Besprechungen -->
+  <section class="slide">
+    <h2>Elektronische Besprechungen</h2>
+    <p>Immer mehr Unternehmen nutzen Formen, die nicht die Anwesenheit aller an einem Ort erfordern.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Videokonferenz</div>
+        <p style="font-size: 1rem;">Austausch an weit entfernten Orten, gemeinsames Arbeiten an Dateien. Nötig: Videosystem + schneller Internetanschluss.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Telefonkonferenz</div>
+        <p style="font-size: 1rem;">Telefonat mit <strong>mehr als drei</strong> Teilnehmern. Genau drei = <strong>Dreierkonferenz</strong>. Virtuelle Räume per PIN.</p>
+      </div>
+    </div>
+    <p class="muted">Vorteil: spart Flug-, Hotelkosten, Verpflegung und Zeit — zunächst Anschaffungskosten der Technik.</p>
+  </section>
+
+  <!-- 15. Hybrid & Etikette -->
+  <section class="slide">
+    <h2>Hybridmeetings &amp; Etikette</h2>
+    <p>Tools: <strong>Teams, Zoom, Webex</strong> · Terminfindung: <strong>Doodle, Google Kalender</strong>. Oft sitzt ein Teil im Raum, ein anderer ist online — das ist <strong>hybrid</strong>.</p>
+    <ul class="checklist">
+      <li>Pünktlich erscheinen, Technik (Kamera, Mikrofon, Ton) vorher testen</li>
+      <li>Mikrofon stumm, wenn man nicht spricht; Kamera möglichst an</li>
+      <li>Ruhiger, aufgeräumter Hintergrund; nur eine Person spricht zur Zeit</li>
+      <li>Bei Hybrid: <strong>Remote-Teilnehmer aktiv und gleichberechtigt einbinden</strong></li>
+    </ul>
+  </section>
+
+  <!-- 16. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 7</h2>
+    <ol class="numlist">
+      <li><strong>Vorbereitung</strong> entscheidet über den Erfolg — mangelnde Planung kostet Zeit und Ergebnisse.</li>
+      <li>Rechtzeitig beginnen und <strong>Fristen</strong> beachten (§ 51 GmbHG: mind. 1 Woche).</li>
+      <li><strong>Vorbereitungsaspekte</strong> klären: Raum, Teilnehmer, Zeit, TOP, Unterlagen, Protokoll.</li>
+      <li><strong>Tagesordnung</strong> mit klarem Ziel, <strong>Einladung</strong> mit allen Pflichtangaben.</li>
+      <li><strong>Durchführung</strong>: Rollen, Pünktlichkeit, Themensteuerung, Diskussionsregeln.</li>
+      <li><strong>Elektronische/hybride</strong> Besprechungen sparen Zeit — Technik und Etikette nötig.</li>
+    </ol>
+  </section>
+
+  <!-- 17. Praxisbeispiel -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Sitzung planen</h2>
+    <p>Sie planen eine <em>Abteilungsleitersitzung</em> in zwei Wochen.</p>
+    <ol class="numlist">
+      <li><strong>Ziel klären</strong>: Worum geht es? Information, Aussprache oder Entscheidung?</li>
+      <li><strong>Teilnehmer &amp; Termin</strong>: Wer muss dabei sein, wann sind alle verfügbar?</li>
+      <li><strong>Raum &amp; Technik</strong>: reservieren, Beamer/PC, Verpflegung organisieren.</li>
+      <li><strong>TOP &amp; Reihenfolge</strong>: Ziele und Zeiten festlegen, präzise formulieren.</li>
+      <li><strong>Einladung</strong>: mit allen Pflichtangaben versenden (Fristen!).</li>
+      <li><strong>Check vor Ort</strong>: Technik testen, Unterlagen und Moderationsmaterial bereitlegen.</li>
+    </ol>
+  </section>
+
+  <!-- 18. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Vorbereitungsaspekte nennen</li>
+          <li>Pflichtangaben einer Einladung</li>
+          <li>Grundsätze der Durchführung</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Tagesordnung/Einladung erstellen</li>
+          <li>TOP präzise formulieren</li>
+          <li>Teilnehmertypen steuern</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 19. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Was hat eine Besprechung für Sie schon einmal zur Zeitverschwendung gemacht?</li>
+      <li>Wie würden Sie als Moderation mit einem Dauerredner umgehen?</li>
+      <li>Welche Vor- und Nachteile haben Videokonferenzen für Sie persönlich?</li>
+      <li>Wie lässt sich verhindern, dass Remote-Teilnehmer in Hybridmeetings „untergehen"?</li>
+    </ol>
+  </section>
+
+  <!-- 20. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 8 (08.07.)</h2>
+    <p class="subtitle">Sitzungen &amp; Besprechungen nachbereiten — das Protokoll</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Protokoll</strong> — Niederschrift über Inhalte, Verlauf und Ergebnisse</li>
+      <li><strong>Wozu Protokolle?</strong> — Information, Beweis-/Dokumentationsmittel, Organisation</li>
+      <li><strong>Protokollarten</strong> — Verlaufs-, Ergebnis- und Beschlussprotokoll</li>
+      <li><strong>Aufbau</strong> — Kopf, Anwesende, TOP, Beschlüsse, Unterschriften</li>
+      <li><strong>Nachbereitung</strong> — Aufgaben verteilen, Beschlüsse nachverfolgen</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Besprechungen-vorbereiten-und-durchfuehren.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Besprechungen-vorbereiten-und-durchfuehren.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 20</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Vorbereitungs-Countdown (Ablauf von links nach rechts)
+  const c1 = document.getElementById('fig-countdown');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 300');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const steps = [
+      { t: '2 Wochen', s: 'Ziel & Kreis', c: '#ECFEFF', st: '#0F766E' },
+      { t: '10 Tage', s: 'Raum & Technik', c: '#ECFEFF', st: '#0F766E' },
+      { t: '1 Woche', s: 'TOP & Einladung', c: '#FEF3C7', st: '#F59E0B' },
+      { t: '2–3 Tage', s: 'Unterlagen', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'am Tag', s: 'Check vor Ort', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let x = 20;
+    const y = 110, w = 150, h = 90;
+    steps.forEach((stp, i) => {
+      box(rc, svg, x, y, w, h, stp.c, stp.st);
+      text(svg, x + w / 2, y + 38, stp.t, { bold: true, size: 17, color: stp.st });
+      text(svg, x + w / 2, y + 64, stp.s, { size: 14, color: '#475569' });
+      if (i < steps.length - 1) arrow(rc, svg, x + w + 2, y + h / 2, x + w + 18, y + h / 2, '#475569');
+      x += w + 20;
+    });
+    text(svg, 450, 50, 'Vorbereitungs-Countdown bis zur Sitzung', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 250, 'früh  ⟶  Sitzungstermin', { size: 14, color: '#475569' });
+  });
+
+  // FIG: Rollen in der Besprechung (zentrale Sitzung mit drei Rollen)
+  const c2 = document.getElementById('fig-rollen');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 280');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '280');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    // Zentrum: die Sitzung
+    box(rc, svg, 360, 110, 180, 70, '#ECFEFF', '#0F766E');
+    text(svg, 450, 142, 'Die Sitzung', { bold: true, size: 18, color: '#0F766E' });
+    text(svg, 450, 164, 'Ziel · Zeit · Ergebnis', { size: 13, color: '#475569' });
+    // Drei Rollen
+    box(rc, svg, 60, 30, 200, 70, '#FEF3C7', '#F59E0B');
+    text(svg, 160, 60, 'Leitung', { bold: true, size: 17, color: '#F59E0B' });
+    text(svg, 160, 84, 'eröffnen · steuern · schließen', { size: 12, color: '#475569' });
+    box(rc, svg, 640, 30, 200, 70, '#FEF3C7', '#F59E0B');
+    text(svg, 740, 60, 'Moderation', { bold: true, size: 17, color: '#F59E0B' });
+    text(svg, 740, 84, 'Wort erteilen · zusammenfassen', { size: 12, color: '#475569' });
+    box(rc, svg, 350, 210, 200, 60, '#FFE4E6', '#F97316');
+    text(svg, 450, 245, 'Protokollführung', { bold: true, size: 17, color: '#F97316' });
+    // Pfeile von Rollen zur Sitzung
+    arrow(rc, svg, 220, 100, 380, 120, '#475569');
+    arrow(rc, svg, 700, 100, 520, 120, '#475569');
+    arrow(rc, svg, 450, 205, 450, 185, '#475569');
+    text(svg, 450, 22, 'Drei Rollen für eine erfolgreiche Besprechung', { size: 16, bold: true, color: '#0F766E' });
+  });
+});
+</script>
+
+</body>
+</html>

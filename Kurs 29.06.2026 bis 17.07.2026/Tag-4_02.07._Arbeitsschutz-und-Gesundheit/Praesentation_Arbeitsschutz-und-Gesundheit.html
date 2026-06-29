@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 4 — Arbeitsschutz & Gesundheit am Arbeitsplatz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 4 · 02.07.2026</span>
+    <h1>Arbeitsschutz &amp; Gesundheit am Arbeitsplatz</h1>
+    <p class="subtitle">Belastung erkennen, Gesundheit schützen — Recht, Akteure und Prävention</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 2 &amp; 3 (S. 77–83, 91–104)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>die <strong>Rechtsgrundlagen</strong> des Arbeitsschutzes (ArbSchG, ArbZG, ASiG) erläutern</li>
+      <li>die <strong>Akteure</strong> des Arbeitsschutzes und ihre Aufgaben zuordnen</li>
+      <li><strong>Gefährdungsbeurteilung, Unterweisung</strong> und Betriebsanweisung beschreiben</li>
+      <li><strong>Belastung</strong> von Beanspruchung und <strong>Eustress</strong> von Distress unterscheiden</li>
+      <li>Ursachen, Folgen und Maßnahmen bei <strong>Stress, Burnout, Mobbing</strong> einordnen</li>
+      <li>Maßnahmen des <strong>betrieblichen Gesundheitsmanagements</strong> bewerten</li>
+    </ul>
+  </section>
+
+  <!-- 3. Arbeitsschutz Rechtsrahmen -->
+  <section class="slide">
+    <h2>Arbeitsschutz — der rechtliche Rahmen</h2>
+    <p>Arbeitgeber sind an Gesetze gebunden, die die <strong>psychische und physische Gesundheit</strong> der Arbeitnehmer schützen. Für Büroarbeitsplätze sind vor allem die allgemeinen Vorschriften relevant.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die drei zentralen Gesetze: <strong>Arbeitsschutzgesetz (ArbSchG)</strong>, <strong>Arbeitszeitgesetz (ArbZG)</strong> und <strong>Arbeitssicherheitsgesetz (ASiG)</strong> — ergänzt durch Gewerbeordnung und Arbeitsstättenverordnung.
+    </div>
+    <p class="muted">Buchverweis: S. 77</p>
+  </section>
+
+  <!-- 4. Akteure - Diagramm -->
+  <section class="slide">
+    <h2>Die Akteure des Arbeitsschutzes</h2>
+    <div class="figure" id="fig-akteure"></div>
+    <p class="caption">Innerbetriebliche Verantwortung und externe Aufsicht greifen ineinander.</p>
+  </section>
+
+  <!-- 5. Verantwortung AG/AN -->
+  <section class="slide">
+    <h2>Verantwortung: Arbeitgeber und Arbeitnehmer</h2>
+    <p>Die Verantwortung für die Gesundheit am Arbeitsplatz liegt <strong>bei beiden</strong>.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Arbeitgeber</div>
+        <ul style="margin-left: 1rem;">
+          <li>Sichere Arbeitsbedingungen schaffen</li>
+          <li>Arbeitsschutz-/Unfallverhütungsvorschriften einhalten</li>
+          <li>Geeignete Arbeitsmittel bereitstellen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Arbeitnehmer</div>
+        <ul style="margin-left: 1rem;">
+          <li>Gesundheitsgefährdungen vorbeugen</li>
+          <li>Gefahren meiden</li>
+          <li>Auf Schwachstellen hinweisen</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Aufsicht -->
+  <section class="slide">
+    <h2>Aufsicht über den Arbeitsschutz</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Berufsgenossenschaft</div>
+        <ul style="margin-left: 1rem;">
+          <li>Branchenspezifisch, jedes Unternehmen gehört dazu</li>
+          <li>Überwacht Unfall- und Krankheitsverhütung</li>
+          <li>Kontrolliert Erste Hilfe, berät</li>
+          <li>Erlässt die <strong>BGV</strong> (Unfallverhütung)</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Gewerbeaufsichtsamt</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kontrolliert Arbeits-, Umwelt-, Verbraucherschutz</li>
+          <li>Darf Betriebe jederzeit besichtigen</li>
+          <li>Kann stilllegen und Bußgelder verhängen (§ 35 GewO)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. ArbZG -->
+  <section class="slide">
+    <h2>Arbeitszeitgesetz (ArbZG)</h2>
+    <p>Das ArbZG sichert den <strong>Gesundheitsschutz</strong> der Arbeitnehmer durch klare Grenzen.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Höchstarbeitszeit</div>Begrenzt die tägliche Arbeitszeit.</div>
+      <div class="card teal"><div class="card-title">Mindestruhepausen</div>Sichert Erholung während der Arbeit.</div>
+      <div class="card amber"><div class="card-title">Nachtarbeit</div>Besonderer Schutz für Nachtarbeiter/-innen.</div>
+      <div class="card amber"><div class="card-title">Sonn- &amp; Feiertage</div>Grundsätzliches Arbeitsverbot, Ausnahmen möglich.</div>
+    </div>
+  </section>
+
+  <!-- 8. ArbSchG §4 -->
+  <section class="slide">
+    <h2>Arbeitsschutzgesetz — § 4 Grundsätze</h2>
+    <p>Das ArbSchG sichert Sicherheit und Gesundheitsschutz. § 4 nennt allgemeine Grundsätze:</p>
+    <ol class="numlist">
+      <li>Gefährdung für Leben sowie physische und psychische Gesundheit <strong>möglichst vermeiden</strong></li>
+      <li>Gefahren <strong>an ihrer Quelle</strong> bekämpfen</li>
+      <li>Stand von Technik, Arbeitsmedizin und Hygiene berücksichtigen</li>
+      <li>Individuelle Schutzmaßnahmen sind <strong>nachrangig</strong></li>
+      <li>Besonders schutzbedürftige Gruppen berücksichtigen</li>
+    </ol>
+  </section>
+
+  <!-- 9. Gefährdungsbeurteilung -->
+  <section class="slide">
+    <h2>Gefährdungsbeurteilung (§ 5 ArbSchG)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kerngedanke</span>
+      Der Arbeitgeber ermittelt durch Beurteilung der Gefährdung, welche Schutzmaßnahmen nötig sind — <strong>auch die psychische Belastung</strong> zählt dazu.
+    </div>
+    <h3>Wann durchführen und dokumentieren?</h3>
+    <ul>
+      <li>Vor Aufnahme der Tätigkeiten (Erstbeurteilung)</li>
+      <li>Beim Einrichten und Betreiben von Arbeitsstätten</li>
+      <li>Vor erstmaliger Verwendung eines Arbeitsmittels</li>
+      <li>Aktualisierung bei neuen Arbeitsplätzen oder Verfahren</li>
+    </ul>
+  </section>
+
+  <!-- 10. Unterweisung & Betriebsanweisung -->
+  <section class="slide">
+    <h2>Unterweisung &amp; Betriebsanweisung</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Unterweisung (§ 12)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Mündlich, arbeitsplatzbezogen, praxisnah</li>
+          <li>Erstunterweisung vor Tätigkeitsbeginn</li>
+          <li>Wiederholung mind. 1× jährlich</li>
+          <li>Schriftlich dokumentiert + unterschrieben</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Betriebsanweisung</div>
+        <ul style="margin-left: 1rem;">
+          <li>Schriftliches Dokument, am Arbeitsplatz ausgehängt</li>
+          <li>Welche Gefahren bestehen</li>
+          <li>Welche Schutzmaßnahmen / Verhaltensregeln gelten</li>
+          <li>Hinweise zu Gefahrenfall &amp; Erster Hilfe</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. ASiG / Akteure -->
+  <section class="slide">
+    <h2>Arbeitssicherheitsgesetz (ASiG)</h2>
+    <p>Der Arbeitgeber muss <strong>Betriebsärzte</strong> und <strong>Fachkräfte für Arbeitssicherheit</strong> bestellen — sie unterstützen aus dem Betrieb heraus.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Betriebsarzt</div>
+        <p style="font-size: 1rem;">Berät, untersucht arbeitsmedizinisch, beobachtet den Arbeitsschutz. <strong>Prüft keine Krankmeldungen</strong> auf ihre Berechtigung.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Sicherheitsbeauftragte</div>
+        <p style="font-size: 1rem;">Vom Unternehmen <strong>schriftlich bestellt</strong> (SGB); unterstützen den Arbeitsschutz als Bindeglied vor Ort.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>ArbZG = Zeit · ArbSchG = Schutz · ASiG = Sicherheitspersonal.</strong>
+    </div>
+  </section>
+
+  <!-- 12. Belastung vs Beanspruchung -->
+  <section class="slide">
+    <h2>Gesundheit: Belastung vs. Beanspruchung</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Belastung</div>
+        <p style="font-size: 1rem;">Neutraler Begriff: <strong>alle Einflüsse von außen</strong>, die auf den Menschen einwirken.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Beanspruchung</div>
+        <p style="font-size: 1rem;">Die <strong>individuelle Wirkung</strong> im Menschen — abhängig von Konstitution, Qualifikation, Stressumgang.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Dieselbe Belastung wirkt je nach Person unterschiedlich. <strong>Über- und Unterforderung</strong> führen zu Fehlbelastungen. Seit 2013 zählen psychische Belastungen ausdrücklich.
+    </div>
+  </section>
+
+  <!-- 13. Psychische Belastungsfaktoren -->
+  <section class="slide">
+    <h2>Psychische Belastungsfaktoren</h2>
+    <table>
+      <thead><tr><th>Bereich</th><th>Belastungsfaktor</th><th>Gegenmaßnahme</th></tr></thead>
+      <tbody>
+        <tr><td>Soziale Beziehungen</td><td>Fehlende Rückmeldung, Leistung nicht gewürdigt</td><td>Feedbackgespräche, Lob</td></tr>
+        <tr><td>Arbeitsaufgabe</td><td>Über-/Unterforderung</td><td>Angemessene Personal- &amp; Aufgabenplanung</td></tr>
+        <tr><td>Arbeitsumgebung</td><td>Klima, Licht, Lärm</td><td>Gesetzliche Bestimmungen anpassen</td></tr>
+        <tr><td>Betriebliche Organisation</td><td>Ständige Unterbrechung, unklare Kompetenzen</td><td>Prioritäten setzen, Kompetenzen klären</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 14. Stress Diagramm -->
+  <section class="slide">
+    <h2>Stress: Eustress &amp; Distress</h2>
+    <div class="figure" id="fig-stress"></div>
+    <p class="caption">Stress ist die Kampf-oder-Flucht-Reaktion — heute oft ohne Möglichkeit, den Druck abzubauen.</p>
+  </section>
+
+  <!-- 15. Stress Symptome & Abbau -->
+  <section class="slide">
+    <h2>Stress: Symptome erkennen, Druck abbauen</h2>
+    <div class="cards">
+      <div class="card rose">
+        <div class="card-title">Symptome bei Distress</div>
+        <ul style="margin-left: 1rem;">
+          <li>Verminderte Konzentration, Schlafstörungen</li>
+          <li>Magen-Darm-Probleme, Gereiztheit</li>
+          <li>Bluthochdruck, geschwächtes Immunsystem</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <div class="card-title">Stress abbauen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Sport treiben, Bewegung</li>
+          <li>Erholungsphasen <em>vor</em> dem Stress einplanen</li>
+          <li>Ausreichend schlafen, Yoga/Meditation</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Bewegung beschleunigt den Stressabbau — der Ruhezustand wird früher erreicht.</p>
+  </section>
+
+  <!-- 16. Burnout -->
+  <section class="slide">
+    <h2>Burnout — „ausbrennen”</h2>
+    <p>Zustand völliger <strong>physischer und psychischer Erschöpfung</strong> durch berufliche Überlastung. Mediziner sehen darin eine <strong>Vorstufe zur Depression</strong>.</p>
+    <div class="cards">
+      <div class="card rose">
+        <div class="card-title">Typische Symptome</div>
+        <ul style="margin-left: 1rem;">
+          <li>Chronische Müdigkeit, Erschöpfung</li>
+          <li>Konzentrationsprobleme, Nervosität</li>
+          <li>Schlafstörungen, Kopf-/Rückenschmerzen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Besonders gefährdet</div>
+        <ul style="margin-left: 1rem;">
+          <li>Hohe Leistungsansprüche, Perfektionisten</li>
+          <li>Wer sich über den Job definiert</li>
+          <li>Großes Engagement, übertriebener Ehrgeiz</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17. Work-Life-Balance -->
+  <section class="slide">
+    <h2>Work-Life-Balance</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kerngedanke</span>
+      Private und berufliche Anforderungen in ein <strong>gesundes Gleichgewicht</strong> bringen — das beugt Burnout und stressbedingten Erkrankungen vor.
+    </div>
+    <ul>
+      <li><strong>Arbeitszeitmodelle</strong>: Teilzeit, Gleitzeit, Vertrauensarbeitszeit</li>
+      <li><strong>Arbeitsorganisation</strong>: Job Rotation, Job Enlargement, Teamarbeit</li>
+      <li><strong>Betriebliches Gesundheitsmanagement</strong>: autogenes Training, Sport</li>
+      <li><strong>Unterstützung</strong> bei Kinder-/Pflegebetreuung; Weiterbildung im Stress- und Zeitmanagement</li>
+    </ul>
+  </section>
+
+  <!-- 18. Mobbing Definition -->
+  <section class="slide">
+    <h2>Mobbing — was ist das?</h2>
+    <p>Schikanöses Handeln gegen eine Person, <strong>über längere Zeit wiederholt</strong>, mit der Absicht zu schädigen (Definition nach Bernd Zuschlag).</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Abgrenzung zum Konflikt</span>
+      Mobbing erkennt man daran: Der Konflikt hat sich <strong>verfestigt</strong>, die Würde wird angegriffen, die Parteien sind <strong>nicht auf Augenhöhe</strong>, und der Unterlegene kommt nicht aus eigener Kraft heraus.
+    </div>
+    <p class="muted">Kein Mobbing: einmalige Aktion, notwendige organisatorische Maßnahme, keine schikanöse Absicht.</p>
+  </section>
+
+  <!-- 19. Mobbing Ursachen/Folgen/Maßnahmen -->
+  <section class="slide">
+    <h2>Mobbing: Ursachen, Folgen, Maßnahmen</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Ursachen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Beim Täter (Ziele, Ängste)</li>
+          <li>Beim Opfer (berechtigt/unabsichtlich)</li>
+          <li>In den Rahmenbedingungen</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Folgen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Opfer: körperlich/psychisch krank</li>
+          <li>Betrieb: Klima, Fehlzeiten, Fluktuation</li>
+          <li>Volkswirtschaft: Milliardenkosten</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Maßnahmen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Täter ansprechen, Grenzen setzen</li>
+          <li>Mobbing-Tagebuch, Netzwerk stärken</li>
+          <li>Rechtsweg; früh reagieren</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. Suchtprävention & Ernährung -->
+  <section class="slide">
+    <h2>BGM: Suchtprävention &amp; gesunde Ernährung</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Suchtprävention</div>
+        <ul style="margin-left: 1rem;">
+          <li>Risiko durch Leistungsdruck &amp; schlechtes Klima</li>
+          <li>Mitarbeiter informieren, Führungskräfte schulen</li>
+          <li>Probleme nicht verschweigen oder decken</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Gesunde Ernährung</div>
+        <ul style="margin-left: 1rem;">
+          <li>Gehirn verbraucht ca. 15 % der Energie</li>
+          <li>Frühstück, leichte Mahlzeiten, bewusste Pausen</li>
+          <li>Ausreichend trinken (Wasser, Schorle 1/3 zu 2/3)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 21. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 4</h2>
+    <ol class="numlist">
+      <li><strong>Arbeitsschutz</strong> ruht auf ArbSchG, ArbZG und ASiG.</li>
+      <li>Verantwortung tragen <strong>AG und AN</strong>; Aufsicht: BG (BGV) &amp; Gewerbeaufsichtsamt.</li>
+      <li><strong>Gefährdungsbeurteilung, Unterweisung, Betriebsanweisung</strong> sichern den Schutz im Betrieb.</li>
+      <li><strong>Belastung</strong> ist neutral, <strong>Beanspruchung</strong> individuell.</li>
+      <li><strong>Eustress</strong> hilft, <strong>Distress</strong> schadet; Burnout = Vorstufe zur Depression.</li>
+      <li><strong>Mobbing</strong> früh stoppen; <strong>BGM</strong> = Sucht­prävention, Ernährung, Work-Life-Balance.</li>
+    </ol>
+  </section>
+
+  <!-- 22. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 5 (03.07.)</h2>
+    <p class="subtitle">Zeitmanagement &amp; Aufgabenplanung</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Zeitdiebe erkennen</strong> — woran Arbeitszeit verloren geht</li>
+      <li><strong>Prioritäten setzen</strong> — Eisenhower-Prinzip, ABC-Analyse</li>
+      <li><strong>Aufgaben planen</strong> — To-do-Listen, ALPEN-Methode</li>
+      <li><strong>Selbstorganisation</strong> — Tagesplan und Pufferzeiten</li>
+      <li><strong>Brücke</strong>: gutes Zeitmanagement senkt Stress und Belastung</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Arbeitsschutz-und-Gesundheit.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Arbeitsschutz-und-Gesundheit.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 22</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Akteure des Arbeitsschutzes
+  const c1 = document.getElementById('fig-akteure');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 300');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    // Zentrum
+    box(rc, svg, 350, 125, 200, 60, '#ECFEFF', '#0F766E');
+    text(svg, 450, 160, 'Arbeitsschutz', { bold: true, size: 18, color: '#0F766E' });
+    // Innerbetrieblich (oben)
+    const intern = [
+      { t: 'Arbeitgeber', x: 40 }, { t: 'Arbeitnehmer', x: 250 },
+      { t: 'Betriebsarzt', x: 460 }, { t: 'Fachkraft f. AS', x: 670 }
+    ];
+    intern.forEach(o => {
+      box(rc, svg, o.x, 20, 190, 50, '#FEF3C7', '#F59E0B');
+      text(svg, o.x + 95, 50, o.t, { bold: true, size: 15, color: '#475569' });
+      arrow(rc, svg, o.x + 95, 70, 450, 122, '#F59E0B');
+    });
+    // Aufsicht (unten)
+    const extern = [
+      { t: 'Berufsgenossenschaft (BGV)', x: 120 },
+      { t: 'Gewerbeaufsichtsamt (§ 35 GewO)', x: 470 }
+    ];
+    extern.forEach(o => {
+      box(rc, svg, o.x, 235, 320, 50, '#FFE4E6', '#F97316');
+      text(svg, o.x + 160, 265, o.t, { bold: true, size: 15, color: '#F97316' });
+      arrow(rc, svg, o.x + 160, 235, 450, 188, '#F97316');
+    });
+    text(svg, 450, 110, 'innerbetrieblich  ⟶  Verantwortung & Beratung', { size: 12, color: '#475569' });
+    text(svg, 450, 215, 'extern  ⟶  Aufsicht & Kontrolle', { size: 12, color: '#475569' });
+  });
+
+  // FIG: Stress — Eustress / Distress
+  const c2 = document.getElementById('fig-stress');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 280');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '280');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    // Stress oben
+    box(rc, svg, 350, 20, 200, 55, '#ECFEFF', '#0F766E');
+    text(svg, 450, 53, 'Stress', { bold: true, size: 20, color: '#0F766E' });
+    // Eustress links
+    box(rc, svg, 70, 150, 320, 100, '#ECFEFF', '#0F766E');
+    text(svg, 230, 180, 'Eustress = positiver Stress', { bold: true, size: 16, color: '#0F766E' });
+    text(svg, 230, 208, 'erhöht Aufmerksamkeit, motiviert,', { size: 13, color: '#475569' });
+    text(svg, 230, 228, 'steigert die Produktivität', { size: 13, color: '#475569' });
+    arrow(rc, svg, 420, 75, 230, 148, '#0F766E');
+    // Distress rechts
+    box(rc, svg, 510, 150, 320, 100, '#FFE4E6', '#F97316');
+    text(svg, 670, 180, 'Distress = negativer Stress', { bold: true, size: 16, color: '#F97316' });
+    text(svg, 670, 208, 'zu häufig / ohne Ausgleich,', { size: 13, color: '#475569' });
+    text(svg, 670, 228, 'überfordert, bedrohlich', { size: 13, color: '#475569' });
+    arrow(rc, svg, 480, 75, 670, 148, '#F97316');
+  });
+});
+</script>
+
+</body>
+</html>

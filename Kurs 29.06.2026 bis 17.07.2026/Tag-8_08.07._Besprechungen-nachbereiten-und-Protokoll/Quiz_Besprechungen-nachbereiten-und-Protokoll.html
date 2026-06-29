@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 8 — Besprechungen nachbereiten & Protokoll</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 8 · 08.07.2026 · 30 Fragen</span>
+  <h1>Quiz: Besprechungen nachbereiten &amp; Protokoll</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Besprechungen-nachbereiten-und-Protokoll.html</strong> und dem <strong>Handout_Besprechungen-nachbereiten-und-Protokoll.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067) · Kurs 29.06.–17.07.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Nachbereitung (1-3) ===
+  { topic: "Nachbereitung", q: "Warum ist die Nachbereitung einer Besprechung wichtig?",
+    options: ["Weil sie die Sitzung verlängert", "Weil erst sie sicherstellt, dass beschlossene Maßnahmen umgesetzt werden", "Weil ohne sie die Sitzung nicht beginnen darf", "Weil sie die Tagesordnung ersetzt"],
+    a: 1, e: "Erst die Nachbereitung (Aufgabenverfolgung, Protokoll) sorgt dafür, dass aus Beschlüssen auch Ergebnisse werden." },
+  { topic: "Maßnahmenliste", q: "Welche drei Angaben sollte eine To-do-/Maßnahmenliste je Aufgabe enthalten?",
+    options: ["Was, Wer und Bis wann", "Nur die Aufgabe", "Kosten, Risiko und Nutzen", "Name, Abteilung und Telefon"],
+    a: 0, e: "Eine gute Maßnahmenliste beantwortet drei Fragen: Was (Aufgabe), Wer (verantwortliche Person) und Bis wann (Termin)." },
+  { topic: "Verteiler", q: "Wofür dient der Verteiler eines Protokolls?",
+    options: ["Zur Festlegung der Sitzordnung", "Zur Berechnung der Sitzungskosten", "Zur Festlegung, wer das fertige Protokoll erhält", "Zur Auswahl des Besprechungsraums"],
+    a: 2, e: "Der Verteiler legt fest, wer das Protokoll bekommt — Teilnehmer, entschuldigt Abwesende und ggf. Vorgesetzte." },
+
+  // === Block B: Begriff & Funktionen (4-6) ===
+  { topic: "Begriff", q: "Was bedeutet das Wort „Protokoll" und was meint es in der kaufmännischen Praxis?",
+    options: ["Eine mündliche Absprache ohne Aufzeichnung", "Eine Tagesordnung vor der Sitzung", "Eine Checkliste für die Raumbuchung", "Niederschrift — eine schriftliche Aufzeichnung über Inhalte, Verlauf und Ergebnisse"],
+    a: 3, e: "Protokoll bedeutet Niederschrift und meint eine schriftliche Aufzeichnung über Inhalte, Verlauf und Ergebnisse von Veranstaltungen." },
+  { topic: "Funktionen", q: "Welche drei Funktionen erfüllt ein Protokoll?",
+    options: ["Werbung, Verkauf und Vertrieb", "Information, Beweis-/Dokumentationsmittel und Organisation", "Planung, Einkauf und Lagerung", "Kontrolle, Strafe und Belohnung"],
+    a: 1, e: "Protokolle dienen der Information, als Beweis-/Dokumentationsmittel und der Organisation." },
+  { topic: "Funktionen", q: "Welches Beispiel gehört zur Funktion „Information"?",
+    options: ["Gedächtnisstütze für die Teilnehmer und Information für Abwesende", "Beschlüsse werden aktenkundig gemacht", "Kompetenzen werden festgelegt", "Entscheidungen werden rechtswirksam"],
+    a: 0, e: "Zur Funktion Information gehören die Gedächtnisstütze für Teilnehmer und die Information Abwesender." },
+
+  // === Block C: Protokollarten (7-16) ===
+  { topic: "Protokollarten", q: "Nach welchem Kriterium werden die Protokollarten unterschieden?",
+    options: ["Nach dem Papierformat", "Nach der Anzahl der Teilnehmer", "Nach ihrer Ausführlichkeit (Umfang)", "Nach der Tageszeit der Sitzung"],
+    a: 2, e: "Protokollarten werden nach ihrer Ausführlichkeit, also nach dem Umfang, unterschieden." },
+  { topic: "Wortprotokoll", q: "Wo wird das Wortprotokoll typischerweise verwendet?",
+    options: ["Bei wöchentlichen Teambesprechungen", "Bei kurzen Telefonaten", "Bei Projektsitzungen mit Formular", "Bei Gerichtsverhandlungen und Parlamentsdebatten"],
+    a: 3, e: "Das Wortprotokoll gibt alle Aussagen wörtlich wieder und wird z. B. bei Gerichtsverhandlungen und Parlamentsdebatten verwendet." },
+  { topic: "Wortprotokoll", q: "Was kennzeichnet das Wortprotokoll inhaltlich?",
+    options: ["Es fasst nur Beschlüsse zusammen", "Es gibt alle Aussagen von Rednern oder Teilnehmern wörtlich wieder", "Es verzichtet auf Namen", "Es wird nachträglich aus dem Gedächtnis erstellt"],
+    a: 1, e: "Das Wortprotokoll gibt alle Aussagen wörtlich wieder; in der Wirtschaft findet man es eher selten." },
+  { topic: "Verlaufsprotokoll", q: "Wann wird ein Verlaufsprotokoll gewählt?",
+    options: ["Wenn der Verlauf und das Zustandekommen von Beschlüssen nachvollziehbar sein müssen", "Wenn gar nichts dokumentiert werden soll", "Wenn nur das Datum festgehalten wird", "Wenn ausschließlich Telefonate dokumentiert werden"],
+    a: 0, e: "Das Verlaufsprotokoll wird gewählt, wenn der Sitzungsverlauf und das Zustandekommen von Beschlüssen nachvollziehbar sein müssen." },
+  { topic: "Verlaufsprotokoll", q: "Was enthält das Verlaufsprotokoll neben der Zusammenfassung des Verlaufs?",
+    options: ["Nur eine Anwesenheitsliste", "Ausschließlich Werbung", "Vorschläge, Einwände, Argumente, Aufgabenverteilung und Beschlüsse im Wortlaut", "Nur das Abstimmungsergebnis ohne Beschlusstext"],
+    a: 2, e: "Es enthält Vorschläge, Einwände und Argumente (ggf. mit Namen), die Aufgabenverteilung sowie Beschlüsse im Wortlaut mit Abstimmungsergebnissen." },
+  { topic: "Kurzprotokoll", q: "Worauf wird beim Kurzprotokoll weitgehend verzichtet?",
+    options: ["Auf die Beschlüsse", "Auf die Aufgabenverteilung", "Auf das Abstimmungsergebnis", "Auf die Namensnennung der Redebeiträge"],
+    a: 3, e: "Da Sache und Ergebnis im Vordergrund stehen, wird beim Kurzprotokoll auf die Namensnennung der Redebeiträge weitgehend verzichtet." },
+  { topic: "Kurzprotokoll", q: "Welche Protokollart wird in der kaufmännischen Praxis sehr häufig eingesetzt?",
+    options: ["Das Kurzprotokoll", "Das Wortprotokoll", "Das Gedächtnisprotokoll", "Das Wortlautprotokoll des Gerichts"],
+    a: 0, e: "Das Kurzprotokoll eignet sich für Abteilungsleiter-, Mitarbeiter- und Beratungsgespräche und wird sehr häufig eingesetzt." },
+  { topic: "Beschlussprotokoll", q: "Bei welchem Anlass wird das Beschluss-/Ergebnisprotokoll typischerweise eingesetzt?",
+    options: ["Bei Gerichtsverhandlungen", "Bei Projekt- und Arbeitssitzungen", "Bei Parlamentsdebatten", "Bei Pressekonferenzen mit Wortlaut"],
+    a: 1, e: "Ergebnisprotokolle sind in der Regel sehr kurz und werden z. B. bei Projekt- und Arbeitssitzungen eingesetzt." },
+  { topic: "Beschlussprotokoll", q: "Was eignet sich besonders für das Beschluss-/Ergebnisprotokoll?",
+    options: ["Ein wörtliches Mitstenografieren", "Eine reine Audioaufnahme", "Standardisierte Protokollformulare", "Ein Brief an alle Kunden"],
+    a: 2, e: "Für das Beschluss-/Ergebnisprotokoll eignen sich standardisierte Protokollformulare, die nach eigenen Vorstellungen gestaltet werden können." },
+  { topic: "Gedächtnisprotokoll", q: "Wodurch unterscheidet sich das Gedächtnisprotokoll von den übrigen Arten?",
+    options: ["Es ist immer das ausführlichste Protokoll", "Es wird vom Gericht verlangt", "Es muss wörtlich sein", "Es wird nachträglich aus dem Gedächtnis erstellt, wenn nicht mitgeschrieben wurde"],
+    a: 3, e: "Das Gedächtnisprotokoll wird erst nach der Besprechung aus dem Gedächtnis angefertigt; verwandt ist die Akten-/Gesprächsnotiz." },
+
+  // === Block D: Protokollrahmen (17-22) ===
+  { topic: "DIN 5008", q: "In welche drei Teile gliedert sich ein Protokoll nach DIN 5008?",
+    options: ["Protokollkopf, Protokolltext und Protokollfuß", "Einleitung, Hauptteil und Werbung", "Anrede, Gruß und Unterschrift", "Deckblatt, Anhang und Rechnung"],
+    a: 0, e: "Nach DIN 5008 gliedert sich das Protokoll in Protokollkopf (Anfang), Protokolltext und Protokollfuß (Schluss)." },
+  { topic: "Protokollkopf", q: "Welche Angabe gehört in den Protokollkopf?",
+    options: ["Die Unterschrift des Vorsitzenden", "Datum, Zeit, Ort, Vorsitz, Teilnehmer und Tagesordnung", "Nur das Abstimmungsergebnis", "Die Liste der Anlagen"],
+    a: 1, e: "Der Protokollkopf enthält u. a. Unternehmen/Abteilung, Datum, Zeit, Ort, Vorsitz, Teilnehmer, Protokollführung und die Tagesordnung." },
+  { topic: "Protokollkopf", q: "Wie wird im Protokoll vermerkt, dass ein Teilnehmer nur zeitweise anwesend war?",
+    options: ["Gar nicht, das ist unwichtig", "Nur mündlich am Ende der Sitzung", "Durch einen Vermerk wie „Herr Schütz ab TOP 3"", "Durch Streichung des Namens"],
+    a: 2, e: "Zeitweise Anwesenheit wird vermerkt (z. B. „Frau Dr. Müller bis 11:20 Uhr, Herr Schütz ab TOP 3") — wichtig bei Beschlüssen mit rechtlicher Relevanz." },
+  { topic: "Protokolltext", q: "Welche drei Kriterien sind für den Protokollführer beim Protokolltext entscheidend?",
+    options: ["Schnelligkeit, Kürze und Humor", "Stil, Schönschrift und Farbe", "Lautstärke, Tempo und Pausen", "Wichtigkeit, Vollständigkeit und wahrheitsgetreue Wiedergabe"],
+    a: 3, e: "Entscheidend sind Wichtigkeit, Vollständigkeit und die wahrheitsgetreue Wiedergabe der Inhalte und Ergebnisse — ohne Wertung." },
+  { topic: "Protokollfuß", q: "Was enthält der Protokollfuß?",
+    options: ["Datum der Ausfertigung, Unterschriften von Leitung und Protokollführer, ggf. Verteiler und Anlagen", "Nur die Tagesordnung", "Die Anschrift aller Kunden", "Nur den Namen des Unternehmens"],
+    a: 0, e: "Der Protokollfuß enthält das Ausfertigungsdatum, die Unterschriften von Leitung und Protokollführer sowie ergänzend Verteiler und Hinweis auf Anlagen." },
+  { topic: "Protokollformular", q: "Wie lässt sich das Erstellen eines Protokolls vereinfachen?",
+    options: ["Indem man gar nichts notiert", "Durch ein Protokollformular in Tabellenform mit Formularfeldern der Software", "Indem man nur Bilder einfügt", "Durch handschriftliche Notizen auf losen Zetteln"],
+    a: 1, e: "Ein Protokollformular in Tabellenform mit Formularfeldern vereinfacht die Erstellung; TOP können vorab eingegeben werden." },
+
+  // === Block E: Sprache & indirekte Rede (23-28) ===
+  { topic: "Sprache", q: "In welcher Zeitform wird der Protokolltext geschrieben?",
+    options: ["Immer im Futur", "Immer im Perfekt", "Im Präsens (Gegenwart), im Ausnahmefall in der Vergangenheit", "Ausschließlich im Plusquamperfekt"],
+    a: 2, e: "Der Protokolltext wird im Präsens (Gegenwart) geschrieben, nur im Ausnahmefall in der Vergangenheit." },
+  { topic: "Sprache", q: "Wie ist die Sprache des Protokolls grundsätzlich?",
+    options: ["Sachlich und ohne wertende, ausschmückende Adjektive", "Werbend und übertreibend", "Umgangssprachlich und locker", "Möglichst kompliziert und ausschmückend"],
+    a: 0, e: "Die Sprache ist sachlich; der Protokollführer verzichtet auf wertende und ausschmückende Adjektive." },
+  { topic: "Anträge/Beschlüsse", q: "Wie werden Anträge und Beschlüsse im Protokoll wiedergegeben?",
+    options: ["Stark gekürzt und sinngemäß", "Wörtlich, so wie sie gesagt wurden", "Nur als Stichworte", "Gar nicht, um neutral zu bleiben"],
+    a: 1, e: "Anträge und Beschlüsse werden wörtlich wiedergegeben; wird ein Antrag zum Beschluss erhoben, bleibt der Beschlusstext." },
+  { topic: "Indirekte Rede", q: "Welcher Modus wird für die indirekte Rede namentlich erwähnter Beiträge verwendet?",
+    options: ["Der Imperativ", "Der Indikativ", "Der Konjunktiv I (Möglichkeitsform)", "Das Futur II"],
+    a: 2, e: "Namentlich erwähnte Beiträge werden in indirekter Rede mit dem Konjunktiv I wiedergegeben — der Protokollführer wird zum Berichterstatter." },
+  { topic: "Konjunktiv", q: "Wann wird statt des Konjunktivs I der Konjunktiv II verwendet?",
+    options: ["Immer in der 1. Person Singular", "Nur bei Fragen", "Niemals im Protokoll", "Wenn der Konjunktiv I nicht vom Indikativ Präsens zu unterscheiden ist (z. B. 3. Person Plural)"],
+    a: 3, e: "Ist der Konjunktiv I formgleich mit dem Indikativ Präsens (außer bei „sein" in der 3. Person Plural der Fall), wählt man als Ersatz den Konjunktiv II." },
+  { topic: "Konjunktiv", q: "Welche Form ist der korrekte Konjunktiv I von „haben" (3. Person Singular)?",
+    options: ["hätte", "hatte", "wird haben", "habe"],
+    a: 3, e: "Der Konjunktiv I von „haben" (3. Person Singular) lautet „habe" (Indikativ: hat, Konjunktiv II: hätte)." },
+
+  // === Block F: Bedeutung & moderne Praxis (29-30) ===
+  { topic: "Bedeutung", q: "Wodurch werden die Inhalte eines Protokolls verbindlich, und welche Protokolle haben Beweisfunktion?",
+    options: ["Durch Vorlesen allein; jedes Protokoll ist beweiskräftig", "Durch Unterschrift und Genehmigung; nur Protokolle mit Originalunterschrift haben Beweisfunktion", "Durch das Datum; nur digitale Protokolle zählen", "Durch die Teilnehmerzahl; nur große Sitzungen zählen"],
+    a: 1, e: "Durch Unterschrift und Genehmigung werden die Inhalte verbindlich; nur Protokolle mit Originalunterschrift haben Beweisfunktion und sind aufzubewahren." },
+  { topic: "Moderne Praxis", q: "Welcher Vorteil kennzeichnet das kollaborative, digitale Protokollieren?",
+    options: ["Mehrere Personen schreiben gleichzeitig in einem Dokument, Ergebnisse sind sofort verfügbar und versionierbar", "Es ist ohne jede Software möglich", "Es ersetzt automatisch jede rechtsgültige Unterschrift", "Es macht den Verteiler überflüssig"],
+    a: 0, e: "Beim kollaborativen Protokollieren schreiben mehrere gleichzeitig in einem Online-Dokument; Ergebnisse sind sofort verfügbar, versionierbar und mit Aufgaben-Tools verknüpfbar — zu beachten sind Datenschutz und gültige Signatur." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 15 — Vertiefung, Übung & Reflektion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 15 · 17.07.2026</span>
+    <h1>Vertiefung, Übung &amp; Reflektion</h1>
+    <p class="subtitle">Abschlusstag — der ganze Büroprozess auf einen Blick (Wiederholung Tag 1–14)</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Material</strong>Wiederholung Tag 1–14 · keine neue Literatur</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was wir heute erreichen</h2>
+    <p class="subtitle">Am Ende des Tages haben Sie...</p>
+    <ul class="checklist">
+      <li>die zentralen Begriffe, Regeln und Fristen des Moduls <strong>gefestigt</strong></li>
+      <li>die 14 Themen als <strong>einen zusammenhängenden Büroprozess vernetzt</strong></li>
+      <li>eine komplexe, fächerübergreifende Fallstudie <strong>angewendet</strong></li>
+      <li>sich gezielt auf die <strong>IHK-Abschlussprüfung</strong> vorbereitet</li>
+      <li>Ihren Lernstand realistisch <strong>eingeschätzt</strong> und Lücken erkannt</li>
+    </ul>
+  </section>
+
+  <!-- 3. Modul-Landkarte (Rough.js) -->
+  <section class="slide">
+    <h2>Modul-Landkarte: Büroprozesse als ein Ablauf</h2>
+    <div class="figure" id="fig-landkarte"></div>
+    <p class="caption">Vom geplanten Raum über die organisierte, gesunde Arbeit bis zur rechtssicheren Verwaltung von Informationen.</p>
+  </section>
+
+  <!-- 4. Block 1 -->
+  <section class="slide">
+    <h2>Block 1 · Büroraumplanung &amp; Büroformen (Tag 1)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kernpunkte</span>
+      Flächenbedarf = Summe der <strong>sechs Teilflächen</strong>. Vier Büroformen: Zelle (Ruhe), Gruppe (Reden), Großraum (Sparen), Kombi (beides).
+    </div>
+    <ul>
+      <li>Leitfaden: <strong>DGUV Information 215-441</strong></li>
+      <li>Richtwerte: Bildschirmarbeitsplatz 8–10 m², Großraum ca. 12–15 m²</li>
+      <li>Modern: reversibles Büro, non-territoriales Büro (<strong>Desksharing</strong>)</li>
+    </ul>
+  </section>
+
+  <!-- 5. Block 2 -->
+  <section class="slide">
+    <h2>Block 2 · Büroausstattung &amp; Bildschirmarbeitsplatz (Tag 2)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kernpunkte</span>
+      <strong>Ergonomie</strong> = die Arbeit an den Menschen anpassen. Bürodrehstuhl nach <strong>DIN EN 1335</strong>.
+    </div>
+    <ul>
+      <li>„So sitzen Sie richtig": Bildschirm seitlich zum Fenster, 50–70 cm, 90°-Winkel</li>
+      <li>Steh-Sitz-Dynamik: <strong>60 % sitzen · 30 % stehen · 10 % gehen</strong></li>
+      <li>Prüfsiegel: <strong>GS</strong> (freiwillig) und <strong>CE</strong> (Pflicht)</li>
+    </ul>
+  </section>
+
+  <!-- 6. Block 3 -->
+  <section class="slide">
+    <h2>Block 3 · Arbeitsumgebung &amp; Umweltfaktoren (Tag 3)</h2>
+    <p>Umweltfaktoren wirken auf Gesundheit und Leistung.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Klima &amp; Licht</div>Raumklima (max. 26 °C, ASR A3.5), ausreichende Lux-Werte, blend- und flimmerfrei.</div>
+      <div class="card amber"><div class="card-title">Lärm &amp; mehr</div>Schalldruck in dB(A), Farbpsychologie, Pflanzen, Schutz vor Tonerstaub.</div>
+    </div>
+  </section>
+
+  <!-- 7. Block 4 -->
+  <section class="slide">
+    <h2>Block 4 · Arbeitsschutz &amp; Gesundheit (Tag 4)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kernpunkte</span>
+      Drei Säulen: <strong>ArbSchG</strong>, <strong>ArbZG</strong>, <strong>ASiG</strong>. Pflicht: <strong>Gefährdungsbeurteilung</strong> (§ 5 ArbSchG).
+    </div>
+    <ul>
+      <li><strong>Belastung</strong> = äußere Einwirkung · <strong>Beanspruchung</strong> = individuelle Wirkung</li>
+      <li><strong>Eustress</strong> (positiv) vs. <strong>Distress</strong> (negativ) → Gefahr: Burnout</li>
+    </ul>
+  </section>
+
+  <!-- 8. Block 5 -->
+  <section class="slide">
+    <h2>Block 5 · Zeitmanagement &amp; Aufgabenplanung (Tag 5)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Methoden-Werkzeugkasten</span>
+      <strong>ALPEN</strong>, <strong>Eisenhower</strong> (wichtig × dringend), <strong>Pareto</strong> (80/20), <strong>ABC-Analyse</strong>, Salamitaktik.
+    </div>
+    <ul>
+      <li>Ziele formulieren nach <strong>SMART</strong></li>
+      <li>Leistungskurve nutzen · Sägeblatteffekt durch „stille Stunde" vermeiden</li>
+    </ul>
+  </section>
+
+  <!-- 9. Block 6 -->
+  <section class="slide">
+    <h2>Block 6 · Terminplanung &amp; Terminmanagement (Tag 6)</h2>
+    <ul>
+      <li>Termin = <strong>Kalenderdatum + Uhrzeit</strong>; feste/variable, Einzel-/Serien-, interne/externe</li>
+      <li><strong>Terminüberwachung</strong> über die Wiedervorlage; gesetzliche Termine einhalten</li>
+      <li>Urlaubsplanung nach <strong>§ 7 BUrlG</strong></li>
+      <li>Tools: Terminkalender, MS Outlook, geteilte Kalender, Doodle</li>
+    </ul>
+  </section>
+
+  <!-- 10. Block 7 -->
+  <section class="slide">
+    <h2>Block 7 · Besprechungen vorbereiten &amp; durchführen (Tag 7)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kernpunkt</span>
+      Über den Erfolg entscheidet die <strong>Vorbereitung</strong>: Datum, Raum, Teilnehmer, Zeitbedarf, <strong>Tagesordnung (TOP)</strong>, Unterlagen, Protokoll.
+    </div>
+    <ul>
+      <li>Einladung fristgerecht (z. B. § 51 GmbHG)</li>
+      <li>Durchführung: klare Rollen, Diskussionsregeln, schwierige Typen steuern</li>
+    </ul>
+  </section>
+
+  <!-- 11. Block 8 -->
+  <section class="slide">
+    <h2>Block 8 · Nachbereitung &amp; Protokoll (Tag 8)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kernpunkte</span>
+      Protokoll: drei Funktionen (<strong>Information, Beweis, Organisation</strong>); fünf Arten (Wort-, Verlaufs-, Kurz-/Ergebnis-, Beschluss-, Gedächtnisprotokoll).
+    </div>
+    <ul>
+      <li>Aufbau nach <strong>DIN 5008</strong> (Kopf, Text, Fuß)</li>
+      <li>Sprache: <strong>Präsens, sachlich, indirekte Rede (Konjunktiv I/II)</strong></li>
+    </ul>
+  </section>
+
+  <!-- 12. Block 9 -->
+  <section class="slide">
+    <h2>Block 9 · Kommunikation &amp; Teamarbeit (Tag 9)</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Modelle</div>Sender-Empfänger-Modell; <strong>vier Seiten einer Nachricht</strong> (Schulz von Thun); verbal/nonverbal/paraverbal.</div>
+      <div class="card amber"><div class="card-title">Team</div>Phasen nach <strong>Tuckman</strong>: Forming, Storming, Norming, Performing, Adjourning; Feedbackregeln.</div>
+    </div>
+  </section>
+
+  <!-- 13. Block 10 -->
+  <section class="slide">
+    <h2>Block 10 · Postbearbeitung: Posteingang (Tag 10)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Ablauf</span>
+      Annehmen → Vorsortieren → Öffnen → Kontrollieren → Stempeln → Verteilen → Erfassen.
+    </div>
+    <ul>
+      <li>Als <strong>persönlich/vertraulich</strong> gekennzeichnete Post: <strong>nicht öffnen</strong></li>
+      <li>Posteingangsstempel dokumentiert den Eingang; Scan/OCR → digitale Archivierung</li>
+    </ul>
+  </section>
+
+  <!-- 14. Block 11 -->
+  <section class="slide">
+    <h2>Block 11 · Postbearbeitung: Postausgang (Tag 11)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Ablauf</span>
+      Kontrollieren → Sortieren → Falzen → Kuvertieren → Wiegen → Frankieren → Aufgeben.
+    </div>
+    <ul>
+      <li>Versandarten (Brief, Einschreiben-Varianten, KEP), Falzarten, Frankierung</li>
+      <li>Große Mengen über die <strong>Poststraße</strong></li>
+    </ul>
+  </section>
+
+  <!-- 15. Block 12 -->
+  <section class="slide">
+    <h2>Block 12 · Aufbewahrung &amp; Fristen (Tag 12)</h2>
+    <table>
+      <thead><tr><th>Frist</th><th>Schriftgut</th></tr></thead>
+      <tbody>
+        <tr><td><strong>6 Jahre</strong></td><td>Handels- und Geschäftsbriefe</td></tr>
+        <tr><td><strong>8 Jahre</strong></td><td>Buchungsbelege (neu nach BEG IV)</td></tr>
+        <tr><td><strong>10 Jahre</strong></td><td>Bücher, Inventare, Jahresabschlüsse</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      HGB § 257 / AO § 147 · Fristbeginn mit <strong>Schluss des Kalenderjahres</strong> · GoBD = revisionssichere Aufbewahrung.
+    </div>
+  </section>
+
+  <!-- 16. Block 13 -->
+  <section class="slide">
+    <h2>Block 13 · Ablage &amp; Ablagesysteme (Tag 13)</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Ordnungssysteme</div>alphabetisch · numerisch · chronologisch · geografisch · alphanumerisch.</div>
+      <div class="card amber"><div class="card-title">Ablagearten</div>liegende/stehende Ablage, Loseblattablage, Hängeregistratur; klarer Aktenplan.</div>
+    </div>
+    <p class="muted">Ziel: Schriftgut schnell und eindeutig wiederfinden.</p>
+  </section>
+
+  <!-- 17. Block 14 -->
+  <section class="slide">
+    <h2>Block 14 · Digitales DMS, Datenschutz &amp; Umweltschutz (Tag 14)</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">DMS</div>Schneller Zugriff, Volltextsuche, Workflows, revisionssichere Archivierung.</div>
+      <div class="card amber"><div class="card-title">Datenschutz</div>DSGVO/BDSG, <strong>TOM</strong>: Zugriffsrechte, Verschlüsselung, Löschkonzept.</div>
+      <div class="card rose"><div class="card-title">Umweltschutz</div>Papierloses Büro, Recyclingpapier, Mülltrennung; Siegel <strong>Blauer Engel</strong>.</div>
+    </div>
+  </section>
+
+  <!-- 18. IHK-Prüfungsvorbereitung -->
+  <section class="slide">
+    <h2>IHK-Prüfungsvorbereitung</h2>
+    <p class="subtitle">Wissen anwenden und begründen — nicht nur Stichworte.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Operatoren verstehen</div>
+        <ul style="margin-left: 1rem;">
+          <li><strong>nennen</strong> → auflisten</li>
+          <li><strong>erläutern</strong> → erklären + begründen</li>
+          <li><strong>beurteilen</strong> → eigene Bewertung mit Argumenten</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Strategie</div>
+        <ul style="margin-left: 1rem;">
+          <li>Aufgabe ganz lesen, Punktzahl = Umfang</li>
+          <li>Zeit nach Punkten einteilen, Leichtes zuerst</li>
+          <li>Am Ende auf Vollständigkeit prüfen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 Notenschlüssel</span>
+      IHK: <strong>ausreichend ab 50 %</strong>, befriedigend ab 67 %, gut ab 81 %, sehr gut ab 92 %.
+    </div>
+  </section>
+
+  <!-- 19. Reflexionsfragen -->
+  <section class="slide">
+    <h2>Reflexionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — ehrlich mit sich selbst.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Welcher Themenblock fällt mir am leichtesten — und welcher noch schwer?</li>
+      <li>Wo sehe ich die größten Querverbindungen zwischen den Themen?</li>
+      <li>Welche drei Begriffe oder Fristen will ich vor der Prüfung gezielt wiederholen?</li>
+      <li>Was nehme ich aus diesem Kurs konkret in meinen Berufsalltag mit?</li>
+    </ol>
+  </section>
+
+  <!-- 20. Abschluss -->
+  <section class="slide cover">
+    <span class="cover-tag">Kursabschluss · M-067</span>
+    <h1>Herzlichen Glückwunsch!</h1>
+    <p class="subtitle">Sie haben das Modul „Büroprozesse gestalten und Arbeitsvorgänge organisieren" abgeschlossen.</p>
+    <ul style="font-size: 1.2rem;">
+      <li>Vom geplanten <strong>Büroraum</strong> bis zum digitalen <strong>Dokumentenmanagement</strong> — Sie kennen jetzt den ganzen Prozess.</li>
+      <li>Nutzen Sie das <strong>Abschlussquiz (30 Fragen)</strong> und das Aufgabenheft zur gezielten Wiederholung.</li>
+      <li>Schließen Sie Ihre persönlichen Lücken — und gehen Sie mit Zuversicht in die <strong>IHK-Abschlussprüfung</strong>.</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Viel Erfolg — und danke für Ihre Mitarbeit!</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 20</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Modul-Landkarte — Büroprozesse als ein Ablauf (vier Cluster)
+  const c1 = document.getElementById('fig-landkarte');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 940 300');
+  svg1.setAttribute('width', '940'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const cluster = [
+      { t: 'Der Arbeitsplatz', s: 'Raum · Ergonomie · Umgebung · Schutz', d: 'Tag 1–4', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Sich organisieren', s: 'Zeit · Termine', d: 'Tag 5–6', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Zusammenarbeiten', s: 'Besprechung · Protokoll · Kommunikation', d: 'Tag 7–9', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Informationen verwalten', s: 'Post · Fristen · Ablage · DMS', d: 'Tag 10–14', c: '#FFE4E6', st: '#F97316' }
+    ];
+    const bw = 200, bh = 110, gap = 30, y = 90;
+    let x = 20;
+    cluster.forEach((cl, i) => {
+      box(rc, svg, x, y, bw, bh, cl.c, cl.st);
+      text(svg, x + bw / 2, y + 32, cl.t, { bold: true, size: 16, color: cl.st });
+      // Beschreibung ggf. zweizeilig
+      const words = cl.s;
+      text(svg, x + bw / 2, y + 60, words, { size: 11.5, color: '#475569' });
+      text(svg, x + bw / 2, y + 90, cl.d, { bold: true, size: 13, color: '#0F172A' });
+      if (i < cluster.length - 1) {
+        arrow(rc, svg, x + bw + 3, y + bh / 2, x + bw + gap - 3, y + bh / 2, '#475569');
+      }
+      x += bw + gap;
+    });
+    text(svg, 470, 40, 'Ein durchgängiger Büroprozess — die 14 Themen greifen ineinander', { size: 16, bold: true, color: '#0F766E' });
+    text(svg, 470, 250, 'planen  ⟶  organisieren  ⟶  zusammenarbeiten  ⟶  verwalten & archivieren', { size: 13, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

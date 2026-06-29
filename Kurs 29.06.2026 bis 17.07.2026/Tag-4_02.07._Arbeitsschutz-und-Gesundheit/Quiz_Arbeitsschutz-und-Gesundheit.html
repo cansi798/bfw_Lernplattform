@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 4 — Arbeitsschutz & Gesundheit am Arbeitsplatz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 4 · 02.07.2026 · 30 Fragen</span>
+  <h1>Quiz: Arbeitsschutz &amp; Gesundheit</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Arbeitsschutz-und-Gesundheit.html</strong> und dem <strong>Handout_Arbeitsschutz-und-Gesundheit.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067) · Kurs 29.06.–17.07.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Arbeitsschutz & Recht (1-14) ===
+  { topic: "Arbeitsschutz", q: "Womit befasst sich das Arbeitsschutzgesetz (ArbSchG)?",
+    options: ["Mit Maßnahmen, die Sicherheit und Gesundheitsschutz der Beschäftigten sichern und verbessern", "Mit der Höhe des Mindestlohns", "Mit den Öffnungszeiten von Geschäften", "Mit den Garantiebedingungen für Maschinen"],
+    a: 0, e: "Das ArbSchG enthält Maßnahmen, die die Sicherheit und den Gesundheitsschutz der Beschäftigten bei der Arbeit sichern und verbessern sollen." },
+  { topic: "ArbZG", q: "Was regelt das Arbeitszeitgesetz (ArbZG)?",
+    options: ["Die Höhe der Sozialversicherungsbeiträge", "Unter anderem die tägliche Höchstarbeitszeit und die Mindestruhepausen", "Die Gestaltung von Büromöbeln", "Die Anzahl der Urlaubstage pro Branche"],
+    a: 1, e: "Das ArbZG legt zum Gesundheitsschutz u. a. die tägliche Höchstarbeitszeit und die Mindestruhepausen fest; besonderer Schutz gilt für Nachtarbeiter." },
+  { topic: "ASiG", q: "Wozu verpflichtet das Arbeitssicherheitsgesetz (ASiG) den Arbeitgeber?",
+    options: ["Krankmeldungen zu überprüfen", "Mindestlöhne zu zahlen", "Betriebsärzte und Fachkräfte für Arbeitssicherheit zu bestellen", "Jährlich Betriebsausflüge zu organisieren"],
+    a: 2, e: "Das ASiG bestimmt, dass der Arbeitgeber Betriebsärzte und Fachkräfte für Arbeitssicherheit bestellen muss, die ihn unterstützen." },
+  { topic: "Verantwortung", q: "Wer trägt die Verantwortung für die Gesundheit am Arbeitsplatz?",
+    options: ["Nur das Gewerbeaufsichtsamt", "Nur die Berufsgenossenschaft", "Nur der Arbeitnehmer", "Sowohl der Arbeitgeber als auch der Arbeitnehmer"],
+    a: 3, e: "Die Verantwortung liegt sowohl beim Arbeitgeber (sichere Bedingungen) als auch beim Arbeitnehmer (verantwortungsbewusstes Verhalten)." },
+  { topic: "Verantwortung", q: "Welche Pflicht hat der Arbeitnehmer im Arbeitsschutz?",
+    options: ["Sich so zu verhalten, dass er Gefährdungen vorbeugt, und auf Schwachstellen hinzuweisen", "Selbst die Schutzausrüstung zu kaufen", "Die Gefährdungsbeurteilung allein zu erstellen", "Die Berufsgenossenschaft zu finanzieren"],
+    a: 0, e: "Der Arbeitnehmer muss sich so verhalten, dass er Gesundheitsgefährdungen vorbeugt, Gefahren meidet und den Arbeitgeber auf Schwachstellen hinweist." },
+  { topic: "Berufsgenossenschaft", q: "Welche Aufgabe haben die Berufsgenossenschaften?",
+    options: ["Sie zahlen das Arbeitslosengeld aus", "Sie überwachen die Verhütung von Arbeitsunfällen und Berufskrankheiten", "Sie legen die Steuersätze fest", "Sie vermieten Büroflächen"],
+    a: 1, e: "Berufsgenossenschaften überwachen die Verhütung von Arbeitsunfällen, Berufskrankheiten und arbeitsbedingten Gesundheitsgefahren, kontrollieren die Erste Hilfe und beraten." },
+  { topic: "Berufsgenossenschaft", q: "Was erlassen die Berufsgenossenschaften zur Unfallverhütung?",
+    options: ["Tarifverträge", "Steuerbescheide", "Berufsgenossenschaftliche Vorschriften (BGV)", "Bebauungspläne"],
+    a: 2, e: "Berufsgenossenschaften erlassen die Berufsgenossenschaftlichen Vorschriften (BGV) zur Unfallverhütung — früher Unfallverhütungsvorschriften genannt." },
+  { topic: "Gewerbeaufsicht", q: "Welche Befugnis hat das Gewerbeaufsichtsamt bei Verstößen (§ 35 GewO)?",
+    options: ["Es darf nur Empfehlungen aussprechen", "Es darf gar nichts unternehmen", "Es darf nur schriftlich mahnen", "Es kann Betriebe stilllegen und Bußgelder verhängen"],
+    a: 3, e: "Bei Verstößen kann das Gewerbeaufsichtsamt Anordnungen erteilen, Betriebe oder Betriebsteile stilllegen und Bußgelder verhängen (§ 35 GewO)." },
+  { topic: "Gefährdungsbeurteilung", q: "Wozu dient die Gefährdungsbeurteilung nach § 5 ArbSchG?",
+    options: ["Zu ermitteln, welche Maßnahmen des Arbeitsschutzes erforderlich sind", "Zur Berechnung der Lohnsteuer", "Zur Bewertung der Kundenzufriedenheit", "Zur Planung des Betriebsausflugs"],
+    a: 0, e: "Der Arbeitgeber muss durch Beurteilung der Gefährdung ermitteln, welche Maßnahmen des Arbeitsschutzes erforderlich sind — auch die psychische Belastung zählt dazu." },
+  { topic: "Gefährdungsbeurteilung", q: "Wann muss eine Gefährdungsbeurteilung durchgeführt werden?",
+    options: ["Nur nach einem Arbeitsunfall", "Vor Aufnahme der Tätigkeiten, beim Einrichten von Arbeitsstätten und vor Verwendung eines Arbeitsmittels", "Nur alle zehn Jahre", "Nur auf Wunsch der Mitarbeiter"],
+    a: 1, e: "Die Gefährdungsbeurteilung ist vor Aufnahme der Tätigkeiten, beim Einrichten/Betreiben von Arbeitsstätten und vor erstmaliger Verwendung eines Arbeitsmittels durchzuführen." },
+  { topic: "Unterweisung", q: "Wie oft muss die Unterweisung (§ 12 ArbSchG) mindestens wiederholt werden?",
+    options: ["Alle fünf Jahre", "Nur einmalig bei Einstellung", "Mindestens einmal jährlich", "Nur bei einem Arbeitsunfall"],
+    a: 2, e: "Die Unterweisung wird mindestens einmal jährlich wiederholt, bei aktuellem Anlass (z. B. Beinah-Unfall) auch häufiger." },
+  { topic: "Betriebsanweisung", q: "Was ist eine Betriebsanweisung?",
+    options: ["Eine Gehaltsabrechnung", "Ein Arbeitsvertrag", "Ein Werbeprospekt", "Ein schriftliches Dokument zu Gefahren, Schutzmaßnahmen und Verhaltensregeln am Arbeitsplatz"],
+    a: 3, e: "Die Betriebsanweisung wird vom Unternehmer erstellt, am Arbeitsplatz ausgehängt und beschreibt Gefahren, Schutzmaßnahmen und Verhaltensregeln." },
+  { topic: "Betriebsarzt", q: "Welche Aufgabe gehört NICHT zu den Aufgaben des Betriebsarztes?",
+    options: ["Krankmeldungen der Arbeitnehmer auf ihre Berechtigung zu überprüfen", "Den Arbeitgeber arbeitsmedizinisch zu beraten", "Die Arbeitnehmer zu untersuchen", "Die Durchführung des Arbeitsschutzes zu beobachten"],
+    a: 0, e: "Zu den Aufgaben des Betriebsarztes gehört es ausdrücklich NICHT, Krankmeldungen der Arbeitnehmer auf ihre Berechtigung zu überprüfen." },
+  { topic: "Sicherheitsbeauftragte", q: "Wer bestellt die Sicherheitsbeauftragten, und wie?",
+    options: ["Die Krankenkasse, mündlich", "Das Unternehmen, schriftlich (nach SGB)", "Das Finanzamt, per Bescheid", "Die Mitarbeiter selbst, formlos"],
+    a: 1, e: "Das Sozialgesetzbuch (SGB) schreibt vor, dass Unternehmen Sicherheitsbeauftragte schriftlich bestellen müssen." },
+
+  // === Block B: Belastung & Stress (15-23) ===
+  { topic: "Belastung", q: "Was bedeutet der Begriff „Belastung” in der Arbeitswissenschaft?",
+    options: ["Ausschließlich körperliche Schwerarbeit", "Nur negative Einflüsse", "Ein zunächst neutraler Begriff für alle Einflüsse, die von außen auf den Menschen einwirken", "Die Höhe des Gehalts"],
+    a: 2, e: "Belastung ist arbeitswissenschaftlich zunächst neutral und bezeichnet alle Einflüsse, die von außen auf den Menschen einwirken." },
+  { topic: "Beanspruchung", q: "Wovon hängt ab, wie stark sich jemand durch eine Belastung beansprucht fühlt?",
+    options: ["Nur vom Wetter", "Nur von der Tageszeit", "Allein vom Gehalt", "Von Belastungsstärke, Alter, Konstitution, Qualifikation und dem Umgang mit Stress"],
+    a: 3, e: "Die Beanspruchung ist die individuelle Wirkung; sie hängt u. a. von Belastungsstärke, Alter, Konstitution, Qualifikation, Handlungsspielraum und Stressumgang ab." },
+  { topic: "Belastung", q: "Seit wann werden psychische Belastungen ausdrücklich im Arbeitsschutzgesetz berücksichtigt?",
+    options: ["Seit Oktober 2013", "Seit 1950", "Seit 2020", "Gar nicht"],
+    a: 0, e: "Seit Oktober 2013 werden psychische Belastungen ausdrücklich als Gesundheitsgefährdung angesehen und im Arbeitsschutzgesetz berücksichtigt." },
+  { topic: "Belastung", q: "Welche Gegenmaßnahme passt zum Belastungsfaktor „fehlende Rückmeldung / Leistung nicht gewürdigt”?",
+    options: ["Mehr Überstunden anordnen", "Regelmäßige Feedbackgespräche und Lob", "Die Beleuchtung dimmen", "Den Arbeitsplatz verlegen"],
+    a: 1, e: "Gegen fehlende Rückmeldung und mangelnde Wertschätzung helfen regelmäßige Feedbackgespräche und Lob." },
+  { topic: "Stress", q: "Was ist Stress ursprünglich?",
+    options: ["Eine moderne Erfindung der Bürowelt", "Eine reine Einbildung", "Eine natürliche Kampf-oder-Flucht-Reaktion des Körpers auf eine Herausforderung", "Eine Krankheit, die nur Manager betrifft"],
+    a: 2, e: "Stress ist eine natürliche Reaktion des Körpers auf eine Herausforderung — ein Überbleibsel aus den Anfangszeiten der Menschheit (Kampf oder Flucht)." },
+  { topic: "Eustress", q: "Was kennzeichnet Eustress (positiven Stress)?",
+    options: ["Er ist immer bedrohlich", "Er führt sofort zu Burnout", "Er entsteht nur ohne Ausgleich", "Er erhöht die Aufmerksamkeit, motiviert und steigert die Produktivität"],
+    a: 3, e: "Eustress ist positiver Stress: Er erhöht die Aufmerksamkeit, fördert die Leistungsfähigkeit ohne zu schaden, motiviert und steigert die Produktivität." },
+  { topic: "Distress", q: "Wann entsteht Distress (negativer Stress)?",
+    options: ["Wenn Stress zu häufig oder ohne körperlichen Ausgleich auftritt", "Wenn man im Urlaub ist", "Wenn man ausreichend schläft", "Wenn man regelmäßig Sport treibt"],
+    a: 0, e: "Distress entsteht, wenn Stress zu häufig oder ohne körperlichen Ausgleich auftritt; er überfordert und ist bedrohlich." },
+  { topic: "Stress", q: "Welches der folgenden ist ein typisches Symptom von negativem Stress?",
+    options: ["Gesteigerte Lebensfreude", "Schlafstörungen und verminderte Konzentrationsfähigkeit", "Dauerhaft niedriger Blutdruck", "Verbesserte Verdauung"],
+    a: 1, e: "Symptome bei negativem Stress sind u. a. Schlafstörungen, verminderte Leistungs-/Konzentrationsfähigkeit, Magen-Darm-Probleme, Gereiztheit und Bluthochdruck." },
+  { topic: "Stress", q: "Welche Maßnahme hilft beim Stressabbau?",
+    options: ["Mehr Koffein trinken", "Pausen ganz weglassen", "Sport treiben und Erholungsphasen einplanen", "Erholung erst nach dem Zusammenbruch"],
+    a: 2, e: "Hilfreich sind Sport, das Vermeiden von Freizeitstress, rechtzeitige Erholungsphasen, ausreichend Schlaf und Entspannung (Yoga, Meditation). Bewegung beschleunigt den Stressabbau." },
+
+  // === Block C: Burnout, Mobbing & BGM (24-30) ===
+  { topic: "Burnout", q: "Was versteht man unter Burnout?",
+    options: ["Eine ansteckende Krankheit", "Eine kurzfristige Müdigkeit nach dem Mittagessen", "Eine Form der Erkältung", "Einen Zustand völliger physischer und psychischer Erschöpfung durch berufliche Überlastung"],
+    a: 3, e: "Burnout ist ein Zustand völliger physischer und psychischer Erschöpfung aufgrund meist beruflicher Überlastung; Mediziner sehen darin eine Vorstufe zur Depression." },
+  { topic: "Burnout", q: "Welche Personen sind besonders burnoutgefährdet?",
+    options: ["Menschen mit hohen Leistungsansprüchen und Perfektionisten, die sich über den Job definieren", "Menschen, die nie arbeiten", "Ausschließlich Rentner", "Nur Personen ohne Ehrgeiz"],
+    a: 0, e: "Besonders gefährdet sind Menschen mit hohen Leistungsansprüchen, Perfektionisten und Personen, die sich vor allem über ihren Job definieren." },
+  { topic: "Work-Life-Balance", q: "Welche Maßnahme fördert die Work-Life-Balance?",
+    options: ["Verbot von Teilzeit", "Flexible Arbeitszeitmodelle wie Gleitzeit und Vertrauensarbeitszeit", "Abschaffung aller Pausen", "Mehr verpflichtende Überstunden"],
+    a: 1, e: "Zur Work-Life-Balance tragen flexible Arbeitszeitmodelle (Teilzeit, Gleitzeit, Vertrauensarbeitszeit), Job Rotation/Enlargement, BGM und Weiterbildung bei." },
+  { topic: "Mobbing", q: "Wie wird Mobbing definiert?",
+    options: ["Ein einmaliger Streit unter Kollegen", "Eine notwendige organisatorische Maßnahme", "Schikanöses Handeln gegen eine Person, das über längere Zeit wiederholt wird, mit Schädigungsabsicht", "Eine sachliche Kritik im Mitarbeitergespräch"],
+    a: 2, e: "Mobbing ist schikanöses Handeln gegen eine Person oder Gruppe, das über einen längeren Zeitraum wiederholt wird und die Absicht hat, das Opfer zu schädigen." },
+  { topic: "Mobbing", q: "Woran erkennt man Mobbing im Unterschied zu einem gewöhnlichen Konflikt?",
+    options: ["Beide Parteien sind gleich stark", "Es handelt sich um eine einmalige Aktion", "Der Konflikt löst sich von selbst", "Der Konflikt hat sich verfestigt und der Unterlegene kommt nicht aus eigener Kraft heraus"],
+    a: 3, e: "Mobbing erkennt man daran, dass der Konflikt verfestigt ist, die Würde angegriffen wird, die Parteien nicht auf Augenhöhe sind und der Unterlegene nicht aus eigener Kraft herauskommt." },
+  { topic: "Mobbing", q: "Welche Maßnahme kann ein Mobbing-Opfer ergreifen?",
+    options: ["Ein Mobbing-Tagebuch führen und das Selbstbewusstsein stärken", "Das Problem dauerhaft ignorieren", "Selbst zum Mobber werden", "Auf jeden Fall sofort kündigen ohne weitere Schritte"],
+    a: 0, e: "Das Opfer kann u. a. eine selbstkritische Prüfung vornehmen, den Täter ansprechen, das soziale Netzwerk und Selbstbewusstsein stärken, ein Mobbing-Tagebuch führen und früh reagieren." },
+  { topic: "BGM", q: "Warum gehört Suchtprävention in das betriebliche Gesundheitsmanagement?",
+    options: ["Weil Sucht den Umsatz steigert", "Weil Arbeitsbedingungen wie Leistungsdruck das Suchtrisiko erhöhen und Suchtmittel die Arbeitssicherheit gefährden", "Weil sie gesetzlich verboten ist", "Weil sie keine Rolle spielt"],
+    a: 1, e: "Hoher Leistungsdruck, ungünstige Arbeitszeiten und schlechtes Betriebsklima erhöhen das Suchtrisiko; Suchtmittel beeinträchtigen die Arbeitssicherheit. Daher gehört Suchtprävention ins BGM." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

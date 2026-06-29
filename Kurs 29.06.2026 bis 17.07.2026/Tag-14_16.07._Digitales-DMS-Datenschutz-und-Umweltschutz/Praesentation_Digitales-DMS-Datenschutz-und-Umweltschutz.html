@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 14 — Digitales DMS, Datenschutz & Umweltschutz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 14 · 16.07.2026</span>
+    <h1>Digitales DMS, Datenschutz &amp; Umweltschutz</h1>
+    <p class="subtitle">Dokumente digital verwalten, Daten schützen, nachhaltig wirtschaften</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 4 &amp; 6 (S. 105–111, 131–135)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>Aufbau und Nutzen eines <strong>DMS</strong> sowie die <strong>revisionssichere Archivierung</strong> (GoBD) erklären</li>
+      <li><strong>Datenschutz</strong> und <strong>Datensicherheit</strong> abgrenzen und personenbezogene Daten definieren</li>
+      <li>Grundsätze von <strong>EU-DSGVO und BDSG</strong> sowie die Rechte der Betroffenen benennen</li>
+      <li>Maßnahmen der <strong>Datensicherung</strong> (Backup, USV, Verschlüsselung) zuordnen</li>
+      <li>die Umweltgesetze (<strong>KrWG, VerpackG, ElektroG</strong>) und die Abfallhierarchie erläutern</li>
+      <li><strong>nachhaltiges Wirtschaften</strong> (Siegel, Energie sparen, Green IT) begründen</li>
+    </ul>
+  </section>
+
+  <!-- 3. Elektronische Dokumente & Datenträger -->
+  <section class="slide">
+    <h2>Vom Papier zum elektronischen Dokument</h2>
+    <p>Bei wachsendem Schriftgutaufkommen werden Dokumente zunehmend digital gespeichert. Ohne System gilt: einheitliches <strong>Dateiablagesystem</strong> mit abgestimmten Ordnerstrukturen und einheitlicher Benennung.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Magnetisch</div>Festplatten, Magnetbänder</div>
+      <div class="card teal"><div class="card-title">Optisch</div>CD, DVD</div>
+      <div class="card amber"><div class="card-title">Mobil</div>Speicherkarten, USB-Sticks</div>
+      <div class="card amber"><div class="card-title">Langzeit</div>Mikrofilm (30–100 Jahre)</div>
+    </div>
+    <p class="muted">Buchverweis: S. 131</p>
+  </section>
+
+  <!-- 4. DMS Vorteile -->
+  <section class="slide">
+    <h2>Das Dokumentenmanagementsystem (DMS)</h2>
+    <p>Ein DMS wandelt papiergebundene Schriftstücke in <strong>elektronische Dokumente</strong> um und verwaltet sie datenbankgestützt.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Schneller Zugriff</div>Volltextsuche statt Aktensuche</div>
+      <div class="card teal"><div class="card-title">Weniger Verlust</div>keine Verteilerkopien nötig</div>
+      <div class="card teal"><div class="card-title">Wenig Platz</div>geringer Archivbedarf</div>
+      <div class="card amber"><div class="card-title">Weniger Routine</div>Wegfall monotoner Ablage</div>
+      <div class="card amber"><div class="card-title">Parallel-Zugriff</div>auch bei Bearbeitung verfügbar</div>
+      <div class="card amber"><div class="card-title">Papierloses Büro</div>technische Grundlage</div>
+    </div>
+  </section>
+
+  <!-- 5. Revisionssichere Archivierung - Diagramm -->
+  <section class="slide">
+    <h2>Revisionssichere Archivierung (GoBD)</h2>
+    <div class="figure" id="fig-revision"></div>
+    <p class="caption">HGB &sect; 257 und GoBD verlangen: aufbewahrungspflichtige Dokumente dürfen nur revisionssicher elektronisch gespeichert werden.</p>
+  </section>
+
+  <!-- 6. Workflow / Versionierung / Cloud -->
+  <section class="slide">
+    <h2>Workflow, Versionierung &amp; Cloud-DMS</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Workflow</div>
+        <p style="font-size: 1rem;">Dokumente durchlaufen automatisch festgelegte Bearbeitungs- und Freigabeschritte (z. B. Rechnungsprüfung &rarr; Freigabe &rarr; Buchung).</p>
+      </div>
+      <div class="card teal">
+        <div class="card-title">Versionierung</div>
+        <p style="font-size: 1rem;">Jede Änderung wird als neue Version gespeichert; ältere Stände bleiben nachvollziehbar erhalten.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Cloud-DMS</div>
+        <p style="font-size: 1rem;">Nutzung als Online-Dienst &rarr; ortsunabhängiger Zugriff (Homeoffice), aber erhöhte Anforderungen an Datenschutz und Vertrag.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      Revisionssicher = <strong>U-V-N-W</strong>: Unveränderbar · Vollständig · Nachvollziehbar · Wiederauffindbar.
+    </div>
+  </section>
+
+  <!-- 7. Datenschutz vs Datensicherheit - Diagramm -->
+  <section class="slide">
+    <h2>Datenschutz vs. Datensicherheit</h2>
+    <div class="figure" id="fig-schutz"></div>
+    <p class="caption">Grundlage aller Maßnahmen: EU-Datenschutz-Grundverordnung (EU-DSGVO) und Bundesdatenschutzgesetz (BDSG).</p>
+  </section>
+
+  <!-- 8. Personenbezogene Daten -->
+  <section class="slide">
+    <h2>Personenbezogene Daten</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Definition (Art. 4 Nr. 1 EU-DSGVO)</span>
+      Personenbezogene Daten sind <strong>alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen</strong>.
+    </div>
+    <p>Eine Person ist z. B. identifizierbar über:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Name</div></div>
+      <div class="card teal"><div class="card-title">E-Mail-Adresse</div></div>
+      <div class="card amber"><div class="card-title">Bankdaten</div></div>
+      <div class="card amber"><div class="card-title">Kreditkartennummer</div></div>
+      <div class="card rose"><div class="card-title">IP-Adresse</div></div>
+    </div>
+  </section>
+
+  <!-- 9. Datenschutzbeauftragter -->
+  <section class="slide">
+    <h2>Der Datenschutzbeauftragte</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Wann verpflichtend?</span>
+      Nach <strong>&sect; 38 BDSG</strong> (seit 2019): wenn mindestens <strong>zwanzig Personen</strong> ständig mit der automatisierten Verarbeitung personenbezogener Daten beschäftigt sind (auch Art. 37 EU-DSGVO).
+    </div>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Rolle</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kontroll- und Beratungsfunktion</li>
+          <li>der Leitung unmittelbar unterstellt, aber weisungsfrei</li>
+          <li>besonderer Kündigungsschutz</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Aufgaben</div>
+        <ul style="margin-left: 1rem;">
+          <li>Beratung &amp; Überwachung</li>
+          <li>Schulung der Mitarbeiter</li>
+          <li>Zusammenarbeit mit der Aufsichtsbehörde</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Der IT-Leiter kann i. d. R. <strong>nicht</strong> DSB sein — er würde sich selbst kontrollieren (Interessenkonflikt).</p>
+  </section>
+
+  <!-- 10. Rechte der Betroffenen -->
+  <section class="slide">
+    <h2>Rechte der Betroffenen (EU-DSGVO)</h2>
+    <table>
+      <thead><tr><th>Recht</th><th>Artikel</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td>Auskunft</td><td>Art. 15</td><td>Art, Empfänger und Zweck der Daten erfahren</td></tr>
+        <tr><td>Berichtigung</td><td>Art. 16</td><td>falsche Daten korrigieren lassen</td></tr>
+        <tr><td>Löschung</td><td>Art. 17</td><td>„Recht auf Vergessenwerden"</td></tr>
+        <tr><td>Einschränkung</td><td>Art. 18</td><td>Verarbeitung während Prüfung aussetzen</td></tr>
+        <tr><td>Datenübertragbarkeit</td><td>Art. 20</td><td>Daten in maschinenlesbarem Format erhalten</td></tr>
+        <tr><td>Widerspruch</td><td>Art. 21</td><td>jederzeit gegen die Verarbeitung</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 11. Weitere Maßnahmen / Aufbewahrung vs Löschpflicht -->
+  <section class="slide">
+    <h2>Maßnahmen, Aufbewahrung &amp; Löschpflicht</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Technisch-organisatorisch</div>
+        <ul style="margin-left: 1rem;">
+          <li>Passwortgeschützte Benutzerkonten</li>
+          <li>Antivirenschutz &amp; Firewall</li>
+          <li>Schulung / Datenschutzerklärung</li>
+          <li>Aktenvernichter (Partikelschnitt)</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Aufbewahrung vs. Löschpflicht</div>
+        <p style="font-size: 1rem;">Während der gesetzlichen Frist darf <strong>nicht gelöscht</strong> werden. Nach Fristablauf greift die <strong>Löschpflicht</strong>: nicht mehr benötigte Unterlagen sind zu vernichten.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Datensicherung Überblick -->
+  <section class="slide">
+    <h2>Datensicherung — fünf Gefahrenbereiche</h2>
+    <table>
+      <thead><tr><th>Gefahrenbereich</th><th>Maßnahmen</th></tr></thead>
+      <tbody>
+        <tr><td>Datenerfassung</td><td>Prüfziffernverfahren, Plausibilitätskontrolle</td></tr>
+        <tr><td>Datenübertragung</td><td>Prüfbit, Übertragungsprotokolle, Verschlüsselung</td></tr>
+        <tr><td>Datenträger</td><td>Schreibschutz, Backup, Archivierung (feuerfest)</td></tr>
+        <tr><td>Rechnerausfall</td><td>Notstromanlage (USV), Plattenspiegelung</td></tr>
+        <tr><td>Computerkriminalität</td><td>Passwort/PIN, Zugriffskontrolle, Virenschutz</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 13. Backup Generationenprinzip -->
+  <section class="slide">
+    <h2>Backup nach dem Generationenprinzip</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Prinzip</span>
+      Von jedem Datenbestand sind mindestens <strong>drei Generationen</strong> vorzuhalten: <strong>Großvater</strong> (älteste) — <strong>Vater</strong> — <strong>Sohn</strong> (jüngste).
+    </div>
+    <ol class="numlist">
+      <li>Montag: Band 1 = <strong>Sohn</strong></li>
+      <li>Dienstag: Band 2 = <strong>Sohn</strong>, Band 1 wird <strong>Vater</strong></li>
+      <li>Mittwoch: Band 3 = <strong>Sohn</strong>, Band 2 wird <strong>Vater</strong>, Band 1 wird <strong>Großvater</strong></li>
+    </ol>
+    <p class="muted">Eine USV überbrückt einen Stromausfall, bis die Daten gesichert sind.</p>
+  </section>
+
+  <!-- 14. Umweltschutz / Abfallhierarchie - Diagramm -->
+  <section class="slide">
+    <h2>Umweltschutz: die Abfallhierarchie (&sect; 6 KrWG)</h2>
+    <div class="figure" id="fig-abfall"></div>
+    <p class="caption">Grundsatz: <em>Vermeidung vor Verwertung, Verwertung vor Beseitigung.</em></p>
+  </section>
+
+  <!-- 15. Wiederverwendung etc -->
+  <section class="slide">
+    <h2>Verwerten — die drei „Ver-"</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wiederverwertung</div>
+        <p style="font-size: 1rem;">Altstoffe kommen im gleichartigen Prozess erneut zum Einsatz. <em>Beispiel: Glas einschmelzen.</em></p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Wiederverwendung</div>
+        <p style="font-size: 1rem;">Gebrauchtes Produkt — gleicher Zweck. <em>Beispiel: Glaspfandflasche.</em></p>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Weiterverwendung</div>
+        <p style="font-size: 1rem;">Gebrauchtes Produkt — anderer Zweck. <em>Beispiel: alte Autoreifen als Schiffsfender.</em></p>
+      </div>
+    </div>
+    <p class="muted">Das KrWG wurde im Oktober 2020 novelliert (höhere Recyclingquoten, getrennte Sammlung, Obhutspflicht).</p>
+  </section>
+
+  <!-- 16. Verpackungsgesetz -->
+  <section class="slide">
+    <h2>Das Verpackungsgesetz (VerpackG, seit 2019)</h2>
+    <p>Hersteller müssen sich bei der <strong>Zentralen Stelle Verpackungsregister</strong> registrieren und sich an einem <strong>dualen System</strong> (z. B. Grüner Punkt – DSD) beteiligen.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Säule 1</div>Altpapier</div>
+      <div class="card teal"><div class="card-title">Säule 2</div>Glas</div>
+      <div class="card amber"><div class="card-title">Säule 3</div>Gelber Sack / gelbe Tonne</div>
+    </div>
+    <p class="muted">Verpackungstypen (&sect; 3): Verkaufs- (mit Service-/Versand-), Um- und Transportverpackungen.</p>
+  </section>
+
+  <!-- 17. ElektroG -->
+  <section class="slide">
+    <h2>Elektro- und Elektronikgerätegesetz (ElektroG)</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">♻️ Durchgestrichene Mülltonne</span>
+      Damit gekennzeichnete Altgeräte dürfen <strong>nicht über den Restmüll</strong> entsorgt werden, sondern müssen als Elektroschrott gesondert gesammelt werden.
+    </div>
+    <ul>
+      <li>Registrierung der Hersteller bei der <strong>Stiftung EAR</strong> — Bußgeld bis 100.000 €</li>
+      <li>Rücknahmepflicht großer Händler (Fläche &gt; 400 m²)</li>
+      <li>Kleine Geräte (Kantenlänge &lt; 25 cm) <strong>immer kostenlos</strong> zurücknehmen</li>
+    </ul>
+  </section>
+
+  <!-- 18. Nachhaltiges Wirtschaften / Siegel -->
+  <section class="slide">
+    <h2>Nachhaltiges Wirtschaften &amp; Umweltsiegel</h2>
+    <p><strong>Nachhaltigkeit</strong> (aus der Forstwirtschaft): heutige Bedürfnisse so befriedigen, dass künftige Generationen über dieselben Ressourcen verfügen.</p>
+    <table>
+      <thead><tr><th>Siegel</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Blauer Engel</strong></td><td>Umweltzeichen der Bundesregierung</td></tr>
+        <tr><td><strong>Energy Star</strong></td><td>stromsparende IT-Geräte (EPA)</td></tr>
+        <tr><td><strong>EU-Ecolabel / TCO</strong></td><td>Lebenszyklus / nachhaltige IT-Produkte</td></tr>
+        <tr><td><strong>FSC / PEFC</strong></td><td>Holz/Papier aus nachhaltiger Forstwirtschaft</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 19. Energie sparen & Green IT -->
+  <section class="slide">
+    <h2>Energie sparen &amp; Green IT</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Energie sparen im Büro</div>
+        <ul style="margin-left: 1rem;">
+          <li>Licht/Bildschirm beim Verlassen aus</li>
+          <li>Stoßlüften statt Kippstellung</li>
+          <li>Stand-by vermeiden, LED nutzen</li>
+          <li>energieeffizient beschaffen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Green IT</div>
+        <p style="font-size: 1rem;">Ressourcenschonende IT über den gesamten Lebenszyklus: energieeffiziente Server, Virtualisierung, bewusste Cloud-Nutzung — zusammen mit dem <strong>papierlosen Büro</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 14</h2>
+    <ol class="numlist">
+      <li>Ein <strong>DMS</strong> verwaltet Dokumente digital — schneller Zugriff, weniger Verlust, wenig Platz.</li>
+      <li><strong>Revisionssicher</strong> = unveränderbar, vollständig, nachvollziehbar, wiederauffindbar (GoBD).</li>
+      <li><strong>Datenschutz</strong> schützt Personen, <strong>Datensicherheit</strong> schützt Technik/Daten (EU-DSGVO, BDSG).</li>
+      <li><strong>Datensicherung</strong>: fünf Bereiche, Backup-Generationenprinzip (Großvater–Vater–Sohn).</li>
+      <li><strong>Umweltgesetze</strong>: KrWG (Abfallhierarchie), VerpackG, ElektroG.</li>
+      <li><strong>Nachhaltigkeit</strong>: Umweltsiegel, Energie sparen, papierloses Büro, Green IT.</li>
+    </ol>
+  </section>
+
+  <!-- 21. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>DMS-Vorteile benennen</li>
+          <li>Datenschutz/-sicherheit abgrenzen</li>
+          <li>Abfallhierarchie aufzählen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Betroffenenrechte zuordnen</li>
+          <li>Backup-Prinzip durchrechnen</li>
+          <li>Umweltsiegel einordnen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 22. Ausblick Tag 15 -->
+  <section class="slide">
+    <h2>Ausblick: Tag 15 (17.07.) — Abschlusstag</h2>
+    <p class="subtitle">Vertiefung, Übung &amp; Reflektion</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Wiederholung</strong> der zentralen Inhalte des gesamten Moduls</li>
+      <li><strong>Übungsaufgaben</strong> im IHK-Klausurformat zur Festigung</li>
+      <li><strong>Transfer</strong> auf betriebliche Praxisfälle</li>
+      <li><strong>Reflektion</strong> des Lernprozesses und offener Fragen</li>
+      <li><strong>Feedback</strong> und Kursabschluss</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Digitales-DMS-Datenschutz-und-Umweltschutz.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Digitales-DMS-Datenschutz-und-Umweltschutz.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 22</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function circle(rc, svg, cx, cy, d, fill, stroke) {
+  svg.appendChild(rc.circle(cx, cy, d, {
+    roughness: 1.5, fill: fill, fillStyle: 'solid', fillWeight: 2, stroke: stroke, strokeWidth: 1.6
+  }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG 1: Revisionssichere Archivierung (Papier -> DMS -> Archiv)
+  const c0 = document.getElementById('fig-revision');
+  const svg0 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg0.setAttribute('viewBox', '0 0 900 220');
+  svg0.setAttribute('width', '900'); svg0.setAttribute('height', '220');
+  c0.appendChild(svg0);
+  makeRough(svg0, (rc, svg) => {
+    box(rc, svg, 30, 70, 190, 80, '#FEF3C7', '#F59E0B');
+    text(svg, 125, 105, 'Papierdokument', { bold: true, size: 17, color: '#B45309' });
+    text(svg, 125, 130, 'scannen / erfassen', { size: 13, color: '#475569' });
+
+    box(rc, svg, 355, 70, 190, 80, '#ECFEFF', '#0F766E');
+    text(svg, 450, 105, 'DMS', { bold: true, size: 18, color: '#0F766E' });
+    text(svg, 450, 130, 'datenbankgestützt', { size: 13, color: '#475569' });
+
+    box(rc, svg, 680, 70, 190, 80, '#ECFEFF', '#0F766E');
+    text(svg, 775, 100, 'Revisions-', { bold: true, size: 16, color: '#0F766E' });
+    text(svg, 775, 122, 'sicheres Archiv', { bold: true, size: 16, color: '#0F766E' });
+
+    arrow(rc, svg, 225, 110, 350, 110, '#475569');
+    arrow(rc, svg, 550, 110, 675, 110, '#475569');
+    text(svg, 450, 35, 'Unveränderbar · Vollständig · Nachvollziehbar · Wiederauffindbar', { size: 16, bold: true, color: '#0F766E' });
+    text(svg, 450, 195, 'HGB § 257 · GoBD', { size: 13, color: '#475569' });
+  });
+
+  // FIG 2: Datenschutz vs Datensicherheit (zwei Kreise)
+  const c1 = document.getElementById('fig-schutz');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 280');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '280');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    circle(rc, svg, 330, 150, 280, '#ECFEFF', '#0F766E');
+    circle(rc, svg, 570, 150, 280, '#FEF3C7', '#F59E0B');
+    text(svg, 250, 60, 'Datenschutz', { bold: true, size: 18, color: '#0F766E' });
+    text(svg, 650, 60, 'Datensicherheit', { bold: true, size: 18, color: '#B45309' });
+    text(svg, 245, 135, 'schützt:', { bold: true, size: 14, color: '#0F172A' });
+    text(svg, 245, 160, 'natürliche Personen', { size: 14, color: '#475569' });
+    text(svg, 245, 195, 'Gefahr: Verletzung', { size: 13, color: '#475569' });
+    text(svg, 245, 213, 'der Persönlichkeit', { size: 13, color: '#475569' });
+    text(svg, 655, 135, 'schützt:', { bold: true, size: 14, color: '#0F172A' });
+    text(svg, 655, 160, 'Hard-, Software, Daten', { size: 14, color: '#475569' });
+    text(svg, 655, 195, 'Gefahr: Verlust,', { size: 13, color: '#475569' });
+    text(svg, 655, 213, 'Zerstörung, Missbrauch', { size: 13, color: '#475569' });
+    text(svg, 450, 150, 'EU-DSGVO', { bold: true, size: 13, color: '#0F172A' });
+    text(svg, 450, 170, '+ BDSG', { bold: true, size: 13, color: '#0F172A' });
+  });
+
+  // FIG 3: Abfallhierarchie (fünf Stufen, Treppe)
+  const c2 = document.getElementById('fig-abfall');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 260');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '260');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    const stufen = [
+      { t: '1. Vermeidung', c: '#ECFEFF', st: '#0F766E' },
+      { t: '2. Vorbereitung z. Wiederverwendung', c: '#ECFEFF', st: '#0F766E' },
+      { t: '3. Recycling', c: '#FEF3C7', st: '#F59E0B' },
+      { t: '4. Sonstige Verwertung', c: '#FEF3C7', st: '#F59E0B' },
+      { t: '5. Beseitigung', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let y = 30;
+    stufen.forEach((s, i) => {
+      const w = 760 - i * 70;
+      box(rc, svg, 70, y, w, 36, s.c, s.st);
+      text(svg, 70 + w / 2, y + 24, s.t, { bold: true, size: 15, color: s.st });
+      y += 44;
+    });
+    arrow(rc, svg, 30, 40, 30, 230, '#0F766E');
+    text(svg, 18, 135, 'Vorrang', { size: 12, color: '#0F766E', anchor: 'middle' });
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 6 — Terminplanung & Terminmanagement</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 6 · 06.07.2026</span>
+    <h1>Terminplanung &amp; Terminmanagement</h1>
+    <p class="subtitle">Termine im Griff — von der Wiedervorlage bis zum geteilten Kalender</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 8 (S. 144–150)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>einen <strong>Termin</strong> definieren und die fünf <strong>W-Fragen</strong> anwenden</li>
+      <li><strong>Terminarten</strong> (feste/variable, Einzel-/Serientermine) unterscheiden</li>
+      <li>die <strong>Terminüberwachung</strong> und gesetzliche Termine erklären</li>
+      <li>die <strong>Urlaubsplanung</strong> nach § 7 BUrlG durchführen</li>
+      <li>klassische und digitale <strong>Hilfsmittel</strong> (Outlook, Doodle, geteilte Kalender) vergleichen</li>
+      <li>die <strong>elektronische Terminkoordination</strong> (Besprechung, Video-/Telefonkonferenz) erläutern</li>
+    </ul>
+  </section>
+
+  <!-- 3. Was ist ein Termin? -->
+  <section class="slide">
+    <h2>Was ist ein Termin?</h2>
+    <p>Ein Termin ist ein <strong>genau definierter Zeitpunkt</strong>, an dem etwas zu erledigen ist oder ein Ereignis stattfindet. Er besteht aus <strong>Kalenderdatum</strong> und <strong>Uhrzeit</strong>.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Betriebliche Termine</span>
+      Besprechungen, Geschäftsreisen, Urlaub, Messen, Vertreterbesuche, Zahlungs- und Liefertermine.
+    </div>
+    <p class="muted">Buchverweis: S. 144</p>
+  </section>
+
+  <!-- 4. Fünf W-Fragen - Diagramm -->
+  <section class="slide">
+    <h2>Die fünf W-Fragen zur Terminklärung</h2>
+    <div class="figure" id="fig-wfragen"></div>
+    <p class="caption">Wer diese Fragen vor jedem Termin klärt, vergisst weder Raum noch Teilnehmer noch Pufferzeit.</p>
+  </section>
+
+  <!-- 5. Terminarten -->
+  <section class="slide">
+    <h2>Terminarten: fest oder variabel?</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Feste (unveränderliche) Termine</div>
+        <p style="font-size: 1rem;">Wiederholen sich periodisch, früh eintragen.</p>
+        <ul style="margin-left: 1rem; font-size: 1rem;">
+          <li>Geburtstage, Jubiläen</li>
+          <li>Steuerzahlungen</li>
+          <li>Messen &amp; Ausstellungen</li>
+          <li>Schul- und Betriebsferien</li>
+          <li>Hauptversammlungen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Variable (bewegliche) Termine</div>
+        <p style="font-size: 1rem;">Sofort nach Vereinbarung eintragen, abstimmen.</p>
+        <ul style="margin-left: 1rem; font-size: 1rem;">
+          <li>Besprechungen, Sitzungen, Tagungen</li>
+          <li>Geschäftsreisen</li>
+          <li>Geschäftsessen, Konzertbesuche</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Zusätzlich: Einzel- vs. Serientermine und interne vs. externe Termine.</p>
+  </section>
+
+  <!-- 6. Terminüberwachung -->
+  <section class="slide">
+    <h2>Terminüberwachung</h2>
+    <p>Oft Aufgabe des <strong>Sekretariats</strong> — aber jeder ist auch <strong>selbst verantwortlich</strong>. Am Ende des Arbeitstages prüfen, was erledigt wurde und morgen dringend ansteht.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">📌 Wiedervorlage &amp; Farben</span>
+      Die <strong>Wiedervorlagemappe</strong> legt Vorgänge zum richtigen Zeitpunkt erneut vor. Jede Terminart in einer eigenen <strong>Farbe</strong> = sofort optischer Überblick.
+    </div>
+    <p class="muted">Buchverweis: S. 145</p>
+  </section>
+
+  <!-- 7. Gesetzliche Termine -->
+  <section class="slide">
+    <h2>Gesetzlich vorgeschriebene Termine</h2>
+    <table>
+      <thead><tr><th>Termin</th><th>Fälligkeit</th></tr></thead>
+      <tbody>
+        <tr><td>Sozialabgaben (AN- und AG-Anteil)</td><td>drittletzter Bankarbeitstag des Monats</td></tr>
+        <tr><td>Einbehaltene Lohnsteuer (ans Finanzamt)</td><td>bis zum 10. des Folgemonats</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">⚠️ Folgen versäumter Termine</span>
+      Kein Skontoabzug, <strong>Verzugszinsen</strong>, <strong>Mahngebühren</strong> und ein gestörtes Verhältnis zum Lieferanten — wie im Fall der Opitz AG.
+    </div>
+  </section>
+
+  <!-- 8. Termin nicht einhaltbar -->
+  <section class="slide">
+    <h2>Wenn ein Termin nicht einzuhalten ist</h2>
+    <p><strong>Fristgerecht</strong> (= fristgemäß) ist ein eingehaltener Termin. Wird er nicht eingehalten, kann er gar nicht, verspätet oder vertagt werden.</p>
+    <ol class="numlist">
+      <li><strong>Sofort absagen</strong> — am besten telefonisch</li>
+      <li>Bei der <strong>zuständigen Person</strong> melden</li>
+      <li>Einen <strong>neuen Termin</strong> vereinbaren</li>
+      <li>Möglichst gleich einen <strong>Alternativtermin</strong> vorschlagen</li>
+    </ol>
+    <p class="muted">Vergessene Termine sind nicht nur peinlich — sie kosten oft Geld und Vertrauen.</p>
+  </section>
+
+  <!-- 9. Urlaubsplanung -->
+  <section class="slide">
+    <h2>Urlaubsplanung — Terminplanung mit Regeln</h2>
+    <p>Gewünschte und genehmigte Urlaubstage einer Abteilung werden in eine <strong>Kalenderübersicht</strong> eingetragen — unter Beachtung der Rahmenbedingungen und persönlicher Wünsche.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">⚖️ § 7 BUrlG</span>
+      <strong>(1)</strong> Urlaubswünsche berücksichtigen, außer dringende betriebliche Belange oder sozial vorrangige Wünsche anderer stehen entgegen. <strong>(2)</strong> Urlaub zusammenhängend gewähren; bei mehr als 12 Werktagen ein Teil mit mind. 12 aufeinanderfolgenden Werktagen.
+    </div>
+  </section>
+
+  <!-- 10. Hilfsmittel Überblick - Diagramm -->
+  <section class="slide">
+    <h2>Hilfsmittel zur Terminplanung</h2>
+    <div class="figure" id="fig-hilfsmittel"></div>
+    <p class="caption">Von der Stecktafel bis zur Cloud — klassische und digitale Werkzeuge.</p>
+  </section>
+
+  <!-- 11. Elektronische Terminplaner Vor/Nachteile -->
+  <section class="slide">
+    <h2>Elektronischer Terminplaner: Vor- und Nachteile</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Vorteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Über Netzwerk verbunden — gemeinsam bearbeiten</li>
+          <li>Frei/Belegt-Suche nach gemeinsamen Terminen</li>
+          <li>Erinnerung (optisch/akustisch)</li>
+          <li>Mobiler Zugriff, leichtes Ändern</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Nachteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Datenverlust bei Hard-/Softwareproblemen</li>
+          <li>Änderungen nicht mehr nachvollziehbar</li>
+          <li>Synchronisation nötig</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Mindestfunktionen: Kalender, Überschneidungsprüfung, Adressbuch, Notizen, Erinnerung, Passwortschutz.</p>
+  </section>
+
+  <!-- 12. Outlook vier Terminarten -->
+  <section class="slide">
+    <h2>MS Outlook — vier Terminarten</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Ressourcen</div>Räume, Fahrzeuge, Technik (Laptop, Beamer) — zeitlich reserviert.</div>
+      <div class="card teal"><div class="card-title">Termine</div>Ohne weitere Personen/Ressource: Anruf, Arztbesuch.</div>
+      <div class="card amber"><div class="card-title">Besprechungen</div>Einladung weiterer Personen + Ressource (Raum).</div>
+      <div class="card amber"><div class="card-title">Ereignisse</div>24 h oder länger, ganztägig: Geburtstag, Feiertag, Urlaub (Erinnerung 18 h vorher).</div>
+    </div>
+    <p class="muted">Outlook ist ein Personal Information Manager (PIM) — volle Funktion mit Exchange-Server.</p>
+  </section>
+
+  <!-- 13. Besprechungsanfrage -->
+  <section class="slide">
+    <h2>Besprechungsanfrage in Outlook</h2>
+    <ol class="numlist">
+      <li><strong>Kalenderansicht</strong> öffnen</li>
+      <li>„Neue Besprechung” → <strong>Titel und Ort</strong> eingeben</li>
+      <li><strong>Datum, Beginn, Ende</strong> (ggf. ganztägig) festlegen</li>
+      <li><strong>Teilnehmer</strong> aus dem Adressbuch wählen (erforderlich/optional)</li>
+      <li>Über <strong>„Terminplanung”</strong> freie Zeiten prüfen (grün/rot)</li>
+      <li>Auf <strong>„Senden”</strong> klicken</li>
+    </ol>
+    <p class="muted">Auch Einladung zu Skype-/Teams-Besprechungen möglich. Serientypen: täglich, wöchentlich, monatlich, jährlich.</p>
+  </section>
+
+  <!-- 14. Terminkategorien -->
+  <section class="slide">
+    <h2>Terminkategorien — Farbe schafft Überblick</h2>
+    <p>In Outlook lässt sich jede Kategorie einer eigenen Farbe zuordnen. Beispiele:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Intern</div>
+        <ul style="margin-left: 1rem; font-size: 1rem;">
+          <li>Teammeeting</li>
+          <li>Fortbildung</li>
+          <li>Wichtiger Abgabetermin</li>
+        </ul>
+      </div>
+      <div class="card amber"><div class="card-title">Extern / Privat</div>
+        <ul style="margin-left: 1rem; font-size: 1rem;">
+          <li>Kundentermin</li>
+          <li>Lieferantentermin</li>
+          <li>Private Termine</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Anzahl und Farbwahl der Kategorien legt jeder Nutzer selbst fest.</p>
+  </section>
+
+  <!-- 15. Geteilte Kalender & Online-Tools -->
+  <section class="slide">
+    <h2>Geteilte Kalender &amp; Online-Terminfindung</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Doodle &amp; Google Kalender</div>
+        <p style="font-size: 1rem;">Kostenlose Terminfindung mit Externen ohne Outlook — Terminabfrage per Assistent. Mit Outlook verbindbar (ICS-Feeds).</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Geteilte Kalender &amp; Buchungs-Tools</div>
+        <p style="font-size: 1rem;">Microsoft 365 / Google Workspace: Verfügbarkeiten teilen. Calendly &amp; Microsoft Bookings: Kunden buchen selbst freie Slots.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🔒 Hinweis</span>
+      Bei allen Cloud-Tools gilt: <strong>Datenschutz beachten</strong>.
+    </div>
+  </section>
+
+  <!-- 16. Elektronische Besprechungen -->
+  <section class="slide">
+    <h2>Elektronische Besprechungen</h2>
+    <p>Immer mehr Unternehmen planen Besprechungen, die <strong>nicht</strong> die Anwesenheit aller an einem Ort erfordern.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Videokonferenz</div>
+        <p style="font-size: 1rem;">Austausch per Video an verschiedenen Orten; spezielle Systeme + schneller Internetanschluss; gemeinsame Dateiarbeit.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Telefonkonferenz</div>
+        <p style="font-size: 1rem;">Telefonat mit mehr als drei Teilnehmern (genau drei = Dreierkonferenz); virtuelle Konferenzräume per PIN.</p>
+      </div>
+    </div>
+    <p class="muted">Spart Flug-, Hotel- und Verpflegungskosten sowie Zeit — zunächst aber Anschaffungskosten für die Technik.</p>
+  </section>
+
+  <!-- 17. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 6</h2>
+    <ol class="numlist">
+      <li>Ein <strong>Termin</strong> = Datum + Uhrzeit; klären mit den fünf <strong>W-Fragen</strong>.</li>
+      <li><strong>Terminarten</strong>: feste (früh) und variable (sofort) Termine; Einzel-/Serien-, intern/extern.</li>
+      <li><strong>Terminüberwachung</strong> mit Wiedervorlage; gesetzliche Fristen für Sozialabgaben und Lohnsteuer.</li>
+      <li><strong>Urlaubsplanung</strong> nach Rahmenbedingungen und § 7 BUrlG.</li>
+      <li><strong>Hilfsmittel</strong>: klassisch und digital (Outlook, Doodle, geteilte Kalender, Buchungs-Tools).</li>
+      <li><strong>Elektronische Besprechungen</strong>: Video- und Telefonkonferenz sparen Zeit und Kosten.</li>
+    </ol>
+  </section>
+
+  <!-- 18. Praxisbeispiel -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Teamtermin koordinieren</h2>
+    <p>Ein Projektteam aus drei Abteilungen soll sich wöchentlich abstimmen — eine Person sitzt im Homeoffice.</p>
+    <ol class="numlist">
+      <li><strong>W-Fragen klären</strong>: Warum, Wer, Wann, Wo, Wie lange.</li>
+      <li><strong>Serientermin</strong> anlegen (wöchentlich, fester Wochentag).</li>
+      <li><strong>Freie Zeiten</strong> über die Terminplanung in Outlook suchen.</li>
+      <li><strong>Besprechungsanfrage</strong> mit Teams-Link versenden.</li>
+      <li><strong>Externe</strong> ohne Outlook per Doodle einbinden.</li>
+      <li><strong>Kategorie-Farbe</strong> „Teammeeting” setzen, Erinnerung aktivieren.</li>
+    </ol>
+    <p class="muted">So treffen Sie als Bürokaufleute eine nachvollziehbare, effiziente Terminentscheidung.</p>
+  </section>
+
+  <!-- 19. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Termin definieren, W-Fragen nennen</li>
+          <li>Terminarten unterscheiden</li>
+          <li>Gesetzliche Fristen kennen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Urlaub nach § 7 BUrlG planen</li>
+          <li>Tool situativ empfehlen</li>
+          <li>Vor- und Nachteile abwägen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 20. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Welches Hilfsmittel zur Terminplanung nutzen Sie privat — und warum?</li>
+      <li>Papierkalender oder digital: Was hat sich bei Ihnen bewährt?</li>
+      <li>Wie sinnvoll sind Videokonferenzen gegenüber Präsenz-Besprechungen?</li>
+      <li>Würden Sie Ihren Kalender für Kollegen freigeben? Wo liegt die Grenze?</li>
+    </ol>
+  </section>
+
+  <!-- 21. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 7 (07.07.)</h2>
+    <p class="subtitle">Sitzungen &amp; Besprechungen vorbereiten und durchführen</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Besprechungsarten</strong> — formell und informell</li>
+      <li><strong>Vorbereitung</strong> — Ziel, Tagesordnung, Einladung</li>
+      <li><strong>Durchführung</strong> — Moderation und Gesprächsregeln</li>
+      <li><strong>Rollen</strong> — Leitung, Teilnehmer, Protokollführung</li>
+      <li><strong>Hilfsmittel</strong> — Präsentationstechnik und Raum</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Terminplanung-und-Terminmanagement.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Terminplanung-und-Terminmanagement.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 21</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Fünf W-Fragen
+  const c1 = document.getElementById('fig-wfragen');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 280');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '280');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const fragen = [
+      { t: 'Warum?', s: 'Zweck', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Wer?', s: 'Teilnehmer', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Wann?', s: 'Datum/Zeit', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Wo?', s: 'Ort/Raum', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Wie lange?', s: 'Dauer', c: '#FFE4E6', st: '#F97316' }
+    ];
+    fragen.forEach((f, i) => {
+      const px = 30 + i * 172;
+      box(rc, svg, px, 90, 150, 90, f.c, f.st);
+      text(svg, px + 75, 130, f.t, { bold: true, size: 20, color: f.st });
+      text(svg, px + 75, 158, f.s, { size: 14, color: '#475569' });
+    });
+    text(svg, 450, 45, 'Fünf W-Fragen vor jedem Termin klären', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 235, 'Termin = Kalenderdatum + Uhrzeit', { size: 15, color: '#475569' });
+  });
+
+  // FIG: Hilfsmittel klassisch -> digital
+  const c2 = document.getElementById('fig-hilfsmittel');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 250');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '250');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    box(rc, svg, 40, 90, 230, 90, '#ECFEFF', '#0F766E');
+    text(svg, 155, 125, 'Klassisch', { bold: true, size: 18, color: '#0F766E' });
+    text(svg, 155, 152, 'Kalender, Planer,', { size: 13, color: '#475569' });
+    text(svg, 155, 170, 'Terminmappe, Stecktafel', { size: 13, color: '#475569' });
+
+    box(rc, svg, 335, 90, 230, 90, '#FEF3C7', '#F59E0B');
+    text(svg, 450, 125, 'Elektronisch', { bold: true, size: 18, color: '#F59E0B' });
+    text(svg, 450, 152, 'MS Outlook,', { size: 13, color: '#475569' });
+    text(svg, 450, 170, 'Erinnerung, Adressbuch', { size: 13, color: '#475569' });
+
+    box(rc, svg, 630, 90, 230, 90, '#FFE4E6', '#F97316');
+    text(svg, 745, 125, 'Cloud / geteilt', { bold: true, size: 18, color: '#F97316' });
+    text(svg, 745, 152, 'Doodle, geteilte Kalender,', { size: 13, color: '#475569' });
+    text(svg, 745, 170, 'Buchungs-Tools', { size: 13, color: '#475569' });
+
+    arrow(rc, svg, 275, 135, 330, 135, '#475569');
+    arrow(rc, svg, 570, 135, 625, 135, '#475569');
+    text(svg, 450, 45, 'Vom Papier zur Cloud', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 215, 'zunehmende Vernetzung und gemeinsame Nutzung ⟶', { size: 13, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

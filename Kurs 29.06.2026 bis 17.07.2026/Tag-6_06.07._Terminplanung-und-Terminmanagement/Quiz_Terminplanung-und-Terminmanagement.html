@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 6 — Terminplanung & Terminmanagement</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 6 · 06.07.2026 · 30 Fragen</span>
+  <h1>Quiz: Terminplanung &amp; Terminmanagement</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Terminplanung-und-Terminmanagement.html</strong> und dem <strong>Handout_Terminplanung-und-Terminmanagement.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067) · Kurs 29.06.–17.07.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Termine & Grundlagen (1-6) ===
+  { topic: "Grundlagen", q: "Was ist ein Termin?",
+    options: ["Ein genau definierter Zeitpunkt, an dem etwas zu erledigen ist oder ein Ereignis stattfindet", "Eine grobe Schätzung über mehrere Wochen", "Eine reine Uhrzeit ohne Datum", "Ein Vermerk ohne festen Zeitbezug"],
+    a: 0, e: "Ein Termin ist ein genau definierter Zeitpunkt, an dem etwas zu erledigen ist oder ein Ereignis stattfindet." },
+  { topic: "Grundlagen", q: "Aus welchen beiden Angaben besteht ein Termin?",
+    options: ["Aus Ort und Teilnehmerzahl", "Aus Kalenderdatum und Uhrzeit", "Aus Abteilung und Kostenstelle", "Aus Betreff und Priorität"],
+    a: 1, e: "Ein Termin besteht aus den beiden Angaben Kalenderdatum und Uhrzeit." },
+  { topic: "Grundlagen", q: "Welche der folgenden Anlässe sind typische betriebliche Termine?",
+    options: ["Nur Geburtstage", "Ausschließlich Pausen", "Besprechungen, Geschäftsreisen, Urlaub, Messen, Liefertermine", "Nur private Treffen"],
+    a: 2, e: "Betriebliche Termine sind z. B. Besprechungen, Geschäftsreisen, Urlaub, Messen, Vertreterbesuche sowie Zahlungs- und Liefertermine." },
+  { topic: "W-Fragen", q: "Wie viele W-Fragen sollte man vor dem Einplanen eines Termins klären?",
+    options: ["Zwei", "Drei", "Vier", "Fünf"],
+    a: 3, e: "Es sind fünf W-Fragen: Warum, Wer, Wann, Wo und Wie lange." },
+  { topic: "W-Fragen", q: "Womit wird zur visuellen Verdeutlichung bei der Terminplanung oft gearbeitet?",
+    options: ["Mit dem sogenannten Netzplan", "Mit einer Gewinn- und Verlustrechnung", "Mit einem Organigramm", "Mit einer Bilanz"],
+    a: 0, e: "Oftmals wird zur visuellen Verdeutlichung bei der Terminplanung mit dem sogenannten Netzplan gearbeitet." },
+  { topic: "W-Fragen", q: "Welche Angabe gehört NICHT zu den fünf W-Fragen der Terminklärung?",
+    options: ["Wer nimmt teil?", "Wie viel kostet der Termin?", "Wo findet er statt?", "Wie lange dauert er?"],
+    a: 1, e: "Die fünf W-Fragen lauten: Warum, Wer, Wann, Wo und Wie lange. Die Kostenfrage gehört nicht dazu." },
+
+  // === Block B: Terminarten (7-12) ===
+  { topic: "Terminarten", q: "Welche zwei Grundarten von Terminen unterscheidet man?",
+    options: ["Laute und leise Termine", "Teure und günstige Termine", "Feste und variable Termine", "Schriftliche und mündliche Termine"],
+    a: 2, e: "Termine lassen sich in feste (unveränderliche) und variable (bewegliche) Termine unterscheiden." },
+  { topic: "Terminarten", q: "Wodurch sind feste Termine gekennzeichnet?",
+    options: ["Sie werden nie eingetragen", "Sie ändern sich täglich", "Sie sind grundsätzlich geheim", "Sie wiederholen sich periodisch und werden frühzeitig eingetragen"],
+    a: 3, e: "Feste Termine wiederholen sich periodisch und werden möglichst frühzeitig eingetragen, um Überschneidungen vorzubeugen." },
+  { topic: "Terminarten", q: "Welcher Termin ist ein typischer fester (unveränderlicher) Termin?",
+    options: ["Steuerzahlung", "Spontane Besprechung", "Kurzfristiges Geschäftsessen", "Ad-hoc-Telefonat"],
+    a: 0, e: "Feste Termine sind z. B. Geburtstage, Steuerzahlungen, Messen, Schul- und Betriebsferien, Jubiläen und Hauptversammlungen." },
+  { topic: "Terminarten", q: "Welcher Termin zählt zu den variablen (beweglichen) Terminen?",
+    options: ["Betriebsferien", "Geschäftsreise", "Jubiläum", "Hauptversammlung"],
+    a: 1, e: "Zu den variablen Terminen gehören u. a. Besprechungen, Geschäftsreisen sowie private und geschäftliche Treffen." },
+  { topic: "Terminarten", q: "Was ist ein Serientermin?",
+    options: ["Ein einmaliger Sondertermin", "Ein abgesagter Termin", "Ein Anlass, der sich nach einem Muster regelmäßig wiederholt", "Ein Termin nur für externe Gäste"],
+    a: 2, e: "Ein Serientermin wiederholt sich nach einem Muster regelmäßig — täglich, wöchentlich, monatlich oder jährlich." },
+  { topic: "Terminarten", q: "Wann werden variable Termine eingetragen?",
+    options: ["Erst am Jahresende", "Gar nicht", "Nur wenn sie gesetzlich vorgeschrieben sind", "Sofort, nachdem sie vereinbart wurden"],
+    a: 3, e: "Variable Termine werden sofort eingetragen, nachdem sie vereinbart wurden; bei Bedarf erfolgt eine Abstimmung." },
+
+  // === Block C: Terminüberwachung & Fristen (13-18) ===
+  { topic: "Terminüberwachung", q: "Wer ist für die Einhaltung von Terminen verantwortlich?",
+    options: ["Oft das Sekretariat — aber jeder ist auch selbst verantwortlich", "Ausschließlich die Geschäftsführung", "Nur die IT-Abteilung", "Niemand im Betrieb"],
+    a: 0, e: "Die Terminüberwachung wird oft vom Sekretariat übernommen; gleichzeitig ist jeder selbst für seine Termine verantwortlich." },
+  { topic: "Terminüberwachung", q: "Welches Hilfsmittel unterstützt die Terminüberwachung besonders?",
+    options: ["Der Jahresabschluss", "Die Wiedervorlagemappe", "Die Lohnabrechnung", "Das Organigramm"],
+    a: 1, e: "Bei der Terminüberwachung unterstützt der Einsatz der Wiedervorlagemappe." },
+  { topic: "Fristen", q: "Wann sind die Sozialabgaben fällig?",
+    options: ["Am ersten Tag des Monats", "Erst am Jahresende", "Am drittletzten Bankarbeitstag des Monats", "Immer am 15. des Monats"],
+    a: 2, e: "Die Sozialabgaben (Arbeitnehmer- und Arbeitgeberanteil) sind am drittletzten Bankarbeitstag des Monats fällig." },
+  { topic: "Fristen", q: "Bis wann muss die einbehaltene Lohnsteuer an das Finanzamt abgeführt werden?",
+    options: ["Bis zum Monatsende", "Innerhalb von 24 Stunden", "Erst im Folgejahr", "Bis zum 10. des Folgemonats"],
+    a: 3, e: "Die einbehaltene Lohnsteuer ist bis zum 10. des Folgemonats an das Finanzamt abzuführen." },
+  { topic: "Fristen", q: "Wie nennt man einen Termin, der zum vereinbarten Zeitpunkt eingehalten wird?",
+    options: ["Fristgerecht (bzw. fristgemäß)", "Vertagt", "Verspätet", "Storniert"],
+    a: 0, e: "Wird ein Termin eingehalten, spricht man von einem fristgerechten oder fristgemäßen Termin." },
+  { topic: "Fristen", q: "Welche Folge kann ein versäumter Zahlungstermin haben?",
+    options: ["Ein höherer Skontoabzug", "Verzugszinsen und Mahngebühren", "Eine Belohnung des Lieferanten", "Eine automatische Fristverlängerung"],
+    a: 1, e: "Ein versäumter Zahlungstermin kann zum Verlust des Skontos, zu Verzugszinsen und Mahngebühren sowie zu gestörtem Vertrauen führen." },
+
+  // === Block D: Urlaubsplanung (19-21) ===
+  { topic: "Urlaubsplanung", q: "Was geschieht bei der Urlaubsplanung?",
+    options: ["Es werden nur Überstunden erfasst", "Es werden Gehälter berechnet", "Die Urlaubstage aller Mitarbeiter einer Abteilung werden in eine Kalenderübersicht eingetragen", "Es werden Dienstreisen gebucht"],
+    a: 2, e: "Bei der Urlaubsplanung werden die gewünschten oder genehmigten Urlaubstage aller Mitarbeiter in eine Kalenderübersicht eingetragen." },
+  { topic: "§ 7 BUrlG", q: "Was regelt § 7 Abs. 1 BUrlG zur Urlaubsfestlegung?",
+    options: ["Urlaub ist immer im Sommer zu nehmen", "Der Arbeitgeber entscheidet allein und frei", "Urlaub darf nur einzeln tageweise genommen werden", "Die Urlaubswünsche des Arbeitnehmers sind zu berücksichtigen, außer es stehen dringende betriebliche Belange oder vorrangige Wünsche anderer entgegen"],
+    a: 3, e: "Nach § 7 Abs. 1 BUrlG sind die Urlaubswünsche des Arbeitnehmers zu berücksichtigen, sofern keine dringenden betrieblichen Belange oder sozial vorrangigen Wünsche anderer entgegenstehen." },
+  { topic: "§ 7 BUrlG", q: "Was schreibt § 7 Abs. 2 BUrlG grundsätzlich vor?",
+    options: ["Der Urlaub ist zusammenhängend zu gewähren", "Urlaub muss immer geteilt werden", "Urlaub verfällt sofort", "Urlaub darf nur halbtags genommen werden"],
+    a: 0, e: "Nach § 7 Abs. 2 BUrlG ist der Urlaub zusammenhängend zu gewähren; bei mehr als zwölf Werktagen muss ein Teil mindestens zwölf aufeinanderfolgende Werktage umfassen." },
+
+  // === Block E: Hilfsmittel & Outlook (22-27) ===
+  { topic: "Hilfsmittel", q: "Welches sind klassische Hilfsmittel der Terminplanung?",
+    options: ["Server und Router", "Kalender, Planer, Terminmappen und Stecktafeln", "Drucker und Scanner", "Telefon und Fax"],
+    a: 1, e: "Klassische Hilfsmittel sind Kalender, Planer, Terminmappen oder Stecktafeln." },
+  { topic: "Hilfsmittel", q: "Welche Funktion sollte ein elektronisches Terminplanungsprogramm mindestens enthalten?",
+    options: ["Eine Videobearbeitung", "Eine Buchhaltungsschnittstelle", "Eine Terminüberschneidungsprüfung", "Eine Lagerverwaltung"],
+    a: 2, e: "Mindestfunktionen sind u. a. Kalenderfunktion, Terminüberschneidungsprüfung, Adressbuch, Notizen, Erinnerungsfunktion und Passwortschutz." },
+  { topic: "Hilfsmittel", q: "Was ist ein Vorteil eines elektronischen Terminplaners gegenüber dem Papierkalender?",
+    options: ["Er funktioniert ohne jede Technik", "Er kann niemals Daten verlieren", "Er braucht keine Synchronisation", "Kalender können über ein Netzwerk verbunden und Termine gemeinsam bearbeitet werden"],
+    a: 3, e: "Ein großer Vorteil ist, dass Terminkalender über ein Netzwerk verbunden und Termine ausgetauscht, abgeglichen und gemeinsam bearbeitet werden können." },
+  { topic: "Hilfsmittel", q: "Was ist ein Nachteil elektronischer Terminplaner?",
+    options: ["Gefahr des Datenverlustes bei Hard- oder Softwareproblemen", "Sie sind grundsätzlich unbedienbar", "Sie können keine Erinnerungen anzeigen", "Sie lassen sich nicht mit einem Passwort schützen"],
+    a: 0, e: "Ein großer Nachteil ist die Gefahr des Datenverlustes bei Hard- oder Softwareproblemen; zudem sind Änderungen später nicht mehr nachvollziehbar." },
+  { topic: "MS Outlook", q: "Wie viele verschiedene Terminarten definiert MS Outlook für seine Kalenderfunktion?",
+    options: ["Zwei", "Vier", "Sechs", "Acht"],
+    a: 1, e: "MS Outlook definiert vier Terminarten: Ressourcen, Termine, Besprechungen und Ereignisse." },
+  { topic: "MS Outlook", q: "Was ist in Outlook ein „Ereignis”?",
+    options: ["Ein kurzer Anruf von fünf Minuten", "Eine Raumreservierung", "Ein Anlass, der 24 Stunden oder länger andauert (z. B. Geburtstag, Feiertag, Urlaub)", "Eine Besprechung mit Beamer"],
+    a: 2, e: "Ereignisse dauern 24 Stunden oder länger und sind keiner Uhrzeit zugeordnet; Outlook erinnert standardmäßig 18 Stunden vorher." },
+
+  // === Block F: Online-Tools & elektronische Besprechungen (28-30) ===
+  { topic: "MS Outlook", q: "Worin unterscheidet sich in Outlook eine „Besprechung” von einem „Termin”?",
+    options: ["Eine Besprechung ist immer privat", "Ein Termin dauert immer länger", "Es gibt keinen Unterschied", "Bei der Besprechung werden weitere Personen eingeladen und eine Ressource (z. B. Raum) benötigt"],
+    a: 3, e: "Termine finden ohne weitere Personen und ohne Ressource statt; bei Besprechungen werden weitere Personen eingeladen und eine Ressource (z. B. Besprechungsraum) benötigt." },
+  { topic: "Online-Tools", q: "Wofür eignet sich ein Online-Tool wie Doodle besonders?",
+    options: ["Zur Terminfindung mit externen Partnern oder im privaten Bereich ohne MS Outlook", "Zur Lohnabrechnung", "Zur Lagerhaltung", "Zur Reisekostenabrechnung"],
+    a: 0, e: "Doodle (oder Google Kalender) ermöglicht mit einem selbsterklärenden Assistenten Terminabfragen — ideal für Externe oder den privaten Bereich ohne Outlook." },
+  { topic: "Elektronische Besprechungen", q: "Was gilt für die Telefonkonferenz?",
+    options: ["Sie ist nur zu zweit möglich", "Sie wird mit mehr als drei Teilnehmern geführt (genau drei = Dreierkonferenz)", "Sie benötigt keinerlei Technik", "Sie ist mit einer Videokonferenz identisch"],
+    a: 1, e: "Bei einer Telefonkonferenz wird ein Telefonat mit mehr als drei Teilnehmern geführt; bei genau drei spricht man von einer Dreierkonferenz." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

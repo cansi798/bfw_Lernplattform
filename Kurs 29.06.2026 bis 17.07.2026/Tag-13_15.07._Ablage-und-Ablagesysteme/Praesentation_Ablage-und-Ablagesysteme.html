@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 13 — Ablage & Ablagesysteme</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 13 · 15.07.2026</span>
+    <h1>Ablage &amp; Ablagesysteme</h1>
+    <p class="subtitle">Schriftgut ordnen, aufbewahren und wiederfinden — Orte, Formen und Ordnungssysteme</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 6 (S. 125–131)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>die drei <strong>Ablageorte</strong> unterscheiden und den Grundsatz der Zugriffshäufigkeit anwenden</li>
+      <li><strong>Ablagetechnik</strong> (Loseblatt/geheftet) und <strong>Aktenarten</strong> (Einzel-/Sammelakte) erläutern</li>
+      <li>die drei <strong>Registraturformen</strong> (liegend, stehend, hängend) vergleichen</li>
+      <li>die <strong>Ordnungssysteme</strong> zuordnen und situativ auswählen</li>
+      <li>Schriftgut <strong>alphabetisch nach DIN 5007</strong> sortieren und Hilfsmittel einsetzen</li>
+      <li>die <strong>Kosten der Ablage</strong> einschätzen und ein System empfehlen</li>
+    </ul>
+  </section>
+
+  <!-- 3. Ablageorte -->
+  <section class="slide">
+    <h2>Ablageorte — wo wird abgelegt?</h2>
+    <p>Maßgeblich ist die <strong>Zugriffshäufigkeit</strong>: Je häufiger man auf Schriftstücke zurückgreift, umso näher am Arbeitsplatz werden sie aufbewahrt.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Arbeitsplatzablage</div>Aktuell bearbeitete oder häufig benötigte Unterlagen direkt am Schreibtisch.</div>
+      <div class="card teal"><div class="card-title">Abteilungsablage</div>Von mehreren genutzte Unterlagen, gut erreichbar in der Abteilung (Aktenplan hilft).</div>
+      <div class="card amber"><div class="card-title">Zentralregistratur / Archiv</div>Selten benötigte Unterlagen, gesetzliche Aufbewahrung, Dauerwert.</div>
+    </div>
+  </section>
+
+  <!-- 4. Ablageorte Diagramm -->
+  <section class="slide">
+    <h2>Zugriffshäufigkeit bestimmt den Ort</h2>
+    <div class="figure" id="fig-ablageorte"></div>
+    <p class="caption">Je seltener der Zugriff, desto weiter „weg” vom Arbeitsplatz darf die Ablage liegen.</p>
+  </section>
+
+  <!-- 5. Ablagetechnik -->
+  <section class="slide">
+    <h2>Ablagetechnik</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Loseblattablage</div>
+        <p style="font-size: 1rem;">Ungeheftet in Mappen/Sichthüllen.</p>
+        <ul style="margin-left: 1rem;">
+          <li>+ Zeitgewinn (kein Lochen)</li>
+          <li>− Verlustgefahr, längere Suchzeiten</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Geheftete Ablage</div>
+        <p style="font-size: 1rem;">Gelocht in Ordnern/Heftern.</p>
+        <ul style="margin-left: 1rem;">
+          <li>+ Sichere Aufbewahrung, schnelles Wiederfinden</li>
+          <li>− Mehr Zeitaufwand (Lochen)</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Geheftet eignet sich für viele gleichartige Belege (z. B. Aufträge nach Auftragsnummer).</p>
+  </section>
+
+  <!-- 6. Aktenarten -->
+  <section class="slide">
+    <h2>Aktenarten</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Einzelakte</div>
+        Schriftstücke zu <strong>einem</strong> Vorgang oder Fall.<br>Beispiel: Personalakte eines Mitarbeiters.
+      </div>
+      <div class="card amber">
+        <div class="card-title">Sammelakte</div>
+        Schriftstücke zu verschiedenen, aber <strong>gleichartigen</strong> Vorgängen.<br>Beispiel: Lieferscheine, Rechnungen.
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>Einzel = ein Fall · Sammel = viele gleiche.</strong>
+    </div>
+  </section>
+
+  <!-- 7. Arten der Registratur Überblick -->
+  <section class="slide">
+    <h2>Arten der Registratur</h2>
+    <p>Drei grundlegende <strong>Aufbewahrungsformen</strong> — jeder lassen sich Registraturformen und Schriftgutbehälter zuordnen.</p>
+    <div class="figure" id="fig-registratur"></div>
+    <p class="caption">Liegend, stehend und hängend — vom Aktenstapel bis zur Hängemappe.</p>
+  </section>
+
+  <!-- 8. Liegende Registratur -->
+  <section class="slide">
+    <h2>Liegende Registratur (Flachablage)</h2>
+    <p>Schriftstücke werden flach übereinandergelegt. Schriftgutbehälter: <strong>Aktendeckel, Schnellhefter, Jurismappe</strong>.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Eignung &amp; Vorteil</div>
+        <ul style="margin-left: 1rem;">
+          <li>Akten im laufenden Arbeitsprozess oder selten benötigt</li>
+          <li>+ Geringe Kosten für die Schriftgutbehälter</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Nachteil</div>
+        <ul style="margin-left: 1rem;">
+          <li>Schlechte Übersicht</li>
+          <li>Bearbeitung sehr umständlich</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Stehende Registratur -->
+  <section class="slide">
+    <h2>Stehende Registratur</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Ordnerregistratur (Ordner)</div>
+        <ul style="margin-left: 1rem;">
+          <li>+ Übersichtlich (beschriftbare Rücken), schneller Zugriff, geringe Kosten</li>
+          <li>− Zeitaufwendig (lochen/abheften), unflexibel</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Stehsammlerregistratur</div>
+        <p style="font-size: 1rem;">Einstellmappen, Stehsammler, Kassetten.</p>
+        <ul style="margin-left: 1rem;">
+          <li>+ Schneller Zugriff, gute Raumausnutzung</li>
+          <li>− Feststehende Bodenbreite → wenig flexibel</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Ordnerregistratur eignet sich für umfangreiche Sammelakten (Rechnungskopien, Lieferscheine).</p>
+  </section>
+
+  <!-- 10. Hängende Registratur -->
+  <section class="slide">
+    <h2>Hängende Registratur</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Hängeregistratur</div>
+        <p style="font-size: 1rem;">Hängemappen, -taschen, -ordner.</p>
+        <ul style="margin-left: 1rem;">
+          <li>+ Sehr übersichtlich, schneller Zugriff, sehr flexibel</li>
+          <li>− Höhere Materialkosten, mehr Raum (nur bis Sichthöhe)</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Pendelregistratur</div>
+        <p style="font-size: 1rem;">Pendelmappen, -taschen, -hefter.</p>
+        <ul style="margin-left: 1rem;">
+          <li>+ Gute Stellflächennutzung (bis Griffhöhe), günstig, flexibel</li>
+          <li>− Längere Zugriffszeit, weniger übersichtlich (Schmalseite)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. Registratur Vergleich -->
+  <section class="slide">
+    <h2>Registraturformen im Vergleich</h2>
+    <table>
+      <thead><tr><th>Aufbewahrungsform</th><th>Stärke</th><th>Schwäche</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Liegend</strong> (Flachablage)</td><td>Geringe Kosten</td><td>Schlechte Übersicht</td></tr>
+        <tr><td><strong>Stehend</strong> (Ordner)</td><td>Übersichtlich, schneller Zugriff</td><td>Zeitaufwendig, unflexibel</td></tr>
+        <tr><td><strong>Hängend</strong> (Hängemappe)</td><td>Sehr übersichtlich, flexibel</td><td>Material- und Raumkosten</td></tr>
+        <tr><td><strong>Hängend</strong> (Pendel)</td><td>Gute Raumnutzung, günstig</td><td>Längere Zugriffszeit</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die Eignung hängt von <strong>Aktenart, Zugriffshäufigkeit und Raum</strong> ab — es gibt keine universell beste Form.
+    </div>
+  </section>
+
+  <!-- 12. Ordnungssysteme Überblick -->
+  <section class="slide">
+    <h2>Ordnungssysteme</h2>
+    <p>Ein gutes System ist <strong>allgemein anerkannt und allen bekannt</strong> — nur so finden alle Schriftstücke schnell wieder.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Alphabetisch</div>Nach Ordnungswörtern (DIN 5007).</div>
+      <div class="card teal"><div class="card-title">Numerisch</div>Nach fortlaufender Nummer.</div>
+      <div class="card teal"><div class="card-title">Alphanumerisch</div>Kombination Buchstabe + Zahl.</div>
+      <div class="card amber"><div class="card-title">Mnemotechnisch</div>Gedächtnis-Kürzel (AR/ER) + Nummer.</div>
+      <div class="card amber"><div class="card-title">Chronologisch</div>Nach zeitlicher Reihenfolge.</div>
+      <div class="card amber"><div class="card-title">Geografisch</div>Nach räumlichem Kriterium.</div>
+    </div>
+  </section>
+
+  <!-- 13. Alphabetische Ordnung / DIN 5007 -->
+  <section class="slide">
+    <h2>Alphabetische Ordnung nach DIN 5007</h2>
+    <p>Die Schriftstücke werden in der Reihenfolge der <strong>Ordnungswörter</strong> (z. B. Kundenname) abgelegt; maßgeblich ist die Buchstabenfolge des Alphabets.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">🔤 Beispiel</span>
+      <strong>Kaiser · Krähmer · Kuhn · Kurz · Larsson · Ludwig.</strong> Bei gleichem Anfang entscheidet der nächste Buchstabe; Umlaute ä = a, „ß” = „ss” (Wörterbuch-Variante).
+    </div>
+    <p class="muted">Bei sehr großen Beständen wird die alphabetische oft mit einer Nummer kombiniert (alphanumerisch).</p>
+  </section>
+
+  <!-- 14. Weitere Ordnungssysteme -->
+  <section class="slide">
+    <h2>Numerisch, mnemotechnisch &amp; chronologisch</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Numerisch</div>
+        <p style="font-size: 1rem;">Schriftstück bekommt eine Nummer (Lieferschein-Nr., Kunden-Nr.) und wird danach abgelegt.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Mnemotechnisch / alphanumerisch</div>
+        <p style="font-size: 1rem;">Gedächtnishilfe als Kürzel: <strong>AR</strong> = Ausgangsrechnung, <strong>ER</strong> = Eingangsrechnung; Nummer für die genaue Einordnung.</p>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Chronologisch</div>
+        <p style="font-size: 1rem;">Nach Zeit (Tag, Woche, Monat, Jahr). Bilanzen und Steuerbescheide nach Jahren.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. Ordnungssysteme Vergleich -->
+  <section class="slide">
+    <h2>Ordnungssysteme im direkten Vergleich</h2>
+    <table>
+      <thead><tr><th>System</th><th>Kriterium</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Alphabetisch</strong></td><td>Buchstabenfolge (DIN 5007)</td><td>Kundenkartei nach Namen</td></tr>
+        <tr><td><strong>Numerisch</strong></td><td>fortlaufende Nummer</td><td>Belege nach Lieferschein-Nr.</td></tr>
+        <tr><td><strong>Mnemotechnisch</strong></td><td>Kürzel + Zahl</td><td>AR / ER + Rechnungsnummer</td></tr>
+        <tr><td><strong>Chronologisch</strong></td><td>zeitliche Reihenfolge</td><td>Bilanzen nach Jahren</td></tr>
+        <tr><td><strong>Geografisch</strong></td><td>räumliches Kriterium</td><td>Akten nach Vertriebsgebiet</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>A-N-A-M-C-G</strong> — Alphabetisch, Numerisch, Alphanumerisch, Mnemotechnisch, Chronologisch, Geografisch.
+    </div>
+  </section>
+
+  <!-- 16. Ordnungshilfsmittel -->
+  <section class="slide">
+    <h2>Ordnungshilfsmittel</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Register-/Trennblätter</div>Übersicht im Ordner — alphabetisch oder numerisch.</div>
+      <div class="card teal"><div class="card-title">Leitkarten</div>Unterteilung in Gruppen bei Hängemappen/Karteikästen.</div>
+      <div class="card amber"><div class="card-title">Reiter</div>Inhaltsschilder aus Metall/Kunststoff auf dem Schriftgutbehälter.</div>
+      <div class="card amber"><div class="card-title">Wiedervorlagemappe</div>Für schwebende Vorgänge und Termine.</div>
+    </div>
+  </section>
+
+  <!-- 17. Wiedervorlagemappe -->
+  <section class="slide">
+    <h2>Die Wiedervorlagemappe</h2>
+    <p>Sie nimmt alle Aufgaben und Vorgänge auf, die <strong>nicht sofort</strong> bearbeitet werden — und vermeidet so Stapel auf dem Schreibtisch.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Aufbau</span>
+      <strong>12 Fächer</strong> für die Monate oder <strong>31 Fächer</strong> für die Monatstage. Trennblätter mit <strong>Sichtlöchern</strong> zeigen, ob etwas enthalten ist.
+    </div>
+    <ul>
+      <li>Wichtiges Hilfsmittel der <strong>Terminplanung</strong></li>
+      <li>Vorgänge werden termingerecht bearbeitet und kontrolliert</li>
+    </ul>
+  </section>
+
+  <!-- 18. Aktenplan -->
+  <section class="slide">
+    <h2>Aktenplan &amp; Dezimalklassifikation</h2>
+    <p>Der <strong>Aktenplan</strong> (Informationsstrukturplan) ist der einheitliche Rahmen für die gesamte Ablage — Hauptgruppen, Untergruppen, Stichworte.</p>
+    <table>
+      <thead><tr><th>Hauptgruppe</th><th>Untergruppe</th><th>Stichwort</th></tr></thead>
+      <tbody>
+        <tr><td>5 Personal</td><td>51 Personalverwaltung</td><td>514 Urlaubsanträge</td></tr>
+        <tr><td>2 Beschaffung</td><td>—</td><td>—</td></tr>
+        <tr><td>3 Vertrieb</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Vorteil</span>
+      Einheitliche Regeln → leichte, sichere Einordnung; alle finden Dokumente schnell wieder.
+    </div>
+  </section>
+
+  <!-- 19. Kosten der Ablage -->
+  <section class="slide">
+    <h2>Kosten der Ablage</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Materialkosten</div>Schriftgutbehälter und Registraturmöbel (gering: Flachablage, Pendel; hoch: Hängeregistratur).</div>
+      <div class="card amber"><div class="card-title">Raumkosten</div>Stell-/Stapelfläche (Hängeregistratur braucht mehr Raum als die Pendelregistratur).</div>
+      <div class="card rose"><div class="card-title">Arbeitszeit</div>Lochen, Abheften, Suchen (geheftete Ablage und Ordner sind zeitaufwendiger).</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die <strong>günstigste</strong> Form ist nicht automatisch die <strong>wirtschaftlichste</strong> — Material, Raum und Zeit zusammen betrachten.
+    </div>
+  </section>
+
+  <!-- 20. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 13</h2>
+    <ol class="numlist">
+      <li><strong>Ablageorte</strong>: Arbeitsplatz, Abteilung, Zentralregistratur — Zugriffshäufigkeit entscheidet.</li>
+      <li><strong>Ablagetechnik</strong>: Loseblatt (schnell) vs. geheftet (sicher); Einzel- und Sammelakte.</li>
+      <li><strong>Registraturformen</strong>: liegend, stehend (Ordner/Stehsammler), hängend (Hänge/Pendel).</li>
+      <li><strong>Ordnungssysteme</strong>: alphabetisch (DIN 5007), numerisch, alphanumerisch, mnemotechnisch, chronologisch, geografisch.</li>
+      <li><strong>Hilfsmittel</strong>: Register, Reiter, Leitkarten, Wiedervorlagemappe, Aktenplan (Dezimalklassifikation).</li>
+      <li><strong>Kosten</strong>: Material-, Raum- und Arbeitszeitkosten gemeinsam abwägen.</li>
+    </ol>
+  </section>
+
+  <!-- 21. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 14 (16.07.)</h2>
+    <p class="subtitle">Digitales DMS, Datenschutz &amp; Umweltschutz</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Elektronische Dokumente</strong> — von der Papier- zur digitalen Ablage</li>
+      <li><strong>Dokumentenmanagementsystem (DMS)</strong> — Vorteile und Aufbau</li>
+      <li><strong>Datenträger</strong> — magnetische, optische und digitale Speicher</li>
+      <li><strong>Datenschutz &amp; Datensicherheit</strong> — Abgrenzung und Maßnahmen</li>
+      <li><strong>Umweltschutz im Büro</strong> — Papier sparen, nachhaltig arbeiten</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Ablage-und-Ablagesysteme.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Ablage-und-Ablagesysteme.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 21</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Ablageorte nach Zugriffshäufigkeit
+  const c1 = document.getElementById('fig-ablageorte');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 230');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '230');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const orte = [
+      { t: 'Arbeitsplatz-', s: 'sehr häufig', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Abteilungs-', s: 'gelegentlich', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Zentral-/Archiv', s: 'selten / Pflicht', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let x = 40;
+    orte.forEach((o, i) => {
+      box(rc, svg, x, 80, 220, 90, o.c, o.st);
+      text(svg, x + 110, 120, o.t + 'ablage', { bold: true, size: 18, color: o.st });
+      text(svg, x + 110, 148, 'Zugriff: ' + o.s, { size: 14, color: '#475569' });
+      if (i < orte.length - 1) arrow(rc, svg, x + 222, 125, x + 278, 125, '#475569');
+      x += 290;
+    });
+    text(svg, 450, 40, 'Zugriffshäufigkeit ⟶ bestimmt den Ablageort', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 205, 'häufig = nah am Arbeitsplatz   ·   selten = ins Archiv', { size: 13, color: '#475569' });
+  });
+
+  // FIG: Arten der Registratur
+  const c2 = document.getElementById('fig-registratur');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 230');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '230');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    const formen = [
+      { t: 'Liegend', s: 'Flachablage', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Stehend', s: 'Ordner / Stehsammler', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Hängend', s: 'Hänge / Pendel', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let x = 40;
+    formen.forEach((f) => {
+      box(rc, svg, x, 75, 250, 95, f.c, f.st);
+      text(svg, x + 125, 115, f.t, { bold: true, size: 20, color: f.st });
+      text(svg, x + 125, 145, f.s, { size: 14, color: '#475569' });
+      x += 280;
+    });
+    text(svg, 450, 40, 'Drei Aufbewahrungsformen der Registratur', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 205, 'je Form: eigene Schriftgutbehälter, Vor- und Nachteile', { size: 13, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

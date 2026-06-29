@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 9 — Kommunikationsformen & Teamarbeit</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 9 · 09.07.2026</span>
+    <h1>Kommunikationsformen &amp; Teamarbeit</h1>
+    <p class="subtitle">Wie wir verstanden werden — und gut zusammenarbeiten</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk S. 120–122 + Fachwissen</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>das <strong>Sender-Empfänger-Modell</strong> erklären und Störungen benennen</li>
+      <li>eine Nachricht mit den <strong>vier Seiten</strong> (Schulz von Thun) analysieren</li>
+      <li><strong>verbale, nonverbale und paraverbale</strong> Kommunikation unterscheiden</li>
+      <li>die <strong>Kommunikationsformen im Büro</strong> situationsgerecht auswählen</li>
+      <li>die <strong>Teamphasen nach Tuckman</strong> sowie Vor- und Nachteile beschreiben</li>
+      <li><strong>Feedbackregeln</strong> anwenden und Konflikte konstruktiv lösen</li>
+    </ul>
+  </section>
+
+  <!-- 3. Sender-Empfänger-Modell -->
+  <section class="slide">
+    <h2>Das Sender-Empfänger-Modell</h2>
+    <p>Der <strong>Sender</strong> verschlüsselt eine Absicht in Zeichen (<em>Encodieren</em>), sendet sie über einen Kanal — der <strong>Empfänger</strong> entschlüsselt sie (<em>Decodieren</em>) und gibt ein <strong>Feedback</strong>.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Zwischen <strong>gemeint, gesagt, gehört und verstanden</strong> liegen vier verschiedene Dinge. Jede Störung (<em>Rauschen</em>) verändert die Nachricht auf dem Weg.
+    </div>
+    <p class="muted">Rauschen: Lärm, schlechte Verbindung, Ablenkung, unklare Worte, Vorurteile.</p>
+  </section>
+
+  <!-- 4. Vier Seiten einer Nachricht - Diagramm -->
+  <section class="slide">
+    <h2>Die vier Seiten einer Nachricht</h2>
+    <div class="figure" id="fig-vierseiten"></div>
+    <p class="caption">Jede Nachricht hat <em>vier Seiten</em> — und der Empfänger hört mit <em>vier Ohren</em> (Schulz von Thun).</p>
+  </section>
+
+  <!-- 5. Vier Seiten im Beispiel -->
+  <section class="slide">
+    <h2>Vier Seiten — am Beispiel</h2>
+    <p>Eine Kollegin sagt: <em>„Da ist ein Fehler in der Summenzeile.”</em></p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Sache</div>In der Summenzeile ist ein Rechenfehler.</div>
+      <div class="card teal"><div class="card-title">Selbstoffenbarung</div>„Mir ist Genauigkeit wichtig.”</div>
+      <div class="card amber"><div class="card-title">Beziehung</div>„Ich schaue auf deine Arbeit” — oder: „Ich traue dir nichts zu.”</div>
+      <div class="card amber"><div class="card-title">Appell</div>„Bitte korrigiere die Summenzeile.”</div>
+    </div>
+    <p class="muted">Hört der Kollege mit dem <strong>Beziehungsohr</strong>, entsteht ein Konflikt — obwohl es nur um eine Zahl ging.</p>
+  </section>
+
+  <!-- 6. Watzlawick -->
+  <section class="slide">
+    <h2>Die Axiome von Watzlawick</h2>
+    <ol class="numlist">
+      <li><strong>Man kann nicht <em>nicht</em> kommunizieren</strong> — auch Schweigen ist eine Botschaft.</li>
+      <li>Jede Kommunikation hat einen <strong>Inhalts- und einen Beziehungsaspekt</strong>.</li>
+      <li><strong>Interpunktion</strong>: Jeder sieht sich selbst nur als reagierend.</li>
+      <li>Inhalte werden <strong>digital</strong> (Worte) und <strong>analog</strong> (Körpersprache) übertragen.</li>
+      <li>Kommunikation ist <strong>symmetrisch</strong> (Augenhöhe) oder <strong>komplementär</strong> (Gefälle).</li>
+    </ol>
+  </section>
+
+  <!-- 7. Verbal/nonverbal/paraverbal -->
+  <section class="slide">
+    <h2>Verbal, nonverbal &amp; paraverbal</h2>
+    <table>
+      <thead><tr><th>Ebene</th><th>Was?</th><th>Beispiele</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Verbal</strong></td><td>der Inhalt, die Worte</td><td>Wortwahl, Satzbau, das Gesagte</td></tr>
+        <tr><td><strong>Nonverbal</strong></td><td>Körpersprache</td><td>Mimik, Gestik, Haltung, Blickkontakt</td></tr>
+        <tr><td><strong>Paraverbal</strong></td><td>die Art des Sprechens</td><td>Tonfall, Lautstärke, Tempo, Pausen</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>Was</strong> (verbal) · <strong>Wie</strong> (paraverbal) · <strong>Womit</strong> (nonverbal). Der Ton macht oft mehr als das Wort.
+    </div>
+  </section>
+
+  <!-- 8. Inkongruenz -->
+  <section class="slide">
+    <h2>Wenn Wort und Körper sich widersprechen</h2>
+    <p>„Mir geht es gut” — gesagt mit gesenktem Blick und leiser Stimme.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">⚠️ Inkongruenz</span>
+      Passen verbale und nonverbale Botschaft nicht zusammen, entsteht eine <strong>widersprüchliche Doppelbotschaft</strong>. Empfänger glauben im Zweifel der <strong>Körpersprache und Stimme</strong> — die Glaubwürdigkeit leidet.
+    </div>
+    <p class="muted">Deshalb am Telefon: Der freundliche Tonfall ist entscheidend, denn das Bild fehlt.</p>
+  </section>
+
+  <!-- 9. Kommunikationsformen Überblick -->
+  <section class="slide">
+    <h2>Kommunikationsformen im Büro</h2>
+    <p>Für jeden Anlass die passende Form — nach <strong>Vertraulichkeit, Dokumentation, Geschwindigkeit und Zahl der Beteiligten</strong>.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Mündlich</div>Gespräch, Besprechung — schnell, persönlich, kein Nachweis.</div>
+      <div class="card teal"><div class="card-title">Schriftlich</div>Brief, E-Mail — dokumentiert, beweissicher.</div>
+      <div class="card amber"><div class="card-title">Telefon</div>Schnell + Stimme; Telefonnotiz nicht vergessen.</div>
+      <div class="card amber"><div class="card-title">Digital</div>Messenger, Chat, Videokonferenz.</div>
+    </div>
+  </section>
+
+  <!-- 10. Mündlich vs schriftlich -->
+  <section class="slide">
+    <h2>Mündlich oder schriftlich?</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Mündlich</div>
+        <ul style="margin-left: 1rem;">
+          <li>Schnell, sofortiges Nachfragen</li>
+          <li>Tonfall &amp; Körpersprache wirken mit</li>
+          <li>Ideal für Vertrauliches und Kritik</li>
+          <li>Nachteil: kein Nachweis</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Schriftlich</div>
+        <ul style="margin-left: 1rem;">
+          <li>Dokumentiert, beweissicher</li>
+          <li>In Ruhe formulierbar, viele Empfänger</li>
+          <li>Nachteil: Tonfall fehlt, Verzögerung</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Die Telefonnotiz hält fest: <strong>wer · wann · für wen · worum · was ist zu tun</strong>.</p>
+  </section>
+
+  <!-- 11. E-Mail / Elektronische Post -->
+  <section class="slide">
+    <h2>Elektronische Post — die Geschäfts-E-Mail</h2>
+    <p>E-Mails ersetzen den postalischen Geschäftsbrief — deshalb gelten dieselben Regeln.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Pflichtangaben (EHUG)</span>
+      Geschäftliche E-Mails müssen <strong>Pflichtangaben</strong> enthalten — wie ein Geschäftsbrief. <strong>Welche</strong>, hängt von der <strong>Rechtsform</strong> des Unternehmens ab (z. B. Firma, Rechtsform, Sitz, Registergericht, Handelsregisternummer).
+    </div>
+    <p class="muted">Adresse, Telefon-/Faxnummer und Bankverbindung zählen <strong>nicht</strong> zu den Pflichtangaben. (Buchverweis: S. 120–121)</p>
+  </section>
+
+  <!-- 12. E-Mail-Knigge -->
+  <section class="slide">
+    <h2>E-Mail-Knigge</h2>
+    <ul class="checklist">
+      <li>Aussagekräftiger <strong>Betreff</strong> — sofort erkennbar, worum es geht</li>
+      <li>Passende <strong>Anrede</strong> und Grußformel, höflicher Ton</li>
+      <li><strong>Kurz und klar</strong>: eine E-Mail — ein Anliegen</li>
+      <li>Empfänger bewusst wählen: <strong>CC/BCC sparsam</strong></li>
+      <li>Rechtschreibung prüfen, <strong>Anhänge</strong> ankündigen und beifügen</li>
+      <li><strong>Signatur</strong> mit Pflichtangaben; bei Ärger erst entwerfen, dann senden</li>
+    </ul>
+  </section>
+
+  <!-- 13. Messenger & Videokonferenz -->
+  <section class="slide">
+    <h2>Messenger, Chat &amp; Videokonferenz</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Messenger / Chat</div>
+        <p style="font-size: 1rem;">Kurz, informell, schnell — ideal für Team-Abstimmungen. <strong>Kein</strong> Ersatz für verbindliche, dokumentierte Korrespondenz.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Videokonferenz</div>
+        <p style="font-size: 1rem;">Verbindet Standorte, spart Reisezeit, überträgt Bild und Ton. Regeln: stummschalten, Agenda, Wortmeldungen, Protokoll.</p>
+      </div>
+    </div>
+    <p class="muted">Faustregel: Je vertraulicher oder verbindlicher, desto eher persönlich bzw. schriftlich.</p>
+  </section>
+
+  <!-- 14. Teamarbeit Überblick -->
+  <section class="slide">
+    <h2>Teamarbeit — Gruppe oder Team?</h2>
+    <p>Ein <strong>Team</strong> ist mehr als eine Gruppe: gemeinsames <strong>Ziel</strong>, ergänzende <strong>Rollen</strong>, gemeinsame <strong>Verantwortung</strong>.</p>
+    <table>
+      <thead><tr><th>Vorteile</th><th>Nachteile</th></tr></thead>
+      <tbody>
+        <tr><td>Mehr Ideen &amp; Kreativität</td><td>Höherer Abstimmungsaufwand</td></tr>
+        <tr><td>Stärken ergänzen sich</td><td>Konfliktpotenzial</td></tr>
+        <tr><td>Höhere Akzeptanz, Vertretung</td><td>Soziales Faulenzen, Gruppendruck</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 15. Soziales Faulenzen -->
+  <section class="slide">
+    <h2>Soziales Faulenzen vermeiden</h2>
+    <p><strong>Soziales Faulenzen</strong> (Trittbrettfahren): Einzelne reduzieren ihre Leistung, weil sie sich auf das Team verlassen.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Gegenmaßnahmen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Klare Rollen- und Aufgabenverteilung</li>
+          <li>Messbare Einzelbeiträge</li>
+          <li>Überschaubare Teamgröße</li>
+          <li>Transparente Ziele und Feedback</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Teamrollen</div>
+        <p style="font-size: 1rem;">Erfolgreiche Teams sind gemischt: Ideengeber, Umsetzer, Koordinatoren, kritische Prüfer. Vielfalt ist ein Vorteil — wenn die Rollen geklärt sind.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. Teamphasen Tuckman - Diagramm -->
+  <section class="slide">
+    <h2>Teamphasen nach Tuckman</h2>
+    <div class="figure" id="fig-tuckman"></div>
+    <p class="caption">Jedes Team durchläuft fünf Phasen — die <em>Storming</em>-Phase ist kein Scheitern, sondern notwendig.</p>
+  </section>
+
+  <!-- 17. Teamphasen Detail -->
+  <section class="slide">
+    <h2>Die fünf Phasen im Detail</h2>
+    <ol class="numlist">
+      <li><strong>Forming</strong> (Orientierung) — Team findet sich, höflich-unsicher, Rollen unklar.</li>
+      <li><strong>Storming</strong> (Konflikt) — Streit über Rollen, Aufgaben, Einfluss; Reibung ist normal.</li>
+      <li><strong>Norming</strong> (Organisation) — gemeinsame Regeln, Zusammenhalt wächst.</li>
+      <li><strong>Performing</strong> (Leistung) — effizient und selbstorganisiert am Ziel.</li>
+      <li><strong>Adjourning</strong> (Auflösung) — Abschluss, Auswertung, Auflösung.</li>
+    </ol>
+  </section>
+
+  <!-- 18. Konflikte & Feedback -->
+  <section class="slide">
+    <h2>Konflikte &amp; Feedbackregeln</h2>
+    <p>Konflikte gehören zu jedem Team — entscheidend ist, sie <strong>früh und sachlich</strong> anzusprechen.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Gutes Feedback</span>
+      <strong>Zeitnah · konkret · Ich-Botschaften · beschreibend statt bewertend · wertschätzend</strong> mit Veränderungsvorschlag.
+    </div>
+    <ul>
+      <li>„Ich habe den Eindruck…” statt „Du machst immer…”</li>
+      <li>Auf beobachtbares <strong>Verhalten</strong> beziehen, nicht die Person abwerten</li>
+      <li>Empfänger lässt ausreden und rechtfertigt sich nicht sofort</li>
+    </ul>
+  </section>
+
+  <!-- 19. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 9</h2>
+    <ol class="numlist">
+      <li><strong>Sender-Empfänger-Modell</strong>: Encodieren/Decodieren — Rauschen erzeugt Missverständnisse.</li>
+      <li>Jede Nachricht hat <strong>vier Seiten</strong>: Sache, Selbstoffenbarung, Beziehung, Appell.</li>
+      <li><strong>Verbal, nonverbal, paraverbal</strong> wirken zusammen — der Ton zählt.</li>
+      <li><strong>Kommunikationsformen</strong> situationsgerecht wählen; E-Mail: Pflichtangaben (EHUG) + Knigge.</li>
+      <li><strong>Teamarbeit</strong>: Vorteile &amp; Risiken; Phasen <strong>Forming → Adjourning</strong>.</li>
+      <li><strong>Feedbackregeln</strong> machen Konflikte lösbar.</li>
+    </ol>
+  </section>
+
+  <!-- 20. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kommunikationsmodelle benennen</li>
+          <li>Kommunikationsformen vergleichen</li>
+          <li>Teamphasen in Reihenfolge bringen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Nachricht auf vier Seiten analysieren</li>
+          <li>Form situativ empfehlen</li>
+          <li>Feedback formulieren, Konflikt einordnen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>analysieren</strong>" verlangt Zergliederung, „<strong>beurteilen</strong>" verlangt eine eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 21. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 10 (10.07.)</h2>
+    <p class="subtitle">Postbearbeitung — der Posteingang</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Der Weg der Eingangspost</strong> — von der Annahme bis zur Verteilung</li>
+      <li><strong>Öffnen, sortieren, stempeln</strong> (Eingangsstempel)</li>
+      <li><strong>Erfassen und Weiterleiten</strong> an die richtige Stelle</li>
+      <li><strong>Vertrauliche und persönliche Post</strong> richtig behandeln</li>
+      <li><strong>Digitale Posteingangsbearbeitung</strong> und Posteingangsbuch</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Kommunikationsformen-und-Teamarbeit.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Kommunikationsformen-und-Teamarbeit.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 21</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Vier Seiten einer Nachricht
+  const c1 = document.getElementById('fig-vierseiten');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 300');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    // zentrale Nachricht
+    box(rc, svg, 360, 120, 180, 60, '#FEF3C7', '#F59E0B');
+    text(svg, 450, 155, 'NACHRICHT', { bold: true, size: 18, color: '#B45309' });
+    const seiten = [
+      { t: 'Sachebene', s: 'Worüber informiere ich?', x: 60,  y: 30,  c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Appell',    s: 'Wozu will ich dich bringen?', x: 600, y: 30,  c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Selbstoffenbarung', s: 'Was sage ich über mich?', x: 60,  y: 215, c: '#FFE4E6', st: '#F97316' },
+      { t: 'Beziehung', s: 'Wie stehen wir zueinander?', x: 600, y: 215, c: '#FFE4E6', st: '#F97316' }
+    ];
+    seiten.forEach(p => {
+      box(rc, svg, p.x, p.y, 240, 60, p.c, p.st);
+      text(svg, p.x + 120, p.y + 28, p.t, { bold: true, size: 16, color: p.st });
+      text(svg, p.x + 120, p.y + 48, p.s, { size: 12, color: '#475569' });
+    });
+    arrow(rc, svg, 360, 130, 300, 70,  '#0F766E');
+    arrow(rc, svg, 540, 130, 600, 70,  '#0F766E');
+    arrow(rc, svg, 360, 170, 300, 230, '#F97316');
+    arrow(rc, svg, 540, 170, 600, 230, '#F97316');
+    text(svg, 450, 295, 'Eine Aussage — vier Ohren beim Empfänger', { size: 13, color: '#475569' });
+  });
+
+  // FIG: Teamphasen nach Tuckman
+  const c2 = document.getElementById('fig-tuckman');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 240');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '240');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    const phasen = [
+      { t: 'Forming',    s: 'Orientierung', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Storming',   s: 'Konflikt',     c: '#FFE4E6', st: '#F97316' },
+      { t: 'Norming',    s: 'Organisation', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Performing', s: 'Leistung',     c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Adjourning', s: 'Auflösung',    c: '#ECFEFF', st: '#0F766E' }
+    ];
+    let x = 20;
+    phasen.forEach((p, i) => {
+      box(rc, svg, x, 80, 150, 80, p.c, p.st);
+      text(svg, x + 75, 115, p.t, { bold: true, size: 16, color: p.st });
+      text(svg, x + 75, 140, p.s, { size: 13, color: '#475569' });
+      if (i < phasen.length - 1) arrow(rc, svg, x + 152, 120, x + 168, 120, '#475569');
+      x += 172;
+    });
+    text(svg, 450, 40, 'Vom Kennenlernen zur Hochleistung', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 205, 'Storming ist kein Scheitern, sondern ein notwendiger Schritt', { size: 13, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

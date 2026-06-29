@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 3 — Arbeitsumgebung & Umweltfaktoren</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 3 · 01.07.2026</span>
+    <h1>Arbeitsumgebung &amp; Umweltfaktoren</h1>
+    <p class="subtitle">Klima, Licht, Lärm, Farbe &amp; Co. — wie die Umgebung die Leistung prägt</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 1.3 (S. 71–76)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>die <strong>Faktoren der Arbeitsumgebung</strong> benennen und ihren Einfluss auf Gesundheit und Leistung erläutern</li>
+      <li>die Bestandteile des <strong>Raumklimas</strong> und die Vorgaben (ArbStättV, ASR A3.5) erklären</li>
+      <li>die Anforderungen an eine ergonomische <strong>Beleuchtung</strong> (Lux, Lichtfarbe, Blendung) beschreiben</li>
+      <li><strong>Lärm</strong> einordnen (dB(A), Grenzwerte) und Maßnahmen zur Lärmminderung auswählen</li>
+      <li>die Wirkung von <strong>Farben</strong> und die <strong>Sicherheitskennzeichnung</strong> erläutern</li>
+      <li>den Nutzen von <strong>Pflanzen</strong> beurteilen und Maßnahmen gegen Strahlung und Tonerstaub begründen</li>
+    </ul>
+  </section>
+
+  <!-- 3. Überblick Umweltfaktoren - Diagramm -->
+  <section class="slide">
+    <h2>Die Faktoren der Arbeitsumgebung</h2>
+    <div class="figure" id="fig-faktoren"></div>
+    <p class="caption">Alle sieben Faktoren wirken auf <em>Gesundheit, Wohlbefinden und Leistungsfähigkeit</em>.</p>
+  </section>
+
+  <!-- 4. Raumklima -->
+  <section class="slide">
+    <h2>Raumklima — die drei Bestandteile</h2>
+    <p>Das Klima setzt sich aus <strong>Lufttemperatur</strong>, <strong>relativer Luftfeuchtigkeit</strong> und <strong>Luftgeschwindigkeit</strong> zusammen. Die ArbStättV verlangt ein gesundheitlich zuträgliches Raumklima, die <strong>ASR A3.5</strong> regelt die Raumtemperatur.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Lufttemperatur</div>Mind. 20 °C; soll 26 °C nicht überschreiten; ab 30 °C Pflichtmaßnahmen.</div>
+      <div class="card teal"><div class="card-title">Luftfeuchtigkeit</div>Optimal 40–60 % (Hygrometer). Zu hoch → Schimmel, zu niedrig → trockene Augen.</div>
+      <div class="card amber"><div class="card-title">Luftbewegung</div>0,1–0,15 m/s angenehm. Zugluft → Nacken-/Rückenschmerzen.</div>
+    </div>
+  </section>
+
+  <!-- 5. Temperatur-Skala Diagramm -->
+  <section class="slide">
+    <h2>Raumtemperatur: soll — soll — muss</h2>
+    <div class="figure" id="fig-temp"></div>
+    <p class="caption">ASR A3.5: ab 26 °C <em>soll</em>, ab 30 °C <em>muss</em> gehandelt werden (z. B. Jalousien, Gleitzeit, Getränke).</p>
+  </section>
+
+  <!-- 6. Klimatisierung & Lüften -->
+  <section class="slide">
+    <h2>Klimatisierung &amp; Lüften</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Von <strong>Klimatisierung</strong> darf nur gesprochen werden, wenn <strong>alle drei Faktoren automatisch geregelt</strong> werden.
+    </div>
+    <div class="cards">
+      <div class="card rose">
+        <div class="card-title">Klimaanlage — Nachteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Verbraucht sehr viel Strom</li>
+          <li>Bei schlechter Wartung: Krankheitserreger</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <div class="card-title">Ohne Klimaanlage</div>
+        <ul style="margin-left: 1rem;">
+          <li>Stündlich <strong>stoßlüften</strong></li>
+          <li>Pausenzeit zum Lüften nutzen</li>
+          <li>Heizen, Kühlen, Entlüften</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Beleuchtung -->
+  <section class="slide">
+    <h2>Licht &amp; Arbeitsplatzbeleuchtung</h2>
+    <p>Reicht das Tageslicht nicht, ist künstliche Beleuchtung nötig. Sie beeinflusst Wohlbefinden und Arbeitsleistung — ergonomisch durchdacht vermeidet sie Kopfschmerzen und Augenbeschwerden.</p>
+    <ul>
+      <li>Anpassbar an <strong>Sehvermögen</strong> und Tätigkeit</li>
+      <li><strong>Gleichmäßig hell</strong> — damit sich die Augen nicht ständig neu einstellen</li>
+      <li><strong>Lichtfarbe</strong>: neutral weiß / tageslichtweiß für Bildschirmarbeit</li>
+      <li>Blendung vermeiden, Bildschirm <strong>parallel zum Fenster</strong></li>
+      <li>Beleuchtung muss <strong>flimmerfrei</strong> sein</li>
+    </ul>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kernwert</span>
+      Mindestens <strong>500 Lux</strong> für Bildschirmarbeitsplätze, Arbeits- und Besprechungsräume — ergänzt durch Schreibtischleuchten.
+    </div>
+  </section>
+
+  <!-- 8. Blendung -->
+  <section class="slide">
+    <h2>Blendung &amp; Bildschirm-Reflexe</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Reflexblendung</div>
+        Spiegelungen z. B. vom Bildschirm. Lösung: Bildschirm <strong>parallel zum Fenster</strong>, Sonnenschutz/Verschattung.
+      </div>
+      <div class="card amber">
+        <div class="card-title">Direktblendung</div>
+        Lichtquellen (Lampen, Fenster) im Blickfeld. Lösung: blendfreie Leuchten, Jalousien.
+      </div>
+    </div>
+    <p class="muted">Beide erschweren das Sehen und lassen die Augen schneller ermüden.</p>
+  </section>
+
+  <!-- 9. Lärm Grundlagen -->
+  <section class="slide">
+    <h2>Lärm — wenn Geräusche stören</h2>
+    <p>Gespräche, Geräusche und Töne werden als <strong>Lärm</strong> empfunden, wenn sie stören — die Bewertung ist sehr individuell. Lärm wird in <strong>Dezibel — dB(A)</strong> gemessen und gibt den <strong>Schalldruckpegel</strong> an.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">⚠️ Grenzwert</span>
+      Ab <strong>85 dB(A)</strong> muss den Beschäftigten persönlicher <strong>Gehörschutz</strong> bereitgestellt und auch getragen werden (ArbStättV, Anhang 3.7).
+    </div>
+    <p class="muted">Dauerlärm senkt Konzentration und Leistung und erhöht den Stress.</p>
+  </section>
+
+  <!-- 10. Lärm Bewertung -->
+  <section class="slide">
+    <h2>Schalldruckpegel am Bildschirmarbeitsplatz</h2>
+    <table>
+      <thead><tr><th>Schalldruckpegel</th><th>BAuA-Bewertung</th></tr></thead>
+      <tbody>
+        <tr><td>bis 30 dB(A)</td><td>optimal</td></tr>
+        <tr><td>bis 40 dB(A)</td><td>sehr gut</td></tr>
+        <tr><td>bis 45 dB(A)</td><td>gut</td></tr>
+      </tbody>
+    </table>
+    <p class="muted" style="margin-top: 1rem;">Quelle: BAuA, „Arbeitswissenschaftliche Erkenntnisse Nr. 124: Lärmminderung in Mehrpersonenbüros”.</p>
+  </section>
+
+  <!-- 11. Lärmminderung -->
+  <section class="slide">
+    <h2>Maßnahmen zur Lärmminderung</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Klassisch (Lehrbuch)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Geräuscharme Geräte auswählen</li>
+          <li>Laute Geräte in separaten Räumen</li>
+          <li>Schallschutzhauben für Geräte</li>
+          <li>Teppiche, Vorhänge, Akustikdecken</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Modern im Großraum</div>
+        <ul style="margin-left: 1rem;">
+          <li>Akustikkabinen (Telefon-/Fokuszellen)</li>
+          <li>Schallabsorber-Stellwände</li>
+          <li>Akustikdecken &amp; Rückzugszonen</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. Farbgestaltung -->
+  <section class="slide">
+    <h2>Farbgestaltung — Wirkung von Farben</h2>
+    <div class="cards">
+      <div class="card rose">
+        <div class="card-title">Warme Farben (Rot, Orange, Gelb)</div>
+        Aktivierend, stimulierend, wärmend. Lassen den Raum <strong>kleiner</strong> wirken.
+      </div>
+      <div class="card teal">
+        <div class="card-title">Kalte Farben (Blau, Grün, Violett)</div>
+        Beruhigend, distanzierend. Lassen den Raum <strong>größer</strong> wirken.
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Wichtig</span>
+      Je kräftiger die Farbe, desto stärker die Wirkung. Farbe und <strong>Beleuchtung</strong> immer gemeinsam betrachten — sie beeinflussen sich gegenseitig.
+    </div>
+  </section>
+
+  <!-- 13. Sicherheitszeichen -->
+  <section class="slide">
+    <h2>Farben der Sicherheitszeichen</h2>
+    <table>
+      <thead><tr><th>Farbe</th><th>Art</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Rot</strong></td><td>Verbotszeichen / Brandschutz</td><td>„Rauchen verboten”; Feuerlöscher</td></tr>
+        <tr><td><strong>Gelb</strong></td><td>Warnzeichen</td><td>Warnung vor explosiven Stoffen</td></tr>
+        <tr><td><strong>Blau</strong></td><td>Gebotszeichen</td><td>„Augenschutz benutzen”</td></tr>
+        <tr><td><strong>Grün</strong></td><td>Rettungszeichen</td><td>Rettungsweg, Erste Hilfe</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>Rot verbietet · Gelb warnt · Blau gebietet · Grün rettet.</strong>
+    </div>
+  </section>
+
+  <!-- 14. Pflanzen / biophiles Design -->
+  <section class="slide">
+    <h2>Pflanzen &amp; biophiles Design</h2>
+    <p>Pflanzen sorgen für Entspannung und Wohlbefinden — und leisten ganz praktisch mehr:</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Was Pflanzen leisten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Reinigen die Luft (Formaldehyd, Benzol, CO₂)</li>
+          <li>Produzieren Sauerstoff, erhöhen Luftfeuchte</li>
+          <li>Schlucken Schall und Staub → Lärmpegel sinkt</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Biophiles Design</div>
+        <p style="font-size: 1rem;">Begrünte Wände (Moos-/Pflanzenwände) wirken zugleich als Schallabsorber, verbessern das Klima und steigern das Wohlbefinden.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. Strahlung & Gefahrstoffe -->
+  <section class="slide">
+    <h2>Strahlung &amp; Gefahrstoff Tonerstaub</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Elektromagnetische Strahlung</div>
+        <ul style="margin-left: 1rem;">
+          <li>Strahlungsarme Geräte (Flachbildschirme)</li>
+          <li>Feste statt tragbare Telefone</li>
+          <li>Ungenutzte Geräte abschalten</li>
+          <li>W-LAN-Access-Points ≥ 3 m entfernt</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Tonerstaub</div>
+        <ul style="margin-left: 1rem;">
+          <li>DGUV-Testzeichen &amp; schadstoffarme Toner</li>
+          <li>Geräte in separaten, belüfteten Räumen</li>
+          <li>Toner feucht aufwischen, Hände waschen</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 3</h2>
+    <ol class="numlist">
+      <li>Zur <strong>Arbeitsumgebung</strong> gehören Klima, Licht, Lärm, Farbe, Pflanzen, Strahlung, Gefahrstoffe.</li>
+      <li><strong>Raumklima</strong>: 20 °C min., ab 26 °C soll, ab 30 °C muss; Luftfeuchte 40–60 %; stündlich stoßlüften.</li>
+      <li><strong>Beleuchtung</strong>: ≥ 500 Lux, neutral-/tageslichtweiß, blend- &amp; flimmerfrei, Bildschirm parallel zum Fenster.</li>
+      <li><strong>Lärm</strong>: dB(A); ab 85 dB(A) Gehörschutz; optimal bis 30, sehr gut bis 40, gut bis 45 dB(A).</li>
+      <li><strong>Farbe</strong>: warm aktiviert, kalt beruhigt; Rot verbietet, Gelb warnt, Blau gebietet, Grün rettet.</li>
+      <li><strong>Pflanzen</strong> verbessern Luft &amp; Akustik; Strahlung und Tonerstaub gezielt minimieren.</li>
+    </ol>
+  </section>
+
+  <!-- 17. Praxisbeispiel -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Großraumbüro optimieren</h2>
+    <p>Die <em>Vertrieb Nord GmbH</em> (40 Plätze) klagt über Hitze, Blendung und Lärm.</p>
+    <ol class="numlist">
+      <li><strong>Klima</strong>: Jalousien gegen Hitze, stündlich stoßlüften, Luftfeuchte auf 40–60 % bringen.</li>
+      <li><strong>Licht</strong>: ≥ 500 Lux, blendfreie Leuchten, Bildschirme parallel zum Fenster.</li>
+      <li><strong>Lärm</strong>: laute Drucker separat, Akustikdecken, Schallabsorber-Stellwände.</li>
+      <li><strong>Rückzug</strong>: Akustikkabinen für Telefonate und konzentriertes Arbeiten.</li>
+      <li><strong>Begrünung</strong>: Pflanzenwände als Schallschlucker und Klimaverbesserer.</li>
+      <li><strong>Gefahrstoff</strong>: emissionsarme Geräte mit DGUV-Testzeichen.</li>
+    </ol>
+  </section>
+
+  <!-- 18. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Klimawerte (20/26/30 °C, 40–60 %)</li>
+          <li>Beleuchtung (500 Lux, flimmerfrei)</li>
+          <li>Lärmgrenzwerte (85/45/40/30 dB(A))</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Maßnahmen situativ ableiten</li>
+          <li>Sicherheitszeichen zuordnen</li>
+          <li>Umweltfaktoren beurteilen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 19. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Welcher Umweltfaktor stört Sie an Ihrem Arbeitsplatz am meisten — und warum?</li>
+      <li>Wie könnten Sie das Raumklima in Ihrem Büro mit einfachen Mitteln verbessern?</li>
+      <li>Würden Akustikkabinen im Großraum Ihre Arbeit erleichtern?</li>
+      <li>Welche Farben würden Sie für ein Büro wählen — und welche Wirkung erhoffen Sie sich?</li>
+    </ol>
+  </section>
+
+  <!-- 20. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 4 (02.07.)</h2>
+    <p class="subtitle">Arbeitsschutz &amp; Gesundheit</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Arbeitsschutz</strong> — gesetzliche Grundlagen und Akteure</li>
+      <li><strong>Gefährdungsbeurteilung</strong> — Risiken erkennen und bewerten</li>
+      <li><strong>Ergonomie &amp; Gesundheit</strong> — Belastungen am Bildschirm</li>
+      <li><strong>Betriebliches Gesundheitsmanagement</strong> — Prävention im Büro</li>
+      <li><strong>Erste Hilfe &amp; Notfälle</strong> — Organisation im Betrieb</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Arbeitsumgebung-und-Umweltfaktoren.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Arbeitsumgebung-und-Umweltfaktoren.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 20</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Faktoren der Arbeitsumgebung
+  const c1 = document.getElementById('fig-faktoren');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 300');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const faktoren = ['Klima', 'Beleuchtung', 'Lärm', 'Farbe', 'Pflanzen', 'Strahlung', 'Gefahrstoffe'];
+    const colors = ['#ECFEFF', '#ECFEFF', '#FEF3C7', '#FEF3C7', '#ECFEFF', '#FFE4E6', '#FFE4E6'];
+    const stroke = ['#0F766E', '#0F766E', '#F59E0B', '#F59E0B', '#0F766E', '#F97316', '#F97316'];
+    // zentrale Box
+    box(rc, svg, 350, 130, 200, 60, '#FEF3C7', '#F59E0B');
+    text(svg, 450, 155, 'Gesundheit ·', { bold: true, size: 15, color: '#F97316' });
+    text(svg, 450, 175, 'Leistung · Wohlbefinden', { bold: true, size: 13, color: '#F97316' });
+    // Faktor-Boxen ringsum
+    const positions = [
+      [60, 40], [340, 30], [630, 40],
+      [40, 220], [630, 220],
+      [200, 250], [500, 250]
+    ];
+    faktoren.forEach((f, i) => {
+      const [px, py] = positions[i];
+      box(rc, svg, px, py, 175, 50, colors[i], stroke[i]);
+      text(svg, px + 87, py + 31, f, { bold: true, size: 16, color: stroke[i] });
+    });
+    text(svg, 450, 18, 'Sieben Faktoren der Arbeitsumgebung', { size: 16, bold: true, color: '#0F766E' });
+  });
+
+  // FIG: Temperatur-Skala
+  const c2 = document.getElementById('fig-temp');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 230');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '230');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    const stufen = [
+      { t: '20 °C', s: 'Mindest-\ntemperatur', c: '#ECFEFF', st: '#0F766E' },
+      { t: '26 °C', s: 'soll handeln\n(Jalousien …)', c: '#FEF3C7', st: '#F59E0B' },
+      { t: '30 °C', s: 'muss\nhandeln', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let x = 80;
+    stufen.forEach((f, i) => {
+      box(rc, svg, x, 70, 200, 90, f.c, f.st);
+      text(svg, x + 100, 110, f.t, { bold: true, size: 24, color: f.st });
+      const lines = f.s.split('\n');
+      lines.forEach((ln, k) => text(svg, x + 100, 130 + k * 18, ln, { size: 13, color: '#475569' }));
+      if (i < stufen.length - 1) arrow(rc, svg, x + 200, 115, x + 280, 115, '#475569');
+      x += 280;
+    });
+    text(svg, 450, 35, 'Raumtemperatur nach ASR A3.5', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 200, 'kühler ⟶ wärmer: aus „soll” wird „muss”', { size: 13, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

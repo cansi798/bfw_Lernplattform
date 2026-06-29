@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>BFW Lernplattform — Büroprozesse gestalten und Arbeitsvorgänge organisieren</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 50%, var(--bfw-bg-amber) 100%);
+  min-height: 100vh;
+  color: var(--bfw-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Login-Screen */
+.login-screen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.login-card {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(15,23,42,0.08), 0 4px 16px rgba(15,23,42,0.04);
+  border: 1px solid var(--bfw-border);
+  text-align: center;
+}
+.login-icon {
+  width: 80px; height: 80px;
+  background: linear-gradient(135deg, var(--bfw-primary) 0%, var(--bfw-primary-dark) 100%);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 8px 24px rgba(14,165,164,0.3);
+}
+.login-icon svg { width: 40px; height: 40px; color: white; }
+.login-card h1 {
+  font-size: 1.7rem;
+  color: var(--bfw-primary-dark);
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.01em;
+}
+.login-card .subtitle {
+  color: var(--bfw-ink-soft);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.login-form {
+  display: flex; flex-direction: column;
+  gap: 0.8rem;
+}
+.login-form input {
+  padding: 0.9rem 1.1rem;
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+.login-form input:focus {
+  outline: none;
+  border-color: var(--bfw-primary);
+  box-shadow: 0 0 0 3px rgba(14,165,164,0.15);
+}
+.login-form button {
+  padding: 0.9rem 1.5rem;
+  background: var(--bfw-primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: inherit;
+}
+.login-form button:hover {
+  background: var(--bfw-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(14,165,164,0.25);
+}
+.login-error {
+  color: var(--bfw-danger);
+  font-size: 0.9rem;
+  margin-top: 0.6rem;
+  min-height: 1.2em;
+  font-weight: 600;
+}
+.login-hint {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--bfw-border);
+  font-size: 0.85rem;
+  color: var(--bfw-ink-soft);
+}
+.login-back { margin-top: 1rem; }
+.login-back a { color: var(--bfw-primary-dark); text-decoration: none; font-size: 0.88rem; font-weight: 600; }
+.login-back a:hover { text-decoration: underline; }
+
+/* Dashboard */
+.dashboard { display: none; padding: 2rem 1rem 4rem; }
+.dashboard.active { display: block; }
+.container { max-width: 1180px; margin: 0 auto; }
+
+.dashboard-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 1.8rem;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.04);
+  border: 1px solid var(--bfw-border);
+}
+.dashboard-header .brand {
+  display: flex; align-items: center; gap: 1rem;
+}
+.dashboard-header .brand-icon {
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, var(--bfw-primary) 0%, var(--bfw-primary-dark) 100%);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+}
+.dashboard-header .brand-icon svg { width: 26px; height: 26px; color: white; }
+.dashboard-header h1 {
+  font-size: 1.4rem;
+  color: var(--bfw-primary-dark);
+  margin-bottom: 0.1rem;
+}
+.dashboard-header .meta { color: var(--bfw-ink-soft); font-size: 0.9rem; }
+.header-actions { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; }
+.btn-logout {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--bfw-ink-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+.btn-logout:hover { color: var(--bfw-danger); border-color: var(--bfw-danger); }
+a.btn-logout:hover { color: var(--bfw-primary-dark); border-color: var(--bfw-primary); }
+
+.intro {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--bfw-border);
+  box-shadow: 0 2px 8px rgba(15,23,42,0.03);
+}
+.intro h2 {
+  color: var(--bfw-primary-dark);
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+.intro p { color: var(--bfw-ink-soft); line-height: 1.55; font-size: 0.98rem; }
+
+.section-title {
+  font-size: 1.4rem;
+  color: var(--bfw-primary-dark);
+  margin: 2rem 0 1rem;
+  font-weight: 700;
+}
+
+.tage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.2rem;
+}
+.tag-card {
+  background: white;
+  border: 1px solid var(--bfw-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.tag-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(15,23,42,0.08);
+  border-color: var(--bfw-primary);
+}
+.tag-card.locked { opacity: 0.65; }
+.tag-card.locked:hover { transform: none; box-shadow: none; border-color: var(--bfw-border); }
+.tag-card .tag-stripe {
+  position: absolute; top: 0; left: 0; right: 0; height: 4px;
+  background: linear-gradient(90deg, var(--bfw-primary) 0%, var(--bfw-accent) 100%);
+}
+.tag-card.locked .tag-stripe { background: var(--bfw-border); }
+.tag-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal);
+  color: var(--bfw-primary-dark);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+.tag-card.locked .tag-num { background: #F1F5F9; color: var(--bfw-ink-soft); }
+.tag-card h3 {
+  color: var(--bfw-ink);
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+.tag-date { color: var(--bfw-ink-soft); font-size: 0.85rem; margin-bottom: 1rem; }
+.tag-links {
+  display: flex; flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+.tag-link {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: var(--bfw-bg-soft);
+  border: 1px solid var(--bfw-border);
+  border-radius: 8px;
+  color: var(--bfw-ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: all 0.15s;
+}
+.tag-link:hover {
+  background: var(--bfw-bg-teal);
+  border-color: var(--bfw-primary);
+  color: var(--bfw-primary-dark);
+  transform: translateX(2px);
+}
+.tag-link .link-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+.tag-link.html .link-icon { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); }
+.tag-link.pdf .link-icon { background: var(--bfw-bg-rose); color: var(--bfw-warn); }
+.tag-link.md .link-icon { background: var(--bfw-bg-amber); color: var(--bfw-accent); }
+.tag-link.video .link-icon { background: #EDE9FE; color: #6D28D9; }
+.tag-link.audio .link-icon { background: #DCFCE7; color: #15803D; }
+.tag-link-label { flex: 1; font-weight: 500; }
+.tag-link-arrow { color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Deaktivierte "folgt"-Markierung für noch fehlende Medien */
+.tag-chip-soon {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  background: #F1F5F9;
+  border: 1px dashed var(--bfw-border);
+  border-radius: 8px;
+  color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+.tag-chip-soon .link-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #E2E8F0; color: #94A3B8;
+}
+.tag-chip-soon .tag-link-label { flex: 1; font-weight: 500; }
+.tag-chip-soon .soon-badge {
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: #94A3B8;
+}
+
+.coming-soon {
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+  font-style: italic;
+  background: var(--bfw-bg-soft);
+  border-radius: 8px;
+  border: 1px dashed var(--bfw-border);
+}
+
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 1.5rem;
+  color: var(--bfw-ink-soft);
+  font-size: 0.85rem;
+}
+footer a { color: var(--bfw-primary-dark); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+/* ============================================== */
+/* MORGENQUIZ                                     */
+/* ============================================== */
+.morgen-card {
+  background: linear-gradient(135deg, #FEF3C7 0%, #FEF9E7 60%, #FFE4E6 100%);
+  border: 2px solid var(--bfw-accent);
+  border-radius: 16px;
+  padding: 1.5rem 1.8rem;
+  margin-bottom: 1.4rem;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1.2rem;
+  box-shadow: 0 4px 20px rgba(245,158,11,0.18);
+  position: relative; overflow: hidden;
+}
+.morgen-card::before {
+  content: ""; position: absolute; top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  background: radial-gradient(circle, rgba(245,158,11,0.20) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.morgen-card .mq-info { display: flex; align-items: center; gap: 1.1rem; position: relative; }
+.morgen-card .sun-icon {
+  width: 56px; height: 56px;
+  background: white; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 12px rgba(245,158,11,0.25);
+  flex-shrink: 0;
+}
+.morgen-card h3 { color: #92400E; margin-bottom: 0.25rem; font-size: 1.2rem; }
+.morgen-card .mq-desc { color: var(--bfw-ink-soft); font-size: 0.92rem; line-height: 1.5; }
+.btn-start-quiz {
+  padding: 0.8rem 1.6rem;
+  background: var(--bfw-accent); color: white;
+  border: none; border-radius: 10px;
+  font-size: 1rem; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+  font-family: inherit;
+  position: relative;
+  white-space: nowrap;
+}
+.btn-start-quiz:hover {
+  background: #D97706; transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(245,158,11,0.35);
+}
+
+/* Variante 2 — Woche 2 (Indigo/Violett) */
+.morgen-card-2 {
+  background: linear-gradient(135deg, #DBEAFE 0%, #E0E7FF 50%, #FBCFE8 100%);
+  border-color: #6366F1;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.18);
+}
+.morgen-card-2::before {
+  background: radial-gradient(circle, rgba(99,102,241,0.22) 0%, transparent 70%);
+}
+.morgen-card-2 h3 { color: #3730A3; }
+.morgen-card-2 .sun-icon { box-shadow: 0 4px 12px rgba(99,102,241,0.30); }
+.morgen-card-2 .btn-start-quiz { background: #6366F1; }
+.morgen-card-2 .btn-start-quiz:hover { background: #4F46E5; box-shadow: 0 8px 20px rgba(99,102,241,0.40); }
+
+/* Variante 3 — Woche 3 (Petrol/Grün) */
+.morgen-card-3 {
+  background: linear-gradient(135deg, #ECFEFF 0%, #D1FAE5 50%, #CCFBF1 100%);
+  border-color: var(--bfw-primary);
+  box-shadow: 0 4px 20px rgba(14,165,164,0.18);
+}
+.morgen-card-3::before {
+  background: radial-gradient(circle, rgba(14,165,164,0.22) 0%, transparent 70%);
+}
+.morgen-card-3 h3 { color: var(--bfw-primary-dark); }
+.morgen-card-3 .sun-icon { box-shadow: 0 4px 12px rgba(14,165,164,0.30); }
+.morgen-card-3 .btn-start-quiz { background: var(--bfw-primary); }
+.morgen-card-3 .btn-start-quiz:hover { background: var(--bfw-primary-dark); box-shadow: 0 8px 20px rgba(14,165,164,0.40); }
+
+/* Overlay */
+.quiz-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,0.65);
+  z-index: 1000;
+  padding: 1.5rem 0.8rem;
+  overflow-y: auto;
+}
+.quiz-overlay.active { display: block; }
+.quiz-modal {
+  max-width: 880px; margin: 0 auto;
+  background: white; border-radius: 18px;
+  padding: 2rem 2.2rem;
+  box-shadow: 0 24px 70px rgba(15,23,42,0.35);
+}
+.quiz-modal h2 { color: var(--bfw-primary-dark); font-size: 1.6rem; margin-bottom: 0.8rem; }
+.quiz-modal .mq-sub { color: var(--bfw-ink-soft); margin-bottom: 1.2rem; font-size: 0.98rem; }
+.quiz-witz {
+  background: var(--bfw-bg-amber);
+  border: 1.5px dashed var(--bfw-accent);
+  border-radius: 12px;
+  padding: 1.1rem 1.3rem;
+  margin: 1.2rem 0;
+  font-style: italic;
+  color: #78350F;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+.quiz-controls {
+  display: flex; gap: 0.5rem;
+  justify-content: flex-end;
+  margin: 1.2rem 0;
+  flex-wrap: wrap;
+}
+.btn-quiz {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: all 0.15s;
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-quiz.primary { background: var(--bfw-primary); color: white; border-color: var(--bfw-primary); }
+.btn-quiz.primary:hover { background: var(--bfw-primary-dark); border-color: var(--bfw-primary-dark); }
+.btn-quiz.ghost { background: transparent; color: var(--bfw-primary-dark); }
+.btn-quiz.ghost:hover { background: var(--bfw-bg-teal); }
+.btn-quiz.danger { background: transparent; color: var(--bfw-danger); border-color: var(--bfw-danger); }
+.btn-quiz.danger:hover { background: #FEE2E2; }
+
+.quiz-progress {
+  background: var(--bfw-bg-teal);
+  height: 9px; border-radius: 999px;
+  margin: 1rem 0 1.5rem; overflow: hidden;
+}
+.quiz-progress > div {
+  height: 100%; background: linear-gradient(90deg, var(--bfw-primary) 0%, var(--bfw-accent) 100%);
+  width: 0; transition: width 0.3s;
+}
+.quiz-score {
+  display: flex; gap: 1.5rem;
+  font-weight: 600; color: var(--bfw-ink-soft);
+  font-size: 0.95rem; margin-bottom: 0.5rem;
+}
+.quiz-score strong { color: var(--bfw-primary-dark); font-size: 1.05rem; }
+
+.mq-block-header {
+  background: linear-gradient(90deg, var(--bfw-bg-teal) 0%, transparent 100%);
+  color: var(--bfw-primary-dark);
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  font-weight: 700;
+  margin: 1.5rem 0 0.8rem;
+  border-left: 4px solid var(--bfw-primary);
+  font-size: 1.02rem;
+}
+
+.mq-question {
+  background: var(--bfw-bg-soft);
+  border: 1px solid var(--bfw-border);
+  border-radius: 12px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 0.9rem;
+}
+.mq-question.locked { background: white; }
+.mq-q-num {
+  display: inline-block;
+  background: var(--bfw-bg-amber); color: #92400E;
+  font-weight: 700; font-size: 0.78rem;
+  padding: 0.22rem 0.6rem; border-radius: 999px;
+  margin-right: 0.5rem;
+}
+.mq-q-topic {
+  color: var(--bfw-ink-soft);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mq-q-text {
+  font-size: 1.02rem; line-height: 1.55;
+  margin: 0.6rem 0 0.9rem; font-weight: 500;
+}
+.mq-paragraph {
+  background: white;
+  border-left: 3px solid var(--bfw-primary);
+  padding: 0.8rem 1rem;
+  margin: 0.7rem 0 1rem;
+  font-size: 0.93rem;
+  color: var(--bfw-ink);
+  line-height: 1.6;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 1px 3px rgba(15,23,42,0.04);
+}
+.mq-paragraph .mq-paragraph-label {
+  display: block; font-size: 0.75rem; font-weight: 700;
+  color: var(--bfw-primary-dark);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  margin-bottom: 0.3rem;
+}
+.mq-options { display: flex; flex-direction: column; gap: 0.45rem; }
+.mq-option {
+  display: flex; align-items: flex-start; gap: 0.7rem;
+  padding: 0.65rem 0.8rem;
+  background: white;
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 9px;
+  cursor: pointer; transition: all 0.15s;
+  font-size: 0.96rem; line-height: 1.5;
+}
+.mq-option:hover { border-color: var(--bfw-primary); background: var(--bfw-bg-teal); }
+.mq-option.locked { cursor: default; }
+.mq-option.locked:hover { background: white; border-color: var(--bfw-border); }
+.mq-option.locked.correct { background: #D1FAE5; border-color: var(--bfw-success); color: #064E3B; }
+.mq-option.locked.incorrect { background: #FEE2E2; border-color: var(--bfw-danger); color: #7F1D1D; }
+.mq-marker {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  background: var(--bfw-bg-soft);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; flex-shrink: 0;
+  font-size: 0.88rem;
+  border: 1.5px solid var(--bfw-border);
+}
+.mq-option:hover .mq-marker { background: var(--bfw-primary); color: white; border-color: var(--bfw-primary); }
+.mq-option.locked.correct .mq-marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.mq-option.locked.incorrect .mq-marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.mq-option.locked:hover .mq-marker { background: var(--bfw-bg-soft); color: var(--bfw-ink); border-color: var(--bfw-border); }
+.mq-option.locked.correct:hover .mq-marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.mq-option.locked.incorrect:hover .mq-marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.mq-exp {
+  margin-top: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--bfw-bg-teal);
+  border-radius: 7px;
+  font-size: 0.9rem;
+  color: var(--bfw-ink-soft);
+  line-height: 1.55;
+}
+.mq-exp strong { color: var(--bfw-primary-dark); }
+
+/* Result */
+.mq-result { text-align: center; padding: 1rem 0.5rem 0.5rem; }
+.mq-big-score {
+  font-size: 4rem; font-weight: 900;
+  line-height: 1; margin: 1rem 0 0.5rem;
+}
+.mq-grade { font-size: 1.25rem; margin-bottom: 0.5rem; font-weight: 600; }
+.mq-bestanden {
+  margin: 0.5rem 0 1.2rem;
+  font-weight: 700; font-size: 1rem;
+}
+.mq-skala {
+  width: 100%; max-width: 480px;
+  margin: 1.2rem auto;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.mq-skala th, .mq-skala td {
+  padding: 0.45rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--bfw-border);
+}
+.mq-skala th { color: var(--bfw-ink-soft); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.mq-skala tr.active { background: var(--bfw-bg-teal); font-weight: 700; }
+.mq-result-buttons {
+  margin-top: 1.5rem;
+  display: flex; gap: 0.7rem;
+  justify-content: center; flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN-SCREEN -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+      </svg>
+    </div>
+    <h1>BFW Lernplattform</h1>
+    <p class="subtitle">Büroprozesse gestalten und Arbeitsvorgänge organisieren<br>Modul M-067 · Kurs 29.06.–17.07.2026</p>
+    <form class="login-form" onsubmit="return tryLogin(event)">
+      <input type="password" id="codeInput" placeholder="Zugangscode" autocomplete="off" required autofocus>
+      <button type="submit">Zum Dashboard →</button>
+      <div class="login-error" id="loginError"></div>
+    </form>
+    <div class="login-hint">
+      Keinen Code? Bitte beim Dozenten anfragen.
+    </div>
+    <div class="login-back">
+      <a href="index.html">← Kursauswahl</a>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard" class="dashboard">
+  <div class="container">
+
+    <div class="dashboard-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+          </svg>
+        </div>
+        <div>
+          <h1>BFW Lernplattform</h1>
+          <div class="meta">Büroprozesse gestalten und Arbeitsvorgänge organisieren · Modul M-067 · Kurs 29.06.–17.07.2026</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" class="btn-logout">← Kursauswahl</a>
+        <button class="btn-logout" onclick="logout()">Abmelden</button>
+      </div>
+    </div>
+
+    <div class="intro">
+      <h2>Willkommen zur Lernplattform</h2>
+      <p>Hier finden Sie alle Materialien zum Modul <strong>M-067 — Büroprozesse gestalten und Arbeitsvorgänge organisieren</strong>: <strong>Präsentation</strong>, ausführliches <strong>Handout</strong> als PDF, ein <strong>interaktives Quiz</strong> und ein <strong>Aufgabenheft</strong> mit Musterlösungen — pro Kurstag. Klicken Sie auf einen der Links, um das Material zu öffnen oder herunterzuladen.</p>
+    </div>
+
+    <div class="morgen-card">
+      <div class="mq-info">
+        <div class="sun-icon">🌅</div>
+        <div>
+          <h3>Wiederholungs-Morgenquiz · Woche 1 (Tag 1–5)</h3>
+          <div class="mq-desc">24 Fragen zu Büroraumplanung, Ausstattung, Arbeitsumgebung, Arbeitsschutz &amp; Zeitmanagement<br>· Perfekt zum Aufwachen mit Büroorganisation ·</div>
+        </div>
+      </div>
+      <button class="btn-start-quiz" onclick="startMorgenQuiz('w1')">Quiz starten →</button>
+    </div>
+
+    <div class="morgen-card morgen-card-2">
+      <div class="mq-info">
+        <div class="sun-icon">🌇</div>
+        <div>
+          <h3>Wiederholungs-Morgenquiz · Woche 2 (Tag 6–10)</h3>
+          <div class="mq-desc">24 Fragen zu Terminmanagement, Besprechungen, Protokoll, Kommunikation &amp; Posteingang<br>· Aufwärmen für die zweite Kurswoche ·</div>
+        </div>
+      </div>
+      <button class="btn-start-quiz" onclick="startMorgenQuiz('w2')">Quiz starten →</button>
+    </div>
+
+    <div class="morgen-card morgen-card-3">
+      <div class="mq-info">
+        <div class="sun-icon">🌿</div>
+        <div>
+          <h3>Wiederholungs-Morgenquiz · Woche 3 (Tag 11–15)</h3>
+          <div class="mq-desc">24 Fragen zu Postausgang, Aufbewahrungsfristen, Ablage, DMS, Datenschutz &amp; Umweltschutz<br>· Endspurt der dritten Kurswoche ·</div>
+        </div>
+      </div>
+      <button class="btn-start-quiz" onclick="startMorgenQuiz('w3')">Quiz starten →</button>
+    </div>
+
+    <h2 class="section-title">Kurstage</h2>
+    <div class="tage-grid" id="tageGrid">
+      <!-- wird per JS befüllt -->
+    </div>
+
+    <footer>
+      © Can Siebert · 2026 · Material nur für unterrichtliche Zwecke im Rahmen des Kurses<br>
+      <a href="https://github.com/cansi798/bfw_Lernplattform">github.com/cansi798/bfw_Lernplattform</a>
+    </footer>
+
+  </div>
+</div>
+
+<!-- MORGENQUIZ-OVERLAY (geteilt für alle drei Wochen) -->
+<div id="morgenQuizOverlay" class="quiz-overlay">
+  <div class="quiz-modal" id="morgenQuizModal"><!-- per JS befüllt --></div>
+</div>
+
+<script>
+const ZUGANGSCODE = 'Büroprozesse';
+const STORAGE_KEY = 'bfw_lernplattform_m067_unlocked';
+
+const KURS_BASE = 'Kurs 29.06.2026 bis 17.07.2026';
+
+const TAGE = [
+  { num: 1,  datum: '29.06.2026', thema: 'Büroraumplanung & Büroformen',
+    folder: 'Tag-1_29.06._Bueroraumplanung-und-Bueroformen',
+    slug: 'Bueroraumplanung-und-Bueroformen', verfügbar: true },
+  { num: 2,  datum: '30.06.2026', thema: 'Büroausstattung & ergonomischer Bildschirmarbeitsplatz',
+    folder: 'Tag-2_30.06._Bueroausstattung-und-Bildschirmarbeitsplatz',
+    slug: 'Bueroausstattung-und-Bildschirmarbeitsplatz', verfügbar: true },
+  { num: 3,  datum: '01.07.2026', thema: 'Arbeitsumgebung & Umweltfaktoren',
+    folder: 'Tag-3_01.07._Arbeitsumgebung-und-Umweltfaktoren',
+    slug: 'Arbeitsumgebung-und-Umweltfaktoren', verfügbar: true },
+  { num: 4,  datum: '02.07.2026', thema: 'Arbeitsschutz & Gesundheit',
+    folder: 'Tag-4_02.07._Arbeitsschutz-und-Gesundheit',
+    slug: 'Arbeitsschutz-und-Gesundheit', verfügbar: true },
+  { num: 5,  datum: '03.07.2026', thema: 'Zeitmanagement & Aufgabenplanung',
+    folder: 'Tag-5_03.07._Zeitmanagement-und-Aufgabenplanung',
+    slug: 'Zeitmanagement-und-Aufgabenplanung', verfügbar: true },
+  { num: 6,  datum: '06.07.2026', thema: 'Terminplanung & Terminmanagement',
+    folder: 'Tag-6_06.07._Terminplanung-und-Terminmanagement',
+    slug: 'Terminplanung-und-Terminmanagement', verfügbar: true },
+  { num: 7,  datum: '07.07.2026', thema: 'Besprechungen vorbereiten & durchführen',
+    folder: 'Tag-7_07.07._Besprechungen-vorbereiten-und-durchfuehren',
+    slug: 'Besprechungen-vorbereiten-und-durchfuehren', verfügbar: true },
+  { num: 8,  datum: '08.07.2026', thema: 'Besprechungen nachbereiten & Protokoll',
+    folder: 'Tag-8_08.07._Besprechungen-nachbereiten-und-Protokoll',
+    slug: 'Besprechungen-nachbereiten-und-Protokoll', verfügbar: true },
+  { num: 9,  datum: '09.07.2026', thema: 'Kommunikationsformen & Teamarbeit',
+    folder: 'Tag-9_09.07._Kommunikationsformen-und-Teamarbeit',
+    slug: 'Kommunikationsformen-und-Teamarbeit', verfügbar: true },
+  { num: 10, datum: '10.07.2026', thema: 'Postbearbeitung: Posteingang',
+    folder: 'Tag-10_10.07._Postbearbeitung-Posteingang',
+    slug: 'Postbearbeitung-Posteingang', verfügbar: true },
+  { num: 11, datum: '13.07.2026', thema: 'Postbearbeitung: Postausgang',
+    folder: 'Tag-11_13.07._Postbearbeitung-Postausgang',
+    slug: 'Postbearbeitung-Postausgang', verfügbar: true },
+  { num: 12, datum: '14.07.2026', thema: 'Dokumentenmanagement: Aufbewahrung & Fristen',
+    folder: 'Tag-12_14.07._Dokumentenmanagement-Aufbewahrung-und-Fristen',
+    slug: 'Dokumentenmanagement-Aufbewahrung-und-Fristen', verfügbar: true },
+  { num: 13, datum: '15.07.2026', thema: 'Ablage & Ablagesysteme',
+    folder: 'Tag-13_15.07._Ablage-und-Ablagesysteme',
+    slug: 'Ablage-und-Ablagesysteme', verfügbar: true },
+  { num: 14, datum: '16.07.2026', thema: 'Digitales DMS, Datenschutz & Umweltschutz',
+    folder: 'Tag-14_16.07._Digitales-DMS-Datenschutz-und-Umweltschutz',
+    slug: 'Digitales-DMS-Datenschutz-und-Umweltschutz', verfügbar: true },
+  { num: 15, datum: '17.07.2026', thema: 'Vertiefung & Reflektion',
+    folder: 'Tag-15_17.07._Vertiefung-und-Reflektion',
+    slug: 'Vertiefung-und-Reflektion', verfügbar: true }
+];
+
+function tryLogin(e) {
+  e.preventDefault();
+  const code = document.getElementById('codeInput').value.trim().toLowerCase();
+  if (code === ZUGANGSCODE.toLowerCase()) {
+    localStorage.setItem(STORAGE_KEY, '1');
+    showDashboard();
+  } else {
+    document.getElementById('loginError').textContent = 'Falscher Zugangscode. Bitte erneut versuchen.';
+    document.getElementById('codeInput').value = '';
+    document.getElementById('codeInput').focus();
+  }
+  return false;
+}
+
+function logout() {
+  localStorage.removeItem(STORAGE_KEY);
+  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeInput').focus();
+}
+
+function urlEncodeFolder(folder) {
+  return encodeURIComponent(KURS_BASE) + '/' + encodeURIComponent(folder);
+}
+
+function renderTage() {
+  const grid = document.getElementById('tageGrid');
+  grid.innerHTML = TAGE.map(t => {
+    const base = urlEncodeFolder(t.folder);
+    if (!t.verfügbar) {
+      return `
+        <div class="tag-card locked">
+          <div class="tag-stripe"></div>
+          <div class="tag-num">Tag ${t.num}</div>
+          <h3>${t.thema}</h3>
+          <div class="tag-date">${t.datum}</div>
+          <div class="coming-soon">In Vorbereitung</div>
+        </div>`;
+    }
+    return `
+      <div class="tag-card">
+        <div class="tag-stripe"></div>
+        <div class="tag-num">Tag ${t.num}</div>
+        <h3>${t.thema}</h3>
+        <div class="tag-date">${t.datum}</div>
+        <div class="tag-links">
+          <a class="tag-link html" href="${base}/Praesentation_${t.slug}.html" target="_blank" rel="noopener">
+            <span class="link-icon">▶</span>
+            <span class="tag-link-label">Präsentation (HTML)</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+          <a class="tag-link pdf" href="${base}/Handout_${t.slug}.pdf" target="_blank" rel="noopener">
+            <span class="link-icon">PDF</span>
+            <span class="tag-link-label">Handout (PDF)</span>
+            <span class="tag-link-arrow">↓</span>
+          </a>
+          <a class="tag-link html" href="${base}/Quiz_${t.slug}.html" target="_blank" rel="noopener">
+            <span class="link-icon">?</span>
+            <span class="tag-link-label">Quiz</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+          <a class="tag-link pdf" href="${base}/Aufgabenheft_${t.slug}.pdf" target="_blank" rel="noopener">
+            <span class="link-icon">PDF</span>
+            <span class="tag-link-label">Aufgabenheft mit Lösungen</span>
+            <span class="tag-link-arrow">↓</span>
+          </a>
+          <div class="tag-chip-soon" title="Video folgt in Kürze">
+            <span class="link-icon">🎬</span>
+            <span class="tag-link-label">Video-Aufzeichnung</span>
+            <span class="soon-badge">folgt</span>
+          </div>
+          <div class="tag-chip-soon" title="Podcast folgt in Kürze">
+            <span class="link-icon">🎧</span>
+            <span class="tag-link-label">Podcast (Audio)</span>
+            <span class="soon-badge">folgt</span>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function showDashboard() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('dashboard').classList.add('active');
+  renderTage();
+}
+
+// =================================================================
+// MORGENQUIZ — drei Wochen-Wiederholungen (je 24 Fragen)
+// Generische Engine; Daten in QUIZ_DEFS. Gleiche Mechanik & Notenschlüssel.
+// =================================================================
+
+const QUIZ_DEFS = {
+  w1: {
+    emoji: '🌅',
+    title: 'Wiederholungs-Morgenquiz · Woche 1 (Tag 1–5)',
+    sub: '24 Fragen aus Präsentation und Handout der Kurstage 1 bis 5. Die Antwortreihenfolge wird jedes Mal zufällig neu gemischt.',
+    perDayNote: 'Tag 1 bis Tag 5 nacheinander',
+    witzeStart: [
+      'Guten Morgen! Erste Eselsbrücke des Tages: Ein Großraumbüro ohne Akustikplanung ist wie ein Telefon ohne Stummschalttaste — theoretisch nutzbar, praktisch ein Konzert. ☕ Auf gehts!',
+      'Frage zum Aufwärmen: Wie viele Bürokräfte braucht man, um eine Schreibtischhöhe einzustellen? — Keine, der Stuhl ist höhenverstellbar. Ergonomie heißt: erst denken, dann sitzen.',
+      'Achtung Spruch: 500 Lux, 20 Grad und ein Eisenhower-Quadrant sitzen im Büro. Wer arbeitet am produktivsten? Genau — der, der zuerst priorisiert. Viel Spaß!',
+      'Sagt der Monitor zur Schreibtischlampe: „Halt mal Abstand — 50 bis 70 Zentimeter, bitte." Sehabstand ist auch eine Form von Respekt. Los gehts!'
+    ],
+    witzeEnde: [
+      'Geschafft! Sie haben Ihren Arbeitsplatz jetzt theoretisch perfekt eingerichtet — höhenverstellbar, blendfrei und mit Pufferzeit. Belohnung: eine ergonomische Kaffeepause.',
+      'Quiz beendet. Falls die Note noch nicht „sehr gut" ist: kein Problem — planen Sie nach der ALPEN-Methode eine Wiederholung mit Pufferzeit ein. Morgen ist ein neuer Lux-Tag.',
+      'Sehr gut! Sie sind jetzt büroform-, ergonomie- und zeitmanagement-fest. Verwenden Sie dieses Wissen nur zum Guten — und nicht, um auf Familienfeiern die ASR A3.4 zu zitieren.',
+      'Ende. Erinnern Sie sich: 80 % des Ergebnisses kommen aus 20 % des Aufwands — und Sie haben gerade 100 % investiert. Das nennt man Übererfüllung des Pareto-Prinzips. 🎯'
+    ],
+    tagLabels: {
+      1: 'Tag 1 — Büroraumplanung & Büroformen (29.06.)',
+      2: 'Tag 2 — Büroausstattung & ergonomischer Bildschirmarbeitsplatz (30.06.)',
+      3: 'Tag 3 — Arbeitsumgebung & Umweltfaktoren (01.07.)',
+      4: 'Tag 4 — Arbeitsschutz & Gesundheit (02.07.)',
+      5: 'Tag 5 — Zeitmanagement & Aufgabenplanung (03.07.)'
+    },
+    questions: [
+      // ===== TAG 1 — Büroraumplanung & Büroformen =====
+      { tag: 1, topic: 'Büroformen', q: 'Welche Büroform ist durch einzelne, abgeschlossene Räume für ein bis drei Personen gekennzeichnet?',
+        options: ['Zellenbüro', 'Großraumbüro', 'Open Space', 'Desk-Sharing-Büro'],
+        a: 0, e: 'Das Zellenbüro besteht aus kleinen, abgeschlossenen Räumen (1–3 Personen). Vorteil: Ruhe und Privatsphäre; Nachteil: schlechtere Flächennutzung und Kommunikation.' },
+      { tag: 1, topic: 'Großraumbüro', q: 'Was ist ein typischer Nachteil des Großraumbüros?',
+        options: ['Hoher Geräuschpegel und geringe Privatsphäre', 'Sehr hohe Baukosten je Arbeitsplatz', 'Keine Möglichkeit zur Teamarbeit', 'Zu wenig Tageslicht durch viele Wände'],
+        a: 0, e: 'Im Großraumbüro arbeiten viele Personen in einem Raum. Vorteile sind kurze Wege und gute Flächennutzung; Nachteile sind Lärm, Ablenkung und fehlende Privatsphäre.' },
+      { tag: 1, topic: 'Kombibüro', q: 'Was kennzeichnet das Kombibüro?',
+        options: ['Kleine Einzelzellen (Konzentration) an der Fassade kombiniert mit gemeinsam genutzter Mittelzone (Kommunikation)', 'Ein einziger großer Raum ganz ohne Trennwände', 'Mehrere völlig getrennte Etagen pro Abteilung', 'Ein Büro, das gleichzeitig als Lager genutzt wird'],
+        a: 0, e: 'Das Kombibüro verbindet die Ruhe der Einzelzelle mit der Kommunikation einer gemeinsamen Mittelzone (z. B. für Drucker, Besprechung, Pausen).' },
+      { tag: 1, topic: 'Desk-Sharing', q: 'Was bedeutet Desk-Sharing (non-territoriales Büro)?',
+        options: ['Mitarbeitende haben keinen festen Arbeitsplatz, sondern nutzen freie Plätze je nach Bedarf', 'Jeder Mitarbeitende hat zwei feste Schreibtische', 'Alle teilen sich einen einzigen Computer', 'Schreibtische werden täglich neu gekauft'],
+        a: 0, e: 'Beim Desk-Sharing gibt es weniger Arbeitsplätze als Personen, weil nie alle gleichzeitig anwesend sind (Homeoffice, Außendienst). Spart Fläche, erfordert „Clean-Desk".' },
+      { tag: 1, topic: 'Flächenbedarf', q: 'Welche Mindestfläche je Büroarbeitsplatz wird nach der Arbeitsstättenregel (ASR A1.2) etwa empfohlen?',
+        options: ['Ca. 8–10 m² (im Großraumbüro eher mehr)', 'Ca. 2 m²', 'Ca. 25 m²', 'Ca. 50 m²'],
+        a: 0, e: 'Als Richtwert gelten rund 8–10 m² je Arbeitsplatz inkl. Verkehrsflächen; in Großraumbüros werden wegen Lärm und Wegen eher 12–15 m² angesetzt.' },
+
+      // ===== TAG 2 — Büroausstattung & Bildschirmarbeitsplatz =====
+      { tag: 2, topic: 'Sehabstand', q: 'Welcher Sehabstand zwischen Auge und Bildschirm wird für die Bildschirmarbeit empfohlen?',
+        options: ['Ca. 50–70 cm', 'Ca. 10–20 cm', 'Ca. 120–150 cm', 'Ca. 200 cm'],
+        a: 0, e: 'Empfohlen werden rund 50–70 cm. Bei größeren Monitoren entsprechend mehr. So werden die Augen entlastet und Kopf-/Nackenhaltung bleibt neutral.' },
+      { tag: 2, topic: 'Sitzhaltung', q: 'Welche Gelenkwinkel gelten beim ergonomischen Sitzen am Schreibtisch als Richtwert?',
+        options: ['Etwa 90° in Ellenbogen, Hüfte und Knie', 'Etwa 45° in allen Gelenken', 'Etwa 180° (gestreckte Beine)', 'Etwa 30° in den Knien'],
+        a: 0, e: 'Faustregel: rechte Winkel (ca. 90°) in Ellenbogen, Hüfte und Knie, Füße flach auf dem Boden. So sitzt man entspannt und wirbelsäulenschonend.' },
+      { tag: 2, topic: 'Monitorhöhe', q: 'Wie sollte ein Bildschirm in der Höhe positioniert sein?',
+        options: ['Oberkante in oder leicht unter Augenhöhe, Blick leicht nach unten gerichtet', 'Deutlich über Augenhöhe, Blick stark nach oben', 'Auf Schreibtischniveau, Blick stark nach unten geknickt', 'Seitlich hinter der Person'],
+        a: 0, e: 'Die obere Bildschirmkante liegt in oder knapp unter Augenhöhe; der Blick fällt leicht nach unten. Das entlastet die Halswirbelsäule.' },
+      { tag: 2, topic: 'Bürostuhl', q: 'Welche Eigenschaft muss ein ergonomischer Bürostuhl erfüllen?',
+        options: ['Höhenverstellbar mit dynamischer (mitbewegender) Rückenlehne für wechselnde Haltung', 'Starre Sitzfläche ohne jede Verstellmöglichkeit', 'Nur eine fixe Höhe für alle Personen', 'Keine Rückenlehne, um die Muskulatur zu zwingen'],
+        a: 0, e: 'Ergonomische Stühle sind höhenverstellbar und haben eine dynamische Rückenlehne, die das „bewegte Sitzen" unterstützt – das beugt Rückenbeschwerden vor.' },
+      { tag: 2, topic: 'Vorsorge G37', q: 'Worauf haben Beschäftigte an Bildschirmarbeitsplätzen nach der Arbeitsstättenverordnung Anspruch?',
+        options: ['Auf eine angebotene Untersuchung der Augen/des Sehvermögens (arbeitsmedizinische Vorsorge), ggf. eine Bildschirmbrille', 'Auf einen zusätzlichen Urlaubstag pro Monat', 'Auf ein neues Smartphone jährlich', 'Auf eine Gehaltszulage für Bildschirmarbeit'],
+        a: 0, e: 'Der Arbeitgeber muss eine Augenuntersuchung (Angebotsvorsorge „G37") anbieten; reicht eine normale Sehhilfe nicht aus, ist eine spezielle Bildschirmbrille zu stellen.' },
+
+      // ===== TAG 3 — Arbeitsumgebung & Umweltfaktoren =====
+      { tag: 3, topic: 'Beleuchtung', q: 'Welche Beleuchtungsstärke wird für übliche Büroarbeit mindestens empfohlen (ASR A3.4)?',
+        options: ['Mindestens 500 Lux', 'Mindestens 50 Lux', 'Mindestens 100 Lux', 'Mindestens 2000 Lux'],
+        a: 0, e: 'Für Büro- und Bildschirmarbeit gelten mindestens 500 Lux. Wichtig sind zudem Blendfreiheit und eine gleichmäßige Ausleuchtung.' },
+      { tag: 3, topic: 'Raumtemperatur', q: 'Welche Raumtemperatur gilt für überwiegend sitzende Bürotätigkeit als angemessen?',
+        options: ['Ca. 20–22 °C', 'Ca. 12–14 °C', 'Ca. 28–30 °C', 'Ca. 35 °C'],
+        a: 0, e: 'Für leichte, sitzende Tätigkeit gelten rund 20–22 °C als angenehm; die ASR nennt 20 °C als Mindestwert für solche Arbeitsräume.' },
+      { tag: 3, topic: 'Lärm', q: 'Welcher Beurteilungspegel sollte bei überwiegend geistiger Bürotätigkeit nicht überschritten werden (ASR A3.7)?',
+        options: ['55 dB(A)', '85 dB(A)', '100 dB(A)', '120 dB(A)'],
+        a: 0, e: 'Bei anspruchsvoller geistiger Bürotätigkeit gilt ein Richtwert von 55 dB(A). Höhere Pegel stören Konzentration und Kommunikation.' },
+      { tag: 3, topic: 'Luftfeuchtigkeit', q: 'Welche relative Luftfeuchtigkeit gilt im Büro als angenehm und gesundheitsförderlich?',
+        options: ['Ca. 40–60 %', 'Ca. 5–10 %', 'Ca. 80–95 %', 'Ca. 100 %'],
+        a: 0, e: 'Eine relative Luftfeuchte von etwa 40–60 % gilt als optimal. Zu trockene Luft reizt Augen und Schleimhäute, zu feuchte begünstigt Schimmel.' },
+      { tag: 3, topic: 'Tageslicht', q: 'Welche Anforderung stellt die ASR A3.4 an Arbeitsräume bezüglich Tageslicht?',
+        options: ['Arbeitsräume sollen möglichst Tageslicht erhalten und eine Sichtverbindung nach außen haben', 'Fenster sind in Büros grundsätzlich verboten', 'Nur Kunstlicht ist zulässig', 'Sichtverbindung nach außen ist ausdrücklich untersagt'],
+        a: 0, e: 'Arbeitsräume sollen möglichst über Tageslicht und eine Sichtverbindung nach außen verfügen – das wirkt sich positiv auf Wohlbefinden und Biorhythmus aus.' },
+
+      // ===== TAG 4 — Arbeitsschutz & Gesundheit =====
+      { tag: 4, topic: 'Verantwortung', q: 'Wer trägt nach dem Arbeitsschutzgesetz (ArbSchG) die primäre Verantwortung für den Arbeitsschutz im Betrieb?',
+        options: ['Der Arbeitgeber', 'Ausschließlich die Berufsgenossenschaft', 'Allein der einzelne Beschäftigte', 'Das Finanzamt'],
+        a: 0, e: 'Der Arbeitgeber ist nach dem ArbSchG für Sicherheit und Gesundheit der Beschäftigten verantwortlich; Beschäftigte müssen mitwirken und Anweisungen befolgen.' },
+      { tag: 4, topic: 'Gefährdungsbeurteilung', q: 'Was ist eine Gefährdungsbeurteilung nach § 5 ArbSchG?',
+        options: ['Die systematische Ermittlung und Bewertung von Gefährdungen am Arbeitsplatz samt Festlegung von Schutzmaßnahmen', 'Eine jährliche Mitarbeiterbefragung zur Zufriedenheit', 'Die Bewertung der Bonität von Lieferanten', 'Ein Test der EDV-Passwörter'],
+        a: 0, e: 'Die Gefährdungsbeurteilung ist Pflicht des Arbeitgebers: Gefährdungen ermitteln, bewerten, Maßnahmen festlegen, umsetzen und ihre Wirksamkeit prüfen.' },
+      { tag: 4, topic: 'Unfallversicherung', q: 'Wer ist Träger der gesetzlichen Unfallversicherung für Betriebe?',
+        options: ['Die zuständige Berufsgenossenschaft (BG)', 'Die private Haftpflichtversicherung', 'Die Krankenkasse des Arbeitgebers', 'Das Gewerbeaufsichtsamt'],
+        a: 0, e: 'Träger der gesetzlichen Unfallversicherung sind die Berufsgenossenschaften (bzw. Unfallkassen). Sie zahlen die Beiträge tragen die Arbeitgeber.' },
+      { tag: 4, topic: 'Prävention', q: 'Welche Maßnahme beugt Beschwerden bei langer Bildschirmarbeit am besten vor?',
+        options: ['Regelmäßige Kurzpausen, Haltungswechsel und Ausgleichsbewegung', 'Möglichst lange ohne Unterbrechung sitzen bleiben', 'Den Bildschirm dauerhaft maximal hell stellen', 'Die Pausen komplett streichen, um früher Feierabend zu machen'],
+        a: 0, e: 'Dynamisches Sitzen, regelmäßige Kurzpausen und Bewegung (z. B. nach der 60-30-10-Regel) entlasten Augen, Rücken und Konzentration.' },
+      { tag: 4, topic: 'Ersthelfer', q: 'Wie viele Beschäftigte müssen in Verwaltungs- und Handelsbetrieben bei mehr als 20 anwesenden Versicherten mindestens als Ersthelfer ausgebildet sein?',
+        options: ['Mindestens 5 %', 'Mindestens 50 %', 'Mindestens 25 %', 'Gar keine'],
+        a: 0, e: 'Nach DGUV Vorschrift 1 gilt in Verwaltungs-/Handelsbetrieben: bei 2–20 Anwesenden ein Ersthelfer, bei mehr als 20 mindestens 5 % der Anwesenden.' },
+
+      // ===== TAG 5 — Zeitmanagement & Aufgabenplanung =====
+      { tag: 5, topic: 'Eisenhower', q: 'Nach welchen zwei Kriterien teilt das Eisenhower-Prinzip Aufgaben ein?',
+        options: ['Nach Wichtigkeit und Dringlichkeit (vier Quadranten)', 'Nach Kosten und Gewinn', 'Nach Alphabet und Datum', 'Nach Abteilung und Gehalt'],
+        a: 0, e: 'Die Eisenhower-Matrix ordnet Aufgaben nach wichtig/dringend: sofort erledigen, terminieren, delegieren oder weglassen.' },
+      { tag: 5, topic: 'ALPEN-Methode', q: 'Wofür stehen die Buchstaben der ALPEN-Methode?',
+        options: ['Aufgaben notieren – Länge schätzen – Pufferzeiten einplanen – Entscheidungen/Prioritäten – Nachkontrolle', 'Anfangen – Liegenlassen – Pausieren – Essen – Nachholen', 'Akten – Listen – Pläne – E-Mails – Notizen', 'Analyse – Lager – Preis – Einkauf – Nachfrage'],
+        a: 0, e: 'ALPEN: Aufgaben aufschreiben, Länge (Dauer) schätzen, Pufferzeiten einplanen, Entscheidungen/Prioritäten setzen, Nachkontrolle am Tagesende.' },
+      { tag: 5, topic: 'Pareto', q: 'Was besagt das Pareto-Prinzip im Zeitmanagement?',
+        options: ['Rund 80 % der Ergebnisse entstehen mit etwa 20 % des Aufwands', 'Jede Aufgabe dauert genau gleich lang', '100 % Aufwand bringen 100 % Ergebnis', '20 % der Ergebnisse genügen immer'],
+        a: 0, e: 'Pareto (80/20-Regel): Ein kleiner Teil des Einsatzes (20 %) bewirkt den Großteil des Ergebnisses (80 %). Daher zuerst die wirkungsvollen Aufgaben angehen.' },
+      { tag: 5, topic: 'SMART-Ziele', q: 'Wofür steht die Abkürzung SMART bei der Zielformulierung?',
+        options: ['Spezifisch, Messbar, Attraktiv, Realistisch, Terminiert', 'Schnell, Modern, Aktuell, Riskant, Teuer', 'Sicher, Mutig, Aktiv, Ruhig, Tüchtig', 'Sparsam, Mobil, Agil, Robust, Transparent'],
+        a: 0, e: 'SMART-Ziele sind Spezifisch, Messbar, Attraktiv/Akzeptiert, Realistisch und Terminiert – so werden Ziele überprüfbar und erreichbar.' }
+    ]
+  },
+
+  w2: {
+    emoji: '🌇',
+    title: 'Wiederholungs-Morgenquiz · Woche 2 (Tag 6–10)',
+    sub: '24 Fragen aus Präsentation und Handout der Kurstage 6 bis 10. Die Antwortreihenfolge wird jedes Mal zufällig neu gemischt.',
+    perDayNote: 'Tag 6 bis Tag 10 nacheinander',
+    witzeStart: [
+      'Guten Morgen, Edition Zwei! Heute geht es um Termine, Besprechungen und Post. Eselsbrücke: Eine Besprechung ohne Tagesordnung ist wie ein Kalender ohne Datum – man sitzt zusammen, weiß aber nicht warum. Auf gehts!',
+      'Frage zum Aufwärmen: Was sagt der Terminkalender montags zur Wiedervorlage? — „Wir sehen uns Donnerstag wieder." Wiedervorlage heißt: nichts vergessen, alles zur richtigen Zeit.',
+      'Ein Protokollführer, ein Moderator und vier Ohren sitzen in einer Besprechung. Wer schreibt mit? Genau – Sie. Viel Spaß beim Aufwachen!',
+      'Eselsbrücken-Festival: Forming – Storming – Norming – Performing. Wer das morgens aufsagen kann, hat die halbe Teamtheorie schon im Sack.'
+    ],
+    witzeEnde: [
+      'Geschafft! Sie haben jetzt Termine im Griff, Besprechungen moderiert und die Post sortiert – alles vor dem ersten Kaffee. Respekt.',
+      'Quiz beendet. Falls die Note noch Luft hat: Tragen Sie sich eine Wiedervorlage für morgen ein – mit Pufferzeit, versteht sich.',
+      'Sehr gut! Sie sind protokollfest, kommunikationsstark und posteingangssicher. Nutzen Sie das nur zum Guten – und nicht, um privat Verlaufsprotokolle zu führen.',
+      'Ende. Denken Sie dran: Das Eingangsdatum entscheidet über Fristen – und Ihre richtigen Antworten entscheiden über das Frühstück. Guten Appetit! 🎯'
+    ],
+    tagLabels: {
+      6: 'Tag 6 — Terminplanung & Terminmanagement (06.07.)',
+      7: 'Tag 7 — Besprechungen vorbereiten & durchführen (07.07.)',
+      8: 'Tag 8 — Besprechungen nachbereiten & Protokoll (08.07.)',
+      9: 'Tag 9 — Kommunikationsformen & Teamarbeit (09.07.)',
+      10: 'Tag 10 — Postbearbeitung: Posteingang (10.07.)'
+    },
+    questions: [
+      // ===== TAG 6 — Terminplanung & Terminmanagement =====
+      { tag: 6, topic: 'Fixtermin', q: 'Was kennzeichnet einen Fixtermin?',
+        options: ['Einen zeitlich fest gebundenen, nicht verschiebbaren Termin', 'Einen Termin, der jederzeit beliebig verschoben werden kann', 'Einen Termin ohne festgelegtes Datum', 'Einen Termin, der nur intern gilt'],
+        a: 0, e: 'Fixtermine sind fest gebunden (z. B. Kundengespräch, Zugabfahrt) und nicht verschiebbar. Variable Termine lassen sich dagegen flexibel einplanen.' },
+      { tag: 6, topic: 'Pufferzeiten', q: 'Warum plant man zwischen Terminen Pufferzeiten ein?',
+        options: ['Um Verzögerungen, Überschneidungen und unvorhergesehene Ereignisse abzufangen', 'Um den Kalender möglichst voll aussehen zu lassen', 'Weil Pufferzeiten gesetzlich vorgeschrieben sind', 'Um Termine grundsätzlich zu vermeiden'],
+        a: 0, e: 'Pufferzeiten verhindern, dass sich Verspätungen durch den ganzen Tag fortpflanzen, und schaffen Raum für Unerwartetes (Telefonate, Störungen).' },
+      { tag: 6, topic: 'Terminkollision', q: 'Wie geht man mit einer Terminüberschneidung (Kollision) korrekt um?',
+        options: ['Nach Priorität entscheiden, ggf. delegieren oder verschieben und die Beteiligten rechtzeitig informieren', 'Beide Termine gleichzeitig wahrnehmen', 'Den weniger angenehmen Termin einfach ignorieren', 'Gar nichts tun und abwarten'],
+        a: 0, e: 'Bei Kollisionen wird nach Wichtigkeit/Dringlichkeit priorisiert; nachrangige Termine werden delegiert oder verlegt – und alle Beteiligten werden informiert.' },
+      { tag: 6, topic: 'Digitale Kalender', q: 'Welcher Vorteil spricht für einen elektronischen Gruppenkalender (z. B. Outlook)?',
+        options: ['Gemeinsame Einsicht, automatische Erinnerungen und Verfügbarkeitsprüfung mehrerer Personen', 'Termine können von niemandem mehr eingesehen werden', 'Er funktioniert nur ohne Internet', 'Er ersetzt jede persönliche Absprache vollständig'],
+        a: 0, e: 'Gruppenkalender zeigen die Verfügbarkeit aller, erinnern automatisch und vermeiden Doppelbuchungen – ideal für die Terminkoordination im Team.' },
+      { tag: 6, topic: 'Wiedervorlage', q: 'Was versteht man unter einer Wiedervorlage?',
+        options: ['Ein System, das Vorgänge zum richtigen Zeitpunkt erneut zur Bearbeitung vorlegt (Terminüberwachung)', 'Das doppelte Ausdrucken eines Dokuments', 'Das Vorlesen von Protokollen in der Besprechung', 'Die Rücksendung von Post an den Absender'],
+        a: 0, e: 'Die Wiedervorlage sorgt dafür, dass unerledigte Vorgänge termingerecht wieder „auf den Tisch" kommen – heute meist digital über Erinnerungen/Aufgaben.' },
+
+      // ===== TAG 7 — Besprechungen vorbereiten & durchführen =====
+      { tag: 7, topic: 'Tagesordnung', q: 'Was gehört in eine gute Tagesordnung (Agenda)?',
+        options: ['Themenpunkte mit Reihenfolge, Zeitangaben und Verantwortlichen', 'Nur das Datum der Besprechung', 'Eine Liste der Lieblingsgetränke der Teilnehmer', 'Ausschließlich das Ergebnisprotokoll der letzten Sitzung'],
+        a: 0, e: 'Eine Agenda strukturiert die Besprechung: klare Themenpunkte, Reihenfolge, Zeitrahmen und wer welchen Punkt verantwortet. Das spart Zeit und schafft Fokus.' },
+      { tag: 7, topic: 'Einladung', q: 'Welche Angaben sollte eine Besprechungseinladung enthalten?',
+        options: ['Ort, Zeit, voraussichtliche Dauer, Teilnehmerkreis und Ziel/Tagesordnung', 'Nur den Namen des Chefs', 'Ausschließlich die Raumnummer', 'Nur das Wort „Besprechung"'],
+        a: 0, e: 'Eine vollständige Einladung nennt Ort, Beginn, Dauer, Teilnehmer und Ziel bzw. Tagesordnung – so können sich alle gezielt vorbereiten.' },
+      { tag: 7, topic: 'Moderation', q: 'Welche Aufgabe hat die Moderation in einer Besprechung?',
+        options: ['Durch die Agenda führen, Redebeiträge strukturieren, die Zeit im Blick behalten und Ergebnisse sichern', 'Allein alle Entscheidungen treffen', 'Nur Kaffee ausschenken', 'Sich aus der Diskussion heraushalten und schweigen'],
+        a: 0, e: 'Die Moderation lenkt die Besprechung neutral: Sie hält die Agenda ein, gibt allen Redezeit, fasst zusammen und sorgt für festgehaltene Ergebnisse.' },
+      { tag: 7, topic: 'Sitzordnung', q: 'Welche Sitzordnung fördert eine gleichberechtigte Diskussion am besten?',
+        options: ['Kreis- oder U-Form bzw. ein Konferenztisch, an dem sich alle sehen', 'Reihen wie im Kino, alle blicken nach vorn', 'Einzelplätze in getrennten Räumen', 'Alle stehen mit dem Rücken zueinander'],
+        a: 0, e: 'Kreis-, U-Form oder gemeinsamer Konferenztisch ermöglichen Blickkontakt aller Teilnehmer und damit offene, gleichberechtigte Kommunikation.' },
+      { tag: 7, topic: 'Zielklarheit', q: 'Warum sollte jede Besprechung ein klares Ziel haben?',
+        options: ['Um zielgerichtet und zeiteffizient zu arbeiten und konkrete Ergebnisse zu erreichen', 'Damit sie möglichst lange dauert', 'Damit niemand etwas entscheiden muss', 'Um die Tagesordnung überflüssig zu machen'],
+        a: 0, e: 'Ohne klares Ziel werden Besprechungen schnell zur Zeitverschwendung. Ein definiertes Ziel hält die Diskussion fokussiert und produktiv.' },
+
+      // ===== TAG 8 — Besprechungen nachbereiten & Protokoll =====
+      { tag: 8, topic: 'Ergebnisprotokoll', q: 'Was kennzeichnet ein Ergebnis- bzw. Beschlussprotokoll?',
+        options: ['Es hält nur die Ergebnisse und Beschlüsse fest, nicht den Diskussionsverlauf', 'Es gibt jeden einzelnen Wortbeitrag wörtlich wieder', 'Es enthält ausschließlich die Teilnehmerliste', 'Es wird grundsätzlich nicht schriftlich erstellt'],
+        a: 0, e: 'Das Ergebnis-/Beschlussprotokoll fasst nur die Resultate zusammen (Beschlüsse, Maßnahmen). Es ist kurz und übersichtlich – ideal für den Büroalltag.' },
+      { tag: 8, topic: 'Verlaufsprotokoll', q: 'Was kennzeichnet ein Verlaufsprotokoll?',
+        options: ['Es gibt den Diskussionsverlauf und die wesentlichen Wortbeiträge ausführlich wieder', 'Es enthält nur die Endbeschlüsse', 'Es besteht nur aus Stichworten ohne Zusammenhang', 'Es ist identisch mit der Einladung'],
+        a: 0, e: 'Das Verlaufsprotokoll dokumentiert den Ablauf und die Argumente der Diskussion – aufwendiger, aber nützlich, wenn die Entscheidungsfindung nachvollziehbar sein muss.' },
+      { tag: 8, topic: 'Protokollkopf', q: 'Welche Angaben gehören in den Protokollkopf?',
+        options: ['Datum, Ort, Uhrzeit, Teilnehmer/Abwesende, Protokollführer und Thema', 'Nur die Unterschrift des Chefs', 'Ausschließlich das Wetter am Sitzungstag', 'Nur die Nummer des Sitzungsraums'],
+        a: 0, e: 'Der Protokollkopf nennt die Rahmendaten der Sitzung: wann, wo, wer anwesend/abwesend war, wer protokolliert hat und worum es ging.' },
+      { tag: 8, topic: 'Maßnahmenliste', q: 'Was hält eine Maßnahmen-/To-do-Liste im Protokoll fest?',
+        options: ['Wer macht was bis wann (Aufgabe, Verantwortlicher, Frist)', 'Nur die Namen aller Teilnehmer', 'Die Sitzordnung des nächsten Treffens', 'Die Getränkeauswahl'],
+        a: 0, e: 'Die Maßnahmenliste macht Ergebnisse umsetzbar: Sie ordnet jeder Aufgabe einen Verantwortlichen und eine Frist zu – die Grundlage für die Nachverfolgung.' },
+      { tag: 8, topic: 'Protokollstil', q: 'In welchem Stil wird ein Protokoll üblicherweise verfasst?',
+        options: ['Sachlich, knapp und objektiv, meist in der Gegenwartsform (Präsens)', 'Umgangssprachlich mit persönlicher Meinung', 'In Reimform', 'Als Werbetext mit Ausrufezeichen'],
+        a: 0, e: 'Protokolle sind sachlich, objektiv und knapp – häufig im Präsens. Persönliche Wertungen gehören nicht hinein, nur nachprüfbare Fakten.' },
+
+      // ===== TAG 9 — Kommunikationsformen & Teamarbeit =====
+      { tag: 9, topic: 'Schulz von Thun', q: 'Welche vier Seiten hat eine Nachricht nach dem Kommunikationsquadrat von Schulz von Thun?',
+        options: ['Sachinhalt, Selbstoffenbarung, Beziehung und Appell', 'Anrede, Betreff, Text und Gruß', 'Sender, Kanal, Rauschen und Empfänger', 'Wort, Satz, Absatz und Seite'],
+        a: 0, e: 'Das „Vier-Ohren-Modell" beschreibt jede Nachricht auf vier Ebenen: Sachinhalt, Selbstoffenbarung, Beziehung und Appell. Missverständnisse entstehen oft durch verschiedene „Ohren".' },
+      { tag: 9, topic: 'Nonverbal', q: 'Was zählt zur nonverbalen Kommunikation?',
+        options: ['Mimik, Gestik, Körperhaltung und Blickkontakt', 'Die gesprochenen Wörter selbst', 'Der Inhalt einer E-Mail', 'Die Rechtschreibung eines Briefes'],
+        a: 0, e: 'Nonverbale Signale (Körpersprache) wirken oft stärker als Worte. Mimik, Gestik, Haltung und Blickkontakt prägen die Beziehungsebene maßgeblich.' },
+      { tag: 9, topic: 'Feedback', q: 'Wie sollte konstruktives Feedback formuliert sein?',
+        options: ['Konkret, beschreibend, in Ich-Botschaften, zeitnah und wertschätzend', 'Pauschal, verallgemeinernd und vorwurfsvoll', 'Möglichst spät und in Du-Botschaften', 'Anonym und ohne Beispiele'],
+        a: 0, e: 'Gutes Feedback bezieht sich auf konkretes Verhalten, nutzt Ich-Botschaften ("Ich habe wahrgenommen…"), kommt zeitnah und bleibt wertschätzend.' },
+      { tag: 9, topic: 'Teamphasen', q: 'In welcher Reihenfolge verlaufen die Teamphasen nach Tuckman?',
+        options: ['Forming → Storming → Norming → Performing', 'Performing → Norming → Storming → Forming', 'Storming → Forming → Performing → Norming', 'Norming → Performing → Forming → Storming'],
+        a: 0, e: 'Tuckman: Forming (Orientierung), Storming (Konflikte), Norming (Regeln), Performing (Leistung) – oft ergänzt um Adjourning (Auflösung).' },
+      { tag: 9, topic: 'Kommunikationsmittel', q: 'Wann ist schriftliche Kommunikation (z. B. E-Mail) der mündlichen vorzuziehen?',
+        options: ['Wenn Dokumentation/Nachweis nötig ist und mehrere Empfänger denselben Informationsstand brauchen', 'Wenn es um sehr emotionale Konflikte geht', 'Immer, weil mündliche Kommunikation verboten ist', 'Nie, schriftliche Kommunikation ist überflüssig'],
+        a: 0, e: 'Schriftliche Kommunikation eignet sich für nachweisbare, komplexe oder an viele gerichtete Informationen. Konflikte und Sensibles klärt man besser persönlich.' },
+
+      // ===== TAG 10 — Postbearbeitung: Posteingang =====
+      { tag: 10, topic: 'Ablauf', q: 'In welcher Reihenfolge wird Eingangspost typischerweise bearbeitet?',
+        options: ['Annahme → Sortieren/Öffnen → Eingangsstempel → Erfassung/Verteilung an die Sachbearbeiter', 'Eingangsstempel → Verteilung → Annahme → Öffnen', 'Verteilung → Annahme → Stempel → Sortieren', 'Öffnen → Verteilung → Annahme → Stempel'],
+        a: 0, e: 'Klassischer Posteingang: Post annehmen, sortieren und öffnen (außer „persönlich"), mit Eingangsstempel versehen, erfassen und an die Zuständigen verteilen.' },
+      { tag: 10, topic: 'Eingangsstempel', q: 'Welche Angabe enthält der Eingangsstempel auf einem Schriftstück mindestens?',
+        options: ['Das Eingangsdatum (oft ergänzt um Bearbeiter/Aktenzeichen)', 'Den Namen des Absenders in Großbuchstaben', 'Den Preis der Briefmarke', 'Die Telefonnummer der Poststelle'],
+        a: 0, e: 'Der Eingangsstempel hält vor allem das Eingangsdatum fest – wichtig als Nachweis und für die Fristberechnung; oft ergänzt um Kürzel des Bearbeiters.' },
+      { tag: 10, topic: 'Vertrauliche Post', q: 'Welche Eingangspost darf die Poststelle NICHT öffnen?',
+        options: ['Als „persönlich" oder „vertraulich" gekennzeichnete bzw. personengebundene Sendungen', 'Rechnungen von Lieferanten', 'Werbeprospekte', 'Allgemeine Geschäftspost ohne Zusatz'],
+        a: 0, e: 'Sendungen mit dem Zusatz „persönlich"/„vertraulich" oder an eine konkrete Person adressiert dürfen nur von dieser geöffnet werden – Schutz der Privat-/Vertraulichkeit.' },
+      { tag: 10, topic: 'Fristen', q: 'Warum ist das festgehaltene Eingangsdatum so wichtig?',
+        options: ['Es ist maßgeblich für die Berechnung von Fristen (z. B. Zahlungs-, Reklamations- oder Widerspruchsfristen)', 'Es bestimmt die Farbe des Aktenordners', 'Es legt das Gehalt des Sachbearbeiters fest', 'Es hat keinerlei rechtliche Bedeutung'],
+        a: 0, e: 'Viele Fristen laufen ab dem Zugang/Eingang. Das dokumentierte Eingangsdatum ist daher Beweismittel und Ausgangspunkt der Fristberechnung.' }
+    ]
+  },
+
+  w3: {
+    emoji: '🌿',
+    title: 'Wiederholungs-Morgenquiz · Woche 3 (Tag 11–15)',
+    sub: '24 Fragen aus Präsentation und Handout der Kurstage 11 bis 15. Die Antwortreihenfolge wird jedes Mal zufällig neu gemischt.',
+    perDayNote: 'Tag 11 bis Tag 15 nacheinander',
+    witzeStart: [
+      'Guten Morgen, Endspurt-Edition! Heute: Postausgang, Aufbewahrungsfristen, Ablage und Datenschutz. Eselsbrücke: 10 Jahre Aufbewahrung sind wie ein guter Aktenordner – man braucht ihn selten, aber wenn, dann dringend. Auf gehts!',
+      'Frage zum Aufwärmen: Was sagt der Buchungsbeleg zum Schredder? — „Noch nicht, ich habe noch acht Jahre." Aufbewahrungsfristen sind ernst zu nehmen. Viel Spaß!',
+      'Ein Einschreiben, eine Frankiermaschine und ein Postausgangsbuch stehen am Schalter. Wer kommt sicher an? Genau – das Einschreiben, mit Nachweis. Los gehts!',
+      'Eselsbrücken-Festival: DSGVO heißt nicht „Daten Sammeln Geht Voll Okay", sondern Datenminimierung. Merken Sie sich das – die Aufsichtsbehörde liest mit.'
+    ],
+    witzeEnde: [
+      'Geschafft! Sie haben Post verschickt, Fristen eingehalten, sauber abgelegt und Daten geschützt – alles datenschutzkonform vor dem Frühstück.',
+      'Quiz beendet. Falls noch nicht alles saß: Legen Sie es einfach unter „Wiedervorlage" ab – aber bitte revisionssicher nach GoBD.',
+      'Sehr gut! Sie sind jetzt fristen-, ablage- und datenschutzfest. Nutzen Sie das nur zum Guten – und nicht, um privat zehn Jahre lang Einkaufszettel zu archivieren.',
+      'Endspurt geschafft! Denken Sie dran: doppelseitig drucken spart Papier, und richtige Antworten sparen Nerven. Ein nachhaltiger Erfolg. 🌿'
+    ],
+    tagLabels: {
+      11: 'Tag 11 — Postbearbeitung: Postausgang (13.07.)',
+      12: 'Tag 12 — Dokumentenmanagement: Aufbewahrung & Fristen (14.07.)',
+      13: 'Tag 13 — Ablage & Ablagesysteme (15.07.)',
+      14: 'Tag 14 — Digitales DMS, Datenschutz & Umweltschutz (16.07.)',
+      15: 'Tag 15 — Vertiefung & Reflektion (17.07.)'
+    },
+    questions: [
+      // ===== TAG 11 — Postbearbeitung: Postausgang =====
+      { tag: 11, topic: 'Ablauf', q: 'In welcher Reihenfolge wird Ausgangspost typischerweise bearbeitet?',
+        options: ['Sammeln/Kuvertieren → Frankieren → Versandart wählen → Eintrag ins Postausgangsbuch → Übergabe an den Zusteller', 'Frankieren → Sammeln → Übergabe → Kuvertieren', 'Übergabe → Frankieren → Kuvertieren → Sammeln', 'Versandart wählen → Übergabe → Sammeln → Frankieren'],
+        a: 0, e: 'Im Postausgang werden Sendungen gesammelt und kuvertiert, frankiert, die passende Versandart gewählt, wichtige Sendungen im Postausgangsbuch erfasst und übergeben.' },
+      { tag: 11, topic: 'Versandarten', q: 'Wann wählt man sinnvollerweise ein Einschreiben?',
+        options: ['Wenn ein Nachweis über Versand bzw. Zustellung wichtiger oder fristgebundener Dokumente nötig ist', 'Für alltägliche Werbesendungen', 'Wenn das Porto möglichst niedrig sein soll', 'Wenn die Sendung gar nicht ankommen muss'],
+        a: 0, e: 'Das Einschreiben dokumentiert Versand/Zustellung und dient als Nachweis – wichtig bei Kündigungen, Mahnungen und fristgebundenen Schreiben.' },
+      { tag: 11, topic: 'Frankierung', q: 'Welchen Vorteil bietet eine Frankiermaschine?',
+        options: ['Sie bedruckt Sendungen direkt mit dem Porto, spart Zeit und Briefmarken und ermöglicht oft Mengenrabatte', 'Sie öffnet die eingehende Post automatisch', 'Sie schreibt das Protokoll der Besprechung', 'Sie ersetzt das Postausgangsbuch nicht und ist deshalb nutzlos'],
+        a: 0, e: 'Frankiermaschinen drucken das Porto auf, wiegen oft automatisch und sparen bei höherem Aufkommen Zeit und Geld – meist mit Rabatt gegenüber Briefmarken.' },
+      { tag: 11, topic: 'Postausgangsbuch', q: 'Was dokumentiert das Postausgangsbuch?',
+        options: ['Empfänger, Datum und Versandart wichtiger Sendungen als Nachweis des Versands', 'Die Gehälter der Mitarbeiter', 'Die Urlaubsplanung der Abteilung', 'Die Lieferantenpreise'],
+        a: 0, e: 'Das Postausgangsbuch hält wichtige Sendungen fest (Empfänger, Datum, Versandart) und dient – wie der Eingangsstempel – als Nachweis für den Versand.' },
+      { tag: 11, topic: 'Portooptimierung', q: 'Wie lässt sich im Postausgang Porto sparen?',
+        options: ['Sendungen bündeln, Gewicht und Format optimieren und die passende Versandart bzw. Online-Frankierung wählen', 'Jeden Brief einzeln und übergewichtig versenden', 'Grundsätzlich immer die teuerste Versandart wählen', 'Auf jede Frankierung verzichten'],
+        a: 0, e: 'Porto spart man durch Bündeln, optimale Gewichts-/Formatklassen und die richtige Versandart – häufig zusätzlich günstiger über Frankiermaschine oder Online-Frankierung.' },
+
+      // ===== TAG 12 — Dokumentenmanagement: Aufbewahrung & Fristen =====
+      { tag: 12, topic: 'Fristen 10 Jahre', q: 'Wie lange müssen Handelsbücher, Inventare, Bilanzen und Jahresabschlüsse aufbewahrt werden?',
+        options: ['10 Jahre', '2 Jahre', '6 Monate', '50 Jahre'],
+        a: 0, e: 'Für Handelsbücher, Inventare, Bilanzen und Jahresabschlüsse gilt nach § 257 HGB / § 147 AO eine Aufbewahrungsfrist von 10 Jahren.' },
+      { tag: 12, topic: 'Fristen 6 Jahre', q: 'Welche Aufbewahrungsfrist gilt für empfangene und abgesandte Handels- bzw. Geschäftsbriefe?',
+        options: ['6 Jahre', '10 Jahre', '1 Jahr', '20 Jahre'],
+        a: 0, e: 'Handels- und Geschäftsbriefe (z. B. Angebote, Auftragsbestätigungen, Schriftverkehr) sind 6 Jahre aufzubewahren.' },
+      { tag: 12, topic: 'Fristbeginn', q: 'Wann beginnt die Aufbewahrungsfrist zu laufen?',
+        options: ['Mit Ablauf des Kalenderjahres, in dem das Dokument entstanden bzw. die letzte Eintragung gemacht wurde', 'Genau am Tag der Erstellung des Dokuments', 'Erst nach einer Betriebsprüfung', 'Mit dem Geburtstag des Geschäftsführers'],
+        a: 0, e: 'Die Frist beginnt mit dem Schluss des Kalenderjahres, in dem der Beleg entstand. Eine 2026 erstellte Bilanz ist also bis Ende 2036 aufzubewahren.' },
+      { tag: 12, topic: 'Rechtsgrundlagen', q: 'Welche Gesetze regeln vor allem die handels- und steuerrechtlichen Aufbewahrungspflichten?',
+        options: ['Handelsgesetzbuch (§ 257 HGB) und Abgabenordnung (§ 147 AO)', 'Strafgesetzbuch und Grundgesetz', 'Betriebsverfassungsgesetz und Tarifvertrag', 'Bundesurlaubsgesetz und Kündigungsschutzgesetz'],
+        a: 0, e: 'Die Aufbewahrungspflichten ergeben sich handelsrechtlich aus § 257 HGB und steuerrechtlich aus § 147 AO – beide nennen die bekannten 6- und 10-Jahres-Fristen.' },
+      { tag: 12, topic: 'GoBD', q: 'Was fordert die GoBD bei der digitalen Aufbewahrung steuerrelevanter Unterlagen?',
+        options: ['Unveränderbarkeit, Nachvollziehbarkeit, Vollständigkeit und revisionssichere Speicherung', 'Nur das Ausdrucken auf buntem Papier', 'Die Löschung aller Daten nach einem Jahr', 'Speicherung ausschließlich auf privaten Handys'],
+        a: 0, e: 'Die GoBD verlangen, dass digitale Belege unveränderbar, vollständig, nachvollziehbar und revisionssicher archiviert werden – maschinelle Auswertbarkeit inklusive.' },
+
+      // ===== TAG 13 — Ablage & Ablagesysteme =====
+      { tag: 13, topic: 'Alphabetisch', q: 'Was kennzeichnet die alphabetische Ablage?',
+        options: ['Die Sortierung nach Buchstaben, z. B. nach Namen von A bis Z', 'Die Sortierung nach Eingangsdatum', 'Die Vergabe fortlaufender Nummern', 'Die Ablage nach Sachgebieten'],
+        a: 0, e: 'Bei der alphabetischen Ablage wird nach Buchstaben (meist Namen) geordnet. Vorteil: intuitiv; Nachteil: bei vielen gleichen Anfangsbuchstaben unübersichtlich.' },
+      { tag: 13, topic: 'Chronologisch', q: 'Wonach ordnet die chronologische Ablage?',
+        options: ['Nach Datum bzw. Zeit (z. B. neueste oben)', 'Nach dem Alphabet', 'Nach dem Geldwert der Dokumente', 'Nach der Farbe der Ordner'],
+        a: 0, e: 'Die chronologische Ablage sortiert nach Datum/Zeit. Sie ist typisch für Korrespondenz und Belege, bei denen die zeitliche Reihenfolge wichtig ist.' },
+      { tag: 13, topic: 'Numerisch', q: 'Welcher Vorteil spricht für die numerische (Nummern-)Ablage?',
+        options: ['Eindeutige Zuordnung, beliebige Erweiterbarkeit und datenschutzfreundlich, da keine Namen sichtbar sind', 'Man braucht überhaupt kein Ordnungssystem', 'Sie ist nur für Privatpersonen erlaubt', 'Sie funktioniert nur mit Buchstaben'],
+        a: 0, e: 'Die numerische Ablage ist eindeutig, leicht erweiterbar und diskret (Nummern statt Klarnamen). Sie braucht jedoch ein Register zum Wiederfinden.' },
+      { tag: 13, topic: 'Stufen', q: 'Welche Stufen unterscheidet man bei der Schriftgutverwaltung nach Aktualität?',
+        options: ['Laufende Registratur (aktiv) → Zwischenarchiv (halbaktiv) → Archiv (inaktiv)', 'Nur ein einziger großer Aktenstapel', 'Eingang → Ausgang → Müll', 'Online → Offline → verloren'],
+        a: 0, e: 'Schriftgut durchläuft Phasen: aktive Ablage (häufiger Zugriff), halbaktives Zwischenarchiv und inaktives Archiv – bis zur Aussonderung nach Fristablauf.' },
+      { tag: 13, topic: 'Skartierung', q: 'Was bedeutet „Skartieren" (Kassation) in der Ablage?',
+        options: ['Das datenschutzgerechte Vernichten nicht mehr benötigter Unterlagen nach Ablauf der Aufbewahrungsfrist', 'Das Einscannen aller Dokumente', 'Das Umbenennen von Ordnern', 'Das Verschieben der Akten ins Hauptarchiv'],
+        a: 0, e: 'Skartieren (Kassation) ist das geordnete, datenschutzkonforme Vernichten von Unterlagen, deren Aufbewahrungsfrist abgelaufen ist – meist per Aktenvernichter/Schredder.' },
+
+      // ===== TAG 14 — Digitales DMS, Datenschutz & Umweltschutz =====
+      { tag: 14, topic: 'DMS', q: 'Was ist ein Dokumentenmanagementsystem (DMS)?',
+        options: ['Eine Software zur elektronischen Erfassung, Verwaltung, Speicherung und Wiederauffindung von Dokumenten', 'Ein besonders großer Aktenschrank aus Stahl', 'Ein Programm zum Frankieren von Briefen', 'Eine Telefonanlage für das Büro'],
+        a: 0, e: 'Ein DMS digitalisiert die Schriftgutverwaltung: Dokumente werden erfasst, indexiert, versioniert, sicher gespeichert und per Suche schnell wiedergefunden.' },
+      { tag: 14, topic: 'Digitale Ablage', q: 'Welcher Vorteil spricht für die digitale gegenüber der papierbasierten Ablage?',
+        options: ['Schneller Zugriff per Volltextsuche, Platzersparnis und gleichzeitiger Mehrfachzugriff', 'Höherer Papierverbrauch', 'Akten gehen häufiger verloren', 'Nur eine Person kann gleichzeitig zugreifen'],
+        a: 0, e: 'Digitale Ablage spart Platz, erlaubt schnelle Suche und parallelen Zugriff mehrerer Personen und vereinfacht Sicherung/Versionierung – sie muss aber GoBD- und DSGVO-konform sein.' },
+      { tag: 14, topic: 'DSGVO', q: 'Was besagt der Grundsatz der Datenminimierung (Art. 5 DSGVO)?',
+        options: ['Es dürfen nur die für den jeweiligen Zweck notwendigen personenbezogenen Daten erhoben und verarbeitet werden', 'Man soll möglichst viele Daten auf Vorrat sammeln', 'Personenbezogene Daten dürfen frei weitergegeben werden', 'Daten müssen niemals gelöscht werden'],
+        a: 0, e: 'Datenminimierung bedeutet: nur so viele Daten wie nötig, zweckgebunden und nicht „auf Vorrat". Ergänzt durch Zweckbindung, Rechtmäßigkeit und Speicherbegrenzung.' },
+      { tag: 14, topic: 'Betroffenenrechte', q: 'Welches Recht räumt die DSGVO betroffenen Personen ein?',
+        options: ['Auskunft, Berichtigung, Löschung („Recht auf Vergessenwerden") und Widerspruch', 'Das Recht, fremde Daten beliebig einzusehen', 'Das Recht auf kostenlose Software', 'Das Recht, Steuern zu sparen'],
+        a: 0, e: 'Betroffene haben u. a. Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch gegenüber dem Verantwortlichen.' },
+      { tag: 14, topic: 'Umweltschutz', q: 'Welche Maßnahme schont im Büro Ressourcen und die Umwelt?',
+        options: ['Doppelseitiger Druck, Recyclingpapier, Energiesparen und konsequente Mülltrennung', 'Jedes Dokument mehrfach einseitig ausdrucken', 'Geräte rund um die Uhr im Standby lassen', 'Papier grundsätzlich nach einmaligem Gebrauch wegwerfen'],
+        a: 0, e: 'Ressourcenschonung im Büro: doppelseitig und nur bei Bedarf drucken, Recyclingpapier nutzen, Strom sparen, Müll trennen – Schritte Richtung „papierloses/grünes Büro".' },
+
+      // ===== TAG 15 — Vertiefung & Reflektion =====
+      { tag: 15, topic: 'Büroformen', q: 'Welche moderne Bürogestaltung verbindet Konzentrationszonen mit Kommunikations- und Begegnungsflächen?',
+        options: ['Das Kombibüro bzw. Multi-Space-/Activity-Based-Working-Konzept', 'Das reine Zellenbüro ohne Gemeinschaftsflächen', 'Das klassische Lager', 'Das Einzelbüro ohne Fenster'],
+        a: 0, e: 'Multi-Space/Activity-Based Working (im Kern wie das Kombibüro) bietet je nach Tätigkeit passende Zonen: Ruhe zum Konzentrieren, offene Flächen zum Austausch.' },
+      { tag: 15, topic: 'Recht', q: 'Welche Rechtsgrundlage regelt heute die Anforderungen an Bildschirmarbeitsplätze?',
+        options: ['Die Arbeitsstättenverordnung (ArbStättV) mit Anhang (vormals Bildschirmarbeitsverordnung)', 'Das Bürgerliche Gesetzbuch allein', 'Das Handelsgesetzbuch', 'Die Straßenverkehrsordnung'],
+        a: 0, e: 'Die früher eigenständige Bildschirmarbeitsverordnung ist heute in die ArbStättV (Anhang Nr. 6) integriert; sie regelt Ergonomie, Beleuchtung, Vorsorge u. a.' },
+      { tag: 15, topic: 'Zeitmanagement', q: 'Welche Methode hilft, Aufgaben nach Wichtigkeit und Dringlichkeit zu priorisieren?',
+        options: ['Die Eisenhower-Matrix', 'Die Andler-Formel', 'Das Kanban-Lager', 'Die ABC-Lagerklassifikation'],
+        a: 0, e: 'Die Eisenhower-Matrix sortiert Aufgaben in vier Felder (wichtig/dringend) und gibt so eine klare Reihenfolge: selbst tun, terminieren, delegieren, streichen.' },
+      { tag: 15, topic: 'Aufbewahrung', q: 'Welche Aufbewahrungsfrist gilt klassisch für Buchungsbelege und Jahresabschlüsse?',
+        options: ['10 Jahre', '3 Jahre', '6 Monate', '100 Jahre'],
+        a: 0, e: 'Jahresabschlüsse und Buchungsbelege gehören zu den 10-Jahres-Unterlagen (§ 257 HGB / § 147 AO) – eine zentrale Faustregel der Schriftgutverwaltung.' }
+    ]
+  }
+};
+
+// ---- gemeinsame Engine ----
+let mqKey = null;          // aktueller Quiz-Schlüssel ('w1'|'w2'|'w3')
+let mqAnswers = [];
+let mqState = 'start';     // 'start' | 'running' | 'result'
+
+function mqDef() { return QUIZ_DEFS[mqKey]; }
+function mqQuestions() { return mqDef().questions; }
+
+function mqShuffleAnswers() {
+  mqQuestions().forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+function mqOrigIndex(qi, displayIdx) { return mqQuestions()[qi].shuffled[displayIdx]; }
+function mqDisplayCorrectIdx(qi) { return mqQuestions()[qi].shuffled.indexOf(mqQuestions()[qi].a); }
+
+function mqIsCorrect(qi) {
+  if (mqAnswers[qi] === null || mqAnswers[qi] === undefined) return false;
+  return mqOrigIndex(qi, mqAnswers[qi]) === mqQuestions()[qi].a;
+}
+
+function mqIhkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',  color: '#EF4444', bestanden: false };
+}
+
+function mqPickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+function startMorgenQuiz(key) {
+  mqKey = key;
+  mqShuffleAnswers();
+  mqAnswers = new Array(mqQuestions().length).fill(null);
+  mqState = 'start';
+  const def = mqDef();
+  const startWitz = mqPickRandom(def.witzeStart);
+  const modal = document.getElementById('morgenQuizModal');
+  modal.innerHTML = `
+    <h2>${def.emoji} ${def.title}</h2>
+    <p class="mq-sub">${def.sub}</p>
+    <div class="quiz-witz">${startWitz}</div>
+    <ul style="color: var(--bfw-ink-soft); font-size: 0.95rem; line-height: 1.7; padding-left: 1.3rem; margin: 1rem 0;">
+      <li><strong>${def.questions.length} Fragen</strong> — ${def.perDayNote}</li>
+      <li><strong>Sofortige Auswertung</strong> nach jeder Antwort mit Erklärung</li>
+      <li><strong>IHK-Notenschlüssel</strong> am Ende</li>
+      <li>Wenn ein Gesetzestext oder Sachverhalt zitiert ist, lesen Sie ihn vollständig — die Lösung steht im Text!</li>
+    </ul>
+    <div class="quiz-controls">
+      <button class="btn-quiz ghost" onclick="closeMorgenQuiz()">Abbrechen</button>
+      <button class="btn-quiz primary" onclick="mqRenderRunning()">Los gehts →</button>
+    </div>
+  `;
+  document.getElementById('morgenQuizOverlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  window.scrollTo(0, 0);
+}
+
+function closeMorgenQuiz() {
+  document.getElementById('morgenQuizOverlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function mqRenderRunning() {
+  mqState = 'running';
+  const def = mqDef();
+  const modal = document.getElementById('morgenQuizModal');
+
+  let blocks = '';
+  let lastTag = 0;
+  mqQuestions().forEach((qd, i) => {
+    if (qd.tag !== lastTag) {
+      blocks += `<div class="mq-block-header">${def.tagLabels[qd.tag]}</div>`;
+      lastTag = qd.tag;
+    }
+    blocks += mqRenderQuestion(i);
+  });
+
+  modal.innerHTML = `
+    <h2>${def.emoji} ${def.title}</h2>
+    <div class="quiz-score">
+      <div>Beantwortet: <strong id="mqAnswered">0</strong> / ${def.questions.length}</div>
+      <div>Richtig: <strong id="mqCorrect">0</strong></div>
+    </div>
+    <div class="quiz-progress"><div id="mqProgressBar"></div></div>
+    <div id="mqQuiz">${blocks}</div>
+    <div class="quiz-controls">
+      <button class="btn-quiz danger" onclick="closeMorgenQuiz()">Schließen</button>
+      <button class="btn-quiz primary" onclick="mqFinish()">Jetzt auswerten</button>
+    </div>
+  `;
+  window.scrollTo(0, 0);
+}
+
+function mqRenderQuestion(qi) {
+  const qd = mqQuestions()[qi];
+  let opts = '';
+  qd.shuffled.forEach((origIdx, j) => {
+    const letter = String.fromCharCode(65 + j);
+    opts += `<div class="mq-option" id="mq-opt-${qi}-${j}" onclick="mqAnswer(${qi}, ${j})">
+      <div class="mq-marker">${letter}</div>
+      <div>${qd.options[origIdx]}</div>
+    </div>`;
+  });
+  const paragraphBlock = qd.paragraph
+    ? `<div class="mq-paragraph"><span class="mq-paragraph-label">Gesetzestext / Sachverhalt zum Mitlesen</span>${qd.paragraph}</div>`
+    : '';
+  return `<div class="mq-question" id="mq-q-${qi}">
+    <span class="mq-q-num">Frage ${qi + 1}</span><span class="mq-q-topic">${qd.topic}</span>
+    <p class="mq-q-text">${qd.q}</p>
+    ${paragraphBlock}
+    <div class="mq-options">${opts}</div>
+  </div>`;
+}
+
+function mqAnswer(qi, oi) {
+  if (mqAnswers[qi] !== null) return;
+  mqAnswers[qi] = oi;
+  const q = document.getElementById(`mq-q-${qi}`);
+  const opts = q.querySelectorAll('.mq-option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  const correctDisplayIdx = mqDisplayCorrectIdx(qi);
+  const userIsCorrect = (oi === correctDisplayIdx);
+  opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+  if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+
+  const exp = document.createElement('div');
+  exp.className = 'mq-exp';
+  exp.innerHTML = `<strong>${userIsCorrect ? '✓ Richtig.' : '✗ Falsch.'}</strong> ${mqQuestions()[qi].e}`;
+  q.appendChild(exp);
+  q.classList.add('locked');
+
+  mqUpdateScore();
+
+  const answered = mqAnswers.filter(a => a !== null).length;
+  if (answered === mqQuestions().length) {
+    setTimeout(mqFinish, 800);
+  }
+}
+
+function mqUpdateScore() {
+  const answered = mqAnswers.filter(a => a !== null).length;
+  const correct = mqAnswers.filter((a, i) => mqIsCorrect(i)).length;
+  document.getElementById('mqAnswered').textContent = answered;
+  document.getElementById('mqCorrect').textContent = correct;
+  document.getElementById('mqProgressBar').style.width = `${(answered / mqQuestions().length) * 100}%`;
+}
+
+function mqFinish() {
+  const qs = mqQuestions();
+  for (let i = 0; i < qs.length; i++) {
+    if (mqAnswers[i] === null) {
+      const q = document.getElementById(`mq-q-${i}`);
+      if (!q) continue;
+      const opts = q.querySelectorAll('.mq-option');
+      opts.forEach(o => o.classList.add('locked'));
+      opts[mqDisplayCorrectIdx(i)].classList.add('correct');
+      if (!q.querySelector('.mq-exp')) {
+        const exp = document.createElement('div');
+        exp.className = 'mq-exp';
+        exp.innerHTML = `<strong>Nicht beantwortet.</strong> ${qs[i].e}`;
+        q.appendChild(exp);
+      }
+      q.classList.add('locked');
+    }
+  }
+  mqShowResult();
+}
+
+function mqShowResult() {
+  mqState = 'result';
+  const def = mqDef();
+  const total = mqQuestions().length;
+  const correct = mqAnswers.filter((a, i) => mqIsCorrect(i)).length;
+  const answered = mqAnswers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = mqIhkNote(pct);
+  const endWitz = mqPickRandom(def.witzeEnde);
+
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+  const skalaRows = skala.map(s => `
+    <tr class="${s.stufe === note.num ? 'active' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const resultHTML = `
+    <h2 style="text-align: center;">🎉 Quiz ausgewertet</h2>
+    <div class="mq-result">
+      <div class="mq-big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="mq-grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div class="mq-bestanden" style="color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'};">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="color: var(--bfw-warn); font-size: 0.95rem; margin-bottom: 1rem;">${total - answered} Fragen wurden nicht beantwortet — als falsch gewertet.</div>` : ''}
+      <table class="mq-skala">
+        <thead><tr><th>Note</th><th>Bezeichnung</th><th>Prozentbereich</th></tr></thead>
+        <tbody>${skalaRows}</tbody>
+      </table>
+    </div>
+    <div class="quiz-witz">${endWitz}</div>
+    <div class="mq-result-buttons">
+      <button class="btn-quiz ghost" onclick="document.getElementById('mqAnswersSection').scrollIntoView({behavior:'smooth'})">↓ Antworten im Detail</button>
+      <button class="btn-quiz primary" onclick="startMorgenQuiz('${mqKey}')">Neu mischen &amp; nochmal</button>
+      <button class="btn-quiz danger" onclick="closeMorgenQuiz()">Schließen</button>
+    </div>
+  `;
+
+  const modal = document.getElementById('morgenQuizModal');
+  const existingQuiz = document.getElementById('mqQuiz');
+  if (existingQuiz) {
+    modal.innerHTML = resultHTML + `<div id="mqAnswersSection" style="margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid var(--bfw-border);"><h3 style="color: var(--bfw-primary-dark); margin-bottom: 1rem;">Alle Fragen mit Lösungen</h3>${existingQuiz.outerHTML}</div>`;
+  } else {
+    modal.innerHTML = resultHTML;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Schließen mit Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Escape') return;
+  if (document.getElementById('morgenQuizOverlay').classList.contains('active')) {
+    closeMorgenQuiz();
+  }
+});
+
+// Auto-Login wenn schon freigeschaltet
+if (localStorage.getItem(STORAGE_KEY) === '1') {
+  showDashboard();
+}
+</script>
+
+</body>
+</html>

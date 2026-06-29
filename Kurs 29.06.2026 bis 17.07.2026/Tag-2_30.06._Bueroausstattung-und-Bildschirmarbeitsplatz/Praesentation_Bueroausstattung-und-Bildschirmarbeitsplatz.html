@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 2 — Büroausstattung & ergonomischer Bildschirmarbeitsplatz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 2 · 30.06.2026</span>
+    <h1>Büroausstattung &amp; ergonomischer Bildschirmarbeitsplatz</h1>
+    <p class="subtitle">Die Arbeit an den Menschen anpassen — Stuhl, Tisch, Bildschirm</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 1 (S. 64–70, 84)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>den Begriff <strong>Ergonomie</strong> erklären und auf den Büroarbeitsplatz übertragen</li>
+      <li>die Anforderungen an <strong>Bürostuhl (DIN EN 1335)</strong> und Arbeitstisch benennen</li>
+      <li>einen <strong>Bildschirmarbeitsplatz</strong> korrekt einstellen (Blickabstand, 90°-Winkel)</li>
+      <li><strong>dynamisches Sitzen</strong> und die <strong>Steh-Sitz-Dynamik</strong> erläutern</li>
+      <li>die <strong>Arbeitsstättenverordnung</strong> und die Prüfsiegel <strong>GS/CE</strong> einordnen</li>
+      <li>moderne Ausstattung (Steh-Sitz-Tisch, Laptop + Dockingstation, Homeoffice) bewerten</li>
+    </ul>
+  </section>
+
+  <!-- 3. Ergonomie -->
+  <section class="slide">
+    <h2>Ergonomie — die Arbeit an den Menschen anpassen</h2>
+    <p>Die Ergonomie ist ein Teilgebiet der <strong>Arbeitswissenschaft</strong>. Sie befasst sich mit der Abstimmung zwischen Mensch, Maschine und Arbeitswelt und dient dem <strong>präventiven Gesundheitsschutz</strong>.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      <strong>Ergonomie = die Arbeit an den Menschen anpassen</strong> — nicht umgekehrt. Ziel: Schutz vor Berufskrankheiten, Arbeitsunfällen und Monotonie.
+    </div>
+    <p class="muted">Buchverweis: S. 64</p>
+  </section>
+
+  <!-- 4. Bürostuhl -->
+  <section class="slide">
+    <h2>Der Bürostuhl (DIN EN 1335)</h2>
+    <p>Auf dem Bürostuhl verbringen Büroangestellte den größten Teil ihrer Arbeitszeit. Falsches Sitzen führt zu Rücken-, Nacken- und Kopfschmerzen.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Anforderungen (1)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Verstellbare Sitzhöhe 42–50 cm</li>
+          <li>Sitztiefe min. 38–44 cm, Breite 40–48 cm</li>
+          <li>Verstellbare Rückenlehne (36–48 cm)</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anforderungen (2)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Stand- und kippsicher, min. 5 Rollen</li>
+          <li>Rollwiderstand passend zum Boden</li>
+          <li>Höhenverstellbare Armlehnen</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Norm DIN EN 1335 regelt Maße, Sicherheit und Prüfkriterien.</p>
+  </section>
+
+  <!-- 5. So sitzen Sie richtig - Diagramm -->
+  <section class="slide">
+    <h2>So sitzen Sie richtig</h2>
+    <div class="figure" id="fig-sitzen"></div>
+    <p class="caption">Reihenfolge: erst Stuhl, dann Tisch, dann Bildschirm einstellen.</p>
+  </section>
+
+  <!-- 6. Fünf Regeln -->
+  <section class="slide">
+    <h2>Die fünf Regeln im Detail</h2>
+    <ol class="numlist">
+      <li>Oberste Bildschirmzeile <strong>leicht unterhalb der Sehachse</strong> (Blick leicht gesenkt).</li>
+      <li>Sichtabstand <strong>mindestens 50 cm</strong> (praktisch 50–70 cm); Bildschirm <strong>im rechten Winkel zum Fenster</strong>.</li>
+      <li>Tastatur und Maus in einer Ebene mit <strong>Ellenbogen und Handflächen</strong>.</li>
+      <li><strong>90°-Winkel</strong> zwischen Ober-/Unterarm und Ober-/Unterschenkel.</li>
+      <li>Füße brauchen eine <strong>feste Auflage</strong> — ggf. Fußhocker.</li>
+    </ol>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>„50 sehen, 90 beugen, fest stehen."</strong>
+    </div>
+  </section>
+
+  <!-- 7. Dynamisches Sitzen -->
+  <section class="slide">
+    <h2>Dynamisches Sitzen</h2>
+    <p>Auch auf einem perfekt eingestellten Stuhl gilt: die Sitzposition <strong>immer wieder verändern</strong>. Drei Positionen werden unterschieden:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Vordere Position</div>Winkel unter 90°, Oberschenkel nach unten geneigt.</div>
+      <div class="card teal"><div class="card-title">Mittlere Position</div>Aufrecht, Oberkörper/Horizontale = 90°.</div>
+      <div class="card amber"><div class="card-title">Hintere Position</div>Zurückgelehnt, Winkel größer als 90°.</div>
+    </div>
+    <p class="muted">Wechsel entlasten die Bandscheiben und verbessern die Durchblutung.</p>
+  </section>
+
+  <!-- 8. Steh-Sitz-Dynamik -->
+  <section class="slide">
+    <h2>Steh-Sitz-Dynamik</h2>
+    <p>Neben dem dynamischen Sitzen sollte regelmäßig zwischen Sitzen und Stehen gewechselt werden: <strong>2–4 Haltungswechsel pro Stunde</strong>, Stehphasen höchstens 20–30 Minuten.</p>
+    <table>
+      <thead><tr><th>Haltung</th><th>Anteil der Arbeitszeit</th></tr></thead>
+      <tbody>
+        <tr><td>Sitzen</td><td>60 %</td></tr>
+        <tr><td>Stehen</td><td>30 %</td></tr>
+        <tr><td>Gezieltes Umhergehen</td><td>10 %</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Faustregel Schweizer Arbeitsmediziner: 60 / 30 / 10.</p>
+  </section>
+
+  <!-- 9. Sitzmechaniken -->
+  <section class="slide">
+    <h2>Vier Sitzmechaniken</h2>
+    <table>
+      <thead><tr><th>Mechanik</th><th>Funktionsweise</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Synchron</strong></td><td>Sitz und Lehne fest gekoppelt — Winkel ändert sich beim Zurücklehnen automatisch.</td></tr>
+        <tr><td><strong>Wipp</strong></td><td>Gekoppelt, aber Winkel konstant — Gefühl wie ein Schaukelstuhl.</td></tr>
+        <tr><td><strong>Asynchron</strong></td><td>Sitz- und Lehnenwinkel unabhängig voneinander verstellbar.</td></tr>
+        <tr><td><strong>Pendel</strong></td><td>Steuerung durch Gewichtsverlagerung — ähnlich einem Sitzball.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 10. Prüfsiegel -->
+  <section class="slide">
+    <h2>Prüfsiegel: GS und CE</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">GS-Zeichen</div>
+        <p style="font-size: 1rem;">„Geprüfte Sicherheit": Einhaltung des Produktsicherheitsgesetzes. <strong>Freiwillig</strong> verwendet.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">CE-Zeichen</div>
+        <p style="font-size: 1rem;">Communautés Européennes: Hersteller bestätigt EU-Anforderungen. <strong>Gesetzlich vorgeschrieben</strong> — „technischer Reisepass".</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      GS und CE sind die <strong>einzig gesetzlich geregelten</strong> Produktsicherheitszeichen in Europa. <strong>GS = freiwillig, CE = Pflicht.</strong>
+    </div>
+  </section>
+
+  <!-- 11. Arbeitstisch -->
+  <section class="slide">
+    <h2>Der Arbeitstisch</h2>
+    <p>Auch der Tisch muss anpassbar sein. <strong>Einstellbar</strong> = nur einmal mit Werkzeug, <strong>verstellbar</strong> = jederzeit mit wenigen Handgriffen.</p>
+    <ul>
+      <li>Arbeitsfläche min. <strong>160 × 80 cm</strong> (Call-Center: 120 × 80 cm)</li>
+      <li>Höheneinstellbar <strong>65–85 cm</strong> (sonst min. 72 cm), Mindesttiefe 80 cm</li>
+      <li>Abgerundete Kanten, reflexionsarme Oberfläche, geringe Wärmeleitfähigkeit</li>
+      <li>Genügend Beinfreiheit und Stauraum</li>
+    </ul>
+    <div class="merksatz">
+      <span class="merksatz-label">📐 Richtige Höhe</span>
+      Bei geradem Rücken liegen die <strong>Unterarme flach auf der Platte</strong> — die Schultern werden nicht hochgezogen.
+    </div>
+  </section>
+
+  <!-- 12. Steh-Sitz-Tisch & Drei-Zonen -->
+  <section class="slide">
+    <h2>Steh-Sitz-Tisch &amp; Drei-Zonen-Arbeitsplatz</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Steh-Sitz-Arbeitstisch</div>
+        <p style="font-size: 1rem;">Arbeitshöhe <strong>62–120 cm</strong>, verstellbar per Elektromotor oder Gasfeder. Reiner Steharbeitsplatz: 95–120 cm.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Drei-Zonen-Arbeitsplatz</div>
+        <p style="font-size: 1rem;">Vereint drei Zonen: Sitzarbeit ohne PC, Sitzarbeit am PC und Arbeit im Stehen.</p>
+      </div>
+    </div>
+    <p class="muted">So wird die Steh-Sitz-Dynamik baulich unterstützt.</p>
+  </section>
+
+  <!-- 13. Komponenten -->
+  <section class="slide">
+    <h2>Komponenten des Bildschirmarbeitsplatzes</h2>
+    <p>Neben Bürostuhl und Arbeitstisch besteht der Bildschirmarbeitsplatz in der Regel aus:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Bildschirm</div>Reflexionsarm, dreh- und neigbar.</div>
+      <div class="card teal"><div class="card-title">Tastatur</div>Getrennte, neigbare Einheit.</div>
+      <div class="card teal"><div class="card-title">Maus</div>Auf Ellenbogenebene.</div>
+      <div class="card amber"><div class="card-title">Vorlagenhalter</div>Manuskripthalter auf Wunsch.</div>
+      <div class="card amber"><div class="card-title">Software</div>Softwareergonomie beachten.</div>
+      <div class="card amber"><div class="card-title">Drucker</div>Teil der Ausstattung.</div>
+    </div>
+  </section>
+
+  <!-- 14. Arbeitsstättenverordnung -->
+  <section class="slide">
+    <h2>Die Arbeitsstättenverordnung (ArbStättV)</h2>
+    <p>Sie legt fest, was der Arbeitgeber beim <strong>Einrichten und Betreiben</strong> von Arbeitsstätten für Sicherheit und Gesundheitsschutz beachten muss (Räume, Beleuchtung, Belüftung, Temperatur).</p>
+    <div class="merksatz">
+      <span class="merksatz-label">📋 Wo steht es?</span>
+      Die Anforderungen an Bildschirmarbeitsplätze stehen im <strong>Anhang, Punkt 6</strong> (ehemals Bildschirmarbeitsverordnung). Konkretisiert werden sie in den <strong>ASR</strong> (Technische Regeln für Arbeitsstätten).
+    </div>
+    <p class="muted">Buchverweis: S. 68–70, 84</p>
+  </section>
+
+  <!-- 15. Anforderungen ArbStättV -->
+  <section class="slide">
+    <h2>Anforderungen an Bildschirmarbeitsplätze</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Platz &amp; Bildschirm</div>
+        <ul style="margin-left: 1rem;">
+          <li>Raum für wechselnde Arbeitshaltungen</li>
+          <li>Reflexions- und blendfreie Oberflächen</li>
+          <li>Flimmer- und verzerrungsfreies Bild</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Eingabe &amp; Licht</div>
+        <ul style="margin-left: 1rem;">
+          <li>Getrennte, neigbare Tastatur + Handballenauflage</li>
+          <li>Beleuchtung der Aufgabe angepasst</li>
+          <li>Fußstütze/Manuskripthalter auf Wunsch</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Softwareergonomie: anpassbar, hilft bei Dialogabläufen, keine heimliche Kontrolle.</p>
+  </section>
+
+  <!-- 16. Modernes Wissen -->
+  <section class="slide">
+    <h2>Modernes Wissen für die Praxis</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Laptop + Dockingstation</div>
+        <p style="font-size: 1rem;">Laptop allein ist ein Kompromiss (Bildschirm hoch <em>oder</em> Tastatur tief). Dockingstation trennt Bildschirm, Tastatur und Maus.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Homeoffice-Ergonomie</div>
+        <p style="font-size: 1rem;">Dieselben Regeln gelten zu Hause. Küchentisch/Sofa führen zu Beschwerden — Stuhl, externer Monitor und Licht zuerst.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🚶 Bewegung im Alltag</span>
+      Telefonate im Stehen, Drucker bewusst weiter weg — so entstehen automatisch Haltungswechsel.
+    </div>
+  </section>
+
+  <!-- 17. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 2</h2>
+    <ol class="numlist">
+      <li><strong>Ergonomie</strong> passt die Arbeit an den Menschen an — Schutz der Gesundheit.</li>
+      <li><strong>Bürostuhl</strong> nach DIN EN 1335; korrekt einstellen (90°-Winkel).</li>
+      <li>„So sitzen Sie richtig": Bildschirm unter Sehachse, <strong>≥ 50 cm</strong>, feste Fußauflage.</li>
+      <li><strong>Dynamisches Sitzen</strong> + <strong>Steh-Sitz-Dynamik</strong> (60/30/10), 4 Sitzmechaniken.</li>
+      <li><strong>GS</strong> (freiwillig) und <strong>CE</strong> (Pflicht); Arbeitstisch min. 160 × 80 cm.</li>
+      <li><strong>Arbeitsstättenverordnung</strong> Anhang Punkt 6 regelt Bildschirmarbeitsplätze.</li>
+    </ol>
+  </section>
+
+  <!-- 18. Praxisbeispiel -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Arbeitsplatz einrichten</h2>
+    <p>Frau Akin richtet ihren neuen Bildschirmarbeitsplatz ein.</p>
+    <ol class="numlist">
+      <li><strong>Stuhl zuerst</strong>: Sitzhöhe so, dass Ober-/Unterschenkel 90° bilden, Füße fest stehen.</li>
+      <li><strong>Tisch anpassen</strong>: Höhe so, dass die Unterarme flach aufliegen.</li>
+      <li><strong>Bildschirm</strong>: ca. 60 cm Abstand, oberste Zeile leicht unter der Sehachse.</li>
+      <li><strong>Reflexionen</strong>: Monitor im rechten Winkel zum Fenster — Spiegelungen weg.</li>
+      <li><strong>Eingabe</strong>: Tastatur und Maus auf Ellenbogenhöhe, Handballen aufliegend.</li>
+      <li><strong>Bewegung</strong>: 2× pro Stunde im Stehen arbeiten (Steh-Sitz-Tisch).</li>
+    </ol>
+    <p class="muted">So entsteht ein gesunder, gesetzeskonformer Arbeitsplatz.</p>
+  </section>
+
+  <!-- 19. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Anforderungen an Stuhl/Tisch nennen</li>
+          <li>Regeln „So sitzen Sie richtig"</li>
+          <li>GS- vs. CE-Zeichen unterscheiden</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Ergonomische Mängel erkennen</li>
+          <li>Verbesserungen vorschlagen</li>
+          <li>ArbStättV-Anforderungen einordnen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 20. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Wie ist Ihr Stuhl/Tisch eingestellt — und wo verspannen Sie nach einem langen Tag?</li>
+      <li>Würden Sie im Stehen arbeiten? Was hält Sie ab, was würde helfen?</li>
+      <li>Wie ergonomisch ist Ihr Homeoffice wirklich — und wer trägt die Kosten?</li>
+      <li>Reichen Gesetze (ArbStättV), oder muss der Einzelne selbst auf Ergonomie achten?</li>
+    </ol>
+  </section>
+
+  <!-- 21. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 3 (01.07.)</h2>
+    <p class="subtitle">Arbeitsumgebung &amp; Umweltfaktoren</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Beleuchtung</strong> — Tageslicht, künstliches Licht, Blendung</li>
+      <li><strong>Raumklima</strong> — Temperatur, Luftfeuchte, Lüftung</li>
+      <li><strong>Lärm &amp; Akustik</strong> — Schallschutz im Büro</li>
+      <li><strong>Farbe &amp; Raumwirkung</strong> — Wohlbefinden und Leistung</li>
+      <li><strong>Arbeitssicherheit</strong> — Unfallverhütung im Büro</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Bueroausstattung-und-Bildschirmarbeitsplatz.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Bueroausstattung-und-Bildschirmarbeitsplatz.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 21</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: So sitzen Sie richtig — fünf Regeln am Arbeitsplatz
+  const c1 = document.getElementById('fig-sitzen');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 300');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    // Tisch
+    box(rc, svg, 250, 210, 400, 16, '#ECFEFF', '#0F766E');
+    svg.appendChild(rc.line(300, 226, 300, 285, { roughness: 1.4, stroke: '#0F766E', strokeWidth: 1.8 }));
+    svg.appendChild(rc.line(600, 226, 600, 285, { roughness: 1.4, stroke: '#0F766E', strokeWidth: 1.8 }));
+    // Bildschirm
+    box(rc, svg, 470, 90, 170, 110, '#FEF3C7', '#F59E0B');
+    svg.appendChild(rc.line(555, 200, 555, 210, { roughness: 1.2, stroke: '#F59E0B', strokeWidth: 1.8 }));
+    // Tastatur
+    box(rc, svg, 300, 196, 120, 14, '#FFE4E6', '#F97316');
+    // Person (Kopf + Körper grob)
+    svg.appendChild(rc.circle(170, 95, 46, { roughness: 1.4, stroke: '#0F766E', strokeWidth: 1.8, fill: '#ECFEFF', fillStyle: 'solid' }));
+    box(rc, svg, 150, 125, 44, 90, '#ECFEFF', '#0F766E');
+    // Stuhl
+    box(rc, svg, 120, 215, 90, 14, '#ECFEFF', '#0F766E');
+    svg.appendChild(rc.line(205, 130, 205, 215, { roughness: 1.4, stroke: '#0F766E', strokeWidth: 1.8 }));
+    // Blicklinie
+    svg.appendChild(rc.line(190, 100, 470, 120, { roughness: 1.0, stroke: '#475569', strokeWidth: 1.2 }));
+    // Beschriftungen
+    text(svg, 555, 80, '1  Zeile unter Sehachse', { size: 14, bold: true, color: '#F59E0B' });
+    text(svg, 330, 145, '2  ≥ 50 cm', { size: 14, bold: true, color: '#475569' });
+    text(svg, 360, 250, '3  Tastatur + Maus', { size: 13, bold: true, color: '#F97316' });
+    text(svg, 250, 175, '4  90°-Winkel', { size: 13, bold: true, color: '#0F766E', anchor: 'end' });
+    text(svg, 165, 280, '5  Füße fest', { size: 13, bold: true, color: '#0F766E' });
+    text(svg, 450, 35, 'Ergonomie am Bildschirmarbeitsplatz', { size: 18, bold: true, color: '#0F766E' });
+  });
+});
+</script>
+
+</body>
+</html>

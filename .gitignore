@@ -1,6 +1,11 @@
 # Verlagsmaterial - nicht ins public Repo (Urheberrecht)
 **/GrundlagenLiteratur/*.pdf
+**/Grundlagenliteratur/*.pdf
 **/Grundlagen_*.pdf
+
+# Große Backups / Browser-Artefakte - nicht ins Repo
+*.zip
+.playwright-mcp/
 
 # Lokale Claude-Code-Konfiguration
 .claude/

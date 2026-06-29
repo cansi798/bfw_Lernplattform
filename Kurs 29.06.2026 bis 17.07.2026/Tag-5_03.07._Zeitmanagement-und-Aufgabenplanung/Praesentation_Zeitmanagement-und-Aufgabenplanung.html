@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 5 — Zeitmanagement & Aufgabenplanung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 5 · 03.07.2026</span>
+    <h1>Zeitmanagement &amp; Aufgabenplanung</h1>
+    <p class="subtitle">Die eigene Zeit bewusst steuern — Zeitdiebe, Methoden und Prioritäten</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 7 (S. 136–143)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>die <strong>Ziele des Zeitmanagements</strong> erklären und Zeitdiebe unterscheiden</li>
+      <li>den <strong>Sägeblatteffekt</strong> beschreiben und die „stille Stunde” begründen</li>
+      <li>die persönliche <strong>Leistungskurve</strong> nutzen, um Aufgaben zu verteilen</li>
+      <li>die Methoden <strong>ALPEN, Eisenhower, Pareto, ABC</strong> anwenden</li>
+      <li><strong>To-do-Listen</strong> führen, Ziele nach <strong>SMART</strong> formulieren und delegieren</li>
+      <li><strong>Selbstmanagement</strong> einordnen und moderne Tools bewerten</li>
+    </ul>
+  </section>
+
+  <!-- 3. Ziele des Zeitmanagements -->
+  <section class="slide">
+    <h2>Warum Zeitmanagement?</h2>
+    <p>24 Stunden hat jeder Tag — den Unterschied macht, <strong>wie</strong> wir die Zeit nutzen. Beim Zeitmanagement geht es darum, die persönlich vorhandene Zeit <strong>möglichst effektiv</strong> einzusetzen.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Notwendig sind: <strong>Zeitfresser erkennen</strong>, <strong>wichtige von unwichtigen Aufgaben unterscheiden</strong> und <strong>Prioritäten setzen</strong>.
+    </div>
+    <p class="muted">Ziele: Stress vermeiden · Zufriedenheit steigern · Work-Life-Balance · Buchverweis S. 136</p>
+  </section>
+
+  <!-- 4. Störungen -->
+  <section class="slide">
+    <h2>Störungen — die Zeitdiebe</h2>
+    <p>Zeitfresser unterteilt man in <strong>äußere</strong> (von anderen/Umgebung) und <strong>innere</strong> (von einem selbst) Störungen.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Äußere Störungen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Unordentlicher Arbeitsplatz</li>
+          <li>Unterbrechung durch Kollegen</li>
+          <li>Klingelnde Telefone, E-Mail-Kontrolle</li>
+          <li>Lärm, technische Störungen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Innere Störungen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Lustlosigkeit, Müdigkeit</li>
+          <li>Unfähigkeit, „nein” zu sagen</li>
+          <li>Fehlende Selbstdisziplin</li>
+          <li>Tagträumen, Redseligkeit</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Sägeblatteffekt - Diagramm -->
+  <section class="slide">
+    <h2>Der Sägeblatteffekt</h2>
+    <div class="figure" id="fig-saege"></div>
+    <p class="caption">Jede Unterbrechung senkt die Konzentration — bis zu <strong>28 %</strong> der Zeit gehen verloren.</p>
+  </section>
+
+  <!-- 6. Stille Stunde -->
+  <section class="slide">
+    <h2>Gegenmittel: die „stille Stunde”</h2>
+    <p>Ein fest geplanter <strong>Termin mit sich selbst</strong> für ungestörtes Arbeiten an wichtigen Aufgaben.</p>
+    <ul>
+      <li>In den Terminplan <strong>eintragen</strong></li>
+      <li>Telefon umstellen oder Anrufbeantworter einschalten</li>
+      <li>In eine ohnehin <strong>störungsarme Zeit</strong> legen</li>
+      <li>Wirklich für <strong>wichtige Aufgaben</strong> nutzen — nicht für E-Mails</li>
+    </ul>
+    <div class="merksatz">
+      <span class="merksatz-label">🍅 Modern</span>
+      Die <strong>Pomodoro-Technik</strong> (z. B. 25 Min arbeiten, 5 Min Pause) ist eine moderne Form der stillen Stunde.
+    </div>
+  </section>
+
+  <!-- 7. Leistungskurve - Diagramm -->
+  <section class="slide">
+    <h2>Die Leistungskurve eines Durchschnittsmenschen</h2>
+    <div class="figure" id="fig-leistung"></div>
+    <p class="caption">Hoch zwischen <strong>08–12 Uhr</strong>, Tief nach der Mittagspause — wichtige Aufgaben gehören an den Vormittag.</p>
+  </section>
+
+  <!-- 8. Pausen / ArbZG -->
+  <section class="slide">
+    <h2>Pausen &amp; Arbeitszeitgesetz</h2>
+    <p>Pausen tanken Kraft, senken den Stresspegel und das Burnout- sowie Unfallrisiko. <strong>Brötchen essen + E-Mails lesen ist keine Pause.</strong></p>
+    <table>
+      <thead><tr><th>Arbeitszeit</th><th>Mindestpause (§ 4 ArbZG)</th></tr></thead>
+      <tbody>
+        <tr><td>mehr als 6 bis 9 Stunden</td><td>30 Minuten</td></tr>
+        <tr><td>mehr als 9 Stunden</td><td>45 Minuten</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Aufteilbar in Abschnitte von je mind. 15 Min · max. 6 Std. ohne Pause</p>
+  </section>
+
+  <!-- 9. Methoden Überblick -->
+  <section class="slide">
+    <h2>Methoden des Zeitmanagements</h2>
+    <p>Fünf bewährte Methoden helfen, Aufgaben zu ordnen und Prioritäten zu setzen:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">ABC-Analyse</div>Aufgaben nach Priorität (A/B/C).</div>
+      <div class="card teal"><div class="card-title">Eisenhower</div>Wichtig × dringend.</div>
+      <div class="card amber"><div class="card-title">ALPEN</div>Schriftlicher Tagesplan.</div>
+      <div class="card amber"><div class="card-title">Pareto (80/20)</div>20 % Zeit = 80 % Erfolg.</div>
+      <div class="card rose"><div class="card-title">Salamitaktik</div>Große Aufgaben zerlegen.</div>
+    </div>
+  </section>
+
+  <!-- 10. ABC-Analyse -->
+  <section class="slide">
+    <h2>Die ABC-Analyse</h2>
+    <table>
+      <thead><tr><th>Kategorie</th><th>Priorität</th><th>Handlung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>A</strong> — Muss</td><td>hoch</td><td>Morgens, selbst erledigen, nicht delegieren</td></tr>
+        <tr><td><strong>B</strong> — Soll</td><td>mittel</td><td>Nach A, meist nachmittags</td></tr>
+        <tr><td><strong>C</strong> — Kann</td><td>niedrig</td><td>Routine, ggf. delegieren</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">⚠️ Achtung</span>
+      C-Aufgaben fressen ca. <strong>65 % der Zeit</strong>, bringen aber nur 15 % des Erfolgs. A-Aufgaben: 15 % Zeit → 65 % Erfolg.
+    </div>
+  </section>
+
+  <!-- 11. Eisenhower - Diagramm -->
+  <section class="slide">
+    <h2>Das Eisenhower-Prinzip</h2>
+    <div class="figure" id="fig-eisenhower"></div>
+    <p class="caption"><strong>Wichtigkeit geht vor Dringlichkeit</strong> — sortiert nach zwei Kriterien in vier Felder.</p>
+  </section>
+
+  <!-- 12. ALPEN -->
+  <section class="slide">
+    <h2>Die ALPEN-Methode</h2>
+    <p>Von Lothar J. Seiwert — jeden Morgen einen schriftlichen Tagesplan in fünf Schritten:</p>
+    <ol class="numlist">
+      <li><strong>A</strong>ufgaben und Termine aufschreiben</li>
+      <li><strong>L</strong>änge der Tätigkeiten realistisch abschätzen</li>
+      <li><strong>P</strong>ufferzeiten einplanen</li>
+      <li><strong>E</strong>ntscheidungen über Prioritäten treffen, evtl. delegieren</li>
+      <li><strong>N</strong>achkontrolle — nicht Erledigtes neu einplanen</li>
+    </ol>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Faustregel</span>
+      Nur ca. <strong>60 % der Zeit verplanen</strong> — der Rest bleibt Reserve für Unvorhergesehenes.
+    </div>
+  </section>
+
+  <!-- 13. Pareto -->
+  <section class="slide">
+    <h2>Das Pareto-Prinzip (80/20)</h2>
+    <p>Vilfredo Pareto: 20 % der Bevölkerung besaßen 80 % des Vermögens. Auf die Zeit übertragen:</p>
+    <div class="merksatz">
+      <span class="merksatz-label">📊 Kernaussage</span>
+      <strong>20 % der eingesetzten Zeit bewirken 80 % des Erfolgs</strong> — die restlichen 80 % der Zeit nur noch 20 % des Erfolgs.
+    </div>
+    <ul>
+      <li>20 % der Arbeit am Schreibtisch → 80 % des Arbeitserfolgs</li>
+      <li>20 % der Kunden → 80 % des Gewinns</li>
+    </ul>
+    <p class="muted">Konsequenz: Prioritäten setzen, Wichtiges zuerst!</p>
+  </section>
+
+  <!-- 14. Salamitaktik -->
+  <section class="slide">
+    <h2>Die Salamitaktik</h2>
+    <p>Große Aufgaben wirken wie ein „Berg Arbeit” und demotivieren. Lösung: in <strong>kleine, überschaubare Schritte</strong> (Salamischeiben) zerlegen.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">So geht's</div>
+        <ul style="margin-left: 1rem;">
+          <li>Komplexe Aufgabe in Teilschritte aufteilen</li>
+          <li>Schritt für Schritt abarbeiten</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Vorteil</div>
+        <ul style="margin-left: 1rem;">
+          <li>Regelmäßige kleine Erfolgserlebnisse</li>
+          <li>Scheinbar Unmögliches wird machbar</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15. To-do vs Checkliste -->
+  <section class="slide">
+    <h2>To-do-Liste vs. Checkliste</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">To-do-Liste (Aufgabenliste)</div>
+        <p style="font-size: 1rem;">Hält <strong>zukünftige</strong> Aufgaben fest: „Was ist zu tun? Wer macht was bis wann?” → <strong>zukunftsbezogen</strong>.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Checkliste</div>
+        <p style="font-size: 1rem;">Prüft Vollständigkeit und Reihenfolge: „Wurde alles erledigt?” → <strong>vergangenheitsbezogen</strong>.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💻 Modern</span>
+      Digitale Aufgabenlisten (<strong>Microsoft To Do, Todoist, Trello</strong>): Erinnerungen, Fälligkeiten, Zuweisung an Kollegen, jederzeit teilbar.
+    </div>
+  </section>
+
+  <!-- 16. SMART-Ziele -->
+  <section class="slide">
+    <h2>Ziele formulieren — SMART</h2>
+    <table>
+      <thead><tr><th>Buchstabe</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>S</strong>pezifisch</td><td>präzise, nicht vage</td></tr>
+        <tr><td><strong>M</strong>essbar</td><td>Zielerreichung muss messbar sein</td></tr>
+        <tr><td><strong>A</strong>kzeptiert</td><td>von den Betroffenen angenommen</td></tr>
+        <tr><td><strong>R</strong>ealistisch</td><td>erreichbar</td></tr>
+        <tr><td><strong>T</strong>erminiert</td><td>mit genauer Terminvorgabe</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Beispiel: „Druckerpapierverbrauch der Abteilung um 10 % bis zum 31.12. senken.”</p>
+  </section>
+
+  <!-- 17. Selbstmanagement -->
+  <section class="slide">
+    <h2>Selbstmanagement</h2>
+    <p>Jeder übernimmt die <strong>Verantwortung für die eigene Entwicklung</strong> und steuert sein Verhalten so, dass die gesetzten Ziele erreicht werden.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">sich selbst motivieren</div></div>
+      <div class="card teal"><div class="card-title">sich Ziele setzen</div></div>
+      <div class="card amber"><div class="card-title">planen &amp; organisieren</div></div>
+      <div class="card amber"><div class="card-title">Feedback &amp; Erfolg prüfen</div></div>
+    </div>
+    <p class="muted">Gelenkt durch den Willen — beeinflusst durch Vorlieben, Abneigungen und Erfahrungen.</p>
+  </section>
+
+  <!-- 18. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 5</h2>
+    <ol class="numlist">
+      <li>Zeitmanagement: <strong>Stress vermeiden, Prioritäten setzen, Work-Life-Balance</strong>.</li>
+      <li><strong>Störungen</strong>: äußere (von anderen) und innere (von einem selbst).</li>
+      <li><strong>Sägeblatteffekt</strong> kostet bis 28 % Zeit → Gegenmittel <strong>stille Stunde</strong>.</li>
+      <li><strong>Leistungskurve</strong>: Hoch 08–12 Uhr; Pausen nach § 4 ArbZG.</li>
+      <li>Methoden: <strong>ABC, Eisenhower, ALPEN, Pareto, Salamitaktik</strong>.</li>
+      <li><strong>To-do-Liste, SMART-Ziele, Selbstmanagement</strong> als Hilfsmittel.</li>
+    </ol>
+  </section>
+
+  <!-- 19. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>ALPEN-Schritte benennen</li>
+          <li>Eisenhower-Felder zuordnen</li>
+          <li>Pareto/ABC erklären</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Tagesplan erstellen</li>
+          <li>Aufgaben priorisieren/delegieren</li>
+          <li>SMART-Ziel formulieren</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>anwenden</strong>" verlangt eine Lösung am Fall.
+    </div>
+  </section>
+
+  <!-- 20. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 6 (06.07.)</h2>
+    <p class="subtitle">Terminplanung &amp; Terminmanagement</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Terminarten</strong> — feste und variable Termine</li>
+      <li><strong>Terminkalender</strong> — analog und digital (Outlook)</li>
+      <li><strong>Terminplanung</strong> — Prioritäten, Pufferzeiten, Fristen</li>
+      <li><strong>Terminüberwachung</strong> — Wiedervorlage und Erinnerungen</li>
+      <li><strong>Terminkoordination</strong> im Team</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Zeitmanagement-und-Aufgabenplanung.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Zeitmanagement-und-Aufgabenplanung.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 20</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Sägeblatteffekt
+  const cS = document.getElementById('fig-saege');
+  const svgS = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svgS.setAttribute('viewBox', '0 0 900 300');
+  svgS.setAttribute('width', '900'); svgS.setAttribute('height', '300');
+  cS.appendChild(svgS);
+  makeRough(svgS, (rc, svg) => {
+    // Achsen
+    svg.appendChild(rc.line(60, 250, 860, 250, { roughness: 1.2, stroke: '#475569', strokeWidth: 1.6 }));
+    svg.appendChild(rc.line(60, 250, 60, 40, { roughness: 1.2, stroke: '#475569', strokeWidth: 1.6 }));
+    text(svg, 60, 30, 'Leistung', { size: 14, color: '#475569', anchor: 'middle' });
+    text(svg, 860, 275, 'Zeit', { size: 14, color: '#475569', anchor: 'end' });
+    // Sägezähne: jede Unterbrechung -> Abfall, dann Wiederaufbau
+    const starts = [60, 260, 460, 660];
+    const w = 200;
+    starts.forEach((sx, i) => {
+      // Anstieg von Boden zu Spitze
+      svg.appendChild(rc.line(sx, 250, sx + w - 20, 70, { roughness: 1.5, stroke: '#0F766E', strokeWidth: 2 }));
+      // Abfall (Störung)
+      svg.appendChild(rc.line(sx + w - 20, 70, sx + w, 250, { roughness: 1.5, stroke: '#F97316', strokeWidth: 2 }));
+      // Störungspfeil
+      arrow(rc, svg, sx + w - 10, 270, sx + w - 10, 235, '#F97316');
+    });
+    text(svg, 460, 295, 'Unterbrechungen ↑  — bis zu 28 % Zeitverlust', { size: 14, color: '#F97316', bold: true });
+  });
+
+  // FIG: Leistungskurve
+  const cL = document.getElementById('fig-leistung');
+  const svgL = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svgL.setAttribute('viewBox', '0 0 900 300');
+  svgL.setAttribute('width', '900'); svgL.setAttribute('height', '300');
+  cL.appendChild(svgL);
+  makeRough(svgL, (rc, svg) => {
+    svg.appendChild(rc.line(70, 250, 860, 250, { roughness: 1.2, stroke: '#475569', strokeWidth: 1.6 }));
+    svg.appendChild(rc.line(70, 250, 70, 40, { roughness: 1.2, stroke: '#475569', strokeWidth: 1.6 }));
+    text(svg, 70, 30, 'Leistungsfähigkeit', { size: 13, color: '#475569', anchor: 'start' });
+    // Kurve als Polyline (Hoch 08-12, Tief nach Mittag, kleines Hoch nachmittags)
+    const pts = [[70,210],[160,120],[250,95],[340,110],[430,200],[520,160],[610,175],[700,215],[790,245],[850,250]];
+    let path = '';
+    pts.forEach((p, k) => { path += (k === 0 ? 'M' : 'L') + p[0] + ',' + p[1] + ' '; });
+    const curve = rc.path(path, { roughness: 1.4, stroke: '#0F766E', strokeWidth: 2.4 });
+    svg.appendChild(curve);
+    // Zeitachse-Beschriftung
+    [['08:00',160],['12:00',340],['16:00',520],['20:00',700],['24:00',850]].forEach(([lbl,x]) => {
+      text(svg, x, 270, lbl, { size: 13, color: '#475569' });
+    });
+    text(svg, 250, 75, 'Hoch', { size: 14, bold: true, color: '#0F766E' });
+    text(svg, 430, 225, 'Mittagstief', { size: 13, bold: true, color: '#F97316' });
+  });
+
+  // FIG: Eisenhower-Matrix
+  const cE = document.getElementById('fig-eisenhower');
+  const svgE = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svgE.setAttribute('viewBox', '0 0 760 420');
+  svgE.setAttribute('width', '760'); svgE.setAttribute('height', '420');
+  cE.appendChild(svgE);
+  makeRough(svgE, (rc, svg) => {
+    const x0 = 180, y0 = 50, cw = 240, ch = 150;
+    // vier Felder
+    box(rc, svg, x0, y0, cw, ch, '#ECFEFF', '#0F766E');           // wichtig + nicht dringend (Feld 2)
+    box(rc, svg, x0 + cw, y0, cw, ch, '#FEF3C7', '#F59E0B');       // wichtig + dringend (Feld 1)
+    box(rc, svg, x0, y0 + ch, cw, ch, '#F8FAFC', '#475569');       // nicht wichtig + nicht dringend (Feld 4)
+    box(rc, svg, x0 + cw, y0 + ch, cw, ch, '#FFE4E6', '#F97316');  // nicht wichtig + dringend (Feld 3)
+    // Feldtexte
+    text(svg, x0 + cw/2, y0 + 60, 'Feld 2', { bold: true, size: 18, color: '#0F766E' });
+    text(svg, x0 + cw/2, y0 + 90, 'Termin', { size: 15, color: '#0F766E' });
+    text(svg, x0 + cw/2, y0 + 112, 'vereinbaren', { size: 15, color: '#0F766E' });
+
+    text(svg, x0 + cw + cw/2, y0 + 60, 'Feld 1', { bold: true, size: 18, color: '#B45309' });
+    text(svg, x0 + cw + cw/2, y0 + 90, 'sofort + selbst', { size: 15, color: '#B45309' });
+    text(svg, x0 + cw + cw/2, y0 + 112, 'erledigen', { size: 15, color: '#B45309' });
+
+    text(svg, x0 + cw/2, y0 + ch + 60, 'Feld 4', { bold: true, size: 18, color: '#475569' });
+    text(svg, x0 + cw/2, y0 + ch + 90, 'Papierkorb', { size: 15, color: '#475569' });
+
+    text(svg, x0 + cw + cw/2, y0 + ch + 60, 'Feld 3', { bold: true, size: 18, color: '#C2410C' });
+    text(svg, x0 + cw + cw/2, y0 + ch + 90, 'delegieren', { size: 15, color: '#C2410C' });
+
+    // Achsenbeschriftung
+    text(svg, 90, y0 + ch/2, 'wichtig', { bold: true, size: 15, color: '#0F172A' });
+    text(svg, 90, y0 + ch + ch/2, 'nicht wichtig', { size: 14, color: '#475569' });
+    text(svg, x0 + cw/2, y0 + 2*ch + 40, 'nicht dringend', { size: 14, color: '#475569' });
+    text(svg, x0 + cw + cw/2, y0 + 2*ch + 40, 'dringend', { bold: true, size: 15, color: '#0F172A' });
+  });
+});
+</script>
+
+</body>
+</html>

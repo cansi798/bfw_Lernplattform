@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Tag 10 — Postbearbeitung: Posteingang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Tag 10 · 10.07.2026</span>
+    <h1>Postbearbeitung: Posteingang</h1>
+    <p class="subtitle">Vom Briefkasten zum richtigen Schreibtisch — Wege, Arbeitsschritte und digitaler Posteingang</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067)</span>
+      <span><strong>UE</strong>9 Unterrichtseinheiten</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 5 (S. 112–115)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie heute lernen</h2>
+    <p class="subtitle">Am Ende des Tages können Sie...</p>
+    <ul class="checklist">
+      <li>die <strong>Bedeutung des Posteingangs</strong> erklären und zentrale/dezentrale Poststelle unterscheiden</li>
+      <li>die <strong>Möglichkeiten des Posteingangs</strong> (Brief, Fax, E-Mail, Boten, private Dienstleister) benennen</li>
+      <li>die <strong>Arbeitsschritte</strong> beim Posteingang in der richtigen Reihenfolge beschreiben</li>
+      <li>erläutern, welche Post <strong>nicht geöffnet</strong> werden darf (persönlich/vertraulich)</li>
+      <li>Aufbau und Zweck des <strong>Posteingangsstempels</strong> sowie Wertsendungen erklären</li>
+      <li><strong>Posteingangssysteme, Scannen/OCR</strong> und die digitale Archivierung bewerten</li>
+    </ul>
+  </section>
+
+  <!-- 3. Bedeutung -->
+  <section class="slide">
+    <h2>Warum der Posteingang wichtig ist</h2>
+    <p>Die Stelle, die die Post bearbeitet, ist der <strong>erste Umschlagplatz für ein- und ausgehende Informationen</strong>. Über sie laufen Aufträge, Rechnungen, Verträge und Behördenschreiben.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      In <strong>kleineren Unternehmen</strong> erledigt das <strong>Sekretariat</strong> die Tagespost. In <strong>größeren Unternehmen</strong> übernimmt eine eigene Abteilung, die <strong>Poststelle</strong>.
+    </div>
+    <p class="muted">Buchverweis: S. 112–113</p>
+  </section>
+
+  <!-- 4. Zentral / dezentral -->
+  <section class="slide">
+    <h2>Zentrale vs. dezentrale Poststelle</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Zentrale Poststelle</div>
+        <ul style="margin-left: 1rem;">
+          <li>Eine Stelle bearbeitet die gesamte Post</li>
+          <li>Einheitliche Bearbeitung, Spezialisierung</li>
+          <li>Effiziente Technik (Scan-Straße, Frankiermaschine)</li>
+          <li>Nachteil: längere innerbetriebliche Wege</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Dezentrale Poststelle</div>
+        <ul style="margin-left: 1rem;">
+          <li>Jede Abteilung bearbeitet ihre Post selbst</li>
+          <li>Kurze Wege, hohe Sachnähe</li>
+          <li>Nachteil: mehrfache Ausstattung</li>
+          <li>Weniger Spezialisierung</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Möglichkeiten des Posteingangs -->
+  <section class="slide">
+    <h2>Möglichkeiten des Posteingangs</h2>
+    <p>Auf welchen Wegen erreicht die Post das Unternehmen?</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Briefzusteller / Postbote</div>Deutsche Post AG: Briefe, Päckchen, Pakete. Optional <strong>Postfach</strong> mieten.</div>
+      <div class="card teal"><div class="card-title">Service Hin + Weg</div>Post wird zu vereinbarten Zeiten gebracht und abgeholt.</div>
+      <div class="card amber"><div class="card-title">Private Dienstleister</div>Seit 2008 liberalisiert (Lizenz der Bundesnetzagentur): TNT, FedEx, UPS.</div>
+      <div class="card amber"><div class="card-title">Fax, E-Mail, Boten, Abgabe</div>Digitaler und persönlicher Eingang — ebenfalls zu erfassen.</div>
+    </div>
+  </section>
+
+  <!-- 6. Liberalisierung -->
+  <section class="slide">
+    <h2>Briefmonopol &amp; Postfach</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">📅 Liberalisierung</span>
+      Mit Aufhebung des Briefmonopols ist seit dem <strong>1. Januar 2008</strong> der deutsche Briefmarkt liberalisiert. Private Anbieter brauchen eine <strong>Lizenz der Bundesnetzagentur</strong>.
+    </div>
+    <ul>
+      <li><strong>Postfach</strong>: in der Postfiliale gemietet (einmalige Einrichtungspauschale), Größe je nach Postaufkommen — macht unabhängig von Zustellzeiten</li>
+      <li><strong>Service Hin + Weg</strong>: bringt die Briefe und holt ausgehende Post ab</li>
+      <li>Bekannte private Dienstleister: <strong>TNT, FedEx, UPS</strong></li>
+    </ul>
+  </section>
+
+  <!-- 7. Postvollmacht -->
+  <section class="slide">
+    <h2>Die Postvollmacht</h2>
+    <p>Um die Geschäftspost entgegennehmen zu können, ist eine rechtsgültige <strong>Postvollmacht</strong> nötig — eine einfache schriftliche Erklärung.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Pflichtangaben</div>
+        <ul style="margin-left: 1rem;">
+          <li>Vollmachtgeber</li>
+          <li>Bevollmächtigter</li>
+          <li>Gültigkeitsdauer</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Pflichtangaben</div>
+        <ul style="margin-left: 1rem;">
+          <li>Umfang (normale Post, Einschreiben, eigenhändig)</li>
+          <li>Datum der Ausstellung</li>
+          <li>Unterschrift des Vollmachtgebers</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Arbeitsschritte - Diagramm -->
+  <section class="slide">
+    <h2>Arbeitsschritte beim Posteingang</h2>
+    <div class="figure" id="fig-ablauf"></div>
+    <p class="caption">Die Reihenfolge ist fest: erst sortieren, dann öffnen, kontrollieren, stempeln, verteilen.</p>
+  </section>
+
+  <!-- 9. Vorsortieren -->
+  <section class="slide">
+    <h2>1. Vorsortieren</h2>
+    <p>Die eingehenden Sendungen werden zunächst <strong>ungeöffnet</strong> vorsortiert.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Sortier-Kategorien</div>
+        <ul style="margin-left: 1rem;">
+          <li>Geschäftsbriefe</li>
+          <li>private Briefe</li>
+          <li>Post an Geschäftsleitung</li>
+          <li>Post an Personalabteilung &amp; Betriebsrat</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Irrläufer</div>
+        <p style="font-size: 1rem;">Fehlgeleitete Sendungen — werden <strong>ungeöffnet</strong> dem Postzusteller oder privaten Dienstleister zurückgegeben.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. Öffnen -->
+  <section class="slide">
+    <h2>2. Öffnen — was bleibt zu?</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">⚠️ Nicht öffnen!</span>
+      Private Briefe sowie Post an <strong>Geschäftsleitung, Personalabteilung und Betriebsrat</strong> werden ungeöffnet weitergeleitet. Private Post: Zusatz <strong>„Persönlich"</strong> oder <strong>„Vertraulich"</strong>.
+    </div>
+    <ul>
+      <li>Versehentlich geöffnet? → wieder verschließen, Vermerk <strong>„versehentlich geöffnet"</strong>, weiterleiten</li>
+      <li>Öffnen mit <strong>Handbrieföffner</strong> (geringes Aufkommen) oder <strong>automatischem Brieföffner</strong></li>
+    </ul>
+  </section>
+
+  <!-- 11. Anschriftenfeld-Regel -->
+  <section class="slide">
+    <h2>Geschäftspost oder Privatpost?</h2>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Faustregel</span>
+      Steht <strong>zuerst die Firma</strong>, dann der Name → Geschäftspost, darf geöffnet werden. Steht <strong>zuerst der Name</strong> einer Privatperson <em>ohne</em> Zusatz → darf laut Urteil (LAG Hamm 2003) ebenfalls geöffnet werden.
+    </div>
+    <table>
+      <thead><tr><th>Sendung</th><th>Merkmal</th><th>Behandlung</th></tr></thead>
+      <tbody>
+        <tr><td>Geschäftsbrief</td><td>Firma zuerst, dann Name</td><td>öffnen, weiterleiten</td></tr>
+        <tr><td>Privatbrief</td><td>Name zuerst + „Persönlich"</td><td>nicht öffnen</td></tr>
+        <tr><td>Irrläufer</td><td>falsche Adresse</td><td>ungeöffnet zurück</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 12. Kontrollieren -->
+  <section class="slide">
+    <h2>3. Kontrollieren</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Leerkontrolle</div>
+        <p style="font-size: 1rem;">Wurde der Umschlag nach Entnahme des Inhalts <strong>vollständig geleert</strong>?</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anlagenkontrolle</div>
+        <p style="font-size: 1rem;">Sind alle im Brief <strong>genannten Anlagen</strong> beigefügt? Fehlt eine → handschriftlich vermerken.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📎 Umschlag anheften, wenn ...</span>
+      die Absenderangabe fehlt, es eine amtlich zugestellte Sendung ist oder Brief-Datum und Poststempel weit auseinanderliegen.
+    </div>
+  </section>
+
+  <!-- 13. Stempeln -->
+  <section class="slide">
+    <h2>4. Stempeln</h2>
+    <p>Der <strong>Posteingangsstempel</strong> kommt <strong>rechts oben</strong> neben die Anschrift des Empfängers.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Inhalt des Stempels</div>
+        <ul style="margin-left: 1rem;">
+          <li>Aktuelles Datum (evtl. Uhrzeit)</li>
+          <li>Platz für Bearbeitungs- und Erledigungsvermerke</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Nicht stempeln</div>
+        <p style="font-size: 1rem;">Urkunden, Zeugnisse, Verträge, Schecks, Zeichnungen → stattdessen den <strong>Umschlag</strong> stempeln und beifügen.</p>
+      </div>
+    </div>
+    <p class="muted">Zweck: Abgleich Eingangsdatum ↔ Briefdatum &amp; Feststellung der Bearbeitungszeit.</p>
+  </section>
+
+  <!-- 14. Verteilen -->
+  <section class="slide">
+    <h2>5. Verteilen</h2>
+    <p>Nach dem Stempeln gelangt die Post zu den zuständigen Mitarbeitern.</p>
+    <ol class="numlist">
+      <li><strong>Ablage in Fächer</strong> — Mitarbeiter- oder Abteilungsfächer, aus denen die Post abgeholt wird.</li>
+      <li><strong>Bote</strong> — übernimmt die Verteilung in die verschiedenen Abteilungen.</li>
+      <li><strong>Automatische Verteilung</strong> — über Schriftgutförderanlagen, z. B. ein Rohrpostsystem.</li>
+    </ol>
+  </section>
+
+  <!-- 15. Wertsendungen -->
+  <section class="slide">
+    <h2>Behandlung von Wertsendungen</h2>
+    <p><strong>Einschreiben, Wertbriefe, Nachnahme</strong> brauchen besondere Sorgfalt.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">🔒 So geht's</span>
+      Gegen <strong>Quittung</strong> annehmen (für Einschreiben/eigenhändig ist die <strong>Postvollmacht</strong> nötig), im <strong>Eingangs-/Postbuch</strong> erfassen und sicher verwahren bzw. gegen Nachweis übergeben.
+    </div>
+    <p class="muted">So bleibt jederzeit nachvollziehbar, wer eine wichtige Sendung erhalten hat.</p>
+  </section>
+
+  <!-- 16. Posteingangssysteme -->
+  <section class="slide">
+    <h2>Posteingangssysteme &amp; Digitalisierung</h2>
+    <p>Unternehmen mit hohem Postaufkommen automatisieren die Arbeitsschritte:</p>
+    <ol class="numlist">
+      <li><strong>Maschinelle Öffnung</strong> der Briefumschläge mit elektrischen Brieföffnern.</li>
+      <li><strong>Automatische Entnahme</strong> des Inhalts und elektronische Leerkontrolle.</li>
+      <li><strong>Einlesen per Scanner</strong> und Speicherung im EDV-System — Zugriff über den eigenen PC, oft mit <strong>OCR-Texterkennung</strong>.</li>
+    </ol>
+    <p class="muted">OCR macht gescannte Briefe durchsuchbar und ordnet sie im DMS automatisch zu.</p>
+  </section>
+
+  <!-- 17. Vorteile Digitalisierung -->
+  <section class="slide">
+    <h2>Vorteile der Digitalisierung</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Schneller &amp; sicherer</div>
+        <ul style="margin-left: 1rem;">
+          <li>Schnellerer Informationsfluss</li>
+          <li>Kürzere Bearbeitungszeit</li>
+          <li>Post kann nicht mehr verloren gehen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Effizienter &amp; günstiger</div>
+        <ul style="margin-left: 1rem;">
+          <li>Schriftstücke jederzeit auffindbar</li>
+          <li>Weniger Papierverbrauch</li>
+          <li>Höhere Auskunftsfähigkeit &amp; Effizienz</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Tag 10</h2>
+    <ol class="numlist">
+      <li>Posteingang = <strong>erster Umschlagplatz für Informationen</strong>; Sekretariat oder Poststelle (zentral/dezentral).</li>
+      <li>Eingangswege: <strong>Briefzusteller, Postfach, Service Hin + Weg, private Dienstleister, Fax, E-Mail, Boten</strong>.</li>
+      <li>Arbeitsschritte: <strong>Annehmen → Vorsortieren → Öffnen → Kontrollieren → Stempeln → Verteilen</strong> (Postvollmacht!).</li>
+      <li>Privat-/vertrauliche Post <strong>nicht öffnen</strong>; Firma zuerst = Geschäftspost.</li>
+      <li><strong>Posteingangsstempel</strong> dokumentiert Eingang &amp; Bearbeitungszeit; Wertsendungen gesondert erfassen.</li>
+      <li><strong>Posteingangssysteme + Scannen/OCR</strong> → schneller, auffindbar, papierarm.</li>
+    </ol>
+  </section>
+
+  <!-- 19. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Arbeitsschritte in richtiger Reihenfolge</li>
+          <li>Angaben der Postvollmacht</li>
+          <li>Leer- vs. Anlagenkontrolle</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Anschrift beurteilen: öffnen oder nicht?</li>
+          <li>Vorteile der Digitalisierung abwägen</li>
+          <li>Wertsendungen korrekt behandeln</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" verlangt Aufzählung, „<strong>erläutern</strong>" verlangt Begründung, „<strong>beurteilen</strong>" verlangt eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 20. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Tag 11 (13.07.)</h2>
+    <p class="subtitle">Postbearbeitung: Postausgang</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Ablauf des Postausgangs</strong> — von der Abteilung in die Poststelle</li>
+      <li><strong>Kuvertieren, Falzen, Frankieren</strong> — die Post versandfertig machen</li>
+      <li><strong>Frankiermaschine</strong> und Portooptimierung</li>
+      <li><strong>Versandarten</strong> — Standard, Einschreiben, Pakete</li>
+      <li><strong>Digitaler Postausgang</strong> — E-Mail, E-Rechnung, Hybridpost</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Postbearbeitung-Posteingang.html</code> bearbeiten — 30 Fragen zur Wiederholung. Aufgabenheft <code>Aufgabenheft_Postbearbeitung-Posteingang.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 20</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Ablauf des Posteingangs
+  const c1 = document.getElementById('fig-ablauf');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 300');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const steps = [
+      { t: 'Annehmen',      c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Vorsortieren',  c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Öffnen',        c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Kontrollieren', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Stempeln',      c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Verteilen',     c: '#FFE4E6', st: '#F97316' }
+    ];
+    text(svg, 450, 30, 'Arbeitsschritte beim Posteingang', { size: 18, bold: true, color: '#0F766E' });
+    // Reihe 1: Schritte 1-3
+    const w = 230, h = 70;
+    const xs = [30, 335, 640];
+    steps.slice(0, 3).forEach((s, i) => {
+      box(rc, svg, xs[i], 60, w, h, s.c, s.st);
+      text(svg, xs[i] + w / 2, 102, (i + 1) + '. ' + s.t, { bold: true, size: 17, color: s.st });
+    });
+    arrow(rc, svg, 260, 95, 335, 95, '#475569');
+    arrow(rc, svg, 565, 95, 640, 95, '#475569');
+    // Verbinder nach unten (Schlange)
+    arrow(rc, svg, 755, 130, 755, 175, '#475569');
+    // Reihe 2: Schritte 4-6 (von rechts nach links)
+    const xs2 = [640, 335, 30];
+    steps.slice(3, 6).forEach((s, i) => {
+      box(rc, svg, xs2[i], 180, w, h, s.c, s.st);
+      text(svg, xs2[i] + w / 2, 222, (i + 4) + '. ' + s.t, { bold: true, size: 17, color: s.st });
+    });
+    arrow(rc, svg, 640, 215, 565, 215, '#475569');
+    arrow(rc, svg, 335, 215, 260, 215, '#475569');
+    text(svg, 450, 285, 'Voraussetzung: gültige Postvollmacht', { size: 14, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

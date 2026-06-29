@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Tag 14 — Digitales DMS, Datenschutz & Umweltschutz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Tag 14 · 16.07.2026 · 30 Fragen</span>
+  <h1>Quiz: Digitales DMS, Datenschutz &amp; Umweltschutz</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Digitales-DMS-Datenschutz-und-Umweltschutz.html</strong> und dem <strong>Handout_Digitales-DMS-Datenschutz-und-Umweltschutz.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Büroprozesse gestalten und Arbeitsvorgänge organisieren (M-067) · Kurs 29.06.–17.07.2026</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Elektronische Dokumente, DMS & Archivierung (1-8) ===
+  { topic: "DMS", q: "Was ist ein Dokumentenmanagementsystem (DMS)?",
+    options: ["Ein Programm nur zum Drucken von Briefen", "Ein Aktenschrank für Papierdokumente", "Ein System, das papiergebundene Schriftstücke in elektronische Dokumente umwandelt und datenbankgestützt verwaltet", "Eine Software ausschließlich für die Lohnabrechnung"],
+    a: 2, e: "Ein DMS wandelt ursprünglich papiergebundene Schriftstücke in elektronische Dokumente um und archiviert sie datenbankgestützt." },
+  { topic: "DMS", q: "Welcher der folgenden Punkte ist ein Vorteil eines DMS?",
+    options: ["Schneller Zugriff auf Dokumente und Informationen", "Höherer Platzbedarf für die Archivierung", "Mehr Verteilerkopien", "Häufigerer Verlust von Dokumenten"],
+    a: 0, e: "Ein DMS bietet u. a. schnellen Zugriff, geringeren Platzbedarf und reduzierten Dokumentenverlust." },
+  { topic: "Datenträger", q: "Welcher Datenträger eignet sich für große Datenmengen mit sehr langer Lebensdauer (30–100 Jahre)?",
+    options: ["USB-Stick", "CD-RW", "Speicherkarte", "Mikrofilm"],
+    a: 3, e: "Für große Datenmengen mit langer Lebensdauer (30–100 Jahre) eignet sich auch heute noch der Mikrofilm." },
+  { topic: "Archivierung", q: "Welche Anforderung gehört zur revisionssicheren Archivierung?",
+    options: ["Dokumente müssen jederzeit überschreibbar sein", "Dokumente müssen unveränderbar, vollständig, nachvollziehbar und wiederauffindbar sein", "Dokumente dürfen nur auf Papier vorliegen", "Dokumente müssen nach einem Jahr gelöscht werden"],
+    a: 1, e: "Revisionssicher heißt: unveränderbar, vollständig, nachvollziehbar (protokolliert) und über die Aufbewahrungsfrist wiederauffindbar." },
+  { topic: "Archivierung", q: "Welche Vorschrift regelt die elektronische Speicherung aufbewahrungspflichtiger Unterlagen?",
+    options: ["Das Straßenverkehrsgesetz", "Das Verpackungsgesetz", "Das HGB § 257 (Aufbewahrungsfristen)", "Das Mindestlohngesetz"],
+    a: 2, e: "Der Gesetzgeber gibt für aufbewahrungspflichtige Unterlagen über das HGB § 257 (3) die Regelung für eine elektronische Datenspeicherung vor." },
+  { topic: "GoBD", q: "Wofür steht die Abkürzung GoBD im Zusammenhang mit digitaler Archivierung?",
+    options: ["Grundsätze zur ordnungsmäßigen Führung und Aufbewahrung von Büchern, Aufzeichnungen und Unterlagen in elektronischer Form", "Gesetz über betriebliche Datenverarbeitung", "Garantieordnung für Bürodrucker", "Globale Organisation für Bürodigitalisierung"],
+    a: 0, e: "Die GoBD konkretisieren die Anforderungen an die ordnungsmäßige, revisionssichere Aufbewahrung elektronischer Unterlagen." },
+  { topic: "DMS-Funktionen", q: "Was bezeichnet der Begriff Workflow in einem modernen DMS?",
+    options: ["Das Löschen aller Dokumente am Monatsende", "Der automatisch gesteuerte Ablauf von Bearbeitungs- und Freigabeschritten eines Dokuments", "Die Anzahl der Drucker im Büro", "Die Lautstärke im Großraumbüro"],
+    a: 1, e: "Beim Workflow durchlaufen Dokumente automatisch festgelegte Bearbeitungs- und Freigabeschritte, z. B. Rechnungsprüfung und Freigabe." },
+  { topic: "DMS-Funktionen", q: "Was leistet die Versionierung in einem DMS?",
+    options: ["Sie verschlüsselt das gesamte Netzwerk", "Sie löscht ältere Dokumente automatisch", "Sie druckt jedes Dokument doppelt", "Sie speichert jede Änderung als neue Version, sodass ältere Stände nachvollziehbar bleiben"],
+    a: 3, e: "Durch die Versionierung wird jede Änderung als eigene Version gesichert; frühere Stände bleiben erhalten und nachvollziehbar." },
+
+  // === Block B: Datenschutz & Datensicherheit (9-19) ===
+  { topic: "Datenschutz", q: "Was wird durch den Datenschutz geschützt?",
+    options: ["Natürliche Personen vor der Verletzung ihrer Persönlichkeitsrechte", "Ausschließlich die Hardware des Unternehmens", "Nur die Klimaanlage im Serverraum", "Die Aktienkurse des Unternehmens"],
+    a: 0, e: "Der Datenschutz schützt natürliche Personen vor der Verletzung ihrer Persönlichkeitsrechte (Missbrauch personenbezogener Daten)." },
+  { topic: "Datensicherheit", q: "Was wird durch die Datensicherheit geschützt?",
+    options: ["Nur die Persönlichkeitsrechte von Kunden", "Ausschließlich gedruckte Akten", "Hard-, Software und Daten vor Verlust, Zerstörung und Missbrauch", "Allein die Büromöbel"],
+    a: 2, e: "Die Datensicherheit schützt Hard-, Software und Daten vor Verlust, Zerstörung und Missbrauch durch Unbefugte." },
+  { topic: "Personenbezogene Daten", q: "Wie werden personenbezogene Daten in Art. 4 Nr. 1 EU-DSGVO definiert?",
+    options: ["Nur Daten von Unternehmen", "Alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen", "Ausschließlich Kontonummern", "Nur Daten, die im Internet stehen"],
+    a: 1, e: "Personenbezogene Daten sind alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen." },
+  { topic: "Personenbezogene Daten", q: "Welches der folgenden ist ein Beispiel für ein personenbezogenes Datum?",
+    options: ["Die Raumtemperatur", "Das Datum eines Feiertags", "Die Anzahl der Drucker", "Die IP-Adresse"],
+    a: 3, e: "Eine Person ist z. B. über Name, E-Mail-Adresse, Bankdaten, Kreditkartennummer oder IP-Adresse identifizierbar." },
+  { topic: "Rechtsgrundlagen", q: "Auf welchen beiden Rechtsgrundlagen müssen Datenschutzmaßnahmen erfolgen?",
+    options: ["EU-Datenschutz-Grundverordnung (EU-DSGVO) und Bundesdatenschutzgesetz (BDSG)", "Handelsgesetzbuch und Strafgesetzbuch", "Grundgesetz und Mindestlohngesetz", "Verpackungsgesetz und ElektroG"],
+    a: 0, e: "Alle Maßnahmen erfolgen unter Beachtung der EU-DSGVO und des Bundesdatenschutzgesetzes (BDSG)." },
+  { topic: "Datenschutzbeauftragter", q: "Ab wie vielen ständig mit automatisierter Datenverarbeitung beschäftigten Personen ist nach § 38 BDSG ein Datenschutzbeauftragter zu ernennen?",
+    options: ["ab 10 Personen", "ab 15 Personen", "ab 20 Personen", "ab 50 Personen"],
+    a: 2, e: "Nach § 38 BDSG (in der seit 2019 geltenden Fassung) ist ein Datenschutzbeauftragter zu ernennen, wenn mindestens zwanzig Personen ständig mit der automatisierten Verarbeitung beschäftigt sind." },
+  { topic: "Datenschutzbeauftragter", q: "Welche Aufgabe hat der Datenschutzbeauftragte?",
+    options: ["Er entscheidet allein über alle Gehälter", "Er überwacht die Einhaltung der Datenschutzvorschriften und berät die Unternehmensleitung", "Er führt die Buchhaltung", "Er bestellt das Büromaterial"],
+    a: 1, e: "Der Datenschutzbeauftragte hat eine Kontroll- und Beratungsfunktion (Überwachung, Beratung, Schulung, Zusammenarbeit mit der Aufsichtsbehörde)." },
+  { topic: "Datenschutzbeauftragter", q: "Warum kann der Leiter der IT-Abteilung in der Regel nicht Datenschutzbeauftragter werden?",
+    options: ["Weil er keine Zeit hat", "Weil das Gesetz IT-Mitarbeiter generell ausschließt", "Weil er die Sprache nicht beherrscht", "Weil er sich sonst in bestimmten Bereichen selbst kontrollieren müsste (Interessenkonflikt)"],
+    a: 3, e: "Der IT-Leiter müsste sich selbst kontrollieren; der Datenschutzbeauftragte muss jedoch unabhängig kontrollieren können." },
+  { topic: "Betroffenenrechte", q: "Welches Recht gibt Betroffenen Auskunft über Art, Empfänger und Zweck der gespeicherten Daten?",
+    options: ["Das Auskunftsrecht (Art. 15 EU-DSGVO)", "Das Widerspruchsrecht (Art. 21)", "Das Recht auf Löschung (Art. 17)", "Das Recht auf Berichtigung (Art. 16)"],
+    a: 0, e: "Das Auskunftsrecht (Art. 15 EU-DSGVO) gibt Betroffenen Information über Art, Empfänger und Zweck der gespeicherten Daten." },
+  { topic: "Betroffenenrechte", q: "Wie wird das Recht auf Löschung nach Art. 17 EU-DSGVO auch genannt?",
+    options: ["Recht auf Berichtigung", "Recht auf Datenübertragbarkeit", "„Recht auf Vergessenwerden“", "Widerspruchsrecht"],
+    a: 2, e: "Das Recht auf Löschung (Art. 17 EU-DSGVO) wird auch „Recht auf Vergessenwerden“ genannt." },
+  { topic: "Betroffenenrechte", q: "Was beinhaltet das Widerspruchsrecht (Art. 21 EU-DSGVO)?",
+    options: ["Das Recht, doppelte Daten zu erhalten", "Betroffene können jederzeit gegen die Verarbeitung ihrer Daten Widerspruch einlegen", "Das Recht, fremde Daten zu löschen", "Das Recht auf einen zweiten Arbeitsplatz"],
+    a: 1, e: "Mit dem Widerspruchsrecht (Art. 21) können Betroffene jederzeit gegen die Verarbeitung ihrer personenbezogenen Daten Widerspruch einlegen." },
+
+  // === Block C: Datensicherung (20-23) ===
+  { topic: "Datensicherung", q: "Wie wird beim Generationenprinzip die älteste Datensicherung bezeichnet?",
+    options: ["Sohn", "Vater", "Enkel", "Großvater"],
+    a: 3, e: "Beim Generationenprinzip heißt die älteste Sicherung „Großvater“, die zweitälteste „Vater“ und die jüngste „Sohn“." },
+  { topic: "Datensicherung", q: "Wie viele Generationen aufeinander aufbauender Backups müssen mindestens vorhanden sein?",
+    options: ["mindestens drei", "genau eine", "mindestens zehn", "keine, ein Backup genügt nie"],
+    a: 0, e: "Von jedem Datenbestand müssen mindestens drei Generationen (Großvater–Vater–Sohn) vorhanden sein." },
+  { topic: "Datensicherung", q: "Wozu dient eine USV (unterbrechungsfreie Stromversorgung)?",
+    options: ["Sie verschlüsselt E-Mails", "Sie ersetzt das Antivirenprogramm", "Sie versorgt den Computer bei Stromausfall, bis die Daten gesichert sind", "Sie druckt Sicherheitskopien aus"],
+    a: 2, e: "Eine USV wird zwischen Computer und Steckdose geschaltet und überbrückt einen Stromausfall, bis die Daten aus dem Hauptspeicher gesichert sind." },
+  { topic: "Datensicherung", q: "Welche Maßnahme schützt im Bereich der Computerkriminalität?",
+    options: ["Eine höhere Raumtemperatur", "Zugriffskontrolle durch Passwort/PIN und Virenschutzprogramme", "Das Abschalten der Klimaanlage", "Mehr Papierkopien"],
+    a: 1, e: "Gegen Computerkriminalität helfen Zugriffskontrolle (Passwort/PIN) und Virenschutzprogramme." },
+
+  // === Block D: Umweltschutz (24-30) ===
+  { topic: "Kreislaufwirtschaft", q: "Was ist das Ziel des Kreislaufwirtschaftsgesetzes (KrWG)?",
+    options: ["Abfälle zu reduzieren und die natürlichen Ressourcen zu schonen", "Mehr Verpackungen herzustellen", "Den Stromverbrauch zu erhöhen", "Den Export von Restmüll zu fördern"],
+    a: 0, e: "Das KrWG soll Abfälle reduzieren und dadurch die natürlichen Ressourcen schonen." },
+  { topic: "Abfallhierarchie", q: "Welche Stufe steht an erster Stelle der Abfallhierarchie nach § 6 KrWG?",
+    options: ["Beseitigung", "Recycling", "Energetische Verwertung", "Vermeidung"],
+    a: 3, e: "Die Rangfolge lautet: 1. Vermeidung, 2. Vorbereitung zur Wiederverwendung, 3. Recycling, 4. sonstige Verwertung, 5. Beseitigung." },
+  { topic: "Verwertung", q: "Welches ist ein Beispiel für Wiederverwendung?",
+    options: ["Altpapier wird zu Recyclingpapier verarbeitet", "Glas wird eingeschmolzen", "Eine Glaspfandflasche wird gereinigt und erneut für Mineralwasser befüllt", "Restmüll wird verbrannt"],
+    a: 2, e: "Bei der Wiederverwendung wird ein gebrauchtes Produkt für denselben Zweck erneut genutzt, z. B. eine Glaspfandflasche." },
+  { topic: "Verpackungsgesetz", q: "Welche drei Säulen umfasst das duale System nach dem Verpackungsgesetz?",
+    options: ["Restmüll, Sondermüll, Bauschutt", "Altpapier, Glas sowie gelber Sack/gelbe Tonne", "Papier, Wasser, Strom", "Kunststoff, Holz, Metall"],
+    a: 1, e: "Das duale System umfasst die drei Säulen Altpapier, Glas sowie gelber Sack/gelbe Tonne." },
+  { topic: "ElektroG", q: "Welches Symbol kennzeichnet Geräte nach dem Elektro- und Elektronikgerätegesetz?",
+    options: ["Die durchgestrichene Mülltonne", "Der grüne Punkt", "Der blaue Engel", "Das Recycling-Dreieck"],
+    a: 0, e: "Elektrogeräte werden mit dem Symbol der durchgestrichenen Mülltonne gekennzeichnet." },
+  { topic: "ElektroG", q: "Was bedeutet die durchgestrichene Mülltonne auf einem Elektrogerät?",
+    options: ["Das Gerät ist besonders energieeffizient", "Das Gerät darf beliebig oft kopiert werden", "Das Gerät ist aus Recyclingmaterial", "Das Altgerät darf nicht über den Restmüll entsorgt werden, sondern muss gesondert gesammelt werden"],
+    a: 3, e: "Damit gekennzeichnete Altgeräte dürfen nicht über den Restmüll entsorgt werden, sondern müssen als Elektroschrott gesondert gesammelt werden." },
+  { topic: "Umweltsiegel", q: "Wofür steht der Blaue Engel?",
+    options: ["Für besonders günstige Produkte", "Für importierte Waren", "Für umwelt- und gesundheitsfreundliche Produkte (Umweltzeichen der Bundesregierung)", "Für handgefertigte Produkte"],
+    a: 2, e: "Der Blaue Engel ist das Umweltzeichen der Bundesregierung und kennzeichnet umwelt- und gesundheitsfreundliche Produkte." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>
