@@ -172,18 +172,18 @@ footer a:hover { text-decoration: underline; }
     </div>
 
     <div class="gate" id="gate">
-      <p>Bitte geben Sie den Zugangscode der Lernplattform ein, um die Kursauswahl zu sehen.</p>
+      <p>Bitte geben Sie Ihren Kurs-Zugangscode ein.</p>
       <form class="gate-form" id="gateForm" autocomplete="off">
         <input type="password" id="gateInput" placeholder="Zugangscode" autocomplete="off" required autofocus>
-        <button type="submit">Weiter →</button>
+        <button type="submit">Zum Kurs →</button>
         <div class="gate-error" id="gateError"></div>
       </form>
-      <div class="gate-hint">Anschließend hat jeder Kurs einen eigenen Zugangscode.</div>
+      <div class="gate-hint">Ihr Code öffnet direkt Ihren Kurs.</div>
     </div>
 
     <div class="kurs-grid" id="kursGrid" style="display:none;">
 
-      <a class="kurs-card" href="kurs-beschaffung.html">
+      <a class="kurs-card" id="card-beschaffung" href="kurs-beschaffung.html" style="display:none;">
         <div class="kurs-stripe"></div>
         <span class="kurs-modul">Modul M-064</span>
         <h2>Beschaffung im Büromanagement</h2>
@@ -191,7 +191,7 @@ footer a:hover { text-decoration: underline; }
         <span class="kurs-cta">Zum Kurs <span>→</span></span>
       </a>
 
-      <a class="kurs-card alt" href="kurs-bueroprozesse.html">
+      <a class="kurs-card alt" id="card-bueroprozesse" href="kurs-bueroprozesse.html" style="display:none;">
         <div class="kurs-stripe"></div>
         <span class="kurs-modul">Modul M-067</span>
         <h2>Büroprozesse gestalten und Arbeitsvorgänge organisieren</h2>
@@ -210,28 +210,34 @@ footer a:hover { text-decoration: underline; }
 </footer>
 
 <script>
-  // Globaler Zugangscode der Plattform (schaltet die Kursauswahl frei).
-  // Jeder Kurs hat zusätzlich einen eigenen Code auf seiner Seite.
-  const PLATTFORM_CODE = 'BFW';
-  const gate = document.getElementById('gate');
-  const grid = document.getElementById('kursGrid');
-  const form = document.getElementById('gateForm');
+  // Der eingegebene Zugangscode wählt den Kurs:
+  //   "Büroprozesse" -> nur Kurs M-067 erscheint
+  //   "Beschaffung"  -> nur Kurs M-064 erscheint
+  // Der passende Kurs wird zugleich freigeschaltet (kein zweiter Code nötig).
+  const KURSE = {
+    'büroprozesse': { card: 'card-bueroprozesse', storageKey: 'bfw_lernplattform_m067_unlocked' },
+    'beschaffung':  { card: 'card-beschaffung',   storageKey: 'bfw_lernplattform_unlocked' }
+  };
+  const gate  = document.getElementById('gate');
+  const grid  = document.getElementById('kursGrid');
+  const form  = document.getElementById('gateForm');
   const input = document.getElementById('gateInput');
   const error = document.getElementById('gateError');
 
-  function freischalten() {
+  function kursZeigen(key) {
+    const kurs = KURSE[key];
+    localStorage.setItem(kurs.storageKey, '1');   // Kurs vorab freischalten
     gate.style.display = 'none';
     grid.style.display = 'grid';
+    document.getElementById(kurs.card).style.display = 'block';
   }
-  // Innerhalb der Sitzung nicht erneut abfragen
-  if (sessionStorage.getItem('bfw_platform_ok') === '1') freischalten();
 
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    if (input.value.trim().toLowerCase() === PLATTFORM_CODE.toLowerCase()) {
-      sessionStorage.setItem('bfw_platform_ok', '1');
+    const code = input.value.trim().toLowerCase();
+    if (KURSE[code]) {
       error.textContent = '';
-      freischalten();
+      kursZeigen(code);
     } else {
       error.textContent = 'Falscher Zugangscode. Bitte erneut versuchen.';
       input.value = '';
