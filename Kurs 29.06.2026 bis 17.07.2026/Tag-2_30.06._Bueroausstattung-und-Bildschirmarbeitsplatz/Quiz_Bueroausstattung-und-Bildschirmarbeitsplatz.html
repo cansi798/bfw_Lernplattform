@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Tag 2 — Büroausstattung & ergonomischer Bildschirmarbeitsplatz</title>
+<title>Quiz Tag 2 — Büroausstattung & ergonomischer Bildschirmarbeitsplatz (60 Fragen)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root {
@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 2 · 30.06.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 2 · 30.06.2026 · 60 Fragen</span>
   <h1>Quiz: Büroausstattung &amp; ergonomischer Bildschirmarbeitsplatz</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Bueroausstattung-und-Bildschirmarbeitsplatz.html</strong> und dem <strong>Handout_Bueroausstattung-und-Bildschirmarbeitsplatz.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Bueroausstattung-und-Bildschirmarbeitsplatz.html</strong> und dem <strong>Handout_Bueroausstattung-und-Bildschirmarbeitsplatz.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -269,7 +269,7 @@ const QUESTIONS = [
     a: 2, e: "Bei der Pendelmechanik wird die Neigung des Stuhls durch Bewegung bzw. Gewichtsverlagerung gesteuert, ähnlich wie auf einem Sitzball." },
 
   // === Block D: Prüfsiegel & Arbeitstisch (20-26) ===
-  { topic: "Prüfsiegel", q: "Was gilt für das GS-Zeichen („Geprüfte Sicherheit")?",
+  { topic: "Prüfsiegel", q: "Was gilt für das GS-Zeichen („Geprüfte Sicherheit“)?",
     options: ["Es ist gesetzlich vorgeschrieben", "Es wird nur im Ausland vergeben", "Es ist ein Garantiezeichen für 10 Jahre", "Es wird von den Unternehmen freiwillig verwendet"],
     a: 3, e: "Das GS-Zeichen bescheinigt die Einhaltung des Produktsicherheitsgesetzes und wird von den Unternehmen freiwillig verwendet." },
   { topic: "Prüfsiegel", q: "Was gilt für das CE-Zeichen?",
@@ -303,7 +303,105 @@ const QUESTIONS = [
     a: 0, e: "Im Anhang „Anforderungen und Maßnahmen für Arbeitsstätten nach § 3 Absatz 1“ werden unter Punkt 6 die Anforderungen an den Bildschirmarbeitsplatz konkretisiert." },
   { topic: "ArbStättV", q: "Welche Anforderung stellt die ArbStättV an die Tastatur?",
     options: ["Sie muss fest mit dem Bildschirm verbunden sein", "Sie muss eine vom Bildschirm getrennte, neigbare Einheit mit reflexionsarmer Oberfläche sein", "Sie muss beleuchtet sein", "Sie muss aus Metall bestehen"],
-    a: 1, e: "Tastaturen müssen vom Bildschirm getrennte, neigbare Einheiten mit reflexionsarmer Oberfläche sein; vor der Tastatur muss das Auflegen der Handballen möglich sein." }
+    a: 1, e: "Tastaturen müssen vom Bildschirm getrennte, neigbare Einheiten mit reflexionsarmer Oberfläche sein; vor der Tastatur muss das Auflegen der Handballen möglich sein." },
+
+  // === Block F: Ergonomie-Grundlagen & Bürostuhl (31-39) ===
+  { topic: "Ergonomie", q: "Wie lässt sich das Grundprinzip der Ergonomie zusammenfassen?",
+    options: ["Die Arbeit an den Menschen anpassen", "Den Menschen an die Arbeit anpassen", "Die Maschine über den Menschen stellen", "Die Arbeitszeit verlängern"],
+    a: 0, e: "Ergonomie bedeutet, die Arbeit an den Menschen anzupassen — nicht umgekehrt den Menschen an die Arbeit." },
+  { topic: "Ergonomie", q: "Welchem Zweck dient die Ergonomie in erster Linie?",
+    options: ["Der Gewinnmaximierung", "Dem präventiven Gesundheitsschutz", "Der Steuerersparnis", "Der Raumdekoration"],
+    a: 1, e: "Die Ergonomie dient dem präventiven Gesundheitsschutz und der körpergerechten Gestaltung des Arbeitsplatzes." },
+  { topic: "Bürostuhl", q: "Welche Sitztiefe soll ein Bürodrehstuhl mindestens aufweisen?",
+    options: ["10–20 cm", "25–30 cm", "38–44 cm", "60–70 cm"],
+    a: 2, e: "Die Sitztiefe eines Bürodrehstuhls soll mindestens 38–44 cm betragen." },
+  { topic: "Bürostuhl", q: "Welche Sitzbreite soll ein Bürodrehstuhl mindestens haben?",
+    options: ["10–20 cm", "20–30 cm", "60–70 cm", "40–48 cm"],
+    a: 3, e: "Die Sitzbreite eines Bürodrehstuhls soll mindestens 40–48 cm betragen." },
+  { topic: "Bürostuhl", q: "Wonach richtet sich der Rollwiderstand der Stuhlrollen?",
+    options: ["Nach dem Bodenbelag (Teppich oder glatter Boden)", "Nach der Körpergröße", "Nach der Raumtemperatur", "Nach der Tageszeit"],
+    a: 0, e: "Der Rollwiderstand muss zum Bodenbelag passen — auf Teppich sind andere Rollen nötig als auf glatten Böden." },
+  { topic: "Gesundheit", q: "Welche Beschwerden drohen durch falsches Sitzen auf ungeeigneten Stühlen?",
+    options: ["Sehstörungen und Hörverlust", "Rücken-, Nacken- und Kopfschmerzen", "Hautausschlag", "Zahnschmerzen"],
+    a: 1, e: "Falsches Sitzen führt zu Rücken-, Nacken- und Kopfschmerzen sowie Verspannungen." },
+  { topic: "Einrichtung", q: "In welcher Reihenfolge wird ein Bildschirmarbeitsplatz eingerichtet?",
+    options: ["Erst Bildschirm, dann Tisch, dann Stuhl", "Erst Tisch, dann Stuhl, dann Bildschirm", "Erst Stuhl, dann Tisch, dann Bildschirm", "Die Reihenfolge ist egal"],
+    a: 2, e: "Zuerst wird der Stuhl eingestellt, dann der Tisch, dann der Bildschirm." },
+  { topic: "Eselsbrücke", q: "Welche Eselsbrücke fasst die Regeln des Bildschirmarbeitsplatzes zusammen?",
+    options: ["„Erst messen, dann sägen.“", "„Ordnung ist das halbe Leben.“", "„Viel hilft viel.“", "„50 sehen, 90 beugen, fest stehen.“"],
+    a: 3, e: "„50 sehen, 90 beugen, fest stehen.“ — 50 cm Blickabstand, 90°-Winkel an Armen und Beinen, feste Fußauflage." },
+  { topic: "Blickabstand", q: "Welcher Sichtabstand zum Bildschirm ist in der Praxis empfehlenswert?",
+    options: ["50–70 cm", "10–20 cm", "100–150 cm", "über 2 m"],
+    a: 0, e: "Der Sichtabstand beträgt mindestens 50 cm, in der Praxis sind 50–70 cm empfehlenswert." },
+
+  // === Block G: Sitzpositionen & Sitzmechaniken (40-46) ===
+  { topic: "Sitzpositionen", q: "Wie ist die vordere Sitzposition beim dynamischen Sitzen charakterisiert?",
+    options: ["Winkel genau 90°", "Winkel zwischen Oberkörper und Horizontale unter 90°, Oberschenkel nach unten geneigt", "Winkel größer als 90°, zurückgelehnt", "komplett liegend"],
+    a: 1, e: "In der vorderen Position liegt der Winkel zwischen Oberkörper und Horizontale unter 90°, die Oberschenkel sind nach unten geneigt." },
+  { topic: "Sitzpositionen", q: "Was kennzeichnet die mittlere Sitzposition?",
+    options: ["stark zurückgelehnt", "auf der Stuhlkante", "Aufrechtes Sitzen, Oberkörper und Horizontale bilden 90°", "nach vorn gebeugt unter 90°"],
+    a: 2, e: "In der mittleren Position sitzt man aufrecht; Oberkörper und Horizontale bilden einen 90°-Winkel." },
+  { topic: "Sitzpositionen", q: "Wie ist die hintere Sitzposition beschrieben?",
+    options: ["aufrecht mit 90°", "nach vorn geneigt", "auf der Stuhlkante sitzend", "Zurückgelehnt, der Winkel ist größer als 90°"],
+    a: 3, e: "In der hinteren Position ist man zurückgelehnt, der Winkel ist größer als 90°." },
+  { topic: "Sitzmechanik", q: "Was kennzeichnet die Wippmechanik?",
+    options: ["Sitz und Lehne sind gekoppelt, der Winkel zwischen ihnen bleibt konstant (wie ein Schaukelstuhl)", "Sitz und Lehne sind unabhängig verstellbar", "Steuerung nur durch Gewichtsverlagerung", "der Stuhl ist völlig starr"],
+    a: 0, e: "Bei der Wippmechanik sind beide Flächen gekoppelt, der Winkel zwischen ihnen bleibt aber konstant — wie auf einem Schaukelstuhl." },
+  { topic: "Sitzmechanik", q: "Was kennzeichnet die Asynchronmechanik?",
+    options: ["Sitz und Lehne sind fest gekoppelt", "Die Neigungswinkel von Sitzfläche und Rückenlehne lassen sich unabhängig voneinander verstellen", "der Stuhl wird durch Gewichtsverlagerung gesteuert", "nur die Armlehnen sind verstellbar"],
+    a: 1, e: "Bei der Asynchronmechanik lassen sich die Neigungswinkel von Sitzfläche und Rückenlehne unabhängig voneinander verändern." },
+  { topic: "Sitzmechanik", q: "Welchen Nutzen hat die Neigbarkeit von Rückenlehne und Sitzfläche?",
+    options: ["Sie spart Strom", "Sie macht den Stuhl leiser", "Sie entlastet beim Bewegen die Bandscheiben", "Sie erhöht die maximale Sitzhöhe"],
+    a: 2, e: "Die Neigbarkeit entlastet beim Bewegen die Bandscheiben und unterstützt das dynamische Sitzen." },
+  { topic: "Arbeitstisch", q: "Worin unterscheidet sich ein verstellbarer von einem einstellbaren Tisch?",
+    options: ["Verstellbar bedeutet, er ist fest montiert", "Verstellbar bedeutet, er ist niedriger", "Einstellbar bedeutet, er ist jederzeit anpassbar", "Verstellbar = jederzeit mit wenigen Handgriffen; einstellbar = nur einmal mit Werkzeug"],
+    a: 3, e: "Ein einstellbarer Tisch wird nur einmal mit Werkzeug angepasst; ein verstellbarer Tisch lässt sich jederzeit mit wenigen Handgriffen in der Höhe verändern." },
+
+  // === Block H: Arbeitstisch & moderne Arbeitsplätze (47-52) ===
+  { topic: "Arbeitstisch", q: "Welche Arbeitsfläche genügt ausnahmsweise bei reiner PC-Arbeit (z. B. Call-Center)?",
+    options: ["120 cm × 80 cm", "80 cm × 60 cm", "200 cm × 100 cm", "60 cm × 40 cm"],
+    a: 0, e: "Bei reiner PC-Arbeit (z. B. Call-Center) genügt ausnahmsweise eine Arbeitsfläche von 120 cm × 80 cm." },
+  { topic: "Arbeitstisch", q: "Warum werden für Tischplatten Holz oder Kunststoff statt Glas oder Metall bevorzugt?",
+    options: ["weil sie billiger sind", "wegen der geringen Wärmeleitfähigkeit", "weil sie schwerer sind", "weil sie durchsichtig sind"],
+    a: 1, e: "Holz- oder Kunststoffplatten haben eine geringe Wärmeleitfähigkeit und sind daher angenehmer als Glas oder Metall." },
+  { topic: "Steharbeitsplatz", q: "In welchem Höhenbereich liegt ein reiner Steharbeitsplatz?",
+    options: ["42–50 cm", "62–80 cm", "95–120 cm", "30–40 cm"],
+    a: 2, e: "Ein reiner Steharbeitsplatz hat eine Stehhöhe von 95–120 cm." },
+  { topic: "Drei-Zonen", q: "Was vereint ein Drei-Zonen-Arbeitsplatz?",
+    options: ["drei verschiedene Bildschirme", "drei Bürostühle", "drei Drucker", "Sitzarbeit ohne PC, Sitzarbeit am PC und Arbeit im Stehen"],
+    a: 3, e: "Ein Drei-Zonen-Arbeitsplatz vereint eine Zone für Sitzarbeit ohne PC, eine für Sitzarbeit am PC und eine für Arbeit im Stehen." },
+  { topic: "ArbStättV", q: "Welche Eigenschaft soll die Bildschirmoberfläche laut ArbStättV haben?",
+    options: ["reflexionsarm, dreh- und neigbar", "hochglänzend", "fest fixiert", "aus Glas"],
+    a: 0, e: "Bildschirme sind so aufzustellen, dass die Oberflächen reflexionsarm sowie dreh- und neigbar sind." },
+  { topic: "ArbStättV", q: "Welche Anforderung gilt für das Bild am Bildschirm?",
+    options: ["möglichst dunkel", "Flimmerfrei und verzerrungsfrei, Helligkeit und Kontrast einstellbar", "immer in Schwarz-Weiß", "maximal hell ohne Einstellmöglichkeit"],
+    a: 1, e: "Das Bild muss flimmer- und verzerrungsfrei sein; Helligkeit und Kontrast müssen individuell einstellbar sein." },
+
+  // === Block I: ArbStättV, Software & Praxis (53-60) ===
+  { topic: "ArbStättV", q: "Wie soll die Beleuchtung am Bildschirmarbeitsplatz gestaltet sein?",
+    options: ["möglichst grell", "nur Deckenlicht ohne Tageslicht", "An Arbeitsaufgabe und Sehvermögen angepasst, ohne Blendungen oder Spiegelungen", "komplett abgedunkelt"],
+    a: 2, e: "Die Beleuchtung ist der Arbeitsaufgabe und dem Sehvermögen anzupassen; Blendungen und Spiegelungen sind zu vermeiden." },
+  { topic: "ArbStättV", q: "Was muss am Bildschirmarbeitsplatz auf Wunsch bereitgestellt werden?",
+    options: ["ein zweiter Monitor", "eine Kaffeemaschine", "ein höhenverstellbarer Schrank", "Fußstütze und Manuskripthalter"],
+    a: 3, e: "Auf Wunsch sind eine Fußstütze und ein Manuskripthalter bereitzustellen." },
+  { topic: "Laptop", q: "Was gilt für tragbare Bildschirmgeräte (Laptops) ohne Trennung von Bildschirm und Tastatur?",
+    options: ["Sie dürfen nur kurzzeitig betrieben werden", "Sie sind im Dauereinsatz ideal", "Sie ersetzen jeden Arbeitsplatz", "Sie sind grundsätzlich verboten"],
+    a: 0, e: "Laptops ohne Trennung von Bildschirm und Tastatur dürfen nur kurzzeitig betrieben werden — im Dauereinsatz ist eine Dockingstation nötig." },
+  { topic: "Laptop", q: "Wie wird ein Laptop ergonomisch zum vollwertigen Arbeitsplatz?",
+    options: ["durch eine Schutzhülle", "Mit Dockingstation, externem Bildschirm, Tastatur und Maus", "durch eine größere Akkulaufzeit", "durch ein helleres Display"],
+    a: 1, e: "Mit Dockingstation, externem Monitor, Tastatur und Maus lässt sich jedes Element korrekt positionieren." },
+  { topic: "Softwareergonomie", q: "Welche Anforderung stellt die Softwareergonomie?",
+    options: ["Die Software soll möglichst viele Daten heimlich erfassen", "Die Software muss besonders bunt sein", "Die Software muss anpassbar sein und darf keine heimliche Leistungs- oder Verhaltenskontrolle ermöglichen", "Die Software muss kostenlos sein"],
+    a: 2, e: "Die Software muss an Kenntnisse und Arbeitsaufgabe anpassbar sein; eine heimliche Leistungs- oder Verhaltenskontrolle ist unzulässig." },
+  { topic: "ArbStättV", q: "Wodurch werden die allgemeinen Anforderungen der ArbStättV konkretisiert?",
+    options: ["durch das Grundgesetz", "durch die DSGVO", "durch das Handelsgesetzbuch", "durch die Technischen Regeln für Arbeitsstätten (ASR)"],
+    a: 3, e: "Die allgemein gehaltenen Anforderungen der ArbStättV werden in den Technischen Regeln für Arbeitsstätten (ASR) konkretisiert." },
+  { topic: "ArbStättV", q: "Was muss laut ArbStättV vor der Tastatur möglich sein?",
+    options: ["das Abstellen einer Tasse", "das Ablegen des Telefons", "Das Auflegen der Handballen", "das Aufstellen einer Lampe"],
+    a: 2, e: "Vor der Tastatur muss das Auflegen der Handballen möglich sein." },
+  { topic: "Homeoffice", q: "Welche Regeln gelten für die Ergonomie im Homeoffice?",
+    options: ["dort gelten keine Ergonomieregeln", "nur die Hälfte der Regeln", "ausschließlich Regeln zum Datenschutz", "Dieselben Regeln wie im Büro"],
+    a: 3, e: "Im Homeoffice gelten dieselben Ergonomieregeln wie im Büro; Stuhl, externer Monitor und gutes Licht sind die wichtigsten Investitionen." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

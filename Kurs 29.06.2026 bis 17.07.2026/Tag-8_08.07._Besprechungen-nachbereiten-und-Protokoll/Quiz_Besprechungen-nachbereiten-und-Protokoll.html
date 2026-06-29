@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 8 · 08.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 8 · 08.07.2026 · 60 Fragen</span>
   <h1>Quiz: Besprechungen nachbereiten &amp; Protokoll</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Besprechungen-nachbereiten-und-Protokoll.html</strong> und dem <strong>Handout_Besprechungen-nachbereiten-und-Protokoll.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Besprechungen-nachbereiten-und-Protokoll.html</strong> und dem <strong>Handout_Besprechungen-nachbereiten-und-Protokoll.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -217,13 +217,13 @@ const QUESTIONS = [
     a: 2, e: "Der Verteiler legt fest, wer das Protokoll bekommt — Teilnehmer, entschuldigt Abwesende und ggf. Vorgesetzte." },
 
   // === Block B: Begriff & Funktionen (4-6) ===
-  { topic: "Begriff", q: "Was bedeutet das Wort „Protokoll" und was meint es in der kaufmännischen Praxis?",
+  { topic: "Begriff", q: "Was bedeutet das Wort „Protokoll“ und was meint es in der kaufmännischen Praxis?",
     options: ["Eine mündliche Absprache ohne Aufzeichnung", "Eine Tagesordnung vor der Sitzung", "Eine Checkliste für die Raumbuchung", "Niederschrift — eine schriftliche Aufzeichnung über Inhalte, Verlauf und Ergebnisse"],
     a: 3, e: "Protokoll bedeutet Niederschrift und meint eine schriftliche Aufzeichnung über Inhalte, Verlauf und Ergebnisse von Veranstaltungen." },
   { topic: "Funktionen", q: "Welche drei Funktionen erfüllt ein Protokoll?",
     options: ["Werbung, Verkauf und Vertrieb", "Information, Beweis-/Dokumentationsmittel und Organisation", "Planung, Einkauf und Lagerung", "Kontrolle, Strafe und Belohnung"],
     a: 1, e: "Protokolle dienen der Information, als Beweis-/Dokumentationsmittel und der Organisation." },
-  { topic: "Funktionen", q: "Welches Beispiel gehört zur Funktion „Information"?",
+  { topic: "Funktionen", q: "Welches Beispiel gehört zur Funktion „Information“?",
     options: ["Gedächtnisstütze für die Teilnehmer und Information für Abwesende", "Beschlüsse werden aktenkundig gemacht", "Kompetenzen werden festgelegt", "Entscheidungen werden rechtswirksam"],
     a: 0, e: "Zur Funktion Information gehören die Gedächtnisstütze für Teilnehmer und die Information Abwesender." },
 
@@ -267,8 +267,8 @@ const QUESTIONS = [
     options: ["Die Unterschrift des Vorsitzenden", "Datum, Zeit, Ort, Vorsitz, Teilnehmer und Tagesordnung", "Nur das Abstimmungsergebnis", "Die Liste der Anlagen"],
     a: 1, e: "Der Protokollkopf enthält u. a. Unternehmen/Abteilung, Datum, Zeit, Ort, Vorsitz, Teilnehmer, Protokollführung und die Tagesordnung." },
   { topic: "Protokollkopf", q: "Wie wird im Protokoll vermerkt, dass ein Teilnehmer nur zeitweise anwesend war?",
-    options: ["Gar nicht, das ist unwichtig", "Nur mündlich am Ende der Sitzung", "Durch einen Vermerk wie „Herr Schütz ab TOP 3"", "Durch Streichung des Namens"],
-    a: 2, e: "Zeitweise Anwesenheit wird vermerkt (z. B. „Frau Dr. Müller bis 11:20 Uhr, Herr Schütz ab TOP 3") — wichtig bei Beschlüssen mit rechtlicher Relevanz." },
+    options: ["Gar nicht, das ist unwichtig", "Nur mündlich am Ende der Sitzung", "Durch einen Vermerk wie „Herr Schütz ab TOP 3“", "Durch Streichung des Namens"],
+    a: 2, e: "Zeitweise Anwesenheit wird vermerkt (z. B. „Frau Dr. Müller bis 11:20 Uhr, Herr Schütz ab TOP 3“) — wichtig bei Beschlüssen mit rechtlicher Relevanz." },
   { topic: "Protokolltext", q: "Welche drei Kriterien sind für den Protokollführer beim Protokolltext entscheidend?",
     options: ["Schnelligkeit, Kürze und Humor", "Stil, Schönschrift und Farbe", "Lautstärke, Tempo und Pausen", "Wichtigkeit, Vollständigkeit und wahrheitsgetreue Wiedergabe"],
     a: 3, e: "Entscheidend sind Wichtigkeit, Vollständigkeit und die wahrheitsgetreue Wiedergabe der Inhalte und Ergebnisse — ohne Wertung." },
@@ -294,10 +294,10 @@ const QUESTIONS = [
     a: 2, e: "Namentlich erwähnte Beiträge werden in indirekter Rede mit dem Konjunktiv I wiedergegeben — der Protokollführer wird zum Berichterstatter." },
   { topic: "Konjunktiv", q: "Wann wird statt des Konjunktivs I der Konjunktiv II verwendet?",
     options: ["Immer in der 1. Person Singular", "Nur bei Fragen", "Niemals im Protokoll", "Wenn der Konjunktiv I nicht vom Indikativ Präsens zu unterscheiden ist (z. B. 3. Person Plural)"],
-    a: 3, e: "Ist der Konjunktiv I formgleich mit dem Indikativ Präsens (außer bei „sein" in der 3. Person Plural der Fall), wählt man als Ersatz den Konjunktiv II." },
-  { topic: "Konjunktiv", q: "Welche Form ist der korrekte Konjunktiv I von „haben" (3. Person Singular)?",
+    a: 3, e: "Ist der Konjunktiv I formgleich mit dem Indikativ Präsens (außer bei „sein“ in der 3. Person Plural der Fall), wählt man als Ersatz den Konjunktiv II." },
+  { topic: "Konjunktiv", q: "Welche Form ist der korrekte Konjunktiv I von „haben“ (3. Person Singular)?",
     options: ["hätte", "hatte", "wird haben", "habe"],
-    a: 3, e: "Der Konjunktiv I von „haben" (3. Person Singular) lautet „habe" (Indikativ: hat, Konjunktiv II: hätte)." },
+    a: 3, e: "Der Konjunktiv I von „haben“ (3. Person Singular) lautet „habe“ (Indikativ: hat, Konjunktiv II: hätte)." },
 
   // === Block F: Bedeutung & moderne Praxis (29-30) ===
   { topic: "Bedeutung", q: "Wodurch werden die Inhalte eines Protokolls verbindlich, und welche Protokolle haben Beweisfunktion?",
@@ -305,7 +305,109 @@ const QUESTIONS = [
     a: 1, e: "Durch Unterschrift und Genehmigung werden die Inhalte verbindlich; nur Protokolle mit Originalunterschrift haben Beweisfunktion und sind aufzubewahren." },
   { topic: "Moderne Praxis", q: "Welcher Vorteil kennzeichnet das kollaborative, digitale Protokollieren?",
     options: ["Mehrere Personen schreiben gleichzeitig in einem Dokument, Ergebnisse sind sofort verfügbar und versionierbar", "Es ist ohne jede Software möglich", "Es ersetzt automatisch jede rechtsgültige Unterschrift", "Es macht den Verteiler überflüssig"],
-    a: 0, e: "Beim kollaborativen Protokollieren schreiben mehrere gleichzeitig in einem Online-Dokument; Ergebnisse sind sofort verfügbar, versionierbar und mit Aufgaben-Tools verknüpfbar — zu beachten sind Datenschutz und gültige Signatur." }
+    a: 0, e: "Beim kollaborativen Protokollieren schreiben mehrere gleichzeitig in einem Online-Dokument; Ergebnisse sind sofort verfügbar, versionierbar und mit Aufgaben-Tools verknüpfbar — zu beachten sind Datenschutz und gültige Signatur." },
+
+  // === Block G: Nachbereitung – Vertiefung (31-34) ===
+  { topic: "Nachbereitung", q: "Womit beginnt die Arbeit, sobald eine Besprechung zu Ende ist?",
+    options: ["Mit der Nachbereitung der Besprechung", "Mit der Erstellung der Tagesordnung", "Mit der Einladung der Teilnehmer", "Mit der Raumbuchung"],
+    a: 0, e: "Mit dem Ende der Besprechung beginnt die Nachbereitung; erst sie entscheidet, ob aus Gesprächen Ergebnisse werden." },
+  { topic: "Aufgabenverfolgung", q: "Was versteht man unter Aufgabenverfolgung?",
+    options: ["Das Verlängern der Sitzung", "Das systematische Nachhalten vereinbarter Maßnahmen, damit Beschlüsse umgesetzt werden", "Das Streichen unliebsamer Aufgaben", "Das Verteilen der Sitzungskosten"],
+    a: 1, e: "Aufgabenverfolgung bedeutet, vereinbarte Maßnahmen nachzuhalten, damit sie nicht im Tagesgeschäft untergehen und Beschlüsse umgesetzt werden." },
+  { topic: "Maßnahmenliste", q: "Was passiert, wenn in der Maßnahmenliste eine der drei Angaben (Was, Wer, Bis wann) fehlt?",
+    options: ["Die Liste wird automatisch genehmigt", "Die Aufgabe wird vom Vorsitzenden übernommen", "Die Aufgabe bleibt unverbindlich", "Die Sitzung muss wiederholt werden"],
+    a: 2, e: "Fehlt eine der drei Angaben (Was, Wer, Bis wann), bleibt die Aufgabe unverbindlich." },
+  { topic: "Verteiler", q: "Wer gehört typischerweise zum Verteiler eines Protokolls?",
+    options: ["Nur der Protokollführer", "Nur externe Kunden", "Ausschließlich die Konkurrenz", "Teilnehmer, entschuldigt Abwesende und ggf. Vorgesetzte"],
+    a: 3, e: "Zum Verteiler gehören die Teilnehmer, häufig auch entschuldigt Abwesende und Vorgesetzte, die über die Ergebnisse informiert sein müssen." },
+
+  // === Block H: Begriff & Funktionen – Vertiefung (35-38) ===
+  { topic: "Begriff", q: "Über welche Veranstaltungen wird in der kaufmännischen Praxis ein Protokoll erstellt?",
+    options: ["Sitzungen, Versammlungen, Besprechungen, Konferenzen und Verhandlungen", "Nur über Betriebsfeiern", "Nur über Telefonwerbung", "Nur über Kundenbesuche im Außendienst"],
+    a: 0, e: "Ein Protokoll dokumentiert Inhalte, Verlauf und Ergebnisse von Sitzungen, Versammlungen, Besprechungen, Diskussionen, Konferenzen und Verhandlungen." },
+  { topic: "Funktionen", q: "Welches Beispiel gehört zur Funktion „Beweis-/Dokumentationsmittel“?",
+    options: ["Gedächtnisstütze für die Teilnehmer", "Beschlüsse werden aktenkundig gemacht und Entscheidungen u. U. rechtswirksam", "Die Aufgabenverteilung wird festgehalten", "Der Besprechungsraum wird gebucht"],
+    a: 1, e: "Als Beweis-/Dokumentationsmittel macht das Protokoll Beschlüsse aktenkundig; Entscheidungen werden unter Umständen rechtswirksam." },
+  { topic: "Funktionen", q: "Welches Beispiel gehört zur Funktion „Organisation“?",
+    options: ["Information für Abwesende", "Beschlüsse rechtswirksam machen", "Aufgaben verteilen und Kompetenzen festlegen", "Die Sitzung beenden"],
+    a: 2, e: "Zur Funktion Organisation gehört, die Aufgabenverteilung festzuhalten und Kompetenzen festzulegen." },
+  { topic: "Funktionen", q: "Wofür steht die Merkhilfe „I-B-O“ bei den Protokollfunktionen?",
+    options: ["Inhalt – Beginn – Ordnung", "Idee – Bericht – Organigramm", "Information – Beleg – Output", "Information – Beweis – Organisation"],
+    a: 3, e: "„I-B-O“ steht für Information, Beweis und Organisation — die drei Funktionen jedes Protokolls." },
+
+  // === Block I: Protokollarten – Vertiefung (39-46) ===
+  { topic: "Protokollarten", q: "Wie viele Protokollarten unterscheidet man nach ihrer Ausführlichkeit?",
+    options: ["Fünf", "Zwei", "Drei", "Acht"],
+    a: 0, e: "Man unterscheidet fünf Protokollarten: Wort-, Verlaufs-, Kurz-, Beschluss-/Ergebnis- und Gedächtnisprotokoll." },
+  { topic: "Protokollarten", q: "Worin besteht die Aufgabe des Protokollführers beim Mitschreiben nach Stichworten?",
+    options: ["Jedes Wort wörtlich aufzunehmen", "Wichtiges von Unwichtigem zu unterscheiden", "Die Sitzung zu leiten", "Über Beschlüsse abzustimmen"],
+    a: 1, e: "Die meisten Protokolle werden nach Stichworten geschrieben; der Protokollführer muss dabei Wichtiges von Unwichtigem unterscheiden." },
+  { topic: "Wortprotokoll", q: "Wie häufig kommt das Wortprotokoll in der Wirtschaft vor?",
+    options: ["Es ist dort die Standardform", "Es ist gesetzlich vorgeschrieben", "Eher selten", "Ausschließlich bei Mitarbeitergesprächen"],
+    a: 2, e: "In der Wirtschaft findet man das Wortprotokoll eher selten; typisch ist es bei Gerichtsverhandlungen und Parlamentsdebatten." },
+  { topic: "Verlaufsprotokoll", q: "Gibt das Verlaufsprotokoll die Aussagen wörtlich wieder?",
+    options: ["Ja, immer wörtlich", "Ja, aber nur die Fragen", "Ja, nur die Einwände", "Nein, es gibt den Verlauf wieder, jedoch nicht wörtlich"],
+    a: 3, e: "Das Verlaufsprotokoll ist ausführlich und gibt den Verlauf wieder, jedoch nicht wörtlich; nur Beschlüsse stehen im Wortlaut." },
+  { topic: "Kurzprotokoll", q: "Wie werden die Beschlüsse im Kurzprotokoll festgehalten?",
+    options: ["Im Wortlaut mit Abstimmungsergebnissen", "Nur sinngemäß und gekürzt", "Gar nicht", "Ausschließlich als Audioaufnahme"],
+    a: 0, e: "Das Kurzprotokoll fasst die wesentlichen Inhalte zusammen, gibt die Beschlüsse aber im Wortlaut mit Abstimmungsergebnissen wieder." },
+  { topic: "Kurzprotokoll", q: "Für welche Anlässe eignet sich das Kurzprotokoll besonders?",
+    options: ["Für Gerichtsverhandlungen", "Für Abteilungsleitersitzungen, Mitarbeiterbesprechungen und Beratungsgespräche", "Für Parlamentsdebatten", "Für notarielle Beurkundungen"],
+    a: 1, e: "Das Kurzprotokoll eignet sich für Abteilungsleitersitzungen, Mitarbeiterbesprechungen und Beratungsgespräche und ist in der Praxis sehr häufig." },
+  { topic: "Beschlussprotokoll", q: "Wie ist das Beschluss-/Ergebnisprotokoll vom Umfang her in der Regel?",
+    options: ["Sehr ausführlich", "Wörtlich und lang", "Sehr kurz", "Genauso lang wie ein Wortprotokoll"],
+    a: 2, e: "Ergebnisprotokolle sind in der Regel sehr kurz und enthalten nur Entscheidungen, Aufgabenverteilung und Beschlüsse im Wortlaut." },
+  { topic: "Gedächtnisprotokoll", q: "Welche Aufzeichnung ist mit dem Gedächtnisprotokoll eng verwandt?",
+    options: ["Das Wortprotokoll des Gerichts", "Die Tagesordnung", "Der Geschäftsbrief", "Die Akten- oder Gesprächsnotiz"],
+    a: 3, e: "Eng verwandt mit dem Gedächtnisprotokoll ist die Akten- oder Gesprächsnotiz, eine kürzere, weniger formale Zusammenfassung von Gesprächen." },
+
+  // === Block J: Protokollrahmen – Vertiefung (47-53) ===
+  { topic: "Vergleich", q: "Welche Protokollart gibt alle Aussagen wörtlich wieder?",
+    options: ["Das Wortprotokoll", "Das Kurzprotokoll", "Das Beschlussprotokoll", "Das Gedächtnisprotokoll"],
+    a: 0, e: "Nur das Wortprotokoll gibt alle Aussagen wörtlich wieder; die übrigen Arten fassen das Wesentliche zusammen." },
+  { topic: "DIN 5008", q: "Was empfiehlt DIN 5008 neben dem eigentlichen Protokolltext?",
+    options: ["Eine Werbeanzeige", "In einer separaten Spalte auf Termine, Aufgaben und Aktionen hinzuweisen", "Eine Preisliste", "Ein Foto des Raums"],
+    a: 1, e: "Nach DIN 5008 kann man neben dem Protokolltext in einer separaten Spalte auf Termine, Aufgaben und Aktionen hinweisen." },
+  { topic: "Protokollkopf", q: "Was wird bei sehr vielen Teilnehmern empfohlen?",
+    options: ["Auf Namen ganz zu verzichten", "Die Sitzung abzusagen", "Eine separate Teilnehmerliste zu führen", "Nur den Vorsitzenden zu nennen"],
+    a: 2, e: "Bei vielen Teilnehmern wird eine separate Teilnehmerliste geführt; zeitweise Anwesenheit ist zu vermerken." },
+  { topic: "Protokollkopf", q: "Wer ist für die Anfertigung des Protokolls verantwortlich festzuhalten?",
+    options: ["Immer der jüngste Teilnehmer", "Immer ein externer Dienstleister", "Niemand, das ist freiwillig", "Bei externen Teilnehmern das Unternehmen, bei internen Sitzungen die Abteilung"],
+    a: 3, e: "Festzuhalten ist, welches Unternehmen (bei externen Teilnehmern) bzw. welche Abteilung (bei internen Sitzungen) für das Protokoll verantwortlich ist." },
+  { topic: "Protokolltext", q: "Wie verhält sich der Protokollführer bei der Auswahl der Inhalte für den Protokolltext?",
+    options: ["Er ergreift Partei für eine Seite", "Er schmückt die Beiträge aus", "Er verhält sich neutral", "Er lässt alle Beschlüsse weg"],
+    a: 2, e: "Der Protokollführer entscheidet, welche Beiträge bedeutsam sind, und verhält sich dabei neutral — ohne zu werten." },
+  { topic: "Protokolltext", q: "Wer überprüft den fertigen Protokolltext und ändert ihn ggf.?",
+    options: ["Der jüngste Teilnehmer", "Ein externer Notar", "Niemand", "Der Sitzungsvorsitzende"],
+    a: 3, e: "Nach Erstellung wird der Protokolltext vom Sitzungsvorsitzenden überprüft und gegebenenfalls geändert." },
+  { topic: "Protokollfuß", q: "Wessen Unterschriften gehören in den Protokollfuß?",
+    options: ["Der Leitung (Vorsitz) und des Protokollführers", "Aller Teilnehmer ausnahmslos", "Nur des jüngsten Teilnehmers", "Nur eines externen Zeugen"],
+    a: 0, e: "Der Protokollfuß enthält die Unterschriften der Leitung (des Vorsitzenden) und des Protokollführers, ergänzt um Verteiler und Anlagenhinweis." },
+
+  // === Block K: Sprache & Konjunktiv – Vertiefung (54-57) ===
+  { topic: "Sprache", q: "Welche der folgenden Formulierungen ist neutral (protokollgerecht)?",
+    options: ["Herr Bauer stellt seine überwältigende Produktidee vor.", "Herr Bauer stellt seine Produktidee vor.", "Leider stellt Herr Bauer seine Idee vor.", "Herr Bauer stellt seine geradezu geniale Idee vor."],
+    a: 1, e: "Protokollgerecht ist die sachliche Form ohne wertende Adjektive: „Herr Bauer stellt seine Produktidee vor.“" },
+  { topic: "Indirekte Rede", q: "Welche Rolle nimmt der Protokollführer durch die indirekte Rede mit Konjunktiv I ein?",
+    options: ["Die des Richters", "Die des Antragstellers", "Die des neutralen Berichterstatters, ohne Gewähr für die Richtigkeit", "Die des Werbetexters"],
+    a: 2, e: "Durch die indirekte Rede im Konjunktiv I wird der Protokollführer zum Berichterstatter: Er gibt Aussagen neutral wieder, ohne Gewähr für ihre Richtigkeit." },
+  { topic: "Konjunktiv", q: "Wie lautet der Konjunktiv I von „sein“ in der 3. Person Singular?",
+    options: ["war", "wäre", "ist", "sei"],
+    a: 3, e: "Der Konjunktiv I von „sein“ (3. Person Singular) lautet „sei“ (Indikativ: ist, Konjunktiv II: wäre)." },
+  { topic: "Konjunktiv", q: "In welcher Person stehen laut DUDEN etwa 90 % aller Personalformen der indirekten Rede?",
+    options: ["In der 1. Person Singular", "In der 2. Person", "In der 3. Person Singular und Plural", "In der 1. Person Plural"],
+    a: 2, e: "Etwa 90 % aller Personalformen der indirekten Rede stehen laut DUDEN in der 3. Person Singular (er, sie, es) und Plural (sie)." },
+
+  // === Block L: Bedeutung & moderne Praxis – Vertiefung (58-60) ===
+  { topic: "Genehmigung", q: "Welche zwei Wege gibt es, ein Protokoll zu genehmigen?",
+    options: ["Nur Vorlesen, kein Widerspruch möglich", "Nur per E-Mail an den Vorsitzenden", "Gar keine, es gilt sofort", "Verteilung mit Widerspruchsfrist oder Vorlesen und Abstimmung in der nächsten Sitzung"],
+    a: 3, e: "Genehmigt wird ein Protokoll entweder durch Verteilung mit Ablauf einer Widerspruchsfrist oder durch Vorlesen und Abstimmung in der nächsten Sitzung." },
+  { topic: "Kontrolle", q: "Welche Hilfsmittel dienen der Überprüfung von Terminen, Beschlüssen und Aufgaben?",
+    options: ["Terminkalender, Wiedervorlagemappen, Plantafeln und Computerprogramme", "Nur das Telefonbuch", "Nur eine Pinnwand mit Fotos", "Ausschließlich mündliche Nachfragen"],
+    a: 0, e: "Zur Kontrolle der Einhaltung von Terminen, Beschlüssen und der Erledigung von Aufgaben bieten sich Terminkalender, Wiedervorlagemappen, Plantafeln und Computerprogramme an." },
+  { topic: "Moderne Praxis", q: "Was ist beim digitalen und kollaborativen Protokollieren besonders zu beachten?",
+    options: ["Nur die Schriftgröße", "Datenschutz, Zugriffsrechte und — bei rechtlicher Relevanz — die gültige elektronische Unterschrift", "Ausschließlich die Papierfarbe", "Nur die Anzahl der Drucke"],
+    a: 1, e: "Zu beachten sind Datenschutz und Zugriffsrechte sowie — bei rechtlicher Relevanz — die Frage der gültigen elektronischen Unterschrift." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

@@ -18,6 +18,11 @@ Thumbs.db
 *.tmp
 ~$*
 
+# LaTeX-/Editor-Artefakte
+missfont.log
+*.tmp
+*.tmp.*
+
 # Python (falls Splitting-Skripte genutzt werden)
 __pycache__/
 *.pyc

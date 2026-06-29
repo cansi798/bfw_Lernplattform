@@ -163,15 +163,16 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 5 · 03.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 5 · 03.07.2026 · 60 Fragen</span>
   <h1>Quiz: Zeitmanagement &amp; Aufgabenplanung</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Zeitmanagement-und-Aufgabenplanung.html</strong> und dem <strong>Handout_Zeitmanagement-und-Aufgabenplanung.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Zeitmanagement-und-Aufgabenplanung.html</strong> und dem <strong>Handout_Zeitmanagement-und-Aufgabenplanung.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+  <!-- total wird per JS gesetzt; Default 60 -->
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +194,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -225,8 +226,8 @@ const QUESTIONS = [
     options: ["Lustlosigkeit", "Fehlende Selbstdisziplin", "Klingelnde Telefone und Unterbrechung durch Kollegen", "Angstgefühle"],
     a: 2, e: "Äußere Störungen kommen von außen, z. B. klingelnde Telefone, Unterbrechung durch Kollegen, Lärm oder technische Störungen." },
   { topic: "Störungen", q: "Welches ist ein Beispiel für eine innere Störung?",
-    options: ["Ein unordentlicher Arbeitsplatz", "Wartezeiten am Gemeinschaftsdrucker", "Lärm durch Straßenverkehr", "Die Unfähigkeit, „nein” zu sagen"],
-    a: 3, e: "Innere Störungen sind z. B. Lustlosigkeit, Müdigkeit, fehlende Selbstdisziplin und die Unfähigkeit, „nein” zu sagen." },
+    options: ["Ein unordentlicher Arbeitsplatz", "Wartezeiten am Gemeinschaftsdrucker", "Lärm durch Straßenverkehr", "Die Unfähigkeit, „nein“ zu sagen"],
+    a: 3, e: "Innere Störungen sind z. B. Lustlosigkeit, Müdigkeit, fehlende Selbstdisziplin und die Unfähigkeit, „nein“ zu sagen." },
 
   // === Block B: Sägeblatteffekt & Leistungskurve (8-18) ===
   { topic: "Sägeblatteffekt", q: "Wodurch entsteht der Sägeblatteffekt?",
@@ -235,7 +236,7 @@ const QUESTIONS = [
   { topic: "Sägeblatteffekt", q: "Wie viel Prozent der Zeit können durch Störungen verloren gehen?",
     options: ["bis zu 5 %", "bis zu 28 %", "bis zu 50 %", "bis zu 75 %"],
     a: 1, e: "Addiert man alle Leistungsverluste durch Störungen auf, können bis zu 28 % der Zeit verloren gehen." },
-  { topic: "Stille Stunde", q: "Was ist die „stille Stunde”?",
+  { topic: "Stille Stunde", q: "Was ist die „stille Stunde“?",
     options: ["Die gesetzliche Mittagspause", "Eine Stunde ohne Strom im Büro", "Ein fest geplanter Termin mit sich selbst für ungestörtes Arbeiten an wichtigen Aufgaben", "Die Zeit nach Feierabend"],
     a: 2, e: "Die stille Stunde ist ein fest eingeplanter Termin mit sich selbst, um ungestört an wichtigen Aufgaben zu arbeiten." },
   { topic: "Stille Stunde", q: "Worauf sollten Sie bei der stillen Stunde achten?",
@@ -250,7 +251,7 @@ const QUESTIONS = [
   { topic: "Leistungskurve", q: "Welche Aufgaben sollten am Nachmittag (im Leistungstief) erledigt werden?",
     options: ["Die wichtigsten A-Aufgaben", "Vertrauliche Verhandlungen", "Routineaufgaben wie die Ablage von Unterlagen", "Aufgaben, die volle Konzentration erfordern"],
     a: 2, e: "Im Nachmittagstief eignen sich Routineaufgaben wie die Ablage von Unterlagen; volle Leistung wird am Vormittag gebraucht." },
-  { topic: "Biorhythmus", q: "Was kennzeichnet einen „Abendmenschen”?",
+  { topic: "Biorhythmus", q: "Was kennzeichnet einen „Abendmenschen“?",
     options: ["Er arbeitet überhaupt nicht", "Er hat sein Hoch direkt nach dem Aufstehen", "Er hat keine Leistungskurve", "Er hat seine höchste Leistungsfähigkeit am Nachmittag"],
     a: 3, e: "Abendmenschen haben ihre höchste Leistungsfähigkeit am Nachmittag, Morgenmenschen am frühen Vormittag." },
   { topic: "ArbZG", q: "Wie lang muss die Ruhepause laut § 4 ArbZG bei mehr als sechs bis neun Stunden Arbeitszeit mindestens sein?",
@@ -295,11 +296,109 @@ const QUESTIONS = [
     options: ["80 % der Zeit bewirken 80 % des Erfolgs", "20 % der eingesetzten Zeit bewirken 80 % des Erfolgs", "Man muss 100 % aller Aufgaben perfekt erledigen", "Jede Aufgabe ist gleich wichtig"],
     a: 1, e: "Nach dem Pareto-Prinzip bewirken 20 % der eingesetzten Zeit 80 % des Erfolgs; die restlichen 80 % der Zeit nur noch 20 % des Erfolgs." },
   { topic: "To-do-Liste", q: "Worin unterscheiden sich To-do-Liste und Checkliste?",
-    options: ["Sie sind völlig identisch", "Die Checkliste ist zukunftsbezogen, die To-do-Liste vergangenheitsbezogen", "Die To-do-Liste ist zukunftsbezogen („Was ist zu tun?”), die Checkliste vergangenheitsbezogen (prüft, ob alles erledigt wurde)", "Beide prüfen nur die Vergangenheit"],
-    a: 2, e: "Die To-do-Liste ist mit „Was ist zu tun?” zukunftsbezogen; die Checkliste prüft die Vollständigkeit/Reihenfolge und ist damit vergangenheitsbezogen." },
+    options: ["Sie sind völlig identisch", "Die Checkliste ist zukunftsbezogen, die To-do-Liste vergangenheitsbezogen", "Die To-do-Liste ist zukunftsbezogen („Was ist zu tun?“), die Checkliste vergangenheitsbezogen (prüft, ob alles erledigt wurde)", "Beide prüfen nur die Vergangenheit"],
+    a: 2, e: "Die To-do-Liste ist mit „Was ist zu tun?“ zukunftsbezogen; die Checkliste prüft die Vollständigkeit/Reihenfolge und ist damit vergangenheitsbezogen." },
   { topic: "Salamitaktik", q: "Was versteht man unter der Salamitaktik?",
     options: ["Aufgaben werden grundsätzlich an Kollegen delegiert", "Alle Aufgaben werden gleichzeitig begonnen", "Eine große, schwierige Aufgabe wird in kleine, überschaubare Schritte zerlegt und Schritt für Schritt erledigt", "Schwierige Aufgaben werden gar nicht erst begonnen"],
-    a: 2, e: "Bei der Salamitaktik zerlegt man eine große Aufgabe in kleine Schritte (Salamischeiben) und erledigt sie nacheinander — das schafft regelmäßige Erfolgserlebnisse." }
+    a: 2, e: "Bei der Salamitaktik zerlegt man eine große Aufgabe in kleine Schritte (Salamischeiben) und erledigt sie nacheinander — das schafft regelmäßige Erfolgserlebnisse." },
+
+  // === Block D: Grundlagen, Störungen & Sägeblatt — Vertiefung (31-39) ===
+  { topic: "Ziele", q: "Was bedeutet Work-Life-Balance im Zeitmanagement?",
+    options: ["Ein ausgewogenes Verhältnis zwischen Berufs- und Privatleben", "Möglichst viel Arbeitszeit ansammeln", "Die Abschaffung der Freizeit", "Ausschließlich am Wochenende zu arbeiten"],
+    a: 0, e: "Privat- und Berufsleben sollen in einem ausgewogenen Verhältnis stehen (Work-Life-Balance), damit die Freizeit ohne Reue genossen werden kann." },
+  { topic: "Grundlagen", q: "Warum lohnt sich die Zeit, die man in die Planung investiert?",
+    options: ["Weil Planung gesetzlich vorgeschrieben ist", "Weil Planung die Arbeitszeit grundsätzlich verlängert", "Weil man bei guter Planung anschließend viel Zeit zurückgewinnt", "Weil Planung das Delegieren überflüssig macht"],
+    a: 2, e: "Für die Planung muss man etwas Zeit investieren, gewinnt bei guter Planung aber im Anschluss viel Zeit für Berufliches und Privates zurück." },
+  { topic: "Störungen", q: "Welche der folgenden ist eine äußere Störung?",
+    options: ["Angstgefühle", "Wartezeiten am Gemeinschaftsdrucker", "Redseligkeit", "Müdigkeit"],
+    a: 1, e: "Wartezeiten am Gemeinschaftsdrucker kommen von außen (Umgebung) und zählen damit zu den äußeren Störungen." },
+  { topic: "Störungen", q: "Welche der folgenden zählt zu den inneren Störungen?",
+    options: ["Lärm durch Straßenverkehr", "Computerausfall", "Unterbrechung durch Kollegen", "Redseligkeit"],
+    a: 3, e: "Redseligkeit wird von der Person selbst verursacht und gehört damit zu den inneren Störungen." },
+  { topic: "Selbstmanagement", q: "Wie lassen sich innere Störungen vor allem angehen?",
+    options: ["Durch Selbstmanagement", "Durch eine neue Klimaanlage", "Durch Abschaffen aller Telefone", "Gar nicht, sie sind unveränderlich"],
+    a: 0, e: "Innere Störungen kann man durch Selbstmanagement angehen; äußere Störungen dagegen durch Organisation und Regeln." },
+  { topic: "Sägeblatteffekt", q: "Warum heißt der Sägeblatteffekt so?",
+    options: ["Weil man dabei mit einer Säge arbeitet", "Weil die Pausen sägezahnförmig verteilt sind", "Weil der grafische Verlauf von Zeit und Leistung einem Sägeblatt ähnelt", "Weil die Aufgaben in Stücke zersägt werden"],
+    a: 2, e: "Stellt man Zeit und Leistungsfähigkeit grafisch dar, ergibt sich durch das wiederholte Abfallen und Aufbauen der Leistung ein Bild, das einem Sägeblatt ähnelt." },
+  { topic: "Pomodoro-Technik", q: "Was beschreibt die Pomodoro-Technik?",
+    options: ["Ein Mittagessen mit Tomaten", "Eine Methode zur Ablage von Unterlagen", "Eine gesetzliche Pausenregelung", "Den Wechsel aus festen Arbeitsintervallen (z. B. 25 Min) und kurzen Pausen"],
+    a: 3, e: "Die Pomodoro-Technik wechselt feste Arbeitsintervalle (z. B. 25 Min) mit kurzen Pausen (z. B. 5 Min) — eine moderne Form der stillen Stunde." },
+  { topic: "Pomodoro-Technik", q: "Wogegen schützt die Pomodoro-Technik besonders?",
+    options: ["Gegen den Sägeblatteffekt", "Gegen zu wenige Überstunden", "Gegen das Pareto-Prinzip", "Gegen die gesetzliche Mittagspause"],
+    a: 0, e: "Durch feste, geschützte Arbeitsintervalle wirkt die Pomodoro-Technik dem Sägeblatteffekt (Leistungsverlust durch Unterbrechungen) entgegen." },
+  { topic: "Stille Stunde", q: "Was sollte man zu Beginn der stillen Stunde tun?",
+    options: ["Das Telefon besonders laut stellen", "Das Telefon umstellen oder den Anrufbeantworter einschalten", "Alle Kollegen ins Büro einladen", "Zuerst alle E-Mails beantworten"],
+    a: 1, e: "Für die stille Stunde stellt man das Telefon auf Kollegen um oder schaltet den Anrufbeantworter ein, um ungestört zu arbeiten." },
+
+  // === Block E: Leistungskurve, Pausen & ABC — Vertiefung (40-47) ===
+  { topic: "Leistungskurve", q: "Wann sollten Aufgaben erledigt werden, die volle Leistungsfähigkeit erfordern?",
+    options: ["Direkt nach der Mittagspause", "Am späten Abend", "Am Vormittag", "Der Zeitpunkt ist völlig egal"],
+    a: 2, e: "Da das Leistungshoch zwischen 08:00 und 12:00 Uhr liegt, gehören anspruchsvolle Aufgaben an den Vormittag." },
+  { topic: "Biorhythmus", q: "Was kennzeichnet einen Morgenmenschen?",
+    options: ["Höchste Leistung am Nachmittag", "Er hat keine Leistungskurve", "Höchste Leistung erst nach Mitternacht", "Höchste Leistung am frühen Vormittag"],
+    a: 3, e: "Morgenmenschen haben ihre höchste Leistungsfähigkeit am frühen Vormittag, Abendmenschen am Nachmittag." },
+  { topic: "Pausen", q: "Welche Wirkung haben regelmäßige Pausen laut Lehrbuch?",
+    options: ["Sie senken den Stresspegel und das Burnout-Risiko", "Sie verlängern die Krankheitsdauer", "Sie erhöhen das Unfallrisiko", "Sie sind reine Zeitverschwendung"],
+    a: 0, e: "Pausen machen produktiver, senken den Stresspegel, steigern die Leistungsfähigkeit und verringern das Burnout- sowie (laut DGUV) das Unfallrisiko." },
+  { topic: "ArbZG", q: "Wie lange dürfen Arbeitnehmer höchstens ohne Ruhepause beschäftigt werden?",
+    options: ["8 Stunden", "6 Stunden", "12 Stunden", "beliebig lange"],
+    a: 1, e: "Länger als sechs Stunden hintereinander dürfen Arbeitnehmer laut § 4 ArbZG nicht ohne Ruhepause beschäftigt werden." },
+  { topic: "ArbZG", q: "In welche Mindestabschnitte dürfen die Ruhepausen aufgeteilt werden?",
+    options: ["je 5 Minuten", "je 10 Minuten", "je 15 Minuten", "je 60 Minuten"],
+    a: 2, e: "Die Ruhepausen können in Zeitabschnitte von jeweils mindestens 15 Minuten aufgeteilt werden." },
+  { topic: "ABC-Analyse", q: "Was gilt für B-Aufgaben in der ABC-Analyse?",
+    options: ["Sie haben die höchste Priorität", "Sie kommen direkt in den Papierkorb", "Sie werden immer als Erstes morgens erledigt", "Sie haben mittlere Priorität (Soll) und werden nach den A-Aufgaben erledigt"],
+    a: 3, e: "B-Aufgaben haben mittlere Priorität (Soll); sie werden nach den A-Aufgaben erledigt, meist nachmittags." },
+  { topic: "ABC-Analyse", q: "Welches Missverhältnis ist für C-Aufgaben typisch?",
+    options: ["Sie verschlingen rund 65 % der Zeit, bringen aber nur 15 % des Erfolgs", "Sie kosten 15 % der Zeit und bringen 65 % des Erfolgs", "Sie bringen 80 % des Erfolgs", "Sie kosten überhaupt keine Zeit"],
+    a: 0, e: "C-Aufgaben (Routine) verschlingen rund 65 % der Zeit, tragen aber nur etwa 15 % zum Erfolg bei." },
+  { topic: "ABC-Analyse", q: "Wie ist das Verhältnis von Zeit und Erfolg bei A-Aufgaben?",
+    options: ["65 % Zeit, 15 % Erfolg", "15 % Zeit, 65 % Erfolg", "50 % Zeit, 50 % Erfolg", "Sie tragen nichts zum Erfolg bei"],
+    a: 1, e: "A-Aufgaben kosten nur rund 15 % der Zeit, bringen aber etwa 65 % des Erfolgs." },
+
+  // === Block F: Eisenhower, ALPEN & Pareto — Vertiefung (48-55) ===
+  { topic: "Eisenhower", q: "Was ist mit Aufgaben zu tun, die wichtig, aber nicht dringend sind (Feld 2)?",
+    options: ["Sofort selbst erledigen", "In den Papierkorb werfen", "Einen Termin vereinbaren und in die Terminplanung aufnehmen", "An Kollegen delegieren"],
+    a: 2, e: "Wichtige, aber nicht dringende Aufgaben (Feld 2) bekommen einen Termin und werden in die Terminplanung aufgenommen." },
+  { topic: "Eisenhower", q: "Was kennzeichnet eine dringende Aufgabe?",
+    options: ["Sie bringt einem Ziel langfristig näher", "Sie ist vor allem strategisch orientiert", "Sie kann beliebig verschoben werden", "Sie hat einen konkreten Termin"],
+    a: 3, e: "Dringende Aufgaben haben einen konkreten Termin; wichtige Aufgaben bringen dagegen einem Ziel näher und sind oft langfristig orientiert." },
+  { topic: "Eisenhower", q: "Was kennzeichnet eine wichtige Aufgabe?",
+    options: ["Sie bringt eine Person oder ein Unternehmen einem Ziel näher (Arbeitserfolg)", "Sie hat immer einen Termin am selben Tag", "Sie ist grundsätzlich unbedeutend", "Sie wird stets sofort delegiert"],
+    a: 0, e: "Wichtige Aufgaben bringen ein Unternehmen oder eine Person einem Ziel näher (Arbeitserfolg) und sind häufig langfristig/strategisch." },
+  { topic: "ALPEN-Methode", q: "Wer entwickelte die ALPEN-Methode?",
+    options: ["Dwight D. Eisenhower", "Lothar J. Seiwert", "Vilfredo Pareto", "Henry Ford"],
+    a: 1, e: "Die ALPEN-Methode wurde vom Wirtschaftswissenschaftler Lothar J. Seiwert entwickelt." },
+  { topic: "ALPEN-Methode", q: "Wofür steht das N in der ALPEN-Methode?",
+    options: ["Neuanfang am Morgen", "Nichts delegieren", "Nachkontrolle — Unerledigtes neu einplanen", "Notfälle zuerst erledigen"],
+    a: 2, e: "Das N steht für Nachkontrolle: Alles, was nicht erledigt werden konnte, wird neu eingeplant." },
+  { topic: "ALPEN-Methode", q: "Wofür sind die nicht verplanten ca. 40 % der Zeit gedacht?",
+    options: ["Für eine längere Mittagspause", "Für private Telefonate", "Für zusätzliche Meetings", "Als Reserve für Unvorhergesehenes"],
+    a: 3, e: "Nur ca. 60 % der Zeit werden verplant; die restlichen 40 % bleiben Reserve für Unvorhergesehenes, sonst gerät der Plan durcheinander." },
+  { topic: "Pareto-Prinzip", q: "Worauf geht das Pareto-Prinzip ursprünglich zurück?",
+    options: ["Vilfredo Pareto stellte fest, dass 20 % der Bevölkerung 80 % des Vermögens besaßen", "Eisenhower teilte Aufgaben in vier Felder", "Seiwert erfand den schriftlichen Tagesplan", "Eine gesetzliche Pausenregelung"],
+    a: 0, e: "Vilfredo Pareto entdeckte Anfang des 20. Jahrhunderts, dass 20 % der Bevölkerung 80 % des Staatsvermögens besaßen — daraus entstand die 80/20-Regel." },
+  { topic: "Pareto-Prinzip", q: "Welches Beispiel passt zum Pareto-Prinzip?",
+    options: ["100 % der Aufgaben müssen perfekt erledigt werden", "20 % der Kunden sorgen für 80 % des Gewinns", "Jeder Kunde bringt gleich viel Gewinn", "80 % der Kunden bringen 80 % des Gewinns"],
+    a: 1, e: "Ein typisches Pareto-Beispiel: 20 % der Kunden eines Unternehmens sorgen für 80 % des Gewinns." },
+
+  // === Block G: Salamitaktik, Listen, SMART & Selbstmanagement (56-60) ===
+  { topic: "Salamitaktik", q: "Welchen Vorteil bietet die Salamitaktik?",
+    options: ["Aufgaben erledigen sich von selbst", "Man muss überhaupt nicht mehr planen", "Regelmäßige kleine Erfolgserlebnisse — scheinbar Unmögliches wird machbar", "Man kann alle Aufgaben delegieren"],
+    a: 2, e: "Durch das Zerlegen in kleine Schritte entstehen regelmäßige Erfolgserlebnisse, und eine zunächst unmöglich erscheinende Aufgabe wird machbar." },
+  { topic: "Checkliste", q: "Wozu dient eine Checkliste?",
+    options: ["Sie hält ausschließlich zukünftige Aufgaben fest", "Sie ersetzt das Eisenhower-Prinzip", "Sie verplant automatisch 60 % der Zeit", "Sie prüft Vollständigkeit und Reihenfolge und erleichtert die Einarbeitung"],
+    a: 3, e: "Eine Checkliste überprüft Aktivitäten auf Vollständigkeit und Reihenfolge, unterstützt fehlerfreies Arbeiten und erleichtert die Einarbeitung — sie ist vergangenheitsbezogen." },
+  { topic: "To-do-Liste", q: "Welche Programme sind Beispiele für digitale Aufgabenlisten?",
+    options: ["Microsoft To Do, Todoist, Trello", "Word, Excel, PowerPoint", "Outlook, SAP, DATEV", "Photoshop, Illustrator, InDesign"],
+    a: 0, e: "Digitale Aufgabenlisten wie Microsoft To Do, Todoist oder Trello verbinden To-do-Liste, Prioritäten und Delegation." },
+  { topic: "SMART-Regel", q: "Wofür steht das M in der SMART-Regel?",
+    options: ["Motiviert", "Modern", "Messbar — die Zielerreichung muss sich messen lassen", "Machbar"],
+    a: 2, e: "Das M in SMART steht für messbar: Die Zielerreichung muss sich messen lassen (S = spezifisch, M = messbar, A = akzeptiert, R = realistisch, T = terminiert)." },
+  { topic: "Selbstmanagement", q: "Welche der folgenden ist eine Teilkompetenz des Selbstmanagements?",
+    options: ["Die Firmenkasse verwalten", "Sich selbst motivieren und sich Ziele setzen", "Die Kollegen kontrollieren", "Alle Aufgaben grundsätzlich ablehnen"],
+    a: 1, e: "Zu den Teilkompetenzen des Selbstmanagements gehören u. a. sich selbst motivieren, sich Ziele setzen, planen, sich organisieren und den eigenen Erfolg überprüfen." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

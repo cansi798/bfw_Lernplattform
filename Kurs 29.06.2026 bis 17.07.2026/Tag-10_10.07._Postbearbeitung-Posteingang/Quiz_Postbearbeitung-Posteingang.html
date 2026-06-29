@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 10 · 10.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 10 · 10.07.2026 · 60 Fragen</span>
   <h1>Quiz: Postbearbeitung – Posteingang</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Postbearbeitung-Posteingang.html</strong> und dem <strong>Handout_Postbearbeitung-Posteingang.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Postbearbeitung-Posteingang.html</strong> und dem <strong>Handout_Postbearbeitung-Posteingang.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -229,7 +229,7 @@ const QUESTIONS = [
   { topic: "Eingangswege", q: "Was ist ein Postfach?",
     options: ["Ein Aktenordner für Eingangspost", "Ein E-Mail-Postfach im Computer", "Ein in der Postfiliale gemieteter Behälter, der unabhängig von Zustellzeiten macht", "Ein Briefkasten am Werkstor"],
     a: 2, e: "Ein Postfach wird in einer Postfiliale gemietet (einmalige Einrichtungspauschale) und macht unabhängig von den Zustellzeiten des Postboten." },
-  { topic: "Eingangswege", q: "Was bietet der „Service Hin + Weg" der Deutschen Post AG?",
+  { topic: "Eingangswege", q: "Was bietet der „Service Hin + Weg“ der Deutschen Post AG?",
     options: ["Eine Versicherung für verlorene Pakete", "Eine kostenlose Briefmarke pro Tag", "Die Lagerung von Post über das Wochenende", "Briefe werden zu vereinbarten Zeiten gebracht und ausgehende Briefe abgeholt"],
     a: 3, e: "Beim Service Hin + Weg bringt die Deutsche Post AG die Briefe zu vereinbarten Zeiten und holt die ausgehenden Briefe dort ab." },
   { topic: "Eingangswege", q: "Seit wann ist der deutsche Briefmarkt durch Aufhebung des Briefmonopols liberalisiert?",
@@ -264,14 +264,14 @@ const QUESTIONS = [
     options: ["Jede Rechnung", "Private Briefe sowie Post an Geschäftsleitung, Personalabteilung und Betriebsrat", "Alle Werbesendungen", "Sämtliche Geschäftsbriefe"],
     a: 1, e: "Private Briefe und Post an die Geschäftsleitung, die Personalabteilung und den Betriebsrat werden ungeöffnet weitergeleitet." },
   { topic: "Öffnen", q: "Woran erkennt man private Post im Anschriftenfeld?",
-    options: ["Der Name der natürlichen Person steht zuerst, dann die Firma, oft mit Zusatz „Persönlich/Vertraulich"", "Die Firma steht immer zuerst", "Es fehlt jede Postleitzahl", "Die Adresse ist handschriftlich"],
-    a: 0, e: "Bei privater Post steht im Anschriftenfeld der Name einer natürlichen Person zuerst, dann die Firma; in der Vermerkzone steht oft „Persönlich" oder „Vertraulich"." },
+    options: ["Der Name der natürlichen Person steht zuerst, dann die Firma, oft mit Zusatz „Persönlich/Vertraulich“", "Die Firma steht immer zuerst", "Es fehlt jede Postleitzahl", "Die Adresse ist handschriftlich"],
+    a: 0, e: "Bei privater Post steht im Anschriftenfeld der Name einer natürlichen Person zuerst, dann die Firma; in der Vermerkzone steht oft „Persönlich“ oder „Vertraulich“." },
   { topic: "Öffnen", q: "Wann handelt es sich um Geschäftspost, die geöffnet werden darf?",
-    options: ["Wenn der Brief mit „Vertraulich" gekennzeichnet ist", "Wenn nur ein Vorname genannt wird", "Wenn im Anschriftenfeld zuerst die Firma und dann der Name genannt wird", "Wenn der Brief aus dem Ausland kommt"],
+    options: ["Wenn der Brief mit „Vertraulich“ gekennzeichnet ist", "Wenn nur ein Vorname genannt wird", "Wenn im Anschriftenfeld zuerst die Firma und dann der Name genannt wird", "Wenn der Brief aus dem Ausland kommt"],
     a: 2, e: "Wird im Anschriftenfeld zuerst die Firma und dann der Name einer Person genannt, ist es Geschäftspost, die geöffnet und weitergeleitet werden darf." },
   { topic: "Öffnen", q: "Was ist zu tun, wenn private Post versehentlich geöffnet wurde?",
-    options: ["Sie wegwerfen", "Sie behalten und nicht weiterleiten", "Den Inhalt fotografieren", "Sie wieder verschließen und mit dem Vermerk „versehentlich geöffnet" weiterleiten"],
-    a: 3, e: "Versehentlich geöffnete private Post sollte wieder verschlossen und mit dem Vermerk „versehentlich geöffnet" weitergeleitet werden." },
+    options: ["Sie wegwerfen", "Sie behalten und nicht weiterleiten", "Den Inhalt fotografieren", "Sie wieder verschließen und mit dem Vermerk „versehentlich geöffnet“ weiterleiten"],
+    a: 3, e: "Versehentlich geöffnete private Post sollte wieder verschlossen und mit dem Vermerk „versehentlich geöffnet“ weitergeleitet werden." },
   { topic: "Öffnen", q: "Womit wird die Geschäftspost geöffnet?",
     options: ["Immer nur mit der bloßen Hand", "Mit einem Handbrieföffner oder einem automatischen Brieföffner", "Mit einer Schere des Empfängers", "Mit einem Schredder"],
     a: 1, e: "Zum Öffnen wird ein Handbrieföffner (bei geringem Aufkommen) oder ein automatischer Brieföffner verwendet." },
@@ -305,7 +305,105 @@ const QUESTIONS = [
     a: 1, e: "Die Digitalisierung sorgt für schnelleren Informationsfluss, jederzeit auffindbare Schriftstücke, weniger Papier und höhere Effizienz." },
   { topic: "Wertsendungen", q: "Wie sollten Wertsendungen wie Einschreiben im Posteingang behandelt werden?",
     options: ["Gegen Quittung annehmen, im Eingangs-/Postbuch erfassen und sicher verwahren", "Ungeöffnet in den Papierkorb legen", "Sofort an alle Mitarbeiter verteilen", "Ohne Erfassung ablegen"],
-    a: 0, e: "Wertsendungen werden gegen Quittung angenommen (Einschreiben/eigenhändig: Postvollmacht nötig), im Eingangs-/Postbuch erfasst und sicher verwahrt bzw. gegen Nachweis übergeben." }
+    a: 0, e: "Wertsendungen werden gegen Quittung angenommen (Einschreiben/eigenhändig: Postvollmacht nötig), im Eingangs-/Postbuch erfasst und sicher verwahrt bzw. gegen Nachweis übergeben." },
+
+  // === Block G: Bedeutung & Poststelle – vertieft (31-37) ===
+  { topic: "Bedeutung", q: "Welche Schriftstücke laufen typischerweise über die Poststelle?",
+    options: ["Nur private Glückwunschkarten", "Ausschließlich Werbeprospekte", "Nur interne Telefonnotizen", "Aufträge, Rechnungen, Verträge und Behördenschreiben"],
+    a: 3, e: "Über die Poststelle laufen Aufträge, Rechnungen, Verträge und Behördenschreiben — also alles, was geschäftlich wichtig ist." },
+  { topic: "Poststelle", q: "Welcher Nachteil ist mit der zentralen Poststelle verbunden?",
+    options: ["Längere innerbetriebliche Wege", "Es ist keine Spezialisierung möglich", "Die Wege werden sehr kurz", "Jede Abteilung braucht eigene Technik"],
+    a: 0, e: "Nachteil der zentralen Poststelle sind die längeren innerbetrieblichen Wege, bis die Post die Abteilungen erreicht." },
+  { topic: "Poststelle", q: "Welche Technik ist typisch für eine effiziente zentrale Poststelle?",
+    options: ["Eine private E-Mail-App", "Scan-Straße und Frankiermaschine", "Ein Faxgerät pro Mitarbeiter", "Reine Handsortierung ohne Geräte"],
+    a: 1, e: "Die zentrale Poststelle arbeitet einheitlich, spezialisiert und mit effizienter Technik wie Scan-Straße und Frankiermaschine." },
+  { topic: "Poststelle", q: "Welcher Nachteil ist mit der dezentralen Poststelle verbunden?",
+    options: ["Lange Wege zur Zentrale", "Es fehlt die Sachnähe", "Mehrfache Ausstattung und weniger Spezialisierung", "Nur eine Stelle bearbeitet die gesamte Post"],
+    a: 2, e: "Bei der dezentralen Poststelle bearbeitet jede Abteilung ihre Post selbst — Nachteil sind mehrfache Ausstattung und weniger Spezialisierung." },
+  { topic: "Bedeutung", q: "Welche Aufgabe übernimmt das Sekretariat in kleineren Unternehmen bei der ausgehenden Post?",
+    options: ["Es druckt eigene Briefmarken", "Es verteilt Pakete an die Kunden", "Es führt die gesamte Buchhaltung", "Es kuvertiert, frankiert und verschickt die Post"],
+    a: 3, e: "In kleineren Unternehmen kuvertiert, frankiert und verschickt das Sekretariat die ausgehende Post." },
+  { topic: "Eingangswege", q: "Welche Kosten berechnet die Post für ein Postfach?",
+    options: ["Eine einmalige Einrichtungspauschale", "Eine tägliche Mietgebühr", "Eine Gebühr pro eingegangenem Brief", "Gar keine Kosten"],
+    a: 0, e: "Für ein Postfach berechnet die Post eine einmalige Einrichtungspauschale." },
+  { topic: "Eingangswege", q: "Wovon hängt die Größe des gemieteten Postfachs ab?",
+    options: ["Von der Anzahl der Mitarbeiter", "Vom täglichen Postaufkommen des Unternehmens", "Von der Größe des Firmengebäudes", "Vom Jahresumsatz"],
+    a: 1, e: "Die Größe des Postfachs hängt vom täglichen Postaufkommen des Unternehmens ab." },
+
+  // === Block H: Eingangswege & Postvollmacht – vertieft (38-43) ===
+  { topic: "Eingangswege", q: "Über welche weiteren Wege erreicht Post heute ein Unternehmen?",
+    options: ["Nur über den Briefkasten", "Ausschließlich per Einschreiben", "Fax, E-Mail, persönliche Abgabe und Boten", "Nur über das Postfach"],
+    a: 2, e: "Neben dem Briefweg erreicht Post das Unternehmen auch über Fax, E-Mail, persönliche Abgabe am Empfang und durch Boten." },
+  { topic: "Eingangswege", q: "Welche Aussage zum digitalen Posteingang trifft zu?",
+    options: ["Er ist gesetzlich verboten", "Er muss nicht erfasst werden", "Er ist für Unternehmen unwichtig", "Der digitale Eingang (E-Mail, E-Rechnung) wird ständig wichtiger"],
+    a: 3, e: "Posteingang ist heute mehr als der Briefkasten — der digitale Eingang (E-Mail, E-Rechnung) wird ständig wichtiger." },
+  { topic: "Eingangswege", q: "Wer darf seit der Liberalisierung des Briefmarktes Briefe befördern?",
+    options: ["Die Deutsche Post AG und andere lizenzierte private Unternehmen", "Nur noch die Deutsche Post AG", "Ausschließlich Behörden", "Nur Banken und Versicherungen"],
+    a: 0, e: "Seit der Aufhebung des Briefmonopols dürfen die Deutsche Post AG und andere private Unternehmen mit Lizenz der Bundesnetzagentur Briefe befördern." },
+  { topic: "Postvollmacht", q: "Welche Form hat eine Postvollmacht?",
+    options: ["Ein notariell beglaubigter Vertrag", "Eine einfache schriftliche Erklärung", "Eine rein mündliche Absprache", "Ein Eintrag im Handelsregister"],
+    a: 1, e: "Die Postvollmacht ist eine einfache schriftliche Erklärung." },
+  { topic: "Postvollmacht", q: "Welche dieser Angaben gehören ebenfalls in eine Postvollmacht?",
+    options: ["Umsatz und Gewinn des Unternehmens", "Bankverbindung und IBAN", "Vollmachtgeber, Bevollmächtigter und Gültigkeitsdauer", "Anzahl der Briefe pro Tag"],
+    a: 2, e: "Zur Postvollmacht gehören u. a. Vollmachtgeber, Bevollmächtigter, Gültigkeitsdauer, Umfang, Datum und Unterschrift." },
+  { topic: "Arbeitsschritte", q: "Welcher Arbeitsschritt steht ganz am Anfang des Posteingangs?",
+    options: ["Stempeln", "Verteilen", "Öffnen", "Annehmen"],
+    a: 3, e: "Der erste Arbeitsschritt ist das Annehmen der Sendungen vom Zusteller oder Dienstleister." },
+
+  // === Block I: Sortieren & Öffnen – vertieft (44-49) ===
+  { topic: "Vorsortieren", q: "In welche Kategorien wird die eingehende Post u. a. vorsortiert?",
+    options: ["Geschäftsbriefe, private Briefe und Post an die Geschäftsleitung", "Nach Briefgröße und Gewicht", "Nach dem Wert der Briefmarke", "Nach der Eingangsuhrzeit"],
+    a: 0, e: "Vorsortiert wird in Geschäftsbriefe, private Briefe, Post an die Geschäftsleitung, an Personalabteilung und Betriebsrat sowie Irrläufer." },
+  { topic: "Öffnen", q: "Wie wird Post an die Personalabteilung und den Betriebsrat behandelt?",
+    options: ["Sie wird sofort geöffnet und kopiert", "Sie wird ungeöffnet weitergeleitet", "Sie wird vernichtet", "Sie wird an den Absender zurückgeschickt"],
+    a: 1, e: "Post an die Geschäftsleitung, die Personalabteilung und den Betriebsrat wird ungeöffnet weitergeleitet." },
+  { topic: "Öffnen", q: "Was besagt das Urteil des LAG Hamm (2003) zum Öffnen von Post?",
+    options: ["Jede private Post darf geöffnet werden", "Geschäftspost darf nie geöffnet werden", "Steht der Name einer Privatperson ohne Zusatz „Persönlich/Vertraulich“, darf der Brief in der Poststelle geöffnet werden", "Briefe dürfen nur vom Empfänger selbst geöffnet werden"],
+    a: 2, e: "Laut LAG Hamm (2003) darf ein Brief, bei dem zuerst der Name einer Privatperson ohne Zusatz „Persönlich/Vertraulich“ steht, in der Poststelle geöffnet werden." },
+  { topic: "Öffnen", q: "Wie wird ein Brief behandelt, der an die Geschäftsleitung adressiert ist?",
+    options: ["Öffnen und kopieren", "Ungeöffnet an den Absender zurück", "Vernichten", "Ungeöffnet weiterleiten"],
+    a: 3, e: "Post an die Geschäftsleitung wird ungeöffnet an die genannte Stelle weitergeleitet." },
+  { topic: "Öffnen", q: "Wo steht der Hinweis „Persönlich“ oder „Vertraulich“?",
+    options: ["In der Zusatz- und Vermerkzone des Anschriftenfeldes", "Auf der Rückseite des Briefes", "Mitten im Brieftext", "Auf der Briefmarke"],
+    a: 0, e: "Der Hinweis „Persönlich“ oder „Vertraulich“ steht in der Zusatz- und Vermerkzone des Anschriftenfeldes." },
+  { topic: "Kontrollieren", q: "Wann wird der Briefumschlag als Nachweis an das Schriftstück angeheftet?",
+    options: ["Immer, bei jedem einzelnen Brief", "Wenn die Absenderangabe fehlt, es amtlich zugestellt wurde oder Datum und Poststempel weit auseinanderliegen", "Nur bei Werbesendungen", "Grundsätzlich nie"],
+    a: 1, e: "Der Umschlag wird angeheftet, wenn die Absenderangabe fehlt, es eine amtlich zugestellte Sendung ist oder Briefdatum und Poststempel weit auseinanderliegen." },
+
+  // === Block J: Stempeln, Verteilen & Digitalisierung – vertieft (50-60) ===
+  { topic: "Stempeln", q: "Was enthält der Posteingangsstempel?",
+    options: ["Den Namen des Absenders", "Die aufgeklebte Briefmarke", "Das aktuelle Datum, evtl. die Uhrzeit und Platz für Bearbeitungsvermerke", "Den Rechnungsbetrag"],
+    a: 2, e: "Der Posteingangsstempel enthält das aktuelle Datum, evtl. die Uhrzeit und Platz für Bearbeitungs- und Erledigungsvermerke." },
+  { topic: "Stempeln", q: "Wie wird mit Urkunden, Zeugnissen, Verträgen und Schecks beim Stempeln verfahren?",
+    options: ["Sie werden doppelt gestempelt", "Sie werden mit rotem Stift markiert", "Sie werden zerschnitten", "Sie werden nicht gestempelt; stattdessen wird der Umschlag gestempelt und beigefügt"],
+    a: 3, e: "Urkunden, Zeugnisse, Verträge, Schecks und Zeichnungen werden nicht gestempelt; stattdessen wird der Umschlag gestempelt und beigefügt." },
+  { topic: "Verteilen", q: "Was sind Mitarbeiter- oder Abteilungsfächer?",
+    options: ["Ablagen, aus denen die verteilte Post abgeholt wird", "Tresore für Wertsendungen", "Mülleimer für Irrläufer", "Regale für Büromaterial"],
+    a: 0, e: "Die Post kann in Mitarbeiter- oder Abteilungsfächer abgelegt werden, aus denen sie abgeholt wird." },
+  { topic: "Verteilen", q: "Welche Rolle hat ein Bote bei der Postverteilung?",
+    options: ["Er stempelt die gesamte Post", "Er übernimmt die Verteilung in die verschiedenen Abteilungen", "Er öffnet alle Briefe", "Er frankiert die Ausgangspost"],
+    a: 1, e: "Ein Bote übernimmt die Verteilung der Post in die verschiedenen Abteilungen." },
+  { topic: "Verteilen", q: "Was ist ein Rohrpostsystem?",
+    options: ["Ein modernes Faxgerät", "Ein abschließbarer Aktenschrank", "Eine Schriftgutförderanlage zur automatischen Verteilung", "Ein automatischer Brieföffner"],
+    a: 2, e: "Ein Rohrpostsystem ist eine Schriftgutförderanlage zur automatischen Verteilung der Post." },
+  { topic: "Posteingangssystem", q: "Welcher Schritt gehört zu einem automatisierten Posteingangssystem?",
+    options: ["Manuelles Abschreiben aller Briefe", "Versand per Rohrpost an die Kunden", "Lagerung der Briefe im Tresor", "Maschinelle Öffnung der Umschläge mit elektrischen Brieföffnern"],
+    a: 3, e: "Im Posteingangssystem erfolgt u. a. die maschinelle Öffnung der Briefumschläge mithilfe elektrischer Brieföffner." },
+  { topic: "Posteingangssystem", q: "Was geschieht im Posteingangssystem nach der automatischen Entnahme des Inhalts?",
+    options: ["Der Umschlag wird zurückgeschickt", "Der Brief wird sofort ausgedruckt", "Eine elektronische Leerkontrolle des Briefumschlags", "Die Post wird vernichtet"],
+    a: 2, e: "Nach der automatischen Entnahme des Inhalts erfolgt eine elektronische Leerkontrolle des Briefumschlags." },
+  { topic: "Digitalisierung", q: "Wofür steht die Abkürzung OCR?",
+    options: ["Office Control Room", "Optical Character Recognition (Texterkennung)", "Original Copy Register", "Online Customer Reply"],
+    a: 1, e: "OCR steht für Optical Character Recognition, also die Texterkennung gescannter Dokumente." },
+  { topic: "Digitalisierung", q: "Was bewirkt die OCR-Texterkennung beim gescannten Brief?",
+    options: ["Sie verschlüsselt den Brief", "Sie druckt den Brief erneut aus", "Sie wandelt ihn in durchsuchbaren Text um und legt ihn im DMS ab", "Sie löscht den Brief nach dem Scan"],
+    a: 2, e: "Die OCR-Texterkennung wandelt den gescannten Brief in durchsuchbaren Text um und legt ihn im Dokumentenmanagementsystem (DMS) ab, oft mit automatischer Zuordnung zum Vorgang." },
+  { topic: "Digitalisierung", q: "Welcher Vorteil der Digitalisierung des Posteingangs wird genannt?",
+    options: ["Höherer Papierverbrauch", "Längere innerbetriebliche Wege", "Häufigerer Verlust von Post", "Die Post kann auf ihrem Weg nicht mehr verloren gehen"],
+    a: 3, e: "Ein Vorteil der Digitalisierung ist, dass die Post auf ihrem Weg nicht mehr verloren gehen kann; zudem steigt die Effizienz." },
+  { topic: "Wertsendungen", q: "Wo werden Wertsendungen wie Einschreiben erfasst?",
+    options: ["Im Eingangs- bzw. Postbuch", "Im Telefonbuch", "Im Kassenbuch", "Sie werden gar nicht erfasst"],
+    a: 0, e: "Wertsendungen werden im Eingangs- bzw. Postbuch erfasst, damit nachvollziehbar bleibt, wer eine wichtige Sendung erhalten hat." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

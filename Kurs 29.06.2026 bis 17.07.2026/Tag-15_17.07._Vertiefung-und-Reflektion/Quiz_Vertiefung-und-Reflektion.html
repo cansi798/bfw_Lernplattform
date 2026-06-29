@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 15 · 17.07.2026 · 30 Fragen (Abschluss)</span>
+  <span class="tag-pill">Tag 15 · 17.07.2026 · 60 Fragen (Abschluss)</span>
   <h1>Abschlussquiz: Büroprozesse gestalten</h1>
-  <p class="subtitle">Gemischtes Abschlussquiz über alle 14 Themen — Selbstkontrolle im IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Die 30 Fragen wiederholen das gesamte Modul (Tag 1–14, je ca. 2 Fragen pro Thema). Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle">Alle 60 Fragen — gemischtes Abschlussquiz über alle 14 Themen, Selbstkontrolle im IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Die 60 Fragen wiederholen das gesamte Modul (Tag 1–14, je ca. 4 Fragen pro Thema). Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -212,6 +212,12 @@ const QUESTIONS = [
   { topic: "Büroformen", q: "Welche Büroform vereint störungsfreie Einzelarbeit und gelegentliche Teamarbeit?",
     options: ["Kombibüro", "Großraumbüro", "Zellenbüro", "Gruppenbüro"],
     a: 0, e: "Das Kombibüro vereint Einzelbüros (Konzentration) mit einer zentralen Multifunktionszone (Teamarbeit)." },
+  { topic: "Büroformen", q: "Welche Büroform bietet die größte Ruhe und Vertraulichkeit?",
+    options: ["Zellenbüro", "Großraumbüro", "Kombibüro", "Gruppenbüro"],
+    a: 0, e: "Das Zellenbüro (Einzel-/Mehrpersonenbüro) bietet Ruhe und Vertraulichkeit; der Großraum spart Kosten." },
+  { topic: "Büroraumplanung", q: "Was kennzeichnet das non-territoriale Büro (Desksharing)?",
+    options: ["Jeder hat einen festen, persönlichen Platz", "Es gibt weniger Arbeitsplätze als Beschäftigte", "Alle arbeiten ausschließlich im Homeoffice", "Die Räume sind nicht beheizbar"],
+    a: 1, e: "Beim non-territorialen Büro/Desksharing gibt es weniger Plätze als Beschäftigte — Plätze werden geteilt." },
 
   // === Tag 2: Büroausstattung & Bildschirmarbeitsplatz ===
   { topic: "Ergonomie", q: "Wie lautet das Grundprinzip der Ergonomie?",
@@ -220,6 +226,12 @@ const QUESTIONS = [
   { topic: "Bildschirmarbeitsplatz", q: "Wie lautet die Faustregel der Steh-Sitz-Dynamik?",
     options: ["90 % sitzen, 5 % stehen, 5 % gehen", "50 % sitzen, 40 % stehen, 10 % gehen", "33 % / 33 % / 33 %", "60 % sitzen, 30 % stehen, 10 % gehen"],
     a: 3, e: "Empfohlen werden ca. 60 % sitzen, 30 % stehen und 10 % gehen (dynamisches Arbeiten)." },
+  { topic: "Ergonomie", q: "Nach welcher Norm wird der Bürodrehstuhl gestaltet?",
+    options: ["DIN 5008", "ISO 9001", "DIN EN 1335", "ASR A3.5"],
+    a: 2, e: "Der Bürodrehstuhl folgt der DIN EN 1335; DIN 5008 betrifft die Textgestaltung." },
+  { topic: "Bildschirmarbeitsplatz", q: "Welcher Blickabstand zum Bildschirm wird empfohlen?",
+    options: ["20–30 cm", "100–120 cm", "über 150 cm", "50–70 cm"],
+    a: 3, e: "Empfohlen sind ca. 50–70 cm Blickabstand, Bildschirm seitlich zum Fenster, ca. 90°-Winkel." },
 
   // === Tag 3: Arbeitsumgebung & Umweltfaktoren ===
   { topic: "Arbeitsumgebung", q: "Aus welchen drei Bestandteilen besteht das Raumklima?",
@@ -228,22 +240,40 @@ const QUESTIONS = [
   { topic: "Umweltfaktoren", q: "In welcher Einheit wird der Lärm (Schalldruckpegel) am Arbeitsplatz angegeben?",
     options: ["Lux", "Kelvin", "Dezibel — dB(A)", "Newton"],
     a: 2, e: "Lärm wird als Schalldruckpegel in dB(A) gemessen; Lux ist die Einheit der Beleuchtungsstärke." },
+  { topic: "Umweltfaktoren", q: "In welcher Einheit wird die Beleuchtungsstärke angegeben?",
+    options: ["Lux", "Dezibel", "Kelvin", "Watt"],
+    a: 0, e: "Die Beleuchtungsstärke wird in Lux gemessen; das Licht soll ausreichend, blend- und flimmerfrei sein." },
+  { topic: "Arbeitsumgebung", q: "Ab welcher Raumtemperatur besteht nach ASR A3.5 grundsätzlich Maßnahmenpflicht?",
+    options: ["Ab 20 °C", "Ab 30 °C", "Ab 40 °C", "Ab 15 °C"],
+    a: 1, e: "Nach ASR A3.5 sollen Räume möglichst nicht über 26 °C liegen; ab 30 °C sind Maßnahmen Pflicht." },
 
   // === Tag 4: Arbeitsschutz & Gesundheit ===
   { topic: "Arbeitsschutz", q: "Welche drei Gesetze bilden die zentralen Rechtsgrundlagen des Arbeitsschutzes?",
     options: ["BGB, HGB, AO", "ArbSchG, ArbZG, ASiG", "StGB, GewO, BUrlG", "DSGVO, BDSG, TMG"],
     a: 1, e: "Arbeitsschutzgesetz (ArbSchG), Arbeitszeitgesetz (ArbZG) und Arbeitssicherheitsgesetz (ASiG)." },
-  { topic: "Gesundheit", q: "Was bezeichnet der Begriff „Beanspruchung"?",
+  { topic: "Gesundheit", q: "Was bezeichnet der Begriff „Beanspruchung“?",
     options: ["Die äußere Einwirkung, die für alle gleich ist", "Die gesetzliche Höchstarbeitszeit", "Ein Prüfsiegel für Möbel", "Die individuelle Auswirkung der Belastung auf die einzelne Person"],
     a: 3, e: "Belastung = äußere Einwirkung (für alle gleich); Beanspruchung = individuelle Auswirkung auf die Person." },
+  { topic: "Arbeitsschutz", q: "Welche Pflicht schreibt § 5 ArbSchG dem Arbeitgeber vor?",
+    options: ["Die Lohnabrechnung", "Die Urlaubsplanung", "Die Gefährdungsbeurteilung", "Die Postverteilung"],
+    a: 2, e: "§ 5 ArbSchG verpflichtet zur Gefährdungsbeurteilung — Gefahren systematisch ermitteln und bewerten." },
+  { topic: "Gesundheit", q: "Wie wird positiver, anregender Stress bezeichnet?",
+    options: ["Distress", "Burnout", "Mobbing", "Eustress"],
+    a: 3, e: "Eustress ist positiver Stress; Distress ist negativer (krankmachender) Stress und kann zu Burnout führen." },
 
   // === Tag 5: Zeitmanagement & Aufgabenplanung ===
-  { topic: "Zeitmanagement", q: "Wofür steht das „A" in der ALPEN-Methode?",
+  { topic: "Zeitmanagement", q: "Wofür steht das „A“ in der ALPEN-Methode?",
     options: ["Aufgaben notieren", "Abrechnung erstellen", "Anwesenheit prüfen", "Ablage sortieren"],
     a: 0, e: "ALPEN: Aufgaben notieren, Länge schätzen, Pufferzeiten, Entscheidungen, Nachkontrolle." },
   { topic: "Aufgabenplanung", q: "Nach welchen zwei Kriterien ordnet das Eisenhower-Prinzip Aufgaben?",
     options: ["Größe und Farbe", "Kosten und Nutzen", "Wichtigkeit und Dringlichkeit", "Alter und Erfahrung"],
     a: 2, e: "Das Eisenhower-Prinzip ordnet Aufgaben nach Wichtigkeit und Dringlichkeit (A/B/C/Papierkorb)." },
+  { topic: "Zeitmanagement", q: "Wofür steht der Buchstabe „S“ in der SMART-Regel zur Zielformulierung?",
+    options: ["spezifisch", "schnell", "sicher", "sparsam"],
+    a: 0, e: "SMART = spezifisch, messbar, attraktiv, realistisch, terminiert." },
+  { topic: "Aufgabenplanung", q: "Was besagt das Pareto-Prinzip (80/20-Regel)?",
+    options: ["Alle Aufgaben sind gleich wichtig", "Mit ca. 20 % Aufwand werden ca. 80 % des Ergebnisses erreicht", "Man soll nie Pausen machen", "Aufgaben werden nach dem Alphabet sortiert"],
+    a: 1, e: "Nach Pareto erreicht man mit ca. 20 % des Aufwands rund 80 % des Ergebnisses." },
 
   // === Tag 6: Terminplanung & Terminmanagement ===
   { topic: "Terminplanung", q: "Aus welchen zwei Bestandteilen besteht ein Termin?",
@@ -252,6 +282,12 @@ const QUESTIONS = [
   { topic: "Terminmanagement", q: "Wozu dient die Wiedervorlage in der Terminüberwachung?",
     options: ["Zum Löschen alter Akten", "Zur Urlaubsabrechnung", "Zur Frankierung der Post", "Zur erneuten Vorlage von Vorgängen zum festgelegten Termin"],
     a: 3, e: "Die Wiedervorlage legt Vorgänge zum festgelegten Termin erneut vor, damit Fristen nicht vergessen werden." },
+  { topic: "Terminplanung", q: "Nach welchem Gesetz richtet sich die Urlaubsplanung?",
+    options: ["§ 257 HGB", "§ 5 ArbSchG", "§ 7 BUrlG", "§ 51 GmbHG"],
+    a: 2, e: "Die Urlaubsplanung richtet sich nach § 7 Bundesurlaubsgesetz (BUrlG)." },
+  { topic: "Terminmanagement", q: "Was ist ein Serientermin?",
+    options: ["Ein einmaliger Termin", "Ein abgesagter Termin", "Ein vertraulicher Termin", "Ein regelmäßig wiederkehrender Termin"],
+    a: 3, e: "Ein Serientermin ist ein regelmäßig wiederkehrender Termin (z. B. das wöchentliche Teammeeting)." },
 
   // === Tag 7: Besprechungen vorbereiten & durchführen ===
   { topic: "Besprechung", q: "Was entscheidet vor allem über den Erfolg einer Besprechung?",
@@ -260,6 +296,12 @@ const QUESTIONS = [
   { topic: "Besprechung", q: "Was bedeutet die Abkürzung TOP im Zusammenhang mit Besprechungen?",
     options: ["Teilnehmerorganisationsplan", "Technischer Ordnungsplan", "Tagesordnungspunkt", "Terminoptimierungsprozess"],
     a: 2, e: "TOP steht für Tagesordnungspunkt — die einzelnen Punkte der Tagesordnung." },
+  { topic: "Besprechung", q: "Welche drei Rollen sind in einer Besprechung zentral?",
+    options: ["Leitung, Moderation und Protokoll", "Koch, Kellner und Gast", "Käufer, Verkäufer und Bote", "Sender, Kanal und Rauschen"],
+    a: 0, e: "Für eine gelungene Durchführung braucht es klare Rollen: Leitung, Moderation und Protokoll." },
+  { topic: "Besprechung", q: "Wann sollte die Einladung zu einer Besprechung versendet werden?",
+    options: ["Erst nach der Besprechung", "Rechtzeitig und fristgerecht vor dem Termin", "Nur mündlich am selben Tag", "Gar nicht"],
+    a: 1, e: "Die Einladung wird fristgerecht vorab versendet (z. B. § 51 GmbHG für die Gesellschafterversammlung)." },
 
   // === Tag 8: Nachbereitung & Protokoll ===
   { topic: "Protokoll", q: "Welche Protokollart hält ausschließlich die gefassten Beschlüsse fest?",
@@ -268,22 +310,40 @@ const QUESTIONS = [
   { topic: "Protokoll", q: "In welcher Sprachform wird der Protokolltext überwiegend verfasst?",
     options: ["Vergangenheit, wörtliche Rede", "Zukunft, Ich-Form", "umgangssprachlich, locker", "Präsens, indirekte Rede mit Konjunktiv I/II"],
     a: 3, e: "Der Protokolltext wird sachlich im Präsens und in indirekter Rede (Konjunktiv I/II) verfasst." },
+  { topic: "Protokoll", q: "Welche drei Funktionen erfüllt ein Protokoll?",
+    options: ["Werbung, Verkauf und Versand", "Heizen, Lüften und Kühlen", "Information, Beweis und Organisation", "Falzen, Kuvertieren und Frankieren"],
+    a: 2, e: "Ein Protokoll erfüllt die Funktionen Information, Beweis und Organisation." },
+  { topic: "Protokoll", q: "Nach welcher Norm wird ein Protokoll formal aufgebaut?",
+    options: ["DIN EN 1335", "ISO 14001", "ASR A3.5", "DIN 5008"],
+    a: 3, e: "Der Aufbau (Kopf, Text, Fuß) folgt der DIN 5008." },
 
   // === Tag 9: Kommunikation & Teamarbeit ===
-  { topic: "Kommunikation", q: "Von wem stammt das Modell der „vier Seiten einer Nachricht"?",
+  { topic: "Kommunikation", q: "Von wem stammt das Modell der „vier Seiten einer Nachricht“?",
     options: ["Schulz von Thun", "Tuckman", "Maslow", "Pareto"],
     a: 0, e: "Das Modell der vier Seiten einer Nachricht (Sach-, Selbstoffenbarungs-, Beziehungs-, Appellebene) stammt von Schulz von Thun." },
   { topic: "Teamarbeit", q: "Mit welcher Phase beginnt die Teamentwicklung nach Tuckman?",
     options: ["Storming", "Norming", "Forming", "Performing"],
     a: 2, e: "Reihenfolge nach Tuckman: Forming, Storming, Norming, Performing, Adjourning." },
+  { topic: "Kommunikation", q: "Welche vier Ebenen unterscheidet das Modell von Schulz von Thun?",
+    options: ["Sach-, Selbstoffenbarungs-, Beziehungs- und Appellebene", "Sehen, Hören, Fühlen und Riechen", "Lesen, Schreiben, Rechnen und Sprechen", "Forming, Storming, Norming und Performing"],
+    a: 0, e: "Jede Nachricht hat vier Seiten: Sach-, Selbstoffenbarungs-, Beziehungs- und Appellebene." },
+  { topic: "Teamarbeit", q: "Wie heißt die letzte Phase der Teamentwicklung nach Tuckman?",
+    options: ["Forming", "Adjourning", "Storming", "Norming"],
+    a: 1, e: "Die fünfte und letzte Phase ist Adjourning (Auflösung des Teams)." },
 
   // === Tag 10: Postbearbeitung Posteingang ===
-  { topic: "Posteingang", q: "Wie behandeln Sie Post, die mit „persönlich/vertraulich" gekennzeichnet ist?",
+  { topic: "Posteingang", q: "Wie behandeln Sie Post, die mit „persönlich/vertraulich“ gekennzeichnet ist?",
     options: ["Sofort öffnen und kopieren", "Ungeöffnet an die Empfängerin weiterleiten", "Wegwerfen", "An alle Kollegen verteilen"],
     a: 1, e: "Als persönlich/vertraulich gekennzeichnete Post wird nicht geöffnet, sondern ungeöffnet weitergeleitet." },
   { topic: "Posteingang", q: "Mit welchem Schritt beginnt die Bearbeitung des Posteingangs?",
     options: ["Mit dem Stempeln", "Mit dem Verteilen", "Mit dem Öffnen", "Mit dem Annehmen (dann Vorsortieren ...)"],
     a: 3, e: "Ablauf: Annehmen → Vorsortieren → Öffnen → Kontrollieren → Stempeln → Verteilen → Erfassen." },
+  { topic: "Posteingang", q: "Was dokumentiert der Posteingangsstempel?",
+    options: ["Den Absender", "Den Portobetrag", "Das Eingangsdatum", "Die Aktennummer"],
+    a: 2, e: "Der Posteingangsstempel dokumentiert das Eingangsdatum (und ggf. die Bearbeitung)." },
+  { topic: "Posteingang", q: "Was ermöglicht das Scannen mit OCR im Posteingang?",
+    options: ["Höheren Papierverbrauch", "Den Verlust von Dokumenten", "Mehr Lagerregale", "Die digitale Archivierung mit durchsuchbarem Text"],
+    a: 3, e: "Scan/OCR ermöglicht die digitale, volltextdurchsuchbare Archivierung der Eingangspost." },
 
   // === Tag 11: Postbearbeitung Postausgang ===
   { topic: "Postausgang", q: "Welcher Schritt steht am Anfang des Postausgangs?",
@@ -292,6 +352,12 @@ const QUESTIONS = [
   { topic: "Postausgang", q: "Wie heißt der maschinelle Ablauf zum Versandfertigmachen großer Postmengen?",
     options: ["Postfach", "Postleitzahl", "Poststraße", "Postkutsche"],
     a: 2, e: "Die Poststraße erledigt Falzen, Kuvertieren, Verschließen und Frankieren maschinell." },
+  { topic: "Postausgang", q: "Welcher Arbeitsschritt folgt unmittelbar auf das Falzen?",
+    options: ["Kuvertieren", "Kontrollieren", "Sortieren", "Aufgeben"],
+    a: 0, e: "Reihenfolge: ... Falzen → Kuvertieren → Wiegen → Frankieren → Aufgeben." },
+  { topic: "Postausgang", q: "Welche Versandart liefert einen Nachweis über die Zustellung?",
+    options: ["Standardbrief", "Einschreiben", "Postkarte", "Büchersendung"],
+    a: 1, e: "Das Einschreiben (in seinen Varianten) liefert einen Zustell-/Auslieferungsnachweis." },
 
   // === Tag 12: Aufbewahrung & Fristen ===
   { topic: "Aufbewahrung", q: "Wie lange müssen Buchungsbelege nach aktueller Rechtslage (BEG IV) aufbewahrt werden?",
@@ -300,6 +366,12 @@ const QUESTIONS = [
   { topic: "Fristen", q: "Wann beginnt die gesetzliche Aufbewahrungsfrist?",
     options: ["Am Tag der Erstellung", "Am Monatsende", "Sofort bei Erhalt", "Mit Schluss des Kalenderjahres der Entstehung"],
     a: 3, e: "Die Frist beginnt mit dem Schluss des Kalenderjahres, in dem das Schriftstück entstanden ist." },
+  { topic: "Aufbewahrung", q: "Wie lange müssen Handels- und Geschäftsbriefe aufbewahrt werden?",
+    options: ["10 Jahre", "8 Jahre", "6 Jahre", "2 Jahre"],
+    a: 2, e: "Handels- und Geschäftsbriefe: 6 Jahre; Buchungsbelege 8 Jahre; Bücher/Inventare/Jahresabschlüsse 10 Jahre." },
+  { topic: "Fristen", q: "Was fordern die GoBD?",
+    options: ["Möglichst schnelle Vernichtung aller Belege", "Aufbewahrung ausschließlich in Papierform", "Den Verzicht auf jede Dokumentation", "Eine ordnungsmäßige, revisionssichere (auch digitale) Aufbewahrung"],
+    a: 3, e: "Die GoBD fordern eine ordnungsmäßige, unveränderbare und revisionssichere (auch digitale) Aufbewahrung." },
 
   // === Tag 13: Ablage & Ablagesysteme ===
   { topic: "Ablage", q: "Welches Ordnungssystem ordnet Schriftgut nach Namen von A bis Z?",
@@ -308,6 +380,12 @@ const QUESTIONS = [
   { topic: "Ablagesysteme", q: "Welche Ablageart arbeitet mit hängenden Mappen in Schränken?",
     options: ["Loseblattablage", "Stehordner", "Hängeregistratur", "Schnellhefter"],
     a: 2, e: "Bei der Hängeregistratur werden Mappen hängend in Schränken oder Hängerahmen abgelegt." },
+  { topic: "Ablage", q: "Welches Ordnungssystem ordnet Schriftgut nach dem Datum?",
+    options: ["Chronologisch", "Alphabetisch", "Geografisch", "Numerisch"],
+    a: 0, e: "Das chronologische Ordnungssystem ordnet nach dem Datum (zeitliche Reihenfolge)." },
+  { topic: "Ablagesysteme", q: "Welches Ordnungssystem kombiniert Buchstaben und Zahlen?",
+    options: ["Rein numerisch", "Alphanumerisch", "Rein alphabetisch", "Chronologisch"],
+    a: 1, e: "Das alphanumerische System kombiniert Buchstaben und Zahlen (z. B. Kundengruppen mit laufender Nummer)." },
 
   // === Tag 14: Digitales DMS, Datenschutz & Umweltschutz ===
   { topic: "Dokumentenmanagement", q: "Welcher Vorteil spricht für ein digitales DMS gegenüber der Papierablage?",
@@ -316,14 +394,26 @@ const QUESTIONS = [
   { topic: "Datenschutz", q: "Wofür steht die Abkürzung TOM im Datenschutz?",
     options: ["Totale Office-Methode", "Tägliche Ordnungsmaßnahme", "Technische Ordnungsmittel", "Technisch-organisatorische Maßnahmen"],
     a: 3, e: "TOM = technisch-organisatorische Maßnahmen zum Schutz personenbezogener Daten (DSGVO)." },
+  { topic: "Datenschutz", q: "Welches deutsche Gesetz ergänzt die DSGVO beim Schutz personenbezogener Daten?",
+    options: ["HGB", "ArbZG", "BDSG", "GmbHG"],
+    a: 2, e: "Das Bundesdatenschutzgesetz (BDSG) ergänzt die DSGVO auf nationaler Ebene." },
+  { topic: "Datenschutz", q: "Ab wie vielen Personen, die ständig mit automatisierter Datenverarbeitung beschäftigt sind, ist nach § 38 BDSG ein Datenschutzbeauftragter zu benennen?",
+    options: ["Ab 5 Personen", "Ab 10 Personen", "Ab 50 Personen", "Ab 20 Personen"],
+    a: 3, e: "Nach § 38 BDSG ist ab 20 ständig mit automatisierter Datenverarbeitung beschäftigten Personen ein Datenschutzbeauftragter zu benennen." },
 
   // === Querschnitt / Umweltschutz & Integration ===
   { topic: "Umweltschutz", q: "Welches Umweltsiegel kennzeichnet umweltfreundliche Büroprodukte (z. B. Recyclingpapier)?",
     options: ["Blauer Engel", "GS-Zeichen", "CE-Kennzeichen", "DIN EN 1335"],
-    a: 0, e: "Der „Blaue Engel" ist das bekannte Umweltsiegel; GS/CE sind Sicherheits-, DIN EN 1335 ist eine Stuhlnorm." },
-  { topic: "Querschnitt", q: "Welche Aussage beschreibt das Modul „Büroprozesse gestalten" am besten?",
+    a: 0, e: "Der „Blaue Engel“ ist das bekannte Umweltsiegel; GS/CE sind Sicherheits-, DIN EN 1335 ist eine Stuhlnorm." },
+  { topic: "Querschnitt", q: "Welche Aussage beschreibt das Modul „Büroprozesse gestalten“ am besten?",
     options: ["Die Themen haben nichts miteinander zu tun", "Nur die Ablage ist wirklich wichtig", "Die Themen bilden einen durchgängigen Büroprozess von Planung bis Archivierung", "Büroarbeit besteht ausschließlich aus Postbearbeitung"],
-    a: 2, e: "Die 14 Themen greifen ineinander und bilden einen durchgängigen Büroprozess — vom geplanten Raum bis zur digitalen Archivierung." }
+    a: 2, e: "Die 14 Themen greifen ineinander und bilden einen durchgängigen Büroprozess — vom geplanten Raum bis zur digitalen Archivierung." },
+  { topic: "Umweltschutz", q: "Welche Maßnahme gehört zum betrieblichen Umweltschutz im Büro?",
+    options: ["Möglichst viel Papier ausdrucken", "Die Heizung im Sommer voll aufdrehen", "Geräte dauerhaft im Standby lassen", "Recyclingpapier verwenden und Müll trennen"],
+    a: 3, e: "Umweltschutz im Büro setzt auf papierloses Arbeiten, Recyclingpapier, Mülltrennung und Energiesparen." },
+  { topic: "Querschnitt", q: "Welche Reihenfolge beschreibt den durchgängigen Büroprozess des Moduls?",
+    options: ["Archivieren → planen → organisieren", "Planen → organisieren → zusammenarbeiten → verwalten/archivieren", "Verwalten → planen → kommunizieren", "Zusammenarbeiten → planen → vergessen"],
+    a: 1, e: "Der Büroprozess verläuft: planen (Raum) → organisieren (Zeit/Termine) → zusammenarbeiten (Besprechung/Protokoll) → verwalten & archivieren (Post/Fristen/DMS)." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

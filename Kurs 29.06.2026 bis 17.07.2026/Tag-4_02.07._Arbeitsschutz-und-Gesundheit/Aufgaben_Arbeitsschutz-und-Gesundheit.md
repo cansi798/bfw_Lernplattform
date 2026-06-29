@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Rechtsgrundlagen des Arbeitsschutzes
 
-📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsschutzgesetz einfach erklärt"](https://www.youtube.com/results?search_query=Arbeitsschutzgesetz+einfach+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Arbeitsschutzgesetz+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsschutzgesetz einfach erklärt"](https://www.youtube.com/watch?v=uOgrdnNIJFY) (https://www.youtube.com/watch?v=uOgrdnNIJFY)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Wozu verpflichtet das Arbeitssicherheitsgesetz (ASiG) den Arbeitgeber?
 
 ## Aufgabe 2 — Verantwortung und Aufsicht
 
-📺 **Vorbereitungsvideo:** [YouTube: „Berufsgenossenschaft Aufgaben"](https://www.youtube.com/results?search_query=Berufsgenossenschaft+Aufgaben) (https://www.youtube.com/results?search_query=Berufsgenossenschaft+Aufgaben)
+📺 **Vorbereitungsvideo:** [YouTube: „Berufsgenossenschaft Aufgaben"](https://www.youtube.com/watch?v=x81MOYdKDWU) (https://www.youtube.com/watch?v=x81MOYdKDWU)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Was kontrolliert das Gewerbeaufsichtsamt, und welche Maßnahmen kann es ergre
 
 ## Aufgabe 3 — Gefährdungsbeurteilung und Unterweisung
 
-📺 **Vorbereitungsvideo:** [YouTube: „Gefährdungsbeurteilung erklärt"](https://www.youtube.com/results?search_query=Gef%C3%A4hrdungsbeurteilung+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Gef%C3%A4hrdungsbeurteilung+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [YouTube: „Gefährdungsbeurteilung erklärt"](https://www.youtube.com/watch?v=SC3LUiiTmwY) (https://www.youtube.com/watch?v=SC3LUiiTmwY)
 
 **Sozialform:** Einzelarbeit
 
@@ -53,7 +53,7 @@ c) Worin unterscheidet sich die Unterweisung (§ 12 ArbSchG) von der Betriebsanw
 
 ## Aufgabe 4 — Belastung, Beanspruchung und Stress
 
-📺 **Vorbereitungsvideo:** [YouTube: „Eustress Distress Unterschied"](https://www.youtube.com/results?search_query=Eustress+Distress+Unterschied) (https://www.youtube.com/results?search_query=Eustress+Distress+Unterschied)
+📺 **Vorbereitungsvideo:** [YouTube: „Eustress Distress Unterschied"](https://www.youtube.com/watch?v=9lILRqFvAto) (https://www.youtube.com/watch?v=9lILRqFvAto)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -69,7 +69,7 @@ c) Nennen Sie drei Maßnahmen, mit denen Herr Unger seinen Stress abbauen kann.
 
 ## Aufgabe 5 — Burnout und Work-Life-Balance
 
-📺 **Vorbereitungsvideo:** [YouTube: „Burnout Symptome Ursachen"](https://www.youtube.com/results?search_query=Burnout+Symptome+Ursachen) (https://www.youtube.com/results?search_query=Burnout+Symptome+Ursachen)
+📺 **Vorbereitungsvideo:** [YouTube: „Burnout Symptome Ursachen"](https://www.youtube.com/watch?v=3vx7_ydK3nM) (https://www.youtube.com/watch?v=3vx7_ydK3nM)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -83,8 +83,8 @@ c) Was bedeutet Work-Life-Balance, und mit welchen Maßnahmen können Unternehme
 
 ## Aufgabe 6 — Mobbing erkennen und bekämpfen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Mobbing am Arbeitsplatz Maßnahmen"](https://www.youtube.com/results?search_query=Mobbing+am+Arbeitsplatz+Ma%C3%9Fnahmen) (https://www.youtube.com/results?search_query=Mobbing+am+Arbeitsplatz+Ma%C3%9Fnahmen)
-📺 **Ergänzend:** [YouTube: „Suchtprävention Betrieb"](https://www.youtube.com/results?search_query=Suchtpr%C3%A4vention+Betrieb) (https://www.youtube.com/results?search_query=Suchtpr%C3%A4vention+Betrieb)
+📺 **Vorbereitungsvideo:** [YouTube: „Mobbing am Arbeitsplatz Maßnahmen"](https://www.youtube.com/watch?v=kJoEJnJWDxk) (https://www.youtube.com/watch?v=kJoEJnJWDxk)
+📺 **Ergänzend:** [YouTube: „Suchtprävention Betrieb"](https://www.youtube.com/watch?v=lx76ljNXP8I) (https://www.youtube.com/watch?v=lx76ljNXP8I)
 
 **Sozialform:** Partnerarbeit
 

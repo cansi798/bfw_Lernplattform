@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Tag 6 — Terminplanung & Terminmanagement</title>
+<title>Quiz Tag 6 — Terminplanung & Terminmanagement (60 Fragen)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root {
@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 6 · 06.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 6 · 06.07.2026 · 60 Fragen</span>
   <h1>Quiz: Terminplanung &amp; Terminmanagement</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Terminplanung-und-Terminmanagement.html</strong> und dem <strong>Handout_Terminplanung-und-Terminmanagement.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Terminplanung-und-Terminmanagement.html</strong> und dem <strong>Handout_Terminplanung-und-Terminmanagement.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -292,12 +292,12 @@ const QUESTIONS = [
   { topic: "MS Outlook", q: "Wie viele verschiedene Terminarten definiert MS Outlook für seine Kalenderfunktion?",
     options: ["Zwei", "Vier", "Sechs", "Acht"],
     a: 1, e: "MS Outlook definiert vier Terminarten: Ressourcen, Termine, Besprechungen und Ereignisse." },
-  { topic: "MS Outlook", q: "Was ist in Outlook ein „Ereignis”?",
+  { topic: "MS Outlook", q: "Was ist in Outlook ein „Ereignis“?",
     options: ["Ein kurzer Anruf von fünf Minuten", "Eine Raumreservierung", "Ein Anlass, der 24 Stunden oder länger andauert (z. B. Geburtstag, Feiertag, Urlaub)", "Eine Besprechung mit Beamer"],
     a: 2, e: "Ereignisse dauern 24 Stunden oder länger und sind keiner Uhrzeit zugeordnet; Outlook erinnert standardmäßig 18 Stunden vorher." },
 
   // === Block F: Online-Tools & elektronische Besprechungen (28-30) ===
-  { topic: "MS Outlook", q: "Worin unterscheidet sich in Outlook eine „Besprechung” von einem „Termin”?",
+  { topic: "MS Outlook", q: "Worin unterscheidet sich in Outlook eine „Besprechung“ von einem „Termin“?",
     options: ["Eine Besprechung ist immer privat", "Ein Termin dauert immer länger", "Es gibt keinen Unterschied", "Bei der Besprechung werden weitere Personen eingeladen und eine Ressource (z. B. Raum) benötigt"],
     a: 3, e: "Termine finden ohne weitere Personen und ohne Ressource statt; bei Besprechungen werden weitere Personen eingeladen und eine Ressource (z. B. Besprechungsraum) benötigt." },
   { topic: "Online-Tools", q: "Wofür eignet sich ein Online-Tool wie Doodle besonders?",
@@ -305,7 +305,109 @@ const QUESTIONS = [
     a: 0, e: "Doodle (oder Google Kalender) ermöglicht mit einem selbsterklärenden Assistenten Terminabfragen — ideal für Externe oder den privaten Bereich ohne Outlook." },
   { topic: "Elektronische Besprechungen", q: "Was gilt für die Telefonkonferenz?",
     options: ["Sie ist nur zu zweit möglich", "Sie wird mit mehr als drei Teilnehmern geführt (genau drei = Dreierkonferenz)", "Sie benötigt keinerlei Technik", "Sie ist mit einer Videokonferenz identisch"],
-    a: 1, e: "Bei einer Telefonkonferenz wird ein Telefonat mit mehr als drei Teilnehmern geführt; bei genau drei spricht man von einer Dreierkonferenz." }
+    a: 1, e: "Bei einer Telefonkonferenz wird ein Telefonat mit mehr als drei Teilnehmern geführt; bei genau drei spricht man von einer Dreierkonferenz." },
+
+  // === Block G: Vertiefung W-Fragen & Grundlagen (31-33) ===
+  { topic: "W-Fragen", q: "Welche W-Frage zielt auf die Dauer eines Termins?",
+    options: ["Warum?", "Wo?", "Wie lange?", "Wer?"],
+    a: 2, e: "Die W-Frage „Wie lange?“ klärt die Dauer eines Termins — wichtig für die Pufferzeit." },
+  { topic: "W-Fragen", q: "Welche W-Frage klärt den Zweck bzw. Grund eines Termins?",
+    options: ["Wann?", "Wo?", "Wer?", "Warum?"],
+    a: 3, e: "Die W-Frage „Warum?“ klärt den Zweck bzw. Grund eines Termins." },
+  { topic: "Grundlagen", q: "Welche Tätigkeiten sind laut Handout wesentliche Teile der Büroarbeit?",
+    options: ["Planung der Arbeitszeit sowie Überwachung und Einarbeitung von Terminen in den Tagesablauf", "Ausschließlich die Buchhaltung", "Nur das Schreiben von Rechnungen", "Allein die Lagerverwaltung"],
+    a: 0, e: "Die Planung der Arbeitszeit, die Anwesenheit bei Terminen sowie die Überwachung und Einarbeitung von Terminen in den Tagesablauf sind wesentliche Teile der Büroarbeit." },
+
+  // === Block H: Terminarten vertieft (34-37) ===
+  { topic: "Terminarten", q: "Was unterscheidet interne von externen Terminen?",
+    options: ["Interne sind immer länger", "Interne finden im Unternehmen statt, externe mit Kunden, Lieferanten oder Partnern", "Externe sind grundsätzlich kostenlos", "Es gibt keinen Unterschied"],
+    a: 1, e: "Interne Termine finden im Unternehmen statt, externe Termine mit Kunden, Lieferanten oder Partnern." },
+  { topic: "Terminarten", q: "Was ist ein Einzeltermin?",
+    options: ["Ein wöchentlich wiederkehrender Termin", "Ein gesetzlich vorgeschriebener Termin", "Ein einmaliger Termin", "Ein Termin nur für die Geschäftsleitung"],
+    a: 2, e: "Ein Einzeltermin ist ein einmaliger Termin — im Gegensatz zum Serientermin, der nach einem Muster wiederkehrt." },
+  { topic: "Terminarten", q: "Warum werden feste Termine möglichst frühzeitig — teils schon am Jahresanfang — eingetragen?",
+    options: ["Weil sie sonst teurer werden", "Weil sie geheim bleiben müssen", "Weil das gesetzlich vorgeschrieben ist", "Um späteren Terminüberschneidungen vorzubeugen"],
+    a: 3, e: "Feste Termine werden frühzeitig eingetragen, um späteren Terminüberschneidungen vorzubeugen." },
+  { topic: "Terminarten", q: "Welche Empfehlung gilt für die Eintragung der verschiedenen Terminarten?",
+    options: ["Für jede Terminart eine eigene Farbe verwenden", "Alle Termine grau eintragen", "Termine gar nicht kennzeichnen", "Nur feste Termine eintragen"],
+    a: 0, e: "Für jede Terminart sollte eine eigene Farbe verwendet werden — so hat man sofort optisch einen Überblick." },
+
+  // === Block I: Terminüberwachung & Fristen vertieft (38-44) ===
+  { topic: "Terminüberwachung", q: "Was sollte man sinnvollerweise am Ende jedes Arbeitstages prüfen?",
+    options: ["Den Kontostand des Unternehmens", "Welche Termine erledigt wurden und was am nächsten Tag dringend ansteht", "Die Anzahl der E-Mails", "Den Lagerbestand"],
+    a: 1, e: "Am Ende eines Arbeitstages sollte geprüft werden, welche Termine erledigt wurden und was am nächsten Tag dringend zu tun ist." },
+  { topic: "Terminüberwachung", q: "Welche Aufgabe erfüllt die Wiedervorlagemappe?",
+    options: ["Sie archiviert alte Rechnungen dauerhaft", "Sie ersetzt das Adressbuch", "Sie legt Vorgänge zum richtigen Zeitpunkt erneut zur Bearbeitung vor", "Sie berechnet die Lohnsteuer"],
+    a: 2, e: "Die Wiedervorlagemappe legt Vorgänge zum richtigen Zeitpunkt erneut zur Bearbeitung vor." },
+  { topic: "Fristen", q: "Welche Termine sind unbedingt einzuhalten und deshalb besonders zu kontrollieren?",
+    options: ["Private Geburtstage", "Spontane Kaffeepausen", "Optionale Geschäftsessen", "Gesetzlich vorgeschriebene Termine"],
+    a: 3, e: "Gesetzlich vorgeschriebene Termine sind unbedingt einzuhalten und deshalb besonders zu kontrollieren." },
+  { topic: "Fristen", q: "Welche Anteile umfassen die Sozialabgaben?",
+    options: ["Arbeitnehmer- und Arbeitgeberanteil zur Sozialversicherung", "Nur den Arbeitgeberanteil", "Nur den Arbeitnehmeranteil", "Ausschließlich die Umsatzsteuer"],
+    a: 0, e: "Die Sozialabgaben umfassen den Arbeitnehmer- und den Arbeitgeberanteil zur Sozialversicherung." },
+  { topic: "Fristen", q: "Welche Möglichkeiten bestehen, wenn ein Termin nicht fristgerecht eingehalten wird?",
+    options: ["Er wird automatisch gelöscht", "Er kann gar nicht, verspätet oder vertagt eingehalten werden", "Er verlängert sich von selbst", "Er muss verdoppelt werden"],
+    a: 1, e: "Ein nicht fristgerecht eingehaltener Termin kann entweder gar nicht, verspätet oder vertagt eingehalten werden." },
+  { topic: "Fristen", q: "Wie sollte man vorgehen, wenn ein Termin nicht eingehalten werden kann?",
+    options: ["Den Termin einfach verstreichen lassen", "Erst am nächsten Tag reagieren", "Sofort — am besten telefonisch — bei der zuständigen Person absagen und einen neuen Termin vereinbaren", "Eine Mahnung abwarten"],
+    a: 2, e: "Ist die Termineinhaltung nicht möglich, sollte sofort — am besten telefonisch und bei der zuständigen Person — abgesagt und ein neuer Termin vereinbart werden." },
+  { topic: "Fristen", q: "Was sollte beim Absagen eines Termins möglichst gleich mit angeboten werden?",
+    options: ["Eine Entschuldigung per Brief", "Eine Geldzahlung", "Eine Gegeneinladung zum Essen", "Ein Alternativtermin"],
+    a: 3, e: "Beim Absagen sollte möglichst gleich ein Alternativtermin vorgeschlagen werden." },
+
+  // === Block J: Urlaubsplanung & § 7 BUrlG vertieft (45-47) ===
+  { topic: "Urlaubsplanung", q: "Was muss bei der Urlaubsplanung neben persönlichen Wünschen besonders beachtet werden?",
+    options: ["Die Rahmenbedingungen der einzelnen Abteilungen", "Die Höhe des Umsatzes", "Die Anzahl der Kunden", "Der Lagerbestand"],
+    a: 0, e: "Bei der Urlaubsplanung sind die Rahmenbedingungen der einzelnen Abteilungen und — falls möglich — persönliche Wünsche zu beachten." },
+  { topic: "§ 7 BUrlG", q: "Wie viele aufeinanderfolgende Werktage muss bei einem Anspruch von mehr als zwölf Werktagen ein Urlaubsteil mindestens umfassen?",
+    options: ["Mindestens sechs", "Mindestens zwölf", "Mindestens drei", "Mindestens zwanzig"],
+    a: 1, e: "Nach § 7 Abs. 2 BUrlG muss bei mehr als zwölf Werktagen Anspruch ein Urlaubsteil mindestens zwölf aufeinanderfolgende Werktage umfassen." },
+  { topic: "§ 7 BUrlG", q: "Wann müssen die Urlaubswünsche eines Arbeitnehmers NICHT berücksichtigt werden?",
+    options: ["Wenn der Chef gerade keine Zeit hat", "Wenn der Urlaub im Sommer liegt", "Wenn dringende betriebliche Belange oder sozial vorrangige Wünsche anderer entgegenstehen", "Wenn der Arbeitnehmer Vollzeit arbeitet"],
+    a: 2, e: "Nach § 7 Abs. 1 BUrlG sind Urlaubswünsche zu berücksichtigen, außer dringende betriebliche Belange oder sozial vorrangige Wünsche anderer Arbeitnehmer stehen entgegen." },
+
+  // === Block K: Hilfsmittel & Outlook vertieft (48-56) ===
+  { topic: "Hilfsmittel", q: "Welche Mindestfunktion schützt den elektronischen Kalender vor unbefugtem Zugriff?",
+    options: ["Die Erinnerungsfunktion", "Das Adressbuch", "Die Notizfunktion", "Der Passwortschutz"],
+    a: 3, e: "Zu den Mindestfunktionen gehört die Möglichkeit, den Kalender mit einem Passwort zu schützen." },
+  { topic: "Hilfsmittel", q: "Welcher Nachteil elektronischer Terminplaner betrifft die Nachvollziehbarkeit?",
+    options: ["Änderungen sind im Nachhinein nicht mehr nachvollziehbar", "Sie können keine Termine speichern", "Sie zeigen keine Uhrzeit an", "Sie lassen sich nicht ausdrucken"],
+    a: 0, e: "Ein Nachteil ist, dass Änderungen im Nachhinein nicht mehr nachvollziehbar sind." },
+  { topic: "Hilfsmittel", q: "Was ermöglicht die Frei/Belegt-Markierung eines elektronischen Terminplaners?",
+    options: ["Das Drucken von Rechnungen", "Die automatische Suche nach gemeinsamen freien Terminen", "Das Versenden von Werbung", "Die Berechnung von Gehältern"],
+    a: 1, e: "Die Frei/Belegt-Markierung erlaubt die automatische Suche nach gemeinsamen freien Terminen." },
+  { topic: "MS Outlook", q: "Was bezeichnet Outlook als „Ressource“?",
+    options: ["Eine ganztägige Veranstaltung", "Einen privaten Anruf", "Räume, Fahrzeuge oder Technik wie Laptop und Beamer", "Eine eingeladene Person"],
+    a: 2, e: "Ressourcen sind Räume, Fahrzeuge oder Technik (z. B. Laptop, Beamer), deren Reservierung zeitlich festgelegt wird." },
+  { topic: "MS Outlook", q: "Zu welcher Programmkategorie zählt MS Outlook?",
+    options: ["Zu den Tabellenkalkulationen", "Zu den Bildbearbeitungsprogrammen", "Zu den Warenwirtschaftssystemen", "Zu den Personal Information Managern (PIM)"],
+    a: 3, e: "MS Outlook zählt zu den Personal Information Managern (PIM)." },
+  { topic: "MS Outlook", q: "Was ist für die volle Funktionalität von Outlook notwendig?",
+    options: ["Der Betrieb eines Exchange-Servers", "Ein zweiter Drucker", "Ein Faxgerät", "Eine zusätzliche Tabellenkalkulation"],
+    a: 0, e: "Für die volle Funktionalität von Outlook ist der Betrieb eines Exchange-Servers notwendig." },
+  { topic: "MS Outlook", q: "Womit prüft man in der Besprechungsanfrage die Verfügbarkeit der Teilnehmer?",
+    options: ["Über die Drucken-Funktion", "Über die Schaltfläche „Terminplanung“ mit grüner und roter Linie", "Über das Adressbuch allein", "Über die Rechtschreibprüfung"],
+    a: 1, e: "Über die Schaltfläche „Terminplanung“ lässt sich die Verfügbarkeit aller Teilnehmer prüfen und mit grüner und roter Linie anpassen." },
+  { topic: "MS Outlook", q: "Welche Serientypen bietet Outlook an?",
+    options: ["Nur täglich und wöchentlich", "Stündlich und minütlich", "Täglich, wöchentlich, monatlich und jährlich", "Ausschließlich jährlich"],
+    a: 2, e: "Über Serientypen lässt sich einstellen, ob ein Anlass täglich, wöchentlich, monatlich oder jährlich stattfindet." },
+  { topic: "MS Outlook", q: "Wie viele Stunden vorher erinnert Outlook standardmäßig an ein Ereignis?",
+    options: ["1 Stunde", "6 Stunden", "12 Stunden", "18 Stunden"],
+    a: 3, e: "Outlook erinnert bei Ereignissen standardmäßig 18 Stunden vorher." },
+
+  // === Block L: Online-Tools & elektronische Besprechungen vertieft (57-60) ===
+  { topic: "Online-Tools", q: "Wie lassen sich Doodle und Outlook bei einfachen Konten verbinden?",
+    options: ["Über ICS-Feeds", "Über ein Faxgerät", "Über einen USB-Stick", "Gar nicht"],
+    a: 0, e: "Doodle und Outlook lassen sich verbinden — bei Outlook.com und Microsoft 365 mit einem Klick, sonst über ICS-Feeds." },
+  { topic: "Online-Tools", q: "Wofür dienen Terminbuchungs-Tools wie Calendly oder Microsoft Bookings?",
+    options: ["Zur Erstellung von Bilanzen", "Andere wählen selbst einen freien Slot aus freigegebenen Zeitfenstern", "Zur Verwaltung von Lagerbeständen", "Zur Lohnabrechnung"],
+    a: 1, e: "Bei Terminbuchungs-Tools wie Calendly oder Microsoft Bookings wählen andere (Kunden, Bewerber) selbst einen Slot aus den freigegebenen freien Zeitfenstern." },
+  { topic: "Online-Tools", q: "Was ist bei allen Cloud-Tools zur Terminplanung besonders zu beachten?",
+    options: ["Die Schriftgröße", "Die Farbe des Kalenders", "Der Datenschutz", "Die Anzahl der Drucker"],
+    a: 2, e: "Bei allen Cloud-Tools ist der Datenschutz zu beachten." },
+  { topic: "Elektronische Besprechungen", q: "Was wird durch den Einsatz von Videokonferenzen vor allem eingespart?",
+    options: ["Die Stromkosten des Servers", "Die Kosten für Büromaterial", "Die Gehälter der Mitarbeiter", "Flug-, Hotel- und Verpflegungskosten sowie Zeit"],
+    a: 3, e: "Videokonferenzen sparen Flug-, Hotel- und Verpflegungskosten sowie Zeit; zunächst fallen jedoch Anschaffungskosten für die Technik an." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

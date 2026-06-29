@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Raumklima im Büro
 
-📺 **Vorbereitungsvideo:** [YouTube: „Raumklima Arbeitsplatz Temperatur"](https://www.youtube.com/results?search_query=Raumklima+Arbeitsplatz+Temperatur) (https://www.youtube.com/results?search_query=Raumklima+Arbeitsplatz+Temperatur)
+📺 **Vorbereitungsvideo:** [YouTube: „Raumklima Arbeitsplatz Temperatur"](https://www.youtube.com/watch?v=IFWeO1r2Xj0) (https://www.youtube.com/watch?v=IFWeO1r2Xj0)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Welche relative Luftfeuchtigkeit gilt als optimal, und welche Folgen haben zu
 
 ## Aufgabe 2 — Lüften und Klimatisierung
 
-📺 **Vorbereitungsvideo:** [YouTube: „Richtig Lüften Büro Stoßlüften"](https://www.youtube.com/results?search_query=Richtig+L%C3%BCften+B%C3%BCro+Sto%C3%9Fl%C3%BCften) (https://www.youtube.com/results?search_query=Richtig+L%C3%BCften+B%C3%BCro+Sto%C3%9Fl%C3%BCften)
+📺 **Vorbereitungsvideo:** [YouTube: „Richtig Lüften Büro Stoßlüften"](https://www.youtube.com/watch?v=2m_39bPykSI) (https://www.youtube.com/watch?v=2m_39bPykSI)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Wie sollte das Raumklima in nicht klimatisierten Räumen beeinflusst werden?
 
 ## Aufgabe 3 — Beleuchtung am Bildschirmarbeitsplatz
 
-📺 **Vorbereitungsvideo:** [YouTube: „Beleuchtung Bildschirmarbeitsplatz Lux"](https://www.youtube.com/results?search_query=Beleuchtung+Bildschirmarbeitsplatz+Lux) (https://www.youtube.com/results?search_query=Beleuchtung+Bildschirmarbeitsplatz+Lux)
+📺 **Vorbereitungsvideo:** [YouTube: „Beleuchtung Bildschirmarbeitsplatz Lux"](https://www.youtube.com/watch?v=Roz7ewsjEPA) (https://www.youtube.com/watch?v=Roz7ewsjEPA)
 
 **Sozialform:** Einzelarbeit
 
@@ -51,7 +51,7 @@ c) Was versteht man unter Reflex- und Direktblendung, und wie lassen sich Reflex
 
 ## Aufgabe 4 — Lärm und Akustik im Großraumbüro (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Lärm im Büro Dezibel Schallschutz"](https://www.youtube.com/results?search_query=L%C3%A4rm+im+B%C3%BCro+Dezibel+Schallschutz) (https://www.youtube.com/results?search_query=L%C3%A4rm+im+B%C3%BCro+Dezibel+Schallschutz)
+📺 **Vorbereitungsvideo:** [YouTube: „Lärm im Büro Dezibel Schallschutz"](https://www.youtube.com/watch?v=x3LLYB5JAhw) (https://www.youtube.com/watch?v=x3LLYB5JAhw)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -67,7 +67,7 @@ c) Nennen Sie vier konkrete Maßnahmen zur Lärmminderung für dieses Großraumb
 
 ## Aufgabe 5 — Farbgestaltung und Sicherheitszeichen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Farbpsychologie Büro Wirkung Farben"](https://www.youtube.com/results?search_query=Farbpsychologie+B%C3%BCro+Wirkung+Farben) (https://www.youtube.com/results?search_query=Farbpsychologie+B%C3%BCro+Wirkung+Farben)
+📺 **Vorbereitungsvideo:** [YouTube: „Farbpsychologie Büro Wirkung Farben"](https://www.youtube.com/watch?v=aKkRtB-DZtE) (https://www.youtube.com/watch?v=aKkRtB-DZtE)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -81,7 +81,7 @@ c) Ordnen Sie den Sicherheitszeichen die richtige Farbe zu: Verbotszeichen, Warn
 
 ## Aufgabe 6 — Pflanzen, Strahlung und Gefahrstoffe
 
-📺 **Vorbereitungsvideo:** [YouTube: „Pflanzen im Büro Wirkung Raumklima"](https://www.youtube.com/results?search_query=Pflanzen+im+B%C3%BCro+Wirkung+Raumklima) (https://www.youtube.com/results?search_query=Pflanzen+im+B%C3%BCro+Wirkung+Raumklima)
+📺 **Vorbereitungsvideo:** [YouTube: „Pflanzen im Büro Wirkung Raumklima"](https://www.youtube.com/watch?v=mU6sem1erMk) (https://www.youtube.com/watch?v=mU6sem1erMk)
 
 **Sozialform:** Einzelarbeit
 

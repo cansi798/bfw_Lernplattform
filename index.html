@@ -128,6 +128,31 @@ footer {
 }
 footer a { color: var(--bfw-primary-dark); text-decoration: none; }
 footer a:hover { text-decoration: underline; }
+
+/* Globaler Zugangscode-Gate */
+.gate {
+  max-width: 420px; width: 100%; margin: 0 auto;
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 18px; padding: 2rem 1.8rem;
+  box-shadow: 0 4px 16px rgba(15,23,42,0.06);
+  text-align: center;
+}
+.gate p { color: var(--bfw-ink-soft); font-size: 0.98rem; margin-bottom: 1.2rem; }
+.gate-form { display: flex; flex-direction: column; gap: 0.7rem; }
+.gate input {
+  padding: 0.8rem 1rem; font-size: 1.05rem;
+  border: 1.5px solid var(--bfw-border); border-radius: 10px;
+  font-family: inherit; text-align: center;
+}
+.gate input:focus { outline: none; border-color: var(--bfw-primary); }
+.gate button {
+  padding: 0.8rem 1rem; font-size: 1.02rem; font-weight: 700;
+  border: none; border-radius: 10px; cursor: pointer;
+  background: var(--bfw-primary); color: white; transition: background 0.15s;
+}
+.gate button:hover { background: var(--bfw-primary-dark); }
+.gate-error { color: var(--bfw-danger); font-size: 0.9rem; min-height: 1.1em; }
+.gate-hint { color: var(--bfw-ink-soft); font-size: 0.82rem; margin-top: 0.4rem; }
 </style>
 </head>
 <body>
@@ -146,7 +171,17 @@ footer a:hover { text-decoration: underline; }
       <p>Wählen Sie Ihren Kurs aus, um zu den Materialien, Quizzen und Aufgaben zu gelangen.</p>
     </div>
 
-    <div class="kurs-grid">
+    <div class="gate" id="gate">
+      <p>Bitte geben Sie den Zugangscode der Lernplattform ein, um die Kursauswahl zu sehen.</p>
+      <form class="gate-form" id="gateForm" autocomplete="off">
+        <input type="password" id="gateInput" placeholder="Zugangscode" autocomplete="off" required autofocus>
+        <button type="submit">Weiter →</button>
+        <div class="gate-error" id="gateError"></div>
+      </form>
+      <div class="gate-hint">Anschließend hat jeder Kurs einen eigenen Zugangscode.</div>
+    </div>
+
+    <div class="kurs-grid" id="kursGrid" style="display:none;">
 
       <a class="kurs-card" href="kurs-beschaffung.html">
         <div class="kurs-stripe"></div>
@@ -173,6 +208,37 @@ footer a:hover { text-decoration: underline; }
   © Can Siebert · 2026 · Material nur für unterrichtliche Zwecke im Rahmen des Kurses<br>
   <a href="https://github.com/cansi798/bfw_Lernplattform">github.com/cansi798/bfw_Lernplattform</a>
 </footer>
+
+<script>
+  // Globaler Zugangscode der Plattform (schaltet die Kursauswahl frei).
+  // Jeder Kurs hat zusätzlich einen eigenen Code auf seiner Seite.
+  const PLATTFORM_CODE = 'BFW';
+  const gate = document.getElementById('gate');
+  const grid = document.getElementById('kursGrid');
+  const form = document.getElementById('gateForm');
+  const input = document.getElementById('gateInput');
+  const error = document.getElementById('gateError');
+
+  function freischalten() {
+    gate.style.display = 'none';
+    grid.style.display = 'grid';
+  }
+  // Innerhalb der Sitzung nicht erneut abfragen
+  if (sessionStorage.getItem('bfw_platform_ok') === '1') freischalten();
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (input.value.trim().toLowerCase() === PLATTFORM_CODE.toLowerCase()) {
+      sessionStorage.setItem('bfw_platform_ok', '1');
+      error.textContent = '';
+      freischalten();
+    } else {
+      error.textContent = 'Falscher Zugangscode. Bitte erneut versuchen.';
+      input.value = '';
+      input.focus();
+    }
+  });
+</script>
 
 </body>
 </html>

@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Was ist ein Termin?
 
-📺 **Vorbereitungsvideo:** [YouTube: „Terminplanung Büro Grundlagen"](https://www.youtube.com/results?search_query=Terminplanung+B%C3%BCro+Grundlagen) (https://www.youtube.com/results?search_query=Terminplanung+B%C3%BCro+Grundlagen)
+📺 **Vorbereitungsvideo:** [YouTube: „Terminplanung Büro Grundlagen"](https://www.youtube.com/watch?v=U4t_gWVZWHU) (https://www.youtube.com/watch?v=U4t_gWVZWHU)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Welche fünf Fragen sollte man sich über einen einzuplanenden Termin stellen
 
 ## Aufgabe 2 — Terminarten unterscheiden
 
-📺 **Vorbereitungsvideo:** [YouTube: „feste und variable Termine"](https://www.youtube.com/results?search_query=feste+und+variable+Termine) (https://www.youtube.com/results?search_query=feste+und+variable+Termine)
+📺 **Vorbereitungsvideo:** [YouTube: „feste und variable Termine"](https://www.youtube.com/watch?v=GycqxfgetXg) (https://www.youtube.com/watch?v=GycqxfgetXg)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Was ist ein Serientermin? Nennen Sie zwei Beispiele.
 
 ## Aufgabe 3 — Terminüberwachung und Fristen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Terminüberwachung Wiedervorlage Büro"](https://www.youtube.com/results?search_query=Termin%C3%BCberwachung+Wiedervorlage+B%C3%BCro) (https://www.youtube.com/results?search_query=Termin%C3%BCberwachung+Wiedervorlage+B%C3%BCro)
+📺 **Vorbereitungsvideo:** [YouTube: „Terminüberwachung Wiedervorlage Büro"](https://www.youtube.com/watch?v=-CiCarsMM94) (https://www.youtube.com/watch?v=-CiCarsMM94)
 
 **Sozialform:** Einzelarbeit
 
@@ -53,7 +53,7 @@ c) Ein versäumter Zahlungstermin kann teuer werden. Nennen Sie drei mögliche F
 
 ## Aufgabe 4 — Urlaubsplanung (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Urlaubsplanung § 7 BUrlG"](https://www.youtube.com/results?search_query=Urlaubsplanung+%C2%A7+7+BUrlG) (https://www.youtube.com/results?search_query=Urlaubsplanung+%C2%A7+7+BUrlG)
+📺 **Vorbereitungsvideo:** [YouTube: „Urlaubsplanung § 7 BUrlG"](https://www.youtube.com/watch?v=bg50b-syCNk) (https://www.youtube.com/watch?v=bg50b-syCNk)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -69,8 +69,8 @@ c) Frau Elling und Herr Lembke möchten beide in der ersten Sommerferienwoche Ur
 
 ## Aufgabe 5 — Hilfsmittel und digitale Tools
 
-📺 **Vorbereitungsvideo:** [YouTube: „elektronischer Terminkalender Outlook"](https://www.youtube.com/results?search_query=elektronischer+Terminkalender+Outlook) (https://www.youtube.com/results?search_query=elektronischer+Terminkalender+Outlook)
-📺 **Ergänzend:** [YouTube: „Doodle Terminabfrage erstellen"](https://www.youtube.com/results?search_query=Doodle+Terminabfrage+erstellen) (https://www.youtube.com/results?search_query=Doodle+Terminabfrage+erstellen)
+📺 **Vorbereitungsvideo:** [YouTube: „elektronischer Terminkalender Outlook"](https://www.youtube.com/watch?v=tScB3s_QBAw) (https://www.youtube.com/watch?v=tScB3s_QBAw)
+📺 **Ergänzend:** [YouTube: „Doodle Terminabfrage erstellen"](https://www.youtube.com/watch?v=ev0qrLCcfR8) (https://www.youtube.com/watch?v=ev0qrLCcfR8)
 
 **Sozialform:** Partnerarbeit
 
@@ -84,7 +84,7 @@ c) Wofür eignet sich ein Online-Tool wie Doodle, und in welcher Situation ist e
 
 ## Aufgabe 6 — Outlook und elektronische Besprechungen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Outlook Besprechung planen Teilnehmer einladen"](https://www.youtube.com/results?search_query=Outlook+Besprechung+planen+Teilnehmer+einladen) (https://www.youtube.com/results?search_query=Outlook+Besprechung+planen+Teilnehmer+einladen)
+📺 **Vorbereitungsvideo:** [YouTube: „Outlook Besprechung planen Teilnehmer einladen"](https://www.youtube.com/watch?v=-WnJkAAmCYY) (https://www.youtube.com/watch?v=-WnJkAAmCYY)
 
 **Sozialform:** Einzelarbeit
 

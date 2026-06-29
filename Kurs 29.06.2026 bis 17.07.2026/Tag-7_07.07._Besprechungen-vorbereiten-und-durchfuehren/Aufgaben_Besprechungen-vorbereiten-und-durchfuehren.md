@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Warum Vorbereitung entscheidet
 
-📺 **Vorbereitungsvideo:** [YouTube: „Besprechung vorbereiten Grundlagen"](https://www.youtube.com/results?search_query=Besprechung+vorbereiten+Grundlagen) (https://www.youtube.com/results?search_query=Besprechung+vorbereiten+Grundlagen)
+📺 **Vorbereitungsvideo:** [YouTube: „Besprechung vorbereiten Grundlagen"](https://www.youtube.com/watch?v=DHG3tcWrwmo) (https://www.youtube.com/watch?v=DHG3tcWrwmo)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Wann sollte die Vorbereitung einer wöchentlichen Teamsitzung üblicherweise 
 
 ## Aufgabe 2 — Vorbereitungsaspekte klären
 
-📺 **Vorbereitungsvideo:** [YouTube: „Sitzung planen Checkliste"](https://www.youtube.com/results?search_query=Sitzung+planen+Checkliste) (https://www.youtube.com/results?search_query=Sitzung+planen+Checkliste)
+📺 **Vorbereitungsvideo:** [YouTube: „Sitzung planen Checkliste"](https://www.youtube.com/watch?v=YROwKwdHYdk) (https://www.youtube.com/watch?v=YROwKwdHYdk)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Welche Aspekte betreffen die Technik bzw. den Raum? Nennen Sie zwei Beispiele
 
 ## Aufgabe 3 — Tagesordnung erstellen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Tagesordnung TOP erstellen"](https://www.youtube.com/results?search_query=Tagesordnung+TOP+erstellen) (https://www.youtube.com/results?search_query=Tagesordnung+TOP+erstellen)
+📺 **Vorbereitungsvideo:** [YouTube: „Tagesordnung TOP erstellen"](https://www.youtube.com/watch?v=zXpQY4gw5GI) (https://www.youtube.com/watch?v=zXpQY4gw5GI)
 
 **Sozialform:** Einzelarbeit
 
@@ -55,7 +55,7 @@ c) Welche Angaben sollte ein gut formulierter Tagesordnungspunkt enthalten (mind
 
 ## Aufgabe 4 — Einladung und Vorbereitungs-Countdown
 
-📺 **Vorbereitungsvideo:** [YouTube: „Einladung Besprechung schreiben"](https://www.youtube.com/results?search_query=Einladung+Besprechung+schreiben) (https://www.youtube.com/results?search_query=Einladung+Besprechung+schreiben)
+📺 **Vorbereitungsvideo:** [YouTube: „Einladung Besprechung schreiben"](https://www.youtube.com/watch?v=B7xyYof_S-k) (https://www.youtube.com/watch?v=B7xyYof_S-k)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -71,8 +71,8 @@ c) Warum wird die Einladung erst gestaltet, wenn die übrigen Vorbereitungen wei
 
 ## Aufgabe 5 — Durchführung und schwierige Teilnehmer
 
-📺 **Vorbereitungsvideo:** [YouTube: „Besprechung moderieren Regeln"](https://www.youtube.com/results?search_query=Besprechung+moderieren+Regeln) (https://www.youtube.com/results?search_query=Besprechung+moderieren+Regeln)
-📺 **Ergänzend:** [YouTube: „Moderationstechniken Meeting"](https://www.youtube.com/results?search_query=Moderationstechniken+Meeting) (https://www.youtube.com/results?search_query=Moderationstechniken+Meeting)
+📺 **Vorbereitungsvideo:** [YouTube: „Besprechung moderieren Regeln"](https://www.youtube.com/watch?v=D8QTrMrTEyM) (https://www.youtube.com/watch?v=D8QTrMrTEyM)
+📺 **Ergänzend:** [YouTube: „Moderationstechniken Meeting"](https://www.youtube.com/watch?v=Kxd5M_YBlEM) (https://www.youtube.com/watch?v=Kxd5M_YBlEM)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -86,7 +86,7 @@ c) Wer ist für das gute Gelingen einer Sitzung verantwortlich?
 
 ## Aufgabe 6 — Elektronische und hybride Besprechungen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Videokonferenz Etikette Tipps"](https://www.youtube.com/results?search_query=Videokonferenz+Etikette+Tipps) (https://www.youtube.com/results?search_query=Videokonferenz+Etikette+Tipps)
+📺 **Vorbereitungsvideo:** [YouTube: „Videokonferenz Etikette Tipps"](https://www.youtube.com/watch?v=0FnoyDzE4z8) (https://www.youtube.com/watch?v=0FnoyDzE4z8)
 
 **Sozialform:** Einzelarbeit
 

@@ -695,7 +695,8 @@ const KURS_BASE = 'Kurs 29.06.2026 bis 17.07.2026';
 const TAGE = [
   { num: 1,  datum: '29.06.2026', thema: 'Büroraumplanung & Büroformen',
     folder: 'Tag-1_29.06._Bueroraumplanung-und-Bueroformen',
-    slug: 'Bueroraumplanung-und-Bueroformen', verfügbar: true },
+    slug: 'Bueroraumplanung-und-Bueroformen', verfügbar: true,
+    medien: { video: 'Tag1_Video.mp4', podcast: 'Tag1_Podcast.m4a' } },
   { num: 2,  datum: '30.06.2026', thema: 'Büroausstattung & ergonomischer Bildschirmarbeitsplatz',
     folder: 'Tag-2_30.06._Bueroausstattung-und-Bildschirmarbeitsplatz',
     slug: 'Bueroausstattung-und-Bildschirmarbeitsplatz', verfügbar: true },
@@ -807,16 +808,28 @@ function renderTage() {
             <span class="tag-link-label">Aufgabenheft mit Lösungen</span>
             <span class="tag-link-arrow">↓</span>
           </a>
+          ${t.medien && t.medien.video ? `
+          <a class="tag-link video" href="${base}/${encodeURIComponent(t.medien.video)}" target="_blank" rel="noopener">
+            <span class="link-icon">🎬</span>
+            <span class="tag-link-label">Video-Aufzeichnung</span>
+            <span class="tag-link-arrow">▶</span>
+          </a>` : `
           <div class="tag-chip-soon" title="Video folgt in Kürze">
             <span class="link-icon">🎬</span>
             <span class="tag-link-label">Video-Aufzeichnung</span>
             <span class="soon-badge">folgt</span>
-          </div>
+          </div>`}
+          ${t.medien && t.medien.podcast ? `
+          <a class="tag-link audio" href="${base}/${encodeURIComponent(t.medien.podcast)}" target="_blank" rel="noopener">
+            <span class="link-icon">🎧</span>
+            <span class="tag-link-label">Podcast (Audio)</span>
+            <span class="tag-link-arrow">▶</span>
+          </a>` : `
           <div class="tag-chip-soon" title="Podcast folgt in Kürze">
             <span class="link-icon">🎧</span>
             <span class="tag-link-label">Podcast (Audio)</span>
             <span class="soon-badge">folgt</span>
-          </div>
+          </div>`}
         </div>
       </div>`;
   }).join('');

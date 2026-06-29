@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Sender-Empfänger-Modell
 
-📺 **Vorbereitungsvideo:** [YouTube: „Sender Empfänger Modell einfach erklärt"](https://www.youtube.com/results?search_query=Sender+Empf%C3%A4nger+Modell+einfach+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Sender+Empf%C3%A4nger+Modell+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [YouTube: „Sender Empfänger Modell einfach erklärt"](https://www.youtube.com/watch?v=9-WbAEY0SWw) (https://www.youtube.com/watch?v=9-WbAEY0SWw)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Erklären Sie, warum eine gesendete Nachricht beim Empfänger anders ankommen
 
 ## Aufgabe 2 — Vier Seiten einer Nachricht
 
-📺 **Vorbereitungsvideo:** [YouTube: „Vier Seiten einer Nachricht Schulz von Thun"](https://www.youtube.com/results?search_query=Vier+Seiten+einer+Nachricht+Schulz+von+Thun) (https://www.youtube.com/results?search_query=Vier+Seiten+einer+Nachricht+Schulz+von+Thun)
+📺 **Vorbereitungsvideo:** [YouTube: „Vier Seiten einer Nachricht Schulz von Thun"](https://www.youtube.com/watch?v=9SmiK0hSLw8) (https://www.youtube.com/watch?v=9SmiK0hSLw8)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Formulieren Sie die Aussage so um, dass sie auf der Beziehungsebene wertschä
 
 ## Aufgabe 3 — Verbale, nonverbale und paraverbale Kommunikation
 
-📺 **Vorbereitungsvideo:** [YouTube: „verbale nonverbale paraverbale Kommunikation"](https://www.youtube.com/results?search_query=verbale+nonverbale+paraverbale+Kommunikation) (https://www.youtube.com/results?search_query=verbale+nonverbale+paraverbale+Kommunikation)
+📺 **Vorbereitungsvideo:** [YouTube: „verbale nonverbale paraverbale Kommunikation"](https://www.youtube.com/watch?v=x6VsvMx5oBA) (https://www.youtube.com/watch?v=x6VsvMx5oBA)
 
 **Sozialform:** Einzelarbeit
 
@@ -53,7 +53,7 @@ c) Warum ist es problematisch, wenn verbale und nonverbale Botschaft nicht zusam
 
 ## Aufgabe 4 — Kommunikationsformen im Büro & E-Mail-Knigge
 
-📺 **Vorbereitungsvideo:** [YouTube: „E-Mail Knigge Geschäftsbrief Regeln"](https://www.youtube.com/results?search_query=E-Mail+Knigge+Gesch%C3%A4ftsbrief+Regeln) (https://www.youtube.com/results?search_query=E-Mail+Knigge+Gesch%C3%A4ftsbrief+Regeln)
+📺 **Vorbereitungsvideo:** [YouTube: „E-Mail Knigge Geschäftsbrief Regeln"](https://www.youtube.com/watch?v=6WX_rq-nFVA) (https://www.youtube.com/watch?v=6WX_rq-nFVA)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -71,7 +71,7 @@ c) Welche Pflichtangaben muss eine geschäftliche E-Mail laut EHUG enthalten? Wo
 
 ## Aufgabe 5 — Teamarbeit: Vor- und Nachteile
 
-📺 **Vorbereitungsvideo:** [YouTube: „Teamarbeit Vorteile Nachteile"](https://www.youtube.com/results?search_query=Teamarbeit+Vorteile+Nachteile) (https://www.youtube.com/results?search_query=Teamarbeit+Vorteile+Nachteile)
+📺 **Vorbereitungsvideo:** [YouTube: „Teamarbeit Vorteile Nachteile"](https://www.youtube.com/watch?v=ncOVUq752co) (https://www.youtube.com/watch?v=ncOVUq752co)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -85,8 +85,8 @@ c) Was versteht man unter „sozialem Faulenzen" (Trittbrettfahren) und wie läs
 
 ## Aufgabe 6 — Teamphasen, Konflikte und Feedback
 
-📺 **Vorbereitungsvideo:** [YouTube: „Teamphasen Tuckman Forming Storming Norming Performing"](https://www.youtube.com/results?search_query=Teamphasen+Tuckman+Forming+Storming+Norming+Performing) (https://www.youtube.com/results?search_query=Teamphasen+Tuckman+Forming+Storming+Norming+Performing)
-📺 **Ergänzend:** [YouTube: „Feedbackregeln Ich-Botschaften"](https://www.youtube.com/results?search_query=Feedbackregeln+Ich-Botschaften) (https://www.youtube.com/results?search_query=Feedbackregeln+Ich-Botschaften)
+📺 **Vorbereitungsvideo:** [YouTube: „Teamphasen Tuckman Forming Storming Norming Performing"](https://www.youtube.com/watch?v=oXk_2gNVo7w) (https://www.youtube.com/watch?v=oXk_2gNVo7w)
+📺 **Ergänzend:** [YouTube: „Feedbackregeln Ich-Botschaften"](https://www.youtube.com/watch?v=mnnRCoJHouM) (https://www.youtube.com/watch?v=mnnRCoJHouM)
 
 **Sozialform:** Gruppenarbeit
 

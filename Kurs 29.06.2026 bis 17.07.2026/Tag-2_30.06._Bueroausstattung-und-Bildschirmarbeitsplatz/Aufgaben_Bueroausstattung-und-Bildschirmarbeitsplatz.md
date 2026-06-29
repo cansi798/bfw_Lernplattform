@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Ergonomie verstehen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ergonomie am Arbeitsplatz einfach erklärt"](https://www.youtube.com/results?search_query=Ergonomie+am+Arbeitsplatz+einfach+erklaert) (https://www.youtube.com/results?search_query=Ergonomie+am+Arbeitsplatz+einfach+erklaert)
+📺 **Vorbereitungsvideo:** [YouTube: „Ergonomie am Arbeitsplatz einfach erklärt"](https://www.youtube.com/watch?v=ZYox9dyTUXM) (https://www.youtube.com/watch?v=ZYox9dyTUXM)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Geben Sie drei Beispiele für Arbeitsmittel, die an die Maße des menschliche
 
 ## Aufgabe 2 — Anforderungen an den Bürostuhl
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ergonomischer Bürostuhl richtig einstellen"](https://www.youtube.com/results?search_query=ergonomischer+Buerostuhl+richtig+einstellen) (https://www.youtube.com/results?search_query=ergonomischer+Buerostuhl+richtig+einstellen)
+📺 **Vorbereitungsvideo:** [YouTube: „Ergonomischer Bürostuhl richtig einstellen"](https://www.youtube.com/watch?v=eohM_h-U9lQ) (https://www.youtube.com/watch?v=eohM_h-U9lQ)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Woran erkennen Sie, dass ein Bürostuhl korrekt auf Sie eingestellt ist?
 
 ## Aufgabe 3 — So sitzen Sie richtig (Selbstcheck)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Bildschirmarbeitsplatz ergonomisch einrichten"](https://www.youtube.com/results?search_query=Bildschirmarbeitsplatz+ergonomisch+einrichten) (https://www.youtube.com/results?search_query=Bildschirmarbeitsplatz+ergonomisch+einrichten)
+📺 **Vorbereitungsvideo:** [YouTube: „Bildschirmarbeitsplatz ergonomisch einrichten"](https://www.youtube.com/watch?v=lZHAXBKssA0) (https://www.youtube.com/watch?v=lZHAXBKssA0)
 
 **Sozialform:** Partnerarbeit (Selbstcheck zu zweit)
 
@@ -54,7 +54,7 @@ d) Welche Körperwinkel sollen beim aufrechten Sitzen jeweils etwa 90° betragen
 
 ## Aufgabe 4 — Mängel am Bildschirmarbeitsplatz erkennen (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsplatz ergonomisch Fehler vermeiden"](https://www.youtube.com/results?search_query=Arbeitsplatz+ergonomisch+Fehler+vermeiden) (https://www.youtube.com/results?search_query=Arbeitsplatz+ergonomisch+Fehler+vermeiden)
+📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsplatz ergonomisch Fehler vermeiden"](https://www.youtube.com/watch?v=9ZFWxEGrf7M) (https://www.youtube.com/watch?v=9ZFWxEGrf7M)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -70,7 +70,7 @@ c) Erläutern Sie, warum ein Laptop im Dauereinsatz eine Dockingstation mit exte
 
 ## Aufgabe 5 — Dynamisches Sitzen, Steh-Sitz-Dynamik & Sitzmechaniken
 
-📺 **Vorbereitungsvideo:** [YouTube: „Dynamisches Sitzen Steh-Sitz-Dynamik"](https://www.youtube.com/results?search_query=dynamisches+Sitzen+Steh+Sitz+Dynamik) (https://www.youtube.com/results?search_query=dynamisches+Sitzen+Steh+Sitz+Dynamik)
+📺 **Vorbereitungsvideo:** [YouTube: „Dynamisches Sitzen Steh-Sitz-Dynamik"](https://www.youtube.com/watch?v=RTSjmQjDiEE) (https://www.youtube.com/watch?v=RTSjmQjDiEE)
 
 **Sozialform:** Einzelarbeit
 
@@ -85,7 +85,7 @@ d) Nennen Sie die vier Sitzmechaniken von Bürostühlen und erläutern Sie eine 
 
 ## Aufgabe 6 — Prüfsiegel, Arbeitstisch & Arbeitsstättenverordnung
 
-📺 **Vorbereitungsvideo:** [YouTube: „GS Zeichen CE Kennzeichnung Unterschied"](https://www.youtube.com/results?search_query=GS+Zeichen+CE+Kennzeichnung+Unterschied) (https://www.youtube.com/results?search_query=GS+Zeichen+CE+Kennzeichnung+Unterschied)
+📺 **Vorbereitungsvideo:** [YouTube: „GS Zeichen CE Kennzeichnung Unterschied"](https://www.youtube.com/watch?v=4qd6-4NfE10) (https://www.youtube.com/watch?v=4qd6-4NfE10)
 
 **Sozialform:** Plenumsdiskussion / Einzelarbeit
 

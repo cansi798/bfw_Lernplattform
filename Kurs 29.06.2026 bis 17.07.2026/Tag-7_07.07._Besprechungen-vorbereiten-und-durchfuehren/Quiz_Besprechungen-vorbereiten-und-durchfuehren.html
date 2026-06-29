@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 7 · 07.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 7 · 07.07.2026 · 60 Fragen</span>
   <h1>Quiz: Besprechungen vorbereiten &amp; durchführen</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Besprechungen-vorbereiten-und-durchfuehren.html</strong> und dem <strong>Handout_Besprechungen-vorbereiten-und-durchfuehren.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Besprechungen-vorbereiten-und-durchfuehren.html</strong> und dem <strong>Handout_Besprechungen-vorbereiten-und-durchfuehren.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -229,16 +229,16 @@ const QUESTIONS = [
   { topic: "Vorbereitung", q: "Welcher Punkt gehört zu den Vorbereitungsaspekten einer Sitzung?",
     options: ["Raum reservieren und vorbereiten", "Die Aktienkurse prüfen", "Den Jahresabschluss erstellen", "Die Gehälter auszahlen"],
     a: 0, e: "Zu den Vorbereitungsaspekten gehören u. a. Datum/Uhrzeit, Raum, Teilnehmer, Zeitbedarf, TOP, Unterlagen und Protokoll." },
-  { topic: "Vorbereitung", q: "Welche Leitfrage gehört zum Aspekt „Datum und Uhrzeit"?",
+  { topic: "Vorbereitung", q: "Welche Leitfrage gehört zum Aspekt „Datum und Uhrzeit“?",
     options: ["Wer schreibt das Protokoll?", "Welche Software wird gebraucht?", "Wie viele Drucker stehen im Raum?", "Gibt es andere Sitzungen zum Termin? Sind Teilnehmer verhindert?"],
     a: 3, e: "Beim Festlegen von Datum und Uhrzeit ist zu klären, ob es konkurrierende Sitzungen gibt und ob Teilnehmer verhindert sind." },
-  { topic: "Vorbereitung", q: "Welche Frage ist beim Aspekt „Raum reservieren und vorbereiten" zu klären?",
+  { topic: "Vorbereitung", q: "Welche Frage ist beim Aspekt „Raum reservieren und vorbereiten“ zu klären?",
     options: ["Wie hoch ist der Umsatz?", "Welcher Raum ist geeignet und verfügbar, und welche Technik wird benötigt?", "Wer macht die Buchhaltung?", "Wie viele Mitarbeiter hat die Firma?"],
     a: 1, e: "Beim Raum ist zu klären, ob er geeignet, verfügbar und reserviert ist und welche Medien/technischen Hilfsmittel benötigt werden." },
-  { topic: "Teilnehmer", q: "Was ist beim Vorbereitungsaspekt „Teilnehmer" zu klären?",
+  { topic: "Teilnehmer", q: "Was ist beim Vorbereitungsaspekt „Teilnehmer“ zu klären?",
     options: ["Wie das Wetter wird", "Welche Farbe der Raum hat", "Wer zum Teilnehmerkreis gehört und welche Unterlagen sie zur Vorbereitung benötigen", "Wie teuer die Möbel waren"],
     a: 2, e: "Zu klären ist, wer zum Teilnehmerkreis gehört und welche Unterlagen die Teilnehmer zur Vorbereitung benötigen." },
-  { topic: "Protokoll", q: "Welche Fragen gehören zum Vorbereitungsaspekt „Protokoll"?",
+  { topic: "Protokoll", q: "Welche Fragen gehören zum Vorbereitungsaspekt „Protokoll“?",
     options: ["Wer schreibt das Protokoll und welche Protokollart ist gewünscht?", "Wie viele Stühle werden gebraucht?", "Wann ist Mittagspause?", "Welcher Beamer ist im Raum?"],
     a: 0, e: "Beim Aspekt Protokoll ist zu klären, wer das Protokoll schreibt und welche Protokollart gewünscht wird." },
   { topic: "Verpflegung", q: "Was gehört neben Raum und Technik ebenfalls zu einer guten Vorbereitung?",
@@ -247,9 +247,9 @@ const QUESTIONS = [
   { topic: "Tagesordnung", q: "Was sollte jeder Tagesordnungspunkt (TOP) klar enthalten?",
     options: ["Den Namen aller Anwesenden", "Ein klares Ziel (z. B. Information, Aussprache, Entscheidung)", "Den Umsatz des Vorjahres", "Die Telefonnummer der Geschäftsführung"],
     a: 1, e: "Jeder TOP sollte ein klares Ziel haben: Information, Ideensammlung, Aussprache, Entscheidung oder Beschlussfassung." },
-  { topic: "Tagesordnung", q: "Warum ist die Bezeichnung eines TOP nur mit dem Wort „Sortiment" problematisch?",
+  { topic: "Tagesordnung", q: "Warum ist die Bezeichnung eines TOP nur mit dem Wort „Sortiment“ problematisch?",
     options: ["Weil das Wort zu lang ist", "Weil es keine Sortimente mehr gibt", "Es bleibt unklar, was besprochen werden soll, und die Teilnehmer können sich nicht gezielt vorbereiten", "Weil es nur in Großbuchstaben erlaubt ist"],
-    a: 2, e: "Mit „Sortiment" bleibt unklar, was genau besprochen werden soll; die Teilnehmer können sich nicht gezielt vorbereiten." },
+    a: 2, e: "Mit „Sortiment“ bleibt unklar, was genau besprochen werden soll; die Teilnehmer können sich nicht gezielt vorbereiten." },
 
   // === Block C: Einladung & Ablauf (15-20) ===
   { topic: "Sitzungsablauf", q: "Warum ist eine gewisse Wiederholung im Sitzungsablauf sinnvoll?",
@@ -267,7 +267,7 @@ const QUESTIONS = [
   { topic: "Einladung", q: "Welche Angabe gehört bei innerbetrieblichen Sitzungen ebenfalls in die Einladung?",
     options: ["Der Name des Protokollführers", "Die Bankverbindung", "Die Anzahl der Parkplätze", "Das Geburtsdatum des Leiters"],
     a: 0, e: "Bei innerbetrieblichen Sitzungen/Besprechungen gehört der Name des Protokollführers in die Einladung." },
-  { topic: "Einladung", q: "Wofür ist in der Einladung ein „Hinweis, ob Anmeldung erforderlich ist" besonders gedacht?",
+  { topic: "Einladung", q: "Wofür ist in der Einladung ein „Hinweis, ob Anmeldung erforderlich ist“ besonders gedacht?",
     options: ["Für die Reinigungskraft", "Für die Lieferanten", "Für die Geschäftsführung", "Für außerbetriebliche Teilnehmer"],
     a: 3, e: "Der Hinweis, ob eine Anmeldung erforderlich ist, richtet sich insbesondere an außerbetriebliche Teilnehmer." },
 
@@ -281,7 +281,7 @@ const QUESTIONS = [
   { topic: "Durchführung", q: "Welche Funktion hat die Tagesordnung während der Durchführung?",
     options: ["Sie dient als Leitfaden, die Themen werden zielorientiert abgearbeitet", "Sie ist nur Dekoration", "Sie wird nach Belieben geändert", "Sie ersetzt die Einladung"],
     a: 0, e: "Die Tagesordnung dient als Leitfaden; die Themen werden zielorientiert abgearbeitet, ohne abzuschweifen." },
-  { topic: "Teilnehmertypen", q: "Wie verhält sich der „Dauerredner" in einer Besprechung?",
+  { topic: "Teilnehmertypen", q: "Wie verhält sich der „Dauerredner“ in einer Besprechung?",
     options: ["Er schweigt die ganze Zeit", "Er verlässt früh den Raum", "Er schaut nur auf die Uhr", "Er hat zu allem etwas zu sagen"],
     a: 3, e: "Der Dauerredner hat zu allem etwas zu sagen; die Moderation sollte ihn freundlich begrenzen und auf Zeit/Thema verweisen." },
   { topic: "Teilnehmertypen", q: "Wie kann die Moderation auf einen desinteressierten Teilnehmer reagieren?",
@@ -303,7 +303,111 @@ const QUESTIONS = [
     a: 1, e: "Durch Video-/Telefonkonferenzen lassen sich Kosten (Flug-, Hotelkosten, Verpflegung) und Zeit einsparen." },
   { topic: "Hybridmeeting", q: "Worauf ist bei hybriden Besprechungen besonders zu achten?",
     options: ["Dass niemand die Kamera nutzt", "Dass alle im selben Raum sind", "Die online zugeschalteten Teilnehmer aktiv und gleichberechtigt einzubinden", "Dass nur eine Person die Agenda kennt"],
-    a: 2, e: "Bei Hybridmeetings ist besonders darauf zu achten, die Remote-Teilnehmer aktiv und gleichberechtigt einzubinden." }
+    a: 2, e: "Bei Hybridmeetings ist besonders darauf zu achten, die Remote-Teilnehmer aktiv und gleichberechtigt einzubinden." },
+
+  // === Block F: Rollen in der Besprechung (31-35) ===
+  { topic: "Rollen", q: "Welche Aufgabe gehört zur Rolle der Leitung?",
+    options: ["Die Sitzung eröffnen und schließen sowie auf Ziel, Zeit und Beschlussfähigkeit achten", "Ausschließlich das Wort erteilen", "Nur das Protokoll schreiben", "Die Getränke verteilen"],
+    a: 0, e: "Die Leitung eröffnet und schließt die Sitzung, achtet auf Ziel, Zeit und Beschlussfähigkeit und sorgt für Ergebnisse." },
+  { topic: "Rollen", q: "Was ist die Aufgabe der Moderation?",
+    options: ["Die Einladung verschicken", "Die Diskussion steuern, das Wort erteilen, zusammenfassen und beim Thema/Zeitplan halten", "Den Raum reservieren", "Die Beschlüsse rechtlich prüfen"],
+    a: 1, e: "Die Moderation steuert die Diskussion, erteilt das Wort, fasst zusammen und hält die Gruppe beim Thema und am Zeitplan." },
+  { topic: "Rollen", q: "Welche Aufgabe übernimmt die Protokollführung?",
+    options: ["Sie leitet die Diskussion", "Sie verteilt die Einladungen", "Sie hält Verlauf, Ergebnisse und Beschlüsse fest", "Sie reserviert den Raum"],
+    a: 2, e: "Die Protokollführung hält Verlauf, Ergebnisse und Beschlüsse der Sitzung schriftlich fest." },
+  { topic: "Rollen", q: "Wann wird die Protokollführung benannt?",
+    options: ["Erst nach der Sitzung", "Während der Diskussion", "Gar nicht", "Bereits in der Vorbereitung"],
+    a: 3, e: "Die Protokollführung wird bereits in der Vorbereitung der Sitzung benannt." },
+  { topic: "Rollen", q: "In welcher Konstellation werden Leitung und Moderation oft wahrgenommen?",
+    options: ["Oft in Personalunion durch dieselbe Person", "Immer durch zwei externe Berater", "Nie durch dieselbe Person", "Nur durch den Protokollführer"],
+    a: 0, e: "Die Moderation wird oft in Personalunion mit der Leitung wahrgenommen, also von derselben Person." },
+
+  // === Block G: Schwierige Teilnehmertypen (36-38) ===
+  { topic: "Teilnehmertypen", q: "Wie verhält sich der „Abteilungswitzbold\“?",
+    options: ["Er schweigt durchgehend", "Er macht Scherze auf Kosten anderer und zieht Beiträge ins Lächerliche", "Er schaut nur auf die Uhr", "Er übernimmt das Protokoll"],
+    a: 1, e: "Der Abteilungswitzbold macht Scherze auf Kosten anderer und zieht Beiträge ins Lächerliche." },
+  { topic: "Teilnehmertypen", q: "Wie sollte die Moderation auf den Abteilungswitzbold reagieren?",
+    options: ["Ihn ebenfalls auslachen", "Die Sitzung beenden", "Ihn sachlich zum Thema zurückführen und Beiträge wertschätzen", "Ihn ignorieren"],
+    a: 2, e: "Die Moderation führt den Abteilungswitzbold sachlich zum Thema zurück und wertschätzt Beiträge." },
+  { topic: "Teilnehmertypen", q: "Woran erkennt man den desinteressierten Teilnehmer?",
+    options: ["Er redet ununterbrochen", "Er macht Witze", "Er schreibt das Protokoll", "Er schaut immer wieder auf die Uhr"],
+    a: 3, e: "Der Desinteressierte schaut immer wieder auf die Uhr; die Moderation sollte ihn gezielt einbinden." },
+
+  // === Block H: Grundsätze der Durchführung (39-42) ===
+  { topic: "Durchführung", q: "Wie soll die Kommunikation in der Besprechung sein?",
+    options: ["Offen und respektvoll, ohne dem Redner ins Wort zu fallen", "Möglichst laut und bestimmend", "Nur über die Leitung erlaubt", "Ausschließlich schriftlich"],
+    a: 0, e: "Die Kommunikation ist offen und respektvoll; man fällt dem Redner nicht ins Wort und bemüht sich um Konsens." },
+  { topic: "Durchführung", q: "Worum bemüht sich jeder Teilnehmer bei seinen Wortmeldungen?",
+    options: ["Um möglichst lange Beiträge", "Um kurze Beiträge", "Um Beiträge in Fremdsprachen", "Um schriftliche Eingaben"],
+    a: 1, e: "Jeder bemüht sich um kurze Beiträge, damit die Sitzung zielorientiert und im Zeitrahmen bleibt." },
+  { topic: "Durchführung", q: "Was sollen die Teilnehmer während der Sitzung unterlassen?",
+    options: ["Fragen stellen", "Notizen machen", "Abschweifen und Binnengespräche führen", "Der Tagesordnung folgen"],
+    a: 2, e: "Die Teilnehmer schweifen nicht ab und führen keine Binnengespräche; die Tagesordnung ist Leitfaden." },
+  { topic: "Durchführung", q: "Was gilt für den vorgesehenen Zeitrahmen einer Sitzung?",
+    options: ["Er darf beliebig überzogen werden", "Er gilt nur für die Leitung", "Er ist unwichtig", "Er wird eingehalten"],
+    a: 3, e: "Die Sitzung beginnt pünktlich und der vorgesehene Zeitrahmen wird eingehalten." },
+
+  // === Block I: Vorbereitungs-Countdown (43-48) ===
+  { topic: "Countdown", q: "Was geschieht im Countdown ca. 2 Wochen vor der Sitzung?",
+    options: ["Ziel/Anlass klären, Teilnehmerkreis festlegen, Termin abstimmen", "Den Raum prüfen und Getränke bereitstellen", "Die Unterlagen versenden", "Das Protokoll schreiben"],
+    a: 0, e: "Ca. 2 Wochen vorher werden Ziel/Anlass geklärt, der Teilnehmerkreis festgelegt und der Termin abgestimmt." },
+  { topic: "Countdown", q: "Was steht im Countdown ca. 10 Tage vorher an?",
+    options: ["Das Protokoll genehmigen", "Raum reservieren, Technik und Verpflegung klären", "Die Sitzung durchführen", "Das Ziel erstmals festlegen"],
+    a: 1, e: "Ca. 10 Tage vorher werden der Raum reserviert sowie Technik und Verpflegung geklärt." },
+  { topic: "Countdown", q: "Was geschieht ca. 1 Woche vor der Sitzung?",
+    options: ["Check der Technik vor Ort", "Nachbereitung des Protokolls", "TOP sammeln, Reihenfolge und Zeiten festlegen, Einladung versenden", "Die Raumreinigung"],
+    a: 2, e: "Ca. 1 Woche vorher werden TOP gesammelt, Reihenfolge/Zeiten festgelegt und die Einladung (Fristen!) versendet." },
+  { topic: "Countdown", q: "Was gehört am Sitzungstag zum Countdown?",
+    options: ["Den Teilnehmerkreis erstmals festlegen", "Die Einladung verfassen", "Das Ziel klären", "Raum und Technik prüfen, Moderationsmaterial bereitlegen, Getränke bereitstellen"],
+    a: 3, e: "Am Sitzungstag werden Raum und Technik geprüft, Moderationsmaterial bereitgelegt und Getränke bereitgestellt." },
+  { topic: "Countdown", q: "Was wird laut Countdown 2–3 Tage vor der Sitzung erledigt?",
+    options: ["Unterlagen/Anlagen zusammenstellen und versenden", "Den Raum reservieren", "Das Protokoll der nächsten Sitzung schreiben", "Die Technik anschaffen"],
+    a: 0, e: "2–3 Tage vorher werden die Unterlagen/Anlagen zusammengestellt und versendet." },
+  { topic: "Countdown", q: "Welche Eselsbrücke fasst den Vorbereitungs-Countdown zusammen?",
+    options: ["Reden – streiten – vertagen", "Ziel – Raum – Runde – Reihenfolge – Einladung – Unterlagen – Check", "Fragen – zuhören – klären – festhalten", "Kamera – Mikrofon – Ton"],
+    a: 1, e: "Die Eselsbrücke lautet: Ziel – Raum – Runde – Reihenfolge – Einladung – Unterlagen – Check." },
+
+  // === Block J: Tagesordnung & Ablauf (49-52) ===
+  { topic: "Tagesordnung", q: "Welche der folgenden sind mögliche Ziele eines TOP?",
+    options: ["Reisekostenabrechnung und Buchung", "Reinigung und Catering", "Information, Ideensammlung, Aussprache, Entscheidung oder Beschlussfassung", "Drucken und Kopieren"],
+    a: 2, e: "Mögliche Ziele eines TOP sind Information, Ideensammlung, Erfahrungsaustausch, Aussprache, Entscheidung oder Beschlussfassung." },
+  { topic: "Tagesordnung", q: "Wie lautet die bessere Formulierung statt nur „Sortiment\“?",
+    options: ["„Diverses zum Sortiment\“", "„Sortiment – siehe Anlage\“", "„Sortiment kurz\“", "„Aussprache und Entscheidung über die Sortimentserweiterung der Warengruppe Handelswaren Bürotechnik (Anlagen 1 und 2)\“"],
+    a: 3, e: "Besser ist eine präzise Formulierung mit Ziel und Gegenstand, z. B. „Aussprache und Entscheidung über die Sortimentserweiterung ... (Anlagen 1 und 2)\“." },
+  { topic: "Sitzungsablauf", q: "Welche Punkte können einen festen Platz im Sitzungsablauf erhalten?",
+    options: ["Immer wiederkehrende Punkte wie „Genehmigung des Protokolls\“ oder „Verschiedenes\“", "Nur einmalige Sonderthemen", "Ausschließlich vertrauliche Themen", "Keine Punkte, der Ablauf ist immer frei"],
+    a: 0, e: "Immer wiederkehrende Punkte (z. B. „Genehmigung des Protokolls\“ oder „Verschiedenes\“) können einen festen Platz im Ablauf erhalten." },
+  { topic: "Sitzungsablauf", q: "Was steht im Beispiel-Ablauf um 09:00 Uhr an?",
+    options: ["Pause", "Protokoll der letzten Sitzung", "Schwerpunktthema", "Ende der Sitzung"],
+    a: 1, e: "Im Beispielablauf beginnt die Sitzung um 09:00 Uhr mit dem Protokoll der letzten Sitzung." },
+
+  // === Block K: Grundlagen & Fristen vertieft (53-54) ===
+  { topic: "Wirtschaftlichkeit", q: "Warum kostet eine schlecht vorbereitete Besprechung „doppelt\“?",
+    options: ["Weil zweimal eingeladen wird", "Weil der Raum zweimal gemietet wird", "Weil Zeit aller Anwesenden verschwendet wird und offene Punkte später erneut bearbeitet werden müssen", "Weil zwei Protokolle nötig sind"],
+    a: 2, e: "Sie kostet doppelt: die verschwendete Zeit aller Anwesenden und die spätere erneute Bearbeitung der offenen Punkte." },
+  { topic: "Fristen", q: "In welcher Form erfolgt die Einberufung der GmbH-Gesellschafterversammlung nach § 51?",
+    options: ["Durch mündlichen Zuruf", "Durch Aushang am schwarzen Brett", "Durch SMS", "Durch Einladung der Gesellschafter mittels eingeschriebener Briefe"],
+    a: 3, e: "Nach § 51 GmbHG erfolgt die Berufung durch Einladung mittels eingeschriebener Briefe mit einer Frist von mindestens einer Woche." },
+
+  // === Block L: Elektronische & hybride Besprechungen (55-60) ===
+  { topic: "Videokonferenz", q: "Was ermöglicht eine Videokonferenz neben dem Austausch der Gesprächspartner?",
+    options: ["Das gemeinsame Arbeiten an einer Datei bzw. den Austausch von Dateien", "Das Versenden von Paketen", "Das Drucken vor Ort", "Die Bewirtung der Teilnehmer"],
+    a: 0, e: "Eine Videokonferenz erlaubt auch das gemeinsame Arbeiten an einer Datei bzw. den Austausch von Dateien." },
+  { topic: "Telefonkonferenz", q: "Wie nennt man ein Telefonat mit genau drei Teilnehmern?",
+    options: ["Telefonkonferenz", "Dreierkonferenz", "Videokonferenz", "Hybridmeeting"],
+    a: 1, e: "Ein Telefonat mit genau drei Teilnehmern ist eine Dreierkonferenz; mehr als drei ergeben eine Telefonkonferenz." },
+  { topic: "Telefonkonferenz", q: "Wodurch werden virtuelle Konferenzräume mancher Anbieter „betreten\“?",
+    options: ["Durch einen Hausschlüssel", "Durch eine Unterschrift", "Über eine PIN", "Durch persönliches Erscheinen"],
+    a: 2, e: "Manche Anbieter stellen virtuelle Konferenzräume bereit, die nur über eine PIN „betreten\“ werden können." },
+  { topic: "Hybridmeeting", q: "Was kennzeichnet ein Hybridmeeting?",
+    options: ["Alle sitzen im selben Raum", "Alle sind ausschließlich online", "Es findet nur per Telefon statt", "Ein Teil sitzt im Konferenzraum, ein anderer ist online zugeschaltet"],
+    a: 3, e: "Bei einem Hybridmeeting sitzt ein Teil der Teilnehmer im Konferenzraum, ein anderer Teil ist online zugeschaltet." },
+  { topic: "Etikette", q: "Welche Etikette-Regel gilt in Video- und Hybridkonferenzen?",
+    options: ["Das Mikrofon stummschalten, solange man nicht spricht", "Immer alle gleichzeitig sprechen lassen", "Die Kamera grundsätzlich aus lassen", "Erst zu spät erscheinen"],
+    a: 0, e: "Man schaltet das Mikrofon stumm, solange man nicht spricht; die Kamera möglichst einschalten und nur eine Person spricht zur Zeit." },
+  { topic: "Tools", q: "Welche Online-Tools dienen typischerweise der Terminfindung?",
+    options: ["Microsoft Teams und Zoom", "Webex und Skype", "Word und Excel", "Doodle und Google Kalender"],
+    a: 3, e: "Zur Terminfindung dienen Online-Tools wie Doodle oder der Google Kalender; Teams, Zoom und Webex sind Konferenzplattformen." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Ablauf des Postausgangs
 
-📺 **Vorbereitungsvideo:** [YouTube: „Postausgang Ablauf Poststelle"](https://www.youtube.com/results?search_query=Postausgang+Ablauf+Poststelle) (https://www.youtube.com/results?search_query=Postausgang+Ablauf+Poststelle)
+📺 **Vorbereitungsvideo:** [YouTube: „Postausgang Ablauf Poststelle"](https://www.youtube.com/watch?v=KVr3ZLMX2oo) (https://www.youtube.com/watch?v=KVr3ZLMX2oo)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Worauf wird die Ausgangspost beim Schritt „Kontrolle" geprüft? Nennen Sie 
 
 ## Aufgabe 2 — Versand- und Sendungsarten
 
-📺 **Vorbereitungsvideo:** [YouTube: „Einschreiben Arten Deutsche Post"](https://www.youtube.com/results?search_query=Einschreiben+Arten+Deutsche+Post) (https://www.youtube.com/results?search_query=Einschreiben+Arten+Deutsche+Post)
+📺 **Vorbereitungsvideo:** [YouTube: „Einschreiben Arten Deutsche Post"](https://www.youtube.com/watch?v=eEuG1GNZGOw) (https://www.youtube.com/watch?v=eEuG1GNZGOw)
 
 **Sozialform:** Partnerarbeit
 
@@ -40,7 +40,7 @@ d) Unter welchen Bedingungen darf **Dialogpost** eingesetzt werden?
 
 ## Aufgabe 3 — Falzen und Kuvertieren
 
-📺 **Vorbereitungsvideo:** [YouTube: „Falzarten Brief richtig falten"](https://www.youtube.com/results?search_query=Falzarten+Brief+richtig+falten) (https://www.youtube.com/results?search_query=Falzarten+Brief+richtig+falten)
+📺 **Vorbereitungsvideo:** [YouTube: „Falzarten Brief richtig falten"](https://www.youtube.com/watch?v=gBOF5SJc3vg) (https://www.youtube.com/watch?v=gBOF5SJc3vg)
 
 **Sozialform:** Einzelarbeit (praktische Übung)
 
@@ -55,7 +55,7 @@ d) Was geschieht beim Schritt „Kuvertieren und Verschließen" und wie kann er 
 
 ## Aufgabe 4 — Frankieren und Aufgeben (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Frankiermaschine Frankierarten Büro"](https://www.youtube.com/results?search_query=Frankiermaschine+Frankierarten+B%C3%BCro) (https://www.youtube.com/results?search_query=Frankiermaschine+Frankierarten+B%C3%BCro)
+📺 **Vorbereitungsvideo:** [YouTube: „Frankiermaschine Frankierarten Büro"](https://www.youtube.com/watch?v=W8YphMwpR-w) (https://www.youtube.com/watch?v=W8YphMwpR-w)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -72,8 +72,8 @@ d) Welchen Dienstleister empfehlen Sie für ein eiliges, vertrauliches Vertragso
 
 ## Aufgabe 5 — Poststraße und moderne Praxis
 
-📺 **Vorbereitungsvideo:** [YouTube: „Poststraße Kuvertierstraße Funktion"](https://www.youtube.com/results?search_query=Poststra%C3%9Fe+Kuvertierstra%C3%9Fe+Funktion) (https://www.youtube.com/results?search_query=Poststra%C3%9Fe+Kuvertierstra%C3%9Fe+Funktion)
-📺 **Ergänzend:** [YouTube: „Hybridpost Online Frankierung erklärt"](https://www.youtube.com/results?search_query=Hybridpost+Online+Frankierung+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Hybridpost+Online+Frankierung+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [YouTube: „Poststraße Kuvertierstraße Funktion"](https://www.youtube.com/watch?v=CEXT0fCm6gk) (https://www.youtube.com/watch?v=CEXT0fCm6gk)
+📺 **Ergänzend:** [YouTube: „Hybridpost Online Frankierung erklärt"](https://www.youtube.com/watch?v=qQtCJs926J4) (https://www.youtube.com/watch?v=qQtCJs926J4)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -87,7 +87,7 @@ c) Erklären Sie das Prinzip der Hybridpost.
 
 ## Aufgabe 6 — Elektronische Post
 
-📺 **Vorbereitungsvideo:** [YouTube: „Pflichtangaben Geschäftsbrief E-Mail EHUG"](https://www.youtube.com/results?search_query=Pflichtangaben+Gesch%C3%A4ftsbrief+E-Mail+EHUG) (https://www.youtube.com/results?search_query=Pflichtangaben+Gesch%C3%A4ftsbrief+E-Mail+EHUG)
+📺 **Vorbereitungsvideo:** [YouTube: „Pflichtangaben Geschäftsbrief E-Mail EHUG"](https://www.youtube.com/watch?v=ezaIWyAqonQ) (https://www.youtube.com/watch?v=ezaIWyAqonQ)
 
 **Sozialform:** Einzelarbeit
 

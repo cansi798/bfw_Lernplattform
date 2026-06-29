@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Ziele des Zeitmanagements und Zeitdiebe
 
-📺 **Vorbereitungsvideo:** [YouTube: „Zeitmanagement Grundlagen"](https://www.youtube.com/results?search_query=Zeitmanagement+Grundlagen) (https://www.youtube.com/results?search_query=Zeitmanagement+Grundlagen)
+📺 **Vorbereitungsvideo:** [YouTube: „Zeitmanagement Grundlagen"](https://www.youtube.com/watch?v=ybspTTfyw8M) (https://www.youtube.com/watch?v=ybspTTfyw8M)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Unterscheiden Sie äußere und innere Störungen und nennen Sie je zwei Beisp
 
 ## Aufgabe 2 — Sägeblatteffekt und stille Stunde
 
-📺 **Vorbereitungsvideo:** [YouTube: „Sägeblatteffekt Zeitmanagement"](https://www.youtube.com/results?search_query=S%C3%A4geblatteffekt+Zeitmanagement) (https://www.youtube.com/results?search_query=S%C3%A4geblatteffekt+Zeitmanagement)
+📺 **Vorbereitungsvideo:** [YouTube: „Sägeblatteffekt Zeitmanagement"](https://www.youtube.com/watch?v=IUeuEXAWJVg) (https://www.youtube.com/watch?v=IUeuEXAWJVg)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Was ist die "stille Stunde" und worauf sollten Sie bei ihrer Planung achten?
 
 ## Aufgabe 3 — Leistungskurve und Pausen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Leistungskurve Biorhythmus Arbeit"](https://www.youtube.com/results?search_query=Leistungskurve+Biorhythmus+Arbeit) (https://www.youtube.com/results?search_query=Leistungskurve+Biorhythmus+Arbeit)
+📺 **Vorbereitungsvideo:** [YouTube: „Leistungskurve Biorhythmus Arbeit"](https://www.youtube.com/watch?v=BzziXcCI8p0) (https://www.youtube.com/watch?v=BzziXcCI8p0)
 
 **Sozialform:** Einzelarbeit
 
@@ -51,7 +51,7 @@ c) Welche Pausenregelung schreibt § 4 ArbZG vor (Arbeitszeit mehr als sechs bis
 
 ## Aufgabe 4 — ALPEN-Methode und Eisenhower-Prinzip
 
-📺 **Vorbereitungsvideo:** [YouTube: „ALPEN Methode Eisenhower Prinzip"](https://www.youtube.com/results?search_query=ALPEN+Methode+Eisenhower+Prinzip) (https://www.youtube.com/results?search_query=ALPEN+Methode+Eisenhower+Prinzip)
+📺 **Vorbereitungsvideo:** [YouTube: „ALPEN Methode Eisenhower Prinzip"](https://www.youtube.com/watch?v=dWQoldjrB1s) (https://www.youtube.com/watch?v=dWQoldjrB1s)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -65,7 +65,7 @@ c) Beim Eisenhower-Prinzip werden Aufgaben nach zwei Kriterien sortiert. Nennen 
 
 ## Aufgabe 5 — Pareto, ABC-Analyse und Salamitaktik
 
-📺 **Vorbereitungsvideo:** [YouTube: „Pareto Prinzip ABC Analyse Aufgaben"](https://www.youtube.com/results?search_query=Pareto+Prinzip+ABC+Analyse+Aufgaben) (https://www.youtube.com/results?search_query=Pareto+Prinzip+ABC+Analyse+Aufgaben)
+📺 **Vorbereitungsvideo:** [YouTube: „Pareto Prinzip ABC Analyse Aufgaben"](https://www.youtube.com/watch?v=yaVkudeTUKo) (https://www.youtube.com/watch?v=yaVkudeTUKo)
 
 **Sozialform:** Partnerarbeit
 
@@ -79,8 +79,8 @@ c) Was versteht man unter der Salamitaktik und welchen Vorteil bietet sie?
 
 ## Aufgabe 6 — To-do-Listen, SMART-Ziele und Selbstmanagement
 
-📺 **Vorbereitungsvideo:** [YouTube: „To-do-Liste SMART Ziele Selbstmanagement"](https://www.youtube.com/results?search_query=To-do-Liste+SMART+Ziele+Selbstmanagement) (https://www.youtube.com/results?search_query=To-do-Liste+SMART+Ziele+Selbstmanagement)
-📺 **Ergänzend:** [YouTube: „Pomodoro Technik produktiv arbeiten"](https://www.youtube.com/results?search_query=Pomodoro+Technik+produktiv+arbeiten) (https://www.youtube.com/results?search_query=Pomodoro+Technik+produktiv+arbeiten)
+📺 **Vorbereitungsvideo:** [YouTube: „To-do-Liste SMART Ziele Selbstmanagement"](https://www.youtube.com/watch?v=qTnPCxE8BMo) (https://www.youtube.com/watch?v=qTnPCxE8BMo)
+📺 **Ergänzend:** [YouTube: „Pomodoro Technik produktiv arbeiten"](https://www.youtube.com/watch?v=kXoTIimyGPQ) (https://www.youtube.com/watch?v=kXoTIimyGPQ)
 
 **Sozialform:** Plenumsdiskussion
 

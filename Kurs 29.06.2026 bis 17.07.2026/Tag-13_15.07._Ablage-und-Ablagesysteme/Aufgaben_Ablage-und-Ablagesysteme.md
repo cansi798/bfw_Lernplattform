@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Ablageorte und Zugriffshäufigkeit
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ablage Registratur Büro Grundlagen"](https://www.youtube.com/results?search_query=Ablage+Registratur+B%C3%BCro+Grundlagen) (https://www.youtube.com/results?search_query=Ablage+Registratur+B%C3%BCro+Grundlagen)
+📺 **Vorbereitungsvideo:** [YouTube: „Ablage Registratur Büro Grundlagen"](https://www.youtube.com/watch?v=bI5y54iS6tk) (https://www.youtube.com/watch?v=bI5y54iS6tk)
 
 **Sozialform:** Einzelarbeit
 
@@ -25,7 +25,7 @@ c) Welche Aufgabe erfüllt die Zentralregistratur über die reine Aufbewahrung h
 
 ## Aufgabe 2 — Ablagetechnik und Aktenarten
 
-📺 **Vorbereitungsvideo:** [YouTube: „Loseblattablage geheftete Ablage"](https://www.youtube.com/results?search_query=Loseblattablage+geheftete+Ablage) (https://www.youtube.com/results?search_query=Loseblattablage+geheftete+Ablage)
+📺 **Vorbereitungsvideo:** [YouTube: „Loseblattablage geheftete Ablage"](https://www.youtube.com/watch?v=aSakXzRYYC4) (https://www.youtube.com/watch?v=aSakXzRYYC4)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Unterscheiden Sie Einzelakte und Sammelakte und nennen Sie je ein Beispiel.
 
 ## Aufgabe 3 — Arten der Registratur vergleichen
 
-📺 **Vorbereitungsvideo:** [YouTube: „liegende stehende hängende Registratur"](https://www.youtube.com/results?search_query=liegende+stehende+h%C3%A4ngende+Registratur) (https://www.youtube.com/results?search_query=liegende+stehende+h%C3%A4ngende+Registratur)
+📺 **Vorbereitungsvideo:** [YouTube: „liegende stehende hängende Registratur"](https://www.youtube.com/watch?v=dsNZ40TkPPk) (https://www.youtube.com/watch?v=dsNZ40TkPPk)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -55,7 +55,7 @@ c) Worin unterscheiden sich Hängeregistratur und Pendelregistratur in Übersich
 
 ## Aufgabe 4 — Alphabetische Ordnung nach DIN 5007
 
-📺 **Vorbereitungsvideo:** [YouTube: „alphabetische Sortierung DIN 5007"](https://www.youtube.com/results?search_query=alphabetische+Sortierung+DIN+5007) (https://www.youtube.com/results?search_query=alphabetische+Sortierung+DIN+5007)
+📺 **Vorbereitungsvideo:** [YouTube: „alphabetische Sortierung DIN 5007"](https://www.youtube.com/watch?v=jZz5wppOvcc) (https://www.youtube.com/watch?v=jZz5wppOvcc)
 
 **Sozialform:** Einzelarbeit
 
@@ -69,7 +69,7 @@ c) Wie werden Umlaute (ä, ö, ü) und „ß" bei der Sortierung nach DIN 5007 (
 
 ## Aufgabe 5 — Ordnungssystem wählen und Aktenplan
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ordnungssysteme Aktenplan Dezimalklassifikation"](https://www.youtube.com/results?search_query=Ordnungssysteme+Aktenplan+Dezimalklassifikation) (https://www.youtube.com/results?search_query=Ordnungssysteme+Aktenplan+Dezimalklassifikation)
+📺 **Vorbereitungsvideo:** [YouTube: „Ordnungssysteme Aktenplan Dezimalklassifikation"](https://www.youtube.com/watch?v=dB2aCCutTbY) (https://www.youtube.com/watch?v=dB2aCCutTbY)
 
 **Sozialform:** Partnerarbeit
 
@@ -86,7 +86,7 @@ d) Was ist ein Aktenplan und welche Vorteile bietet er?
 
 ## Aufgabe 6 — Ordnungshilfsmittel und Kosten der Ablage
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ordnungshilfsmittel Wiedervorlagemappe Reiter"](https://www.youtube.com/results?search_query=Ordnungshilfsmittel+Wiedervorlagemappe+Reiter) (https://www.youtube.com/results?search_query=Ordnungshilfsmittel+Wiedervorlagemappe+Reiter)
+📺 **Vorbereitungsvideo:** [YouTube: „Ordnungshilfsmittel Wiedervorlagemappe Reiter"](https://www.youtube.com/watch?v=ZtuCYNXLlSs) (https://www.youtube.com/watch?v=ZtuCYNXLlSs)
 
 **Sozialform:** Plenumsdiskussion
 

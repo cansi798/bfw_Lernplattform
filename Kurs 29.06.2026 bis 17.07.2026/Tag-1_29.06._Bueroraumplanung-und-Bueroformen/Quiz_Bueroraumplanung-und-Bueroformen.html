@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 1 · 29.06.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 1 · 29.06.2026 · 60 Fragen</span>
   <h1>Quiz: Büroraumplanung &amp; Büroformen</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Bueroraumplanung-und-Bueroformen.html</strong> und dem <strong>Handout_Bueroraumplanung-und-Bueroformen.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Bueroraumplanung-und-Bueroformen.html</strong> und dem <strong>Handout_Bueroraumplanung-und-Bueroformen.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -205,19 +205,21 @@ footer {
 
 <script>
 const QUESTIONS = [
-  // === Block A: Grundlagen & Teilflächen (1-10) ===
+  // === Block A: Grundlagen & DGUV ===
   { topic: "Grundlagen", q: "Worauf wirkt sich die Raumgestaltung eines Büros laut Lehrbuch entscheidend aus?",
-    options: ["Nur auf die Stromkosten", "Auf die Produktivität und die Arbeitszufriedenheit der Nutzer", "Ausschließlich auf den Aktienkurs", "Nur auf die Anzahl der Drucker"],
-    a: 1, e: "Die Raumgestaltung beeinflusst Produktivität und Arbeitszufriedenheit — deshalb sollten räumliche Ressourcen sorgfältig geplant werden." },
+    options: ["Auf die Produktivität und die Arbeitszufriedenheit der Nutzer", "Nur auf die Stromkosten", "Ausschließlich auf den Aktienkurs", "Nur auf die Anzahl der Drucker"],
+    a: 0, e: "Die Raumgestaltung beeinflusst Produktivität und Arbeitszufriedenheit — deshalb sollten räumliche Ressourcen sorgfältig geplant werden." },
   { topic: "DGUV", q: "Wofür dient die DGUV Information 215-441 in der Büroraumplanung?",
-    options: ["Als Leitfaden, der die Anforderungen an die Planung von Büroflächen konkretisiert", "Als Steuerformular für Büromöbel", "Als Vorschrift für Mindestlöhne", "Als Garantieurkunde für Bürostühle"],
-    a: 0, e: "Die DGUV Information 215-441 „Büroraumplanung” konkretisiert sicherheitstechnische, arbeitsmedizinische, ergonomische und arbeitspsychologische Anforderungen." },
-  { topic: "Grundlagen", q: "Wie ist ein „Büro” definiert?",
-    options: ["Ein Raum überwiegend zur Lagerung von Waren", "Ein Raum, der überwiegend zur Erledigung von Verwaltungstätigkeiten dient", "Ein Verkaufsraum mit Kundenverkehr", "Eine Produktionshalle"],
-    a: 1, e: "Ein Büro ist ein Raum, der überwiegend zur Erledigung von Verwaltungstätigkeiten dient." },
+    options: ["Als Steuerformular für Büromöbel", "Als Leitfaden, der die Anforderungen an die Planung von Büroflächen konkretisiert", "Als Vorschrift für Mindestlöhne", "Als Garantieurkunde für Bürostühle"],
+    a: 1, e: "Die DGUV Information 215-441 „Büroraumplanung” konkretisiert sicherheitstechnische, arbeitsmedizinische, ergonomische und arbeitspsychologische Anforderungen." },
+  { topic: "Grundlagen", q: "Wie ist ein „Büro“ definiert?",
+    options: ["Ein Raum überwiegend zur Lagerung von Waren", "Ein Verkaufsraum mit Kundenverkehr", "Ein Raum, der überwiegend zur Erledigung von Verwaltungstätigkeiten dient", "Eine Produktionshalle"],
+    a: 2, e: "Ein Büro ist ein Raum, der überwiegend zur Erledigung von Verwaltungstätigkeiten dient." },
   { topic: "Teilflächen", q: "In wie viele Teilflächen lässt sich die Fläche eines Büros gliedern?",
-    options: ["In drei", "In vier", "In sechs", "In zehn"],
-    a: 2, e: "Die Fläche eines Büros gliedert sich in sechs Teilflächen, deren Summe den Flächenbedarf ergibt." },
+    options: ["In drei", "In vier", "In zehn", "In sechs"],
+    a: 3, e: "Die Fläche eines Büros gliedert sich in sechs Teilflächen, deren Summe den Flächenbedarf ergibt." },
+
+  // === Block B: Die sechs Teilflächen ===
   { topic: "Teilflächen", q: "Welche Teilfläche bezeichnet die Bodenfläche für Schreibtisch, Schrank, Regal und Pflanzen?",
     options: ["Stellfläche", "Bewegungsfläche", "Verkehrswegefläche", "Funktionsfläche"],
     a: 0, e: "Die Stellfläche ist die benötigte Bodenfläche für die Einrichtung wie Schreibtisch, Schrank, Regal und Pflanzen." },
@@ -228,62 +230,66 @@ const QUESTIONS = [
     options: ["Verkehrswegefläche", "Stellfläche", "Funktionsfläche", "Besucherfläche"],
     a: 2, e: "Die Funktionsfläche ist die Fläche, die z. B. beim Öffnen von Schranktüren oder Schubladen überdeckt wird." },
   { topic: "Teilflächen", q: "Was umfasst die Verkehrswegefläche?",
-    options: ["Die Fläche für Personenverkehr und Materialtransport innerhalb des Büros", "Die Fläche zum Parken von Dienstwagen", "Die Fläche für die Klimaanlage", "Die Fläche am Schreibtisch"],
-    a: 0, e: "Die Verkehrswegefläche ist die Fläche, die für den Personenverkehr und den Transport von Material notwendig ist." },
+    options: ["Die Fläche zum Parken von Dienstwagen", "Die Fläche für die Klimaanlage", "Die Fläche am Schreibtisch", "Die Fläche für Personenverkehr und Materialtransport innerhalb des Büros"],
+    a: 3, e: "Die Verkehrswegefläche ist die Fläche, die für den Personenverkehr und den Transport von Material notwendig ist." },
   { topic: "Teilflächen", q: "Was beschreibt die Benutzerfläche am Arbeitsplatz?",
-    options: ["Die Fläche, die der Nutzer bei seiner jeweiligen Tätigkeit am persönlich zugewiesenen Arbeitsplatz benötigt", "Die Fläche im Treppenhaus", "Die Fläche der Kantine", "Die Fläche für Lagerregale"],
+    options: ["Die Fläche, die der Nutzer bei seiner Tätigkeit am persönlich zugewiesenen Arbeitsplatz benötigt", "Die Fläche im Treppenhaus", "Die Fläche der Kantine", "Die Fläche für Lagerregale"],
     a: 0, e: "Die Benutzerfläche ist die Fläche am persönlich zugewiesenen Arbeitsplatz, die der Nutzer bei seiner Tätigkeit benötigt." },
   { topic: "Teilflächen", q: "Welche der sechs Teilflächen betrifft Besucher- und Besprechungsplätze?",
-    options: ["Stellfläche", "Bewegungsfläche", "Besucher-/Besprechungsfläche", "Funktionsfläche"],
-    a: 2, e: "Die sechste Teilfläche ist die Benutzerfläche an Besucher- und Besprechungsplätzen, Schränken usw. im Bürobereich." },
+    options: ["Stellfläche", "Besucher-/Besprechungsfläche", "Bewegungsfläche", "Funktionsfläche"],
+    a: 1, e: "Die sechste Teilfläche ist die Benutzerfläche an Besucher- und Besprechungsplätzen, Schränken usw. im Bürobereich." },
 
-  // === Block B: Flächenbedarf (11-13) ===
+  // === Block C: Flächenbedarf ===
   { topic: "Flächenbedarf", q: "Mit wie viel m² wird ein einzelner Bildschirmarbeitsplatz veranschlagt?",
-    options: ["2–4 m²", "8–10 m²", "20–25 m²", "30–40 m²"],
-    a: 1, e: "Für einen Bildschirmarbeitsplatz werden 8–10 m² veranschlagt." },
+    options: ["2–4 m²", "20–25 m²", "8–10 m²", "30–40 m²"],
+    a: 2, e: "Für einen Bildschirmarbeitsplatz werden 8–10 m² veranschlagt." },
   { topic: "Flächenbedarf", q: "Wie viel Fläche wird für einen Arbeitsplatz im Großraumbüro veranschlagt?",
-    options: ["ca. 4–6 m²", "ca. 8–10 m²", "ca. 12–15 m²", "ca. 25–30 m²"],
-    a: 2, e: "Ein Arbeitsplatz im Großraumbüro soll ca. 12–15 m² umfassen, da dort mehr Verkehrswege notwendig sind." },
+    options: ["ca. 4–6 m²", "ca. 8–10 m²", "ca. 25–30 m²", "ca. 12–15 m²"],
+    a: 3, e: "Ein Arbeitsplatz im Großraumbüro soll ca. 12–15 m² umfassen, da dort mehr Verkehrswege notwendig sind." },
   { topic: "Flächenbedarf", q: "Warum benötigt ein Arbeitsplatz im Großraumbüro mehr Fläche als ein einzelner Bildschirmarbeitsplatz?",
-    options: ["Weil die Möbel größer sind", "Weil dort mehr Verkehrswege notwendig sind", "Weil die Decke höher ist", "Weil mehr Pflanzen vorgeschrieben sind"],
-    a: 1, e: "Je mehr Menschen sich einen Raum teilen, desto mehr Fläche entfällt anteilig auf Verkehrswege." },
+    options: ["Weil dort mehr Verkehrswege notwendig sind", "Weil die Möbel größer sind", "Weil die Decke höher ist", "Weil mehr Pflanzen vorgeschrieben sind"],
+    a: 0, e: "Je mehr Menschen sich einen Raum teilen, desto mehr Fläche entfällt anteilig auf Verkehrswege." },
 
-  // === Block C: Klassische Büroformen (14-24) ===
+  // === Block D: Zellenbüro ===
   { topic: "Zellenbüro", q: "Für wie viele Personen ist das klassische Zellenbüro ausgelegt?",
-    options: ["1–3 Personen", "5–10 Personen", "10–25 Personen", "über 50 Personen"],
-    a: 0, e: "Das Zellenbüro ist für 1–3 Personen ausgelegt und gilt als klassische Büroform." },
+    options: ["5–10 Personen", "1–3 Personen", "10–25 Personen", "über 50 Personen"],
+    a: 1, e: "Das Zellenbüro ist für 1–3 Personen ausgelegt und gilt als klassische Büroform." },
   { topic: "Zellenbüro", q: "Welcher Vorteil spricht für das Zellenbüro?",
-    options: ["Niedrigster Flächenbedarf", "Konzentriertes Arbeiten und vertrauliche Gespräche möglich", "Kostengünstigste aller Büroformen", "Maximale informelle Kommunikation"],
-    a: 1, e: "Im Zellenbüro kann konzentriert gearbeitet und vertraulich gesprochen werden; Umgebungseinflüsse sind selbst regulierbar." },
+    options: ["Niedrigster Flächenbedarf", "Kostengünstigste aller Büroformen", "Konzentriertes Arbeiten und vertrauliche Gespräche möglich", "Maximale informelle Kommunikation"],
+    a: 2, e: "Im Zellenbüro kann konzentriert gearbeitet und vertraulich gesprochen werden; Umgebungseinflüsse sind selbst regulierbar." },
   { topic: "Zellenbüro", q: "Welcher Nachteil ist typisch für das Zellenbüro?",
-    options: ["Hoher Geräuschpegel", "Der Nutzer fühlt sich eventuell isoliert; hoher Flächenbedarf", "Ständige Kontrolle durch Kollegen", "Keine individuelle Gestaltung möglich"],
-    a: 1, e: "Ein Nachteil ist das mögliche Isolationsgefühl; zudem hat das Zellenbüro einen hohen Flächenbedarf." },
+    options: ["Hoher Geräuschpegel", "Ständige Kontrolle durch Kollegen", "Keine individuelle Gestaltung möglich", "Der Nutzer fühlt sich eventuell isoliert; hoher Flächenbedarf"],
+    a: 3, e: "Ein Nachteil ist das mögliche Isolationsgefühl; zudem hat das Zellenbüro einen hohen Flächenbedarf." },
+
+  // === Block E: Gruppenbüro ===
   { topic: "Gruppenbüro", q: "Wie viele Arbeitsplätze beherbergt ein Gruppenbüro typischerweise?",
-    options: ["1–2", "3 bis ca. 25", "50 bis 100", "über 200"],
-    a: 1, e: "Gruppenbüros beherbergen drei bis ca. 25 Arbeitsplätze und werden meist von einer Abteilung oder einem Team genutzt." },
+    options: ["3 bis ca. 25", "1–2", "50 bis 100", "über 200"],
+    a: 0, e: "Gruppenbüros beherbergen drei bis ca. 25 Arbeitsplätze und werden meist von einer Abteilung oder einem Team genutzt." },
   { topic: "Gruppenbüro", q: "Welcher Vorteil ist typisch für das Gruppenbüro?",
     options: ["Maximale Privatsphäre", "Intensive Kommunikation und schneller Informationsfluss bei kurzen Wegen", "Geringster Geräuschpegel", "Keine Vertretung nötig"],
     a: 1, e: "Das Gruppenbüro fördert intensive Kommunikation und Kooperation und ermöglicht schnellen Informationsfluss." },
   { topic: "Gruppenbüro", q: "Welcher Nachteil entsteht im Gruppenbüro besonders bei vielen Personen?",
-    options: ["Zu wenig Tageslicht für alle", "Ein hoher Geräuschpegel, der konzentriertes Arbeiten erschwert", "Fehlende Kommunikation", "Zu hohe Mietkosten pro Platz"],
-    a: 1, e: "Bei vielen Personen entsteht ein hoher Geräuschpegel (z. B. durch Gespräche und Telefonate), der die Konzentration stört." },
+    options: ["Zu wenig Tageslicht für alle", "Fehlende Kommunikation", "Ein hoher Geräuschpegel, der konzentriertes Arbeiten erschwert", "Zu hohe Mietkosten pro Platz"],
+    a: 2, e: "Bei vielen Personen entsteht ein hoher Geräuschpegel (z. B. durch Gespräche und Telefonate), der die Konzentration stört." },
   { topic: "Gruppenbüro", q: "Welche Maßnahme senkt den Geräuschpegel in einem Gruppenbüro?",
-    options: ["Mehr Telefone aufstellen", "Telefon-/Arbeitszellen und schallabsorbierende Decken/Teppiche", "Die Trennwände entfernen", "Mehr Mitarbeiter einsetzen"],
-    a: 1, e: "Telefon- und Arbeitszellen sowie schallabsorbierende Decken und schalldämpfende Teppiche reduzieren den Geräuschpegel." },
+    options: ["Mehr Telefone aufstellen", "Die Trennwände entfernen", "Mehr Mitarbeiter einsetzen", "Telefon-/Arbeitszellen und schallabsorbierende Decken/Teppiche"],
+    a: 3, e: "Telefon- und Arbeitszellen sowie schallabsorbierende Decken und schalldämpfende Teppiche reduzieren den Geräuschpegel." },
+
+  // === Block F: Großraumbüro ===
   { topic: "Großraumbüro", q: "Warum gilt das Großraumbüro als besonders kostengünstig?",
-    options: ["Weil keine Mitarbeiter benötigt werden", "Weil die Bürofläche effizient genutzt wird und teure Geräte in geringerer Zahl nötig sind", "Weil keine Klimaanlage erforderlich ist", "Weil keine Möbel gebraucht werden"],
-    a: 1, e: "Das Großraumbüro nutzt die Fläche effizient, und Geräte wie Drucker werden in geringerer Zahl angeschafft." },
+    options: ["Weil die Bürofläche effizient genutzt wird und teure Geräte in geringerer Zahl nötig sind", "Weil keine Mitarbeiter benötigt werden", "Weil keine Klimaanlage erforderlich ist", "Weil keine Möbel gebraucht werden"],
+    a: 0, e: "Das Großraumbüro nutzt die Fläche effizient, und Geräte wie Drucker werden in geringerer Zahl angeschafft." },
   { topic: "Großraumbüro", q: "Welche zwei großen Probleme nennt das Lehrbuch beim Großraumbüro?",
     options: ["Zu wenig Platz und zu viele Wände", "Mangelnde Privatsphäre und das Gefühl ständiger Kontrolle", "Fehlende Kommunikation und Isolation", "Zu hohe Mietkosten und zu wenig Geräte"],
     a: 1, e: "Mangelnde Privatsphäre und das Gefühl der ständigen Kontrolle sind zwei große Probleme des Großraumbüros." },
   { topic: "Großraumbüro", q: "Wofür nutzen viele Unternehmen Großraumbüros vor allem?",
-    options: ["Für die Geschäftsführung", "Für die Unterbringung ihrer Call-Center", "Für Archivräume", "Für Pausenräume"],
-    a: 1, e: "Viele Unternehmen nutzen Großraumbüros vor allem für die Unterbringung ihrer Call-Center." },
+    options: ["Für die Geschäftsführung", "Für Archivräume", "Für die Unterbringung ihrer Call-Center", "Für Pausenräume"],
+    a: 2, e: "Viele Unternehmen nutzen Großraumbüros vor allem für die Unterbringung ihrer Call-Center." },
 
-  // === Block C: Kombibüro (24-26) ===
+  // === Block G: Kombibüro ===
   { topic: "Kombibüro", q: "Wie ist ein Kombibüro grundsätzlich aufgebaut?",
-    options: ["Nur ein großer offener Raum", "Kleine Einzelbüros an der Fensterfront plus eine zentrale Multifunktionszone", "Ausschließlich Besprechungsräume", "Lauter gleich große Zellen ohne Flur"],
-    a: 1, e: "Das Kombibüro besteht aus kleinen Einzelbüros an der Fensterfront und einer zentralen Multifunktionszone statt eines Flurs." },
+    options: ["Nur ein großer offener Raum", "Ausschließlich Besprechungsräume", "Lauter gleich große Zellen ohne Flur", "Kleine Einzelbüros an der Fensterfront plus eine zentrale Multifunktionszone"],
+    a: 3, e: "Das Kombibüro besteht aus kleinen Einzelbüros an der Fensterfront und einer zentralen Multifunktionszone statt eines Flurs." },
   { topic: "Kombibüro", q: "Welchen Vorteil vereint das Kombibüro?",
     options: ["Die Vorteile von Zellen- und Großraumbüro (Einzel- und Teamarbeit)", "Die niedrigsten Baukosten aller Formen", "Den Verzicht auf jegliche Trennwände", "Die vollständige Abschottung der Mitarbeiter"],
     a: 0, e: "Das Kombibüro vereint die Vorteile von Zellen- und Großraumbüro: störungsfreie Einzelarbeit und gelegentliche Teamarbeit." },
@@ -291,19 +297,125 @@ const QUESTIONS = [
     options: ["Ein abgeschlossener Serverraum", "Eine jederzeit veränderbare Zone mit Besprechungs-, Archiv- und Pausenbereichen", "Der Parkplatz im Untergeschoss", "Ein fester, unveränderlicher Flur"],
     a: 1, e: "Die Multifunktionszone liegt in der Mitte, ist jederzeit veränderbar und besteht u. a. aus Besprechungs-, Archiv- und Pausenzonen." },
 
-  // === Block D: Moderne Konzepte (27-30) ===
+  // === Block H: Moderne Konzepte ===
   { topic: "Reversibles Büro", q: "Was kennzeichnet das reversible Büro?",
-    options: ["Es kann nicht verändert werden", "Es kann mit geringem Aufwand durch flexible Wandsysteme an neue Erfordernisse angepasst werden", "Es besteht nur aus festen Wänden", "Es hat keine Fenster"],
-    a: 1, e: "Das reversible Büro nutzt flexible Wandsysteme; jede Etage kann anforderungsgerecht eine andere Büroform aufnehmen." },
+    options: ["Es kann nicht verändert werden", "Es besteht nur aus festen Wänden", "Es kann mit geringem Aufwand durch flexible Wandsysteme an neue Erfordernisse angepasst werden", "Es hat keine Fenster"],
+    a: 2, e: "Das reversible Büro nutzt flexible Wandsysteme; jede Etage kann anforderungsgerecht eine andere Büroform aufnehmen." },
   { topic: "Non-territoriales Büro", q: "Was ist das zentrale Merkmal des non-territorialen Büros (Desksharing)?",
-    options: ["Jeder Mitarbeiter hat zwei feste Schreibtische", "Die Anzahl der Arbeitsplätze ist kleiner als die Zahl der Beschäftigten", "Es gibt mehr Arbeitsplätze als Beschäftigte", "Jeder Platz ist persönlich zugewiesen"],
-    a: 1, e: "Beim non-territorialen Büro ist die Zahl der Arbeitsplätze kleiner als die der Beschäftigten — kein persönlicher Schreibtisch." },
+    options: ["Jeder Mitarbeiter hat zwei feste Schreibtische", "Es gibt mehr Arbeitsplätze als Beschäftigte", "Jeder Platz ist persönlich zugewiesen", "Die Anzahl der Arbeitsplätze ist kleiner als die Zahl der Beschäftigten"],
+    a: 3, e: "Beim non-territorialen Büro ist die Zahl der Arbeitsplätze kleiner als die der Beschäftigten — kein persönlicher Schreibtisch." },
   { topic: "Desksharing", q: "Welcher Vorteil ergibt sich aus dem non-territorialen Bürokonzept?",
-    options: ["Höhere Kosten für Büroflächen", "Bessere Flächenauslastung und Einsparung von Kosten (Fläche, Möbel, Technik, Energie)", "Jeder Mitarbeiter bekommt ein Einzelbüro", "Mehr Papierablage am Arbeitsplatz"],
-    a: 1, e: "Durch das Konzept wird die Fläche besser ausgelastet; es lassen sich Kosten für Flächen, Möbel, Technik, Reinigung und Energie sparen." },
+    options: ["Bessere Flächenauslastung und Einsparung von Kosten (Fläche, Möbel, Technik, Energie)", "Höhere Kosten für Büroflächen", "Jeder Mitarbeiter bekommt ein Einzelbüro", "Mehr Papierablage am Arbeitsplatz"],
+    a: 0, e: "Durch das Konzept wird die Fläche besser ausgelastet; es lassen sich Kosten für Flächen, Möbel, Technik, Reinigung und Energie sparen." },
   { topic: "Mobiles Arbeiten", q: "Wie wirkt sich zunehmendes Homeoffice/mobiles Arbeiten auf den Flächenbedarf eines Unternehmens aus?",
     options: ["Der Flächenbedarf steigt stark", "Es sind weniger Plätze gleichzeitig belegt, der Flächenbedarf sinkt und Desksharing wird attraktiv", "Es ändert sich gar nichts", "Jeder braucht plötzlich zwei Arbeitsplätze"],
-    a: 1, e: "Wenn weniger Beschäftigte gleichzeitig anwesend sind, sinkt der Flächenbedarf — Konzepte wie Desksharing werden wirtschaftlich attraktiv." }
+    a: 1, e: "Wenn weniger Beschäftigte gleichzeitig anwesend sind, sinkt der Flächenbedarf — Konzepte wie Desksharing werden wirtschaftlich attraktiv." },
+
+  // === Block I: Vertiefung Grundlagen & Wirtschaftlichkeit ===
+  { topic: "Grundlagen", q: "Welche Kosten verursachen Büroflächen laut Handout unter anderem?",
+    options: ["Nur Telefonkosten", "Ausschließlich Personalkosten", "Miete, Energie und Reinigung", "Nur Portokosten"],
+    a: 2, e: "Büroflächen verursachen erhebliche Kosten wie Miete, Energie und Reinigung und binden Kapital." },
+  { topic: "Grundlagen", q: "Warum ist gute Büroraumplanung laut Handout Wirtschaftlichkeit und kein Luxus?",
+    options: ["Weil teure Möbel den Gewinn steigern", "Weil große Büros mehr Miete einbringen", "Weil Planung gesetzlich verboten ist", "Weil zufriedene, gesunde Beschäftigte produktiver und seltener krank sind und länger bleiben"],
+    a: 3, e: "Zufriedene, gesunde Beschäftigte arbeiten produktiver, sind seltener krank und bleiben dem Unternehmen länger erhalten." },
+  { topic: "DGUV", q: "Welche Anforderungen konkretisiert die DGUV Information 215-441?",
+    options: ["Sicherheitstechnische, arbeitsmedizinische, ergonomische und arbeitspsychologische Anforderungen", "Nur steuerrechtliche Anforderungen", "Nur Vorgaben zur Wandfarbe", "Nur Datenschutzanforderungen"],
+    a: 0, e: "Die DGUV Information 215-441 konkretisiert sicherheitstechnische, arbeitsmedizinische, ergonomische und arbeitspsychologische Anforderungen." },
+  { topic: "Teilflächen", q: "Wie ermittelt man den tatsächlichen Platzbedarf eines Arbeitsplatzes?",
+    options: ["Durch grobes Schätzen nach Augenmaß", "Durch Addition (Summe) der sechs Teilflächen", "Durch Multiplikation der Mitarbeiterzahl mit 2", "Durch Halbieren der Raumfläche"],
+    a: 1, e: "Erst die Summe (Addition) der sechs Teilflächen ergibt den tatsächlichen Platzbedarf eines Arbeitsplatzes." },
+
+  // === Block J: Rechenbeispiele ===
+  { topic: "Flächenbedarf", q: "Ein Raum von 60 m² wird mit Bildschirmarbeitsplätzen zu je 10 m² ausgestattet. Wie viele Plätze passen rechnerisch hinein?",
+    options: ["3 Plätze", "10 Plätze", "6 Plätze", "12 Plätze"],
+    a: 2, e: "60 m² ÷ 10 m² = 6 Bildschirmarbeitsplätze." },
+  { topic: "Flächenbedarf", q: "Derselbe 60-m²-Raum wird als Großraumbereich mit 12 m² je Platz geplant. Wie viele Plätze ergeben sich?",
+    options: ["8 Plätze", "6 Plätze", "7 Plätze", "5 Plätze"],
+    a: 3, e: "60 m² ÷ 12 m² = 5 Plätze — die zusätzlichen Verkehrswege kosten Fläche." },
+
+  // === Block K: Zellenbüro vertieft ===
+  { topic: "Zellenbüro", q: "Wer hat heute laut Handout vor allem ein Einzel-/Zellenbüro?",
+    options: ["Führungskräfte — es gilt oft als Statussymbol", "Auszubildende im ersten Lehrjahr", "Alle Mitarbeitenden gleichermaßen", "Nur Aushilfskräfte"],
+    a: 0, e: "Einzelbüros haben heute vor allem Führungskräfte; in Unternehmen mit Großraumbüros gelten sie als Statussymbol." },
+  { topic: "Zellenbüro", q: "Wie erfolgt im Zellenbüro die Kommunikation mit anderen?",
+    options: ["Ausschließlich durch Zuruf über den Flur", "Über technische Hilfsmittel (Telefon, E-Mail) oder in Besprechungen", "Gar nicht, Kontakt ist verboten", "Nur per Brief"],
+    a: 1, e: "Im Zellenbüro erfolgt die Kommunikation über technische Hilfsmittel wie Telefon und E-Mail oder in Besprechungen." },
+  { topic: "Zellenbüro", q: "Was können Mitarbeitende im Zellenbüro selbst regulieren?",
+    options: ["Die Höhe ihres Gehalts", "Die Anzahl der Kollegen im Raum", "Umgebungseinflüsse wie Beleuchtung und Raumklima", "Die Lage des Gebäudes"],
+    a: 2, e: "Im Zellenbüro können Umgebungseinflüsse wie Beleuchtung und Raumklima selbst reguliert werden." },
+
+  // === Block L: Gruppenbüro vertieft ===
+  { topic: "Gruppenbüro", q: "Wie ist ein Gruppenbüro räumlich aufgebaut?",
+    options: ["Aus mehreren voneinander getrennten, eigenständigen Räumen", "Aus lauter Einzelzellen mit festen Wänden", "Aus einem reinen Flur ohne Arbeitsplätze", "Aus einem großen Raum, der durch Trennwände/Raumgliederungselemente unterteilt wird"],
+    a: 3, e: "Gruppenbüros bestehen aus einem großen Raum, der durch Trennwände oder Raumgliederungselemente unterteilt wird." },
+  { topic: "Gruppenbüro", q: "Warum erleichtert das Gruppenbüro die Vertretung von Kollegen im Urlaubs- oder Krankheitsfall?",
+    options: ["Durch die ständige Kommunikation entsteht hohe Transparenz", "Weil es keine Aufgaben gibt", "Weil jeder allein arbeitet", "Weil Vertretungen verboten sind"],
+    a: 0, e: "Durch die ständige Kommunikation entsteht hohe Transparenz, was die Vertretung erleichtert." },
+  { topic: "Gruppenbüro", q: "Wie ist laut Handout der Übergang vom Gruppen- zum Großraumbüro?",
+    options: ["Gesetzlich streng getrennt", "Fließend", "Nicht möglich", "Nur durch Umzug in ein anderes Gebäude"],
+    a: 1, e: "Der Übergang vom Gruppen- zum Großraumbüro ist fließend." },
+
+  // === Block M: Großraumbüro vertieft ===
+  { topic: "Großraumbüro", q: "Welche Flächengröße nimmt ein Großraumbüro typischerweise ein?",
+    options: ["10 bis 50 m²", "100 bis 200 m²", "400 m² bis zu mehreren tausend m²", "höchstens 80 m²"],
+    a: 2, e: "Ein Großraumbüro nimmt oft eine ganze Etage ein: 400 m² bis zu mehreren tausend m²." },
+  { topic: "Großraumbüro", q: "Für wie viele Mitarbeitende bietet ein Großraumbüro Platz?",
+    options: ["1 bis 3", "höchstens 10", "genau 24", "25 bis mehrere hundert"],
+    a: 3, e: "Das Großraumbüro bietet Arbeitsplätze für 25 bis mehrere hundert Mitarbeitende." },
+  { topic: "Großraumbüro", q: "Womit wird der Raum eines Großraumbüros üblicherweise gegliedert?",
+    options: ["Mit mittelhohen Stellwänden, Schränken, Wandsystemen und Pflanzen", "Mit festen, raumhohen Betonwänden", "Mit Vorhängen aus Stoff", "Gar nicht — der Raum bleibt komplett leer"],
+    a: 0, e: "Der Raum wird meist durch mittelhohe Stellwände, Schränke, Wandsysteme und Pflanzen gegliedert." },
+  { topic: "Großraumbüro", q: "Welche Folge hat die für das Großraumbüro erforderliche Klimaanlage für den einzelnen Mitarbeiter?",
+    options: ["Er kann die Raumtemperatur exakt selbst einstellen", "Er kann das Klima nicht selbst beeinflussen", "Die Klimaanlage senkt die Miete", "Es wird kein Strom mehr benötigt"],
+    a: 1, e: "Wegen der nötigen Klimaanlage kann der einzelne Mitarbeiter das Klima nicht selbst beeinflussen." },
+  { topic: "Großraumbüro", q: "Was wird im Großraumbüro im Vergleich zum Zellenbüro gefördert?",
+    options: ["Die vollständige Abschottung", "Die individuelle Klimaregelung", "Der informelle Austausch von Wissen", "Die Vertraulichkeit von Gesprächen"],
+    a: 2, e: "Im Großraumbüro wird der informelle Austausch von Wissen gefördert." },
+  { topic: "Großraumbüro", q: "Wodurch wird die Kostenersparnis des Großraumbüros laut Studien häufig wieder aufgehoben?",
+    options: ["Durch zu niedrige Mieten", "Durch zu viele Pflanzen", "Durch zu wenige Mitarbeiter", "Durch Unzufriedenheit, höheren Krankenstand und geringere Produktivität"],
+    a: 3, e: "Die Ersparnis wird laut Studien häufig durch Unzufriedenheit, höheren Krankenstand und geringere Produktivität aufgehoben." },
+
+  // === Block N: Kombibüro vertieft ===
+  { topic: "Kombibüro", q: "Wo liegen im Kombibüro die kleinen Einzelbüros?",
+    options: ["An der Fensterfront des Gebäudes", "Im fensterlosen Kern des Gebäudes", "Im Keller", "Auf dem Dach"],
+    a: 0, e: "Die kleinen Einzelbüros liegen an der Fensterfront des Gebäudes." },
+  { topic: "Kombibüro", q: "Wodurch sind die Einzelbüros im Kombibüro getrennt, und was ermöglicht das?",
+    options: ["Durch feste Betonwände — kein Umbau möglich", "Durch raumhohe, versetzbare Wände — schneller Umbau von Einzel- zu Doppelbüros", "Durch Vorhänge — Schallschutz entfällt", "Durch Glasfronten ohne jede Wand"],
+    a: 1, e: "Raumhohe, versetzbare Wände ermöglichen einen schnellen Umbau von Einzel- zu Doppelbüros." },
+  { topic: "Kombibüro", q: "Welchen Nachteil haben die Glaswände/-türen im Kombibüro?",
+    options: ["Sie lassen kein Licht durch", "Sie sind besonders teuer in der Reinigung von Teppichen", "Mitarbeitende fühlen sich beobachtet und visuelle Störungen steigen", "Sie verhindern jede Kommunikation"],
+    a: 2, e: "Glaswände lassen Licht ein, bewirken aber, dass sich Mitarbeitende beobachtet fühlen und visuelle Störungen steigen." },
+  { topic: "Kombibüro", q: "Was ist bei der Planung der Einzelbüros eines Kombibüros besonders wichtig?",
+    options: ["Sie sollten möglichst klein sein", "Sie sollten keine Fenster haben", "Sie sollten ohne Türen auskommen", "Sie dürfen nicht zu klein zugeschnitten werden"],
+    a: 3, e: "Wichtig ist, dass die Einzelbüros nicht zu klein zugeschnitten werden." },
+
+  // === Block O: Reversibles & non-territoriales Büro vertieft ===
+  { topic: "Reversibles Büro", q: "Wie erfolgt im reversiblen Büro die Raumaufteilung?",
+    options: ["Durch flexible Wandsysteme — feste Wände sind die Ausnahme", "Ausschließlich durch fest gemauerte Wände", "Gar nicht, alle arbeiten in einem Raum", "Durch im Boden verankerte Stahlträger"],
+    a: 0, e: "Im reversiblen Büro sind feste Wände die Ausnahme; die Aufteilung erfolgt durch flexible Wandsysteme." },
+  { topic: "Reversibles Büro", q: "Welchen Nutzen bietet das reversible Büro?",
+    options: ["Es spart die Beleuchtung komplett ein", "Jede Etage kann anforderungsgerecht eine andere Büroform aufnehmen", "Es macht Mitarbeitende überflüssig", "Es verhindert jede Veränderung"],
+    a: 1, e: "Jede Etage kann anforderungsgerecht eine andere Büroform aufnehmen; das Unternehmen kann schnell und kostengünstig reagieren." },
+  { topic: "Desksharing", q: "Aus welchen Gründen sind Beschäftigte häufig abwesend, sodass Arbeitsplätze leer stehen?",
+    options: ["Nur wegen Mittagspausen", "Ausschließlich wegen Feiertagen", "Urlaub, Krankheit, Außendienst, Projektarbeit, Weiterbildung oder Besprechungen", "Nur wegen technischer Störungen"],
+    a: 2, e: "Beschäftigte sind oft wegen Urlaub, Krankheit, Außendienst, Projektarbeit, Weiterbildung oder Besprechungen abwesend." },
+  { topic: "Desksharing", q: "Wo bewahren Beschäftigte beim Desksharing ihre persönlichen Unterlagen auf?",
+    options: ["In einem fest verbauten Wandschrank", "Auf einem zugewiesenen festen Schreibtisch", "Ausschließlich digital ohne jede Ablage", "In einem fahrbaren Rollcontainer, der zum freien Platz gebracht wird"],
+    a: 3, e: "Persönliche Unterlagen kommen in einen fahrbaren Rollcontainer, der bei Arbeitsbeginn zum freien Schreibtisch gebracht wird." },
+  { topic: "Desksharing", q: "Für welche Büroformen ist das Desksharing-Konzept wegen ihrer Kommunikationsstrukturen besonders geeignet?",
+    options: ["Für Gruppen- und Kombibüros", "Nur für reine Zellenbüros", "Nur für Serverräume", "Für gar keine Büroform"],
+    a: 0, e: "Besonders geeignet ist Desksharing wegen ihrer Kommunikationsstrukturen für Gruppen- und Kombibüros." },
+  { topic: "Desksharing", q: "Was muss beim Desksharing an den jeweiligen Nutzer angepasst werden?",
+    options: ["Die Wandfarbe des Raums", "Der Arbeitsplatz an die Körpergröße des Nutzers", "Die Uhrzeit des Arbeitsbeginns", "Die Höhe des Gehalts"],
+    a: 1, e: "Die Arbeitsplätze müssen leicht an die Körpergröße des jeweiligen Nutzers anpassbar sein." },
+
+  // === Block P: Open-Space, New Work & Ausblick ===
+  { topic: "Open-Space", q: "Welche Zonen kombiniert das Open-Space-Konzept?",
+    options: ["Lager-, Versand- und Produktionszonen", "Verkaufs- und Kassenzonen", "Fokuszonen, Begegnungszonen und Rückzugsräume", "Nur abgeschlossene Einzelbüros"],
+    a: 2, e: "Open-Space kombiniert offene Flächen mit verschiedenen Zonen für Fokus, Begegnung und Rückzug." },
+  { topic: "Ergonomie", q: "Welches Verhältnis empfiehlt die Präsentation für dynamisches Steh-Sitz-Verhalten am Arbeitsplatz?",
+    options: ["100 % sitzen", "50 % sitzen, 50 % stehen", "30 % sitzen, 60 % stehen, 10 % gehen", "60 % sitzen, 30 % stehen, 10 % gehen"],
+    a: 3, e: "Empfohlen wird ein dynamischer Wechsel mit 60 % sitzen, 30 % stehen und 10 % gehen." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

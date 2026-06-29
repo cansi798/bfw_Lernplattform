@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 14 · 16.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 14 · 16.07.2026 · 60 Fragen</span>
   <h1>Quiz: Digitales DMS, Datenschutz &amp; Umweltschutz</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Digitales-DMS-Datenschutz-und-Umweltschutz.html</strong> und dem <strong>Handout_Digitales-DMS-Datenschutz-und-Umweltschutz.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Digitales-DMS-Datenschutz-und-Umweltschutz.html</strong> und dem <strong>Handout_Digitales-DMS-Datenschutz-und-Umweltschutz.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -301,7 +301,105 @@ const QUESTIONS = [
     a: 3, e: "Damit gekennzeichnete Altgeräte dürfen nicht über den Restmüll entsorgt werden, sondern müssen als Elektroschrott gesondert gesammelt werden." },
   { topic: "Umweltsiegel", q: "Wofür steht der Blaue Engel?",
     options: ["Für besonders günstige Produkte", "Für importierte Waren", "Für umwelt- und gesundheitsfreundliche Produkte (Umweltzeichen der Bundesregierung)", "Für handgefertigte Produkte"],
-    a: 2, e: "Der Blaue Engel ist das Umweltzeichen der Bundesregierung und kennzeichnet umwelt- und gesundheitsfreundliche Produkte." }
+    a: 2, e: "Der Blaue Engel ist das Umweltzeichen der Bundesregierung und kennzeichnet umwelt- und gesundheitsfreundliche Produkte." },
+
+  // === Block E: Dokumente, Datenträger & DMS – Vertiefung (31-39) ===
+  { topic: "Dateiablage", q: "Was sollte ein Unternehmen tun, das (noch) kein DMS nutzt?",
+    options: ["Texte und Daten nach einem einheitlichen Dateiablagesystem mit abgestimmten Ordnerstrukturen und einheitlicher Benennung speichern", "Dokumente beliebig auf verschiedenen Rechnern verteilen", "Alle Dateien ohne Namen speichern", "Auf jede elektronische Ablage verzichten"],
+    a: 0, e: "Ohne DMS sollten Texte und Daten zumindest nach einem einheitlichen Dateiablagesystem gespeichert werden: abgestimmte Ordnerstrukturen und einheitliche Dateibenennung." },
+  { topic: "Datenträger", q: "Welche Datenträger zählen zur magnetischen Speicherung?",
+    options: ["CD und DVD", "Festplatten und Magnetbänder", "USB-Sticks und Speicherkarten", "Mikrofilme"],
+    a: 1, e: "Zur magnetischen Speicherung gehören Festplatten und Magnetbänder; CD/DVD sind optisch, USB-Stick/Speicherkarte sind mobil." },
+  { topic: "Datenträger", q: "Welche Datenträger sind optische Speicher?",
+    options: ["Festplatten", "Magnetbänder", "CD und DVD", "USB-Sticks"],
+    a: 2, e: "Optische Speicher sind CD und DVD." },
+  { topic: "Papierloses Büro", q: "Wofür ist ein DMS die technische Grundlage?",
+    options: ["Für den Aktenschrank aus Stahl", "Für die Telefonanlage", "Für die Kantinenabrechnung", "Für das papierlose Büro"],
+    a: 3, e: "Das DMS ist die technische Grundlage des papierlosen Büros." },
+  { topic: "DMS", q: "Welcher Vorteil eines DMS bezieht sich auf Kopien?",
+    options: ["Verteilerkopien entfallen", "Es werden mehr Kopien gedruckt", "Jedes Dokument wird dreifach kopiert", "Kopien müssen täglich erneuert werden"],
+    a: 0, e: "Ein DMS lässt Verteilerkopien entfallen, da alle berechtigten Personen direkt auf das Dokument zugreifen." },
+  { topic: "DMS", q: "Welcher Vorteil besteht beim Zugriff auf gerade bearbeitete Dokumente?",
+    options: ["Dokumente in Bearbeitung sind komplett gesperrt", "Auf Dokumente kann unabhängig zugegriffen werden, auch wenn sie gerade bearbeitet werden", "Nur eine Person darf pro Tag zugreifen", "Bearbeitete Dokumente werden automatisch gelöscht"],
+    a: 1, e: "Ein DMS ermöglicht den unabhängigen Zugriff auf Dokumente, auch wenn diese gerade in Bearbeitung sind." },
+  { topic: "Archivierung", q: "Wofür steht die Eselsbrücke U-V-N-W bei der revisionssicheren Archivierung?",
+    options: ["Unsortiert, Voll, Neu, Wichtig", "Umweltfreundlich, Verlässlich, Nah, Wertvoll", "Unveränderbar, Vollständig, Nachvollziehbar, Wiederauffindbar", "Universell, Variabel, Nutzbar, Wandelbar"],
+    a: 2, e: "U-V-N-W = Unveränderbar, Vollständig, Nachvollziehbar, Wiederauffindbar – die vier Kernanforderungen der revisionssicheren Archivierung." },
+  { topic: "Cloud-DMS", q: "Was ist ein Merkmal eines Cloud-DMS?",
+    options: ["Es funktioniert nur ohne Internet", "Es kann ausschließlich im Büro genutzt werden", "Es benötigt keinerlei Datenschutzbeachtung", "Es wird als Online-Dienst genutzt und ermöglicht ortsunabhängigen Zugriff"],
+    a: 3, e: "Ein Cloud-DMS wird als Online-Dienst genutzt und erlaubt ortsunabhängigen Zugriff (wichtig für Homeoffice/mobiles Arbeiten)." },
+  { topic: "Cloud-DMS", q: "Welche besondere Anforderung stellt ein Cloud-DMS?",
+    options: ["Erhöhte Aufmerksamkeit für Datenschutz und Vertragsgestaltung", "Den Verzicht auf jede Verschlüsselung", "Die Abschaffung des Datenschutzbeauftragten", "Ausschließlich Papierarchivierung"],
+    a: 0, e: "Cloud-DMS erfordern besondere Aufmerksamkeit für Datenschutz und Vertragsgestaltung, da Daten extern verarbeitet werden." },
+
+  // === Block F: Datenschutz, DSB & Betroffenenrechte – Vertiefung (40-49) ===
+  { topic: "Datenschutz", q: "Vor welcher Gefahr schützt der Datenschutz?",
+    options: ["Vor Stromausfall", "Vor der Verletzung von Persönlichkeitsrechten", "Vor Festplattendefekten", "Vor Wassereinbruch im Serverraum"],
+    a: 1, e: "Der Datenschutz schützt natürliche Personen vor der Verletzung ihrer Persönlichkeitsrechte." },
+  { topic: "Datensicherheit", q: "Vor welchen Gefahren schützt die Datensicherheit?",
+    options: ["Nur vor Werbeanrufen", "Vor falscher Büromöblierung", "Vor Verlust, Zerstörung und Missbrauch durch Unbefugte", "Vor zu hohen Telefonkosten"],
+    a: 2, e: "Die Datensicherheit schützt Hard-, Software und Daten vor Verlust, Zerstörung und Missbrauch durch Unbefugte." },
+  { topic: "Datenschutzbeauftragter", q: "Wie ist der Datenschutzbeauftragte im Unternehmen gestellt?",
+    options: ["Er ist gegenüber jedem Mitarbeiter weisungsgebunden", "Er hat keinen Kündigungsschutz", "Er ist der Buchhaltung unterstellt", "Er ist der Leitung unmittelbar unterstellt, in Kontrollaufgaben aber weisungsfrei und genießt besonderen Kündigungsschutz"],
+    a: 3, e: "Der DSB ist der Unternehmensleitung unmittelbar unterstellt, hinsichtlich der Kontrollaufgaben weisungsfrei und hat besonderen Kündigungsschutz." },
+  { topic: "Datenschutzbeauftragter", q: "Wann muss nach Art. 37 EU-DSGVO ein Datenschutzbeauftragter ernannt werden?",
+    options: ["Wenn das Kerngeschäft die Überwachung personenbezogener Daten ist", "Wenn das Unternehmen Gewinn macht", "Nur in Behörden im Ausland", "Wenn weniger als fünf Personen beschäftigt sind"],
+    a: 0, e: "Nach Art. 37 EU-DSGVO ist ein DSB zu ernennen, wenn das Kerngeschäft in der Überwachung personenbezogener Daten besteht." },
+  { topic: "Betroffenenrechte", q: "Welches Recht erlaubt die Korrektur falscher personenbezogener Daten?",
+    options: ["Das Widerspruchsrecht (Art. 21)", "Das Recht auf Berichtigung (Art. 16)", "Das Auskunftsrecht (Art. 15)", "Das Recht auf Datenübertragbarkeit (Art. 20)"],
+    a: 1, e: "Das Recht auf Berichtigung (Art. 16 EU-DSGVO) ermöglicht die Korrektur falscher personenbezogener Daten." },
+  { topic: "Betroffenenrechte", q: "Was bewirkt das Recht auf Einschränkung der Verarbeitung (Art. 18)?",
+    options: ["Die sofortige Löschung aller Daten", "Die Verdopplung der Daten", "Die Verarbeitung wird während einer Prüfung ausgesetzt", "Die Weitergabe an Dritte"],
+    a: 2, e: "Mit dem Recht auf Einschränkung (Art. 18) wird die Verarbeitung während einer Prüfung ausgesetzt." },
+  { topic: "Betroffenenrechte", q: "Was beinhaltet das Recht auf Datenübertragbarkeit (Art. 20)?",
+    options: ["Das Recht auf einen neuen Computer", "Das Recht, fremde Daten zu erhalten", "Das Recht auf kostenlosen Internetzugang", "Die Herausgabe der eigenen Daten in einem maschinenlesbaren Format"],
+    a: 3, e: "Das Recht auf Datenübertragbarkeit (Art. 20) gibt Betroffenen ihre Daten in einem maschinenlesbaren Format." },
+  { topic: "Maßnahmen", q: "Welche technisch-organisatorische Maßnahme schützt vor unerlaubten Zugriffen aus dem Netz?",
+    options: ["Eine Firewall", "Eine Kaffeemaschine", "Ein Aktenvernichter", "Ein Mikrofilm"],
+    a: 0, e: "Firewalls schützen vor unerlaubten Zugriffen aus dem Netzwerk; ergänzt durch Antivirenschutz und passwortgeschützte Konten." },
+  { topic: "Maßnahmen", q: "Womit werden Unterlagen nach Ablauf der Aufbewahrungsfrist sicher vernichtet?",
+    options: ["Mit einem Kopierer", "Mit einem Aktenvernichter (möglichst Partikelschnitt)", "Mit einem Drucker", "Mit einem Scanner"],
+    a: 1, e: "Eine sichere Vernichtung gelingt mit Aktenvernichtern – sicherer ist der Partikelschnitt gegenüber dem Streifenschnitt." },
+  { topic: "Löschpflicht", q: "Was gilt während einer laufenden gesetzlichen Aufbewahrungsfrist?",
+    options: ["Die Unterlagen müssen sofort gelöscht werden", "Die Unterlagen dürfen verkauft werden", "Die Unterlagen dürfen nicht gelöscht werden", "Die Unterlagen müssen veröffentlicht werden"],
+    a: 2, e: "Während der gesetzlichen Aufbewahrungsfrist darf nicht gelöscht werden; erst nach Fristablauf greift die Löschpflicht." },
+
+  // === Block G: Datensicherung – Vertiefung (50-53) ===
+  { topic: "Datensicherung", q: "Welche Maßnahme dient der Datensicherung im Bereich der Datenerfassung?",
+    options: ["Notstromanlage (USV)", "Plattenspiegelung", "Firewall", "Prüfziffernverfahren und Plausibilitätskontrolle"],
+    a: 3, e: "Im Bereich Datenerfassung helfen Prüfziffernverfahren und Plausibilitätskontrolle, Fehler frühzeitig zu erkennen." },
+  { topic: "Datensicherung", q: "Welche Maßnahme sichert die Datenübertragung ab?",
+    options: ["Prüfbit (Paritätsbit), Übertragungsprotokolle und Verschlüsselung", "Ein feuerfester Schrank", "Eine USV", "Ein Aktenvernichter"],
+    a: 0, e: "Die Datenübertragung wird durch Prüfbit (Paritätsbit), Übertragungsprotokolle und Verschlüsselung (Kryptographie) abgesichert." },
+  { topic: "Datensicherung", q: "Welche Maßnahmen schützen vor den Folgen eines Rechnerausfalls?",
+    options: ["Plausibilitätskontrolle", "Notstromanlage (USV) und Plattenspiegelung", "Schreibschutz", "Prüfziffernverfahren"],
+    a: 1, e: "Gegen einen Rechnerausfall helfen Notstromanlage (USV) und Plattenspiegelung (Duplexing)." },
+  { topic: "Datensicherung", q: "Was umfasst die Datensicherung?",
+    options: ["Nur das Drucken wichtiger E-Mails", "Allein die Reinigung der Tastatur", "Alle Maßnahmen zum Schutz von Daten, Datenträgern und Programmen vor Verfälschung, Vernichtung, Diebstahl und unberechtigtem Zugriff", "Ausschließlich das Anlegen neuer Benutzerkonten"],
+    a: 2, e: "Die Datensicherung umfasst alle Maßnahmen zum Schutz von Daten, Datenträgern und Programmen vor Übertragungsfehlern, Verfälschung, Vernichtung, Diebstahl und unberechtigtem Zugriff." },
+
+  // === Block H: Umweltschutz – Vertiefung (54-60) ===
+  { topic: "Abfallhierarchie", q: "Welche Stufe folgt in der Abfallhierarchie direkt auf die Vermeidung?",
+    options: ["Beseitigung", "Recycling", "Sonstige Verwertung", "Vorbereitung zur Wiederverwendung"],
+    a: 3, e: "Auf die Vermeidung folgt die Vorbereitung zur Wiederverwendung, dann Recycling, sonstige Verwertung und schließlich Beseitigung." },
+  { topic: "Recycling", q: "Was geschieht beim Recycling im Sinne der Abfallhierarchie?",
+    options: ["Gebrauchte Materialien werden zu Sekundärrohstoffen wiederverwertet (z. B. Altpapier zu Recyclingpapier)", "Abfälle werden auf einer Deponie abgelagert", "Abfälle werden ausschließlich verbrannt", "Abfälle werden ins Ausland exportiert"],
+    a: 0, e: "Beim Recycling werden gebrauchte Materialien zu Sekundärrohstoffen wiederverwertet, z. B. Altpapier zu Recyclingpapier." },
+  { topic: "Abfallhierarchie", q: "Was zählt zur Stufe Beseitigung der Abfallhierarchie?",
+    options: ["Die Reparatur von Geräten", "Die Ablagerung auf Deponien", "Das Einschmelzen von Glas", "Die Mehrwegverpackung"],
+    a: 1, e: "Die Beseitigung – z. B. die Ablagerung auf Deponien – steht an letzter Stelle der Abfallhierarchie." },
+  { topic: "Kreislaufwirtschaft", q: "Welcher Grundsatz liegt der Abfallhierarchie zugrunde?",
+    options: ["Beseitigung vor Verwertung", "Verwertung vor Vermeidung", "Vermeidung vor Verwertung, Verwertung vor Beseitigung", "Export vor Vermeidung"],
+    a: 2, e: "Grundsatz der Abfallhierarchie: Vermeidung vor Verwertung, Verwertung vor Beseitigung." },
+  { topic: "Verwertung", q: "Welches ist ein Beispiel für Wiederverwertung?",
+    options: ["Eine Glaspfandflasche wird erneut befüllt", "Alte Autoreifen werden Schiffsfender", "Ein gebrauchtes Möbelstück wird weiterverkauft", "Glas wird eingeschmolzen und neu verarbeitet"],
+    a: 3, e: "Bei der Wiederverwertung kommen Altstoffe im gleichartigen Prozess erneut zum Einsatz, z. B. Glas einschmelzen." },
+  { topic: "Verwertung", q: "Welches ist ein Beispiel für Weiterverwendung?",
+    options: ["Glas wird eingeschmolzen", "Altpapier wird zu Recyclingpapier", "Eine Pfandflasche wird erneut befüllt", "Alte Autoreifen werden als Schiffsfender genutzt"],
+    a: 3, e: "Bei der Weiterverwendung wird ein gebrauchtes Produkt für einen anderen Zweck genutzt, z. B. alte Autoreifen als Schiffsfender." },
+  { topic: "Verpackungsgesetz", q: "Wo müssen sich Hersteller nach dem Verpackungsgesetz registrieren?",
+    options: ["Bei der Stiftung EAR", "Bei der Zentralen Stelle Verpackungsregister", "Beim Finanzamt", "Bei der IHK"],
+    a: 1, e: "Nach dem VerpackG müssen sich Hersteller bei der Zentralen Stelle Verpackungsregister registrieren (Stiftung EAR betrifft das ElektroG)." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

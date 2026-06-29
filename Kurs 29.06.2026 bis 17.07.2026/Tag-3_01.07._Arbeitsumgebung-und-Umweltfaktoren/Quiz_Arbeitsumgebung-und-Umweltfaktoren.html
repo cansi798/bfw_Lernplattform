@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>Quiz Tag 3 — Arbeitsumgebung & Umweltfaktoren</title>
+<title>Quiz Tag 3 — Arbeitsumgebung & Umweltfaktoren (60 Fragen)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 :root {
@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 3 · 01.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 3 · 01.07.2026 · 60 Fragen</span>
   <h1>Quiz: Arbeitsumgebung &amp; Umweltfaktoren</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Arbeitsumgebung-und-Umweltfaktoren.html</strong> und dem <strong>Handout_Arbeitsumgebung-und-Umweltfaktoren.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Arbeitsumgebung-und-Umweltfaktoren.html</strong> und dem <strong>Handout_Arbeitsumgebung-und-Umweltfaktoren.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -278,7 +278,7 @@ const QUESTIONS = [
   { topic: "Lärm", q: "Bis zu welchem Schalldruckpegel gilt ein Bildschirmarbeitsplatz laut BAuA als optimal?",
     options: ["bis 60 dB(A)", "bis 30 dB(A)", "bis 45 dB(A)", "bis 85 dB(A)"],
     a: 1, e: "Die BAuA bewertet den Schalldruckpegel am Bildschirmarbeitsplatz bis 30 dB(A) als optimal." },
-  { topic: "Lärm", q: "Bis zu welchem Schalldruckpegel wird ein Bildschirmarbeitsplatz noch als „gut" bewertet?",
+  { topic: "Lärm", q: "Bis zu welchem Schalldruckpegel wird ein Bildschirmarbeitsplatz noch als „gut“ bewertet?",
     options: ["bis 30 dB(A)", "bis 40 dB(A)", "bis 45 dB(A)", "bis 85 dB(A)"],
     a: 2, e: "Bis 40 dB(A) gilt als sehr gut, bis 45 dB(A) noch als gut." },
   { topic: "Lärm", q: "Welche Maßnahme reduziert den Lärm im Büro?",
@@ -295,7 +295,7 @@ const QUESTIONS = [
   { topic: "Sicherheitszeichen", q: "Welche Farbe haben Verbotszeichen?",
     options: ["Grün", "Gelb", "Rot", "Blau"],
     a: 2, e: "Rot steht für Verbotszeichen (und Brandschutzzeichen)." },
-  { topic: "Sicherheitszeichen", q: "Welche Farbe haben Gebotszeichen (z. B. „Augenschutz benutzen")?",
+  { topic: "Sicherheitszeichen", q: "Welche Farbe haben Gebotszeichen (z. B. „Augenschutz benutzen“)?",
     options: ["Rot", "Gelb", "Grün", "Blau"],
     a: 3, e: "Blau kennzeichnet Gebotszeichen, die ein bestimmtes Verhalten vorschreiben." },
 
@@ -305,7 +305,103 @@ const QUESTIONS = [
     a: 0, e: "Pflanzen reinigen die Luft von Schadstoffen, produzieren Sauerstoff, erhöhen die Luftfeuchtigkeit und schlucken Schall und Staub." },
   { topic: "Gefahrstoffe", q: "Was ist Tonerstaub und wie geht man damit um?",
     options: ["Ein harmloser Reinigungsstaub", "Ein Gefahrstoff aus Laserdruckern/-kopierern — Geräte separat aufstellen, Toner feucht aufwischen", "Ein Pflanzendünger", "Ein Mittel gegen Lärm"],
-    a: 1, e: "Tonerstaub ist ein Gefahrstoff aus Laserdruckern/-kopierern; Vorsicht: emissionsarme Geräte, separate belüftete Räume, Toner feucht aufwischen, Hände waschen." }
+    a: 1, e: "Tonerstaub ist ein Gefahrstoff aus Laserdruckern/-kopierern; Vorsicht: emissionsarme Geräte, separate belüftete Räume, Toner feucht aufwischen, Hände waschen." },
+
+  // === Block G: Grundlagen & Raumklima vertieft (31-39) ===
+  { topic: "Grundlagen", q: "Welche Verordnung schreibt für den Arbeitsplatz ein gesundheitlich zuträgliches Raumklima vor?",
+    options: ["Das BGB", "Das HGB", "Die Arbeitsstättenverordnung (ArbStättV)", "Die StVO"],
+    a: 2, e: "Die Arbeitsstättenverordnung (ArbStättV) schreibt ein gesundheitlich zuträgliches Raumklima vor; konkretisiert wird sie durch die ASR." },
+  { topic: "Raumklima", q: "Welche Technische Regel für Arbeitsstätten konkretisiert die Raumtemperatur?",
+    options: ["ASR A1.2", "ASR A2.3", "DIN A4", "ASR A3.5"],
+    a: 3, e: "Die ASR A3.5 beschäftigt sich explizit mit der Raumtemperatur (Mindesttemperatur, Grenzwerte 26/30 °C)." },
+  { topic: "Raumklima", q: "Welche Folge hat eine zu hohe Luftfeuchtigkeit, besonders im Winter?",
+    options: ["Schimmelgefahr an den Wänden", "Trockene Schleimhäute", "Höhere Lichtstärke", "Mehr Lärm"],
+    a: 0, e: "Ist die Luftfeuchtigkeit zu hoch (insbesondere im Winter), droht Schimmelgefahr." },
+  { topic: "Raumklima", q: "Was ist bei Überschreiten von +26 °C durch Sonneneinstrahlung zuerst einzusetzen?",
+    options: ["Zwingend eine Klimaanlage", "Jalousien (Sonnenschutz)", "Die Heizung", "Mehr Beleuchtung"],
+    a: 1, e: "Wird +26 °C überschritten (z. B. durch Sonne), sind zunächst Jalousien einzusetzen, sonst weitere Maßnahmen." },
+  { topic: "Raumklima", q: "Welche zusätzlichen Maßnahmen nennt das Handout bei Hitze außer Jalousien?",
+    options: ["Fenster dauerhaft schließen", "Heizung aufdrehen", "Gleitzeit, lockerere Bekleidung und Getränke bereitstellen", "Bildschirme abschalten"],
+    a: 2, e: "Möglich sind Gleitzeitregelungen, Lockerung der Bekleidungsregeln und das Bereitstellen geeigneter Getränke (z. B. Wasser)." },
+  { topic: "Raumklima", q: "Wovon hängt das individuelle Temperaturempfinden ab?",
+    options: ["Nur von der Uhrzeit", "Nur von der Raumgröße", "Nur von der Wandfarbe", "Von Geschlecht, Gesundheit, Bekleidung, Gewöhnung und Tätigkeit"],
+    a: 3, e: "Das Temperaturempfinden ist individuell und hängt z. B. von Geschlecht, Gesundheitszustand, Bekleidung, Gewöhnung und Tätigkeit ab." },
+  { topic: "Raumklima", q: "Wodurch wird die Luftbewegung im Büro vor allem verursacht?",
+    options: ["Klimaanlagen, schlecht isolierte Fenster und Lüftungsschächte", "Pflanzen", "Bildschirme", "Teppiche"],
+    a: 0, e: "Die Luftbewegung wird vor allem durch Klimaanlagen, schlecht isolierte Fenster oder ungünstig angebrachte Lüftungsschächte verursacht." },
+  { topic: "Lüften", q: "Welche Zeit bietet sich neben dem stündlichen Stoßlüften noch zum Lüften an?",
+    options: ["Nur nachts", "Die Pausenzeit", "Nur im Sommer", "Gar keine"],
+    a: 1, e: "Neben dem stündlichen Stoßlüften bietet sich auch die Pausenzeit zum Lüften an." },
+  { topic: "Lüften", q: "Wie lässt sich das Raumklima außer durch Lüften noch beeinflussen?",
+    options: ["Durch lautere Geräte", "Durch dunklere Farben", "Durch Heizen, Kühlen und Entlüften", "Allein durch mehr Pflanzen"],
+    a: 2, e: "Das Raumklima kann zusätzlich durch Heizen, Kühlen oder Entlüften beeinflusst werden." },
+
+  // === Block H: Beleuchtung & Lärm vertieft (40-50) ===
+  { topic: "Beleuchtung", q: "Warum ist künstliche Beleuchtung am Arbeitsplatz oft nötig?",
+    options: ["Weil Tageslicht schädlich ist", "Weil es Strom spart", "Weil Lampen schöner sind", "Weil Tageslicht je nach Jahres- und Uhrzeit nicht ausreicht"],
+    a: 3, e: "Nicht überall ist genügend Tageslicht vorhanden bzw. es reicht je nach Jahres- und Uhrzeit nicht aus — daher künstliche Beleuchtung." },
+  { topic: "Beleuchtung", q: "Welche Beschwerden lassen sich durch ergonomische Beleuchtung vermeiden?",
+    options: ["Kopfschmerzen, Augenbeschwerden, Nervosität und Ermüdung", "Rückenschmerzen durch Zugluft", "Gehörschäden", "Schimmelbildung"],
+    a: 0, e: "Ergonomisch durchdachte Beleuchtung vermeidet Kopfschmerzen, Augenbeschwerden, Nervosität und Ermüdung." },
+  { topic: "Beleuchtung", q: "Was versteht man unter Direktblendung?",
+    options: ["Eine Spiegelung vom Bildschirm", "Eine Lichtquelle (Lampe/Fenster) im Blickfeld", "Flackerndes Licht", "Zu wenig Licht"],
+    a: 1, e: "Direktblendungen entstehen durch Lichtquellen (z. B. Lampen oder Fenster) im Blickfeld; sie sind zu vermeiden." },
+  { topic: "Beleuchtung", q: "Wodurch wird die Beleuchtung am Bildschirmarbeitsplatz sinnvoll ergänzt?",
+    options: ["Durch farbiges Licht", "Durch Kerzen", "Durch persönliche Schreibtischleuchten", "Durch Deckenventilatoren"],
+    a: 2, e: "Die geforderten 500 Lux werden durch persönliche Schreibtischleuchten ergänzt." },
+  { topic: "Beleuchtung", q: "Was bestimmt die Lichtfarbe (Farbtemperatur)?",
+    options: ["Die Helligkeit in Lux", "Den Stromverbrauch", "Die Lebensdauer der Lampe", "Wie das Licht wirkt"],
+    a: 3, e: "Die Lichtfarbe (Farbtemperatur) bestimmt, wie das Licht wirkt — für Bildschirmarbeit neutral-/tageslichtweiß." },
+  { topic: "Lärm", q: "Wann werden Geräusche und Töne als Lärm empfunden?",
+    options: ["Wenn sie stören und belästigen", "Immer ab 20 dB(A)", "Nur bei Musik", "Nie im Büro"],
+    a: 0, e: "Gespräche, Geräusche und Töne werden als Lärm empfunden, wenn sie jemanden stören und belästigen — eine sehr individuelle Bewertung." },
+  { topic: "Lärm", q: "In welchem Anhang befasst sich die ArbStättV mit Lärm?",
+    options: ["Anhang 1.1", "Anhang 3.7", "Anhang A3.5", "Anhang 5.2"],
+    a: 1, e: "Die ArbStättV befasst sich in ihrem Anhang 3.7 mit Lärm; der Schalldruckpegel ist so niedrig wie möglich zu halten." },
+  { topic: "Lärm", q: "Welche Folgen hat dauerhafter Lärm laut Handout?",
+    options: ["Bessere Konzentration", "Mehr Sauerstoff", "Konzentration und Leistung sinken, der Stressfaktor steigt", "Höhere Luftfeuchtigkeit"],
+    a: 2, e: "Dauerlärm beeinträchtigt die Gesundheit: Konzentration und Leistungsfähigkeit leiden, der Stressfaktor steigt." },
+  { topic: "Lärm", q: "Bis zu welchem Schalldruckpegel gilt ein Bildschirmarbeitsplatz laut BAuA als „sehr gut“?",
+    options: ["bis 30 dB(A)", "bis 45 dB(A)", "bis 85 dB(A)", "bis 40 dB(A)"],
+    a: 3, e: "Die BAuA bewertet bis 30 dB(A) als optimal, bis 40 dB(A) als sehr gut und bis 45 dB(A) als gut." },
+  { topic: "Lärm", q: "Welche Mittel zur Schalldämpfung nennt das Lehrbuch?",
+    options: ["Teppiche, Vorhänge und schallabsorbierende Deckenplatten", "Glaswände", "Mehr Drucker", "Offene Türen"],
+    a: 0, e: "Zur Schalldämpfung eignen sich Teppiche, Vorhänge oder schallabsorbierende Deckenplatten." },
+  { topic: "Lärm", q: "Was hilft modern im Großraumbüro zusätzlich gegen Lärm?",
+    options: ["Mehr offene Fläche ohne Maßnahmen", "Akustikkabinen, Schallabsorber-Stellwände und Akustikdecken", "Lautere Klimaanlagen", "Teppiche entfernen"],
+    a: 1, e: "Im Großraum helfen Akustikkabinen (Fokuszellen), Schallabsorber-Stellwände und Akustikdecken." },
+
+  // === Block I: Farbe, Sicherheitszeichen, Pflanzen, Strahlung, Gefahrstoffe (51-60) ===
+  { topic: "Farbgestaltung", q: "Welche Farben zählen zu den warmen Farben?",
+    options: ["Blau, Grün, Violett", "Schwarz, Weiß, Grau", "Rot, Orange, Gelb", "Türkis, Cyan, Indigo"],
+    a: 2, e: "Warme Farben sind Rot, Orange und Gelb — sie wirken aktivierend und lassen den Raum kleiner wirken." },
+  { topic: "Farbgestaltung", q: "Welche Farben zählen zu den kalten Farben?",
+    options: ["Rot, Orange, Gelb", "Braun, Beige, Ocker", "Rosa, Pink, Magenta", "Blau, Grün, Violett"],
+    a: 3, e: "Kalte Farben sind Blau, Grün und Violett — sie wirken beruhigend und lassen den Raum größer wirken." },
+  { topic: "Farbgestaltung", q: "Was gilt für die Stärke der Farbwirkung?",
+    options: ["Je kräftiger die Farbe, desto stärker ihre Wirkung", "Farbe hat keine Wirkung", "Nur helle Farben wirken", "Nur die Beleuchtung wirkt"],
+    a: 0, e: "Je kräftiger die Farbe, desto stärker ist ihre psychologische Wirkung." },
+  { topic: "Farbgestaltung", q: "Welchen wirtschaftlichen Nutzen kann eine sinnvolle Farbgestaltung haben?",
+    options: ["Sie erhöht den Stromverbrauch", "Sie kann Energiekosten senken, da sie das Temperaturempfinden beeinflusst", "Sie senkt den Lärmpegel", "Sie ersetzt die Beleuchtung"],
+    a: 1, e: "Farbe kann Energiekosten senken, weil sie das Temperaturempfinden beeinflusst — neben Motivation und Erholung." },
+  { topic: "Sicherheitszeichen", q: "Welche Farbe haben Warnzeichen?",
+    options: ["Rot", "Grün", "Gelb", "Blau"],
+    a: 2, e: "Gelb kennzeichnet Warnzeichen, die auf Gefahren hinweisen (z. B. explosionsgefährliche Stoffe)." },
+  { topic: "Sicherheitszeichen", q: "Welche Farbe haben Rettungszeichen (z. B. Rettungsweg, Erste Hilfe)?",
+    options: ["Rot", "Gelb", "Blau", "Grün"],
+    a: 3, e: "Grün markiert Rettungszeichen wie Rettungswege, Erste Hilfe und Sammelpunkte." },
+  { topic: "Pflanzen", q: "Welche Schadstoffe können Pflanzen je nach Art aus der Luft filtern?",
+    options: ["Formaldehyd, Benzol und Kohlendioxid", "Tonerstaub und Öl", "Nur Wasserdampf", "Lärm"],
+    a: 0, e: "Pflanzen reinigen die Luft je nach Art von Schadstoffen wie Formaldehyd, Benzol und Kohlendioxid." },
+  { topic: "Strahlung", q: "In welchem Mindestabstand sollten W-LAN-Access-Points angebracht werden?",
+    options: ["mindestens 1 m", "mindestens 3 m vom Arbeitsplatz", "mindestens 10 m", "Der Abstand ist egal"],
+    a: 1, e: "W-LAN-Access-Points sollten mindestens 3 m vom Arbeitsplatz entfernt angebracht werden." },
+  { topic: "Strahlung", q: "Welche Maßnahme reduziert elektromagnetische Strahlung im Büro?",
+    options: ["Röhrenbildschirme nutzen", "Geräte immer eingeschaltet lassen", "Strahlungsarme Geräte (Flachbildschirme) und feste statt tragbare Telefone", "Mehr W-LAN-Sender aufstellen"],
+    a: 2, e: "Strahlungsarme Geräte (Flachbildschirme), feste statt tragbare Telefone und das Abschalten ungenutzter Geräte reduzieren Strahlung." },
+  { topic: "Gefahrstoffe", q: "Worauf sollte man beim Kauf von Laserdruckern und -kopierern achten?",
+    options: ["Möglichst billige Toner", "Geräte ohne Filter", "Maximale Druckgeschwindigkeit", "DGUV-Testzeichen für emissionsarme Geräte und schadstoffarme Toner mit Prüfsiegel"],
+    a: 3, e: "Beim Kauf auf das DGUV-Testzeichen für besonders emissionsarme Geräte und schadstoffarme Toner mit Prüfsiegel achten." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

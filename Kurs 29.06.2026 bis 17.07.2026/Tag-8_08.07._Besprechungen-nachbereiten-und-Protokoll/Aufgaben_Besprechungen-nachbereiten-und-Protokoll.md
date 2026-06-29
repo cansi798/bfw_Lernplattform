@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Besprechungen nachbereiten
 
-📺 **Vorbereitungsvideo:** [YouTube: „Besprechung nachbereiten To-do-Liste"](https://www.youtube.com/results?search_query=Besprechung+nachbereiten+To-do-Liste) (https://www.youtube.com/results?search_query=Besprechung+nachbereiten+To-do-Liste)
+📺 **Vorbereitungsvideo:** [YouTube: „Besprechung nachbereiten To-do-Liste"](https://www.youtube.com/watch?v=1KSQOvp4BJs) (https://www.youtube.com/watch?v=1KSQOvp4BJs)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Wofür dient der Verteiler eines Protokolls?
 
 ## Aufgabe 2 — Funktionen des Protokolls
 
-📺 **Vorbereitungsvideo:** [YouTube: „Protokoll Funktion Beweismittel"](https://www.youtube.com/results?search_query=Protokoll+Funktion+Beweismittel) (https://www.youtube.com/results?search_query=Protokoll+Funktion+Beweismittel)
+📺 **Vorbereitungsvideo:** [YouTube: „Protokoll Funktion Beweismittel"](https://www.youtube.com/watch?v=SG4tsAG_-hI) (https://www.youtube.com/watch?v=SG4tsAG_-hI)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Erläutern Sie, warum ein Protokoll als Beweismittel dienen kann.
 
 ## Aufgabe 3 — Protokollarten unterscheiden
 
-📺 **Vorbereitungsvideo:** [YouTube: „Protokollarten Verlaufsprotokoll Ergebnisprotokoll"](https://www.youtube.com/results?search_query=Protokollarten+Verlaufsprotokoll+Ergebnisprotokoll) (https://www.youtube.com/results?search_query=Protokollarten+Verlaufsprotokoll+Ergebnisprotokoll)
+📺 **Vorbereitungsvideo:** [YouTube: „Protokollarten Verlaufsprotokoll Ergebnisprotokoll"](https://www.youtube.com/watch?v=WREpAUH4cs8) (https://www.youtube.com/watch?v=WREpAUH4cs8)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -55,7 +55,7 @@ c) Für welche Anlässe eignet sich das Beschluss-/Ergebnisprotokoll besonders?
 
 ## Aufgabe 4 — Protokollrahmen nach DIN 5008
 
-📺 **Vorbereitungsvideo:** [YouTube: „Protokollkopf Protokollfuß DIN 5008"](https://www.youtube.com/results?search_query=Protokollkopf+Protokollfu%C3%9F+DIN+5008) (https://www.youtube.com/results?search_query=Protokollkopf+Protokollfu%C3%9F+DIN+5008)
+📺 **Vorbereitungsvideo:** [YouTube: „Protokollkopf Protokollfuß DIN 5008"](https://www.youtube.com/watch?v=WREpAUH4cs8) (https://www.youtube.com/watch?v=WREpAUH4cs8)
 
 **Sozialform:** Partnerarbeit
 
@@ -71,7 +71,7 @@ c) Wie wird vermerkt, wenn ein Teilnehmer nur zeitweise anwesend war? Warum ist 
 
 ## Aufgabe 5 — Sprache des Protokolls und indirekte Rede
 
-📺 **Vorbereitungsvideo:** [YouTube: „Protokoll indirekte Rede Konjunktiv I"](https://www.youtube.com/results?search_query=Protokoll+indirekte+Rede+Konjunktiv+I) (https://www.youtube.com/results?search_query=Protokoll+indirekte+Rede+Konjunktiv+I)
+📺 **Vorbereitungsvideo:** [YouTube: „Protokoll indirekte Rede Konjunktiv I"](https://www.youtube.com/watch?v=fSntdA-DThI) (https://www.youtube.com/watch?v=fSntdA-DThI)
 
 **Sozialform:** Einzelarbeit
 
@@ -87,7 +87,7 @@ c) Erklären Sie, wann statt Konjunktiv I der Konjunktiv II verwendet wird.
 
 ## Aufgabe 6 — Bedeutung, Genehmigung und moderne Praxis
 
-📺 **Vorbereitungsvideo:** [YouTube: „Protokoll genehmigen digitale Protokollvorlage"](https://www.youtube.com/results?search_query=Protokoll+genehmigen+digitale+Protokollvorlage) (https://www.youtube.com/results?search_query=Protokoll+genehmigen+digitale+Protokollvorlage)
+📺 **Vorbereitungsvideo:** [YouTube: „Protokoll genehmigen digitale Protokollvorlage"](https://www.youtube.com/watch?v=aBNW4f6PoS0) (https://www.youtube.com/watch?v=aBNW4f6PoS0)
 
 **Sozialform:** Plenumsdiskussion
 

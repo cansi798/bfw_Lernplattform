@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Dokumentenmanagementsystem (DMS)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagementsystem DMS einfach erklärt"](https://www.youtube.com/results?search_query=Dokumentenmanagementsystem+DMS+einfach+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Dokumentenmanagementsystem+DMS+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagementsystem DMS einfach erklärt"](https://www.youtube.com/watch?v=cEBooQppYKI) (https://www.youtube.com/watch?v=cEBooQppYKI)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Was bedeutet „revisionssichere Archivierung" und warum ist sie nach HGB/GoB
 
 ## Aufgabe 2 — Datenschutz und Datensicherheit abgrenzen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Datenschutz Datensicherheit Unterschied"](https://www.youtube.com/results?search_query=Datenschutz+Datensicherheit+Unterschied) (https://www.youtube.com/results?search_query=Datenschutz+Datensicherheit+Unterschied)
+📺 **Vorbereitungsvideo:** [YouTube: „Datenschutz Datensicherheit Unterschied"](https://www.youtube.com/watch?v=-QsJ5c-Fxbs) (https://www.youtube.com/watch?v=-QsJ5c-Fxbs)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Auf welchen beiden Rechtsgrundlagen müssen alle Maßnahmen des Datenschutzes
 
 ## Aufgabe 3 — Datenschutzbeauftragter & Rechte der Betroffenen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Datenschutzbeauftragter DSGVO Aufgaben"](https://www.youtube.com/results?search_query=Datenschutzbeauftragter+DSGVO+Aufgaben) (https://www.youtube.com/results?search_query=Datenschutzbeauftragter+DSGVO+Aufgaben)
+📺 **Vorbereitungsvideo:** [YouTube: „Datenschutzbeauftragter DSGVO Aufgaben"](https://www.youtube.com/watch?v=4gRbl55hnSk) (https://www.youtube.com/watch?v=4gRbl55hnSk)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -54,7 +54,7 @@ d) Ein Kunde verlangt Auskunft über seine gespeicherten Daten und anschließend
 
 ## Aufgabe 4 — Datensicherung (Backup-Generationenprinzip)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Generationenprinzip Backup Großvater Vater Sohn"](https://www.youtube.com/results?search_query=Generationenprinzip+Backup+Gro%C3%9Fvater+Vater+Sohn) (https://www.youtube.com/results?search_query=Generationenprinzip+Backup+Gro%C3%9Fvater+Vater+Sohn)
+📺 **Vorbereitungsvideo:** [YouTube: „Generationenprinzip Backup Großvater Vater Sohn"](https://www.youtube.com/watch?v=T2joUFzI_9g) (https://www.youtube.com/watch?v=T2joUFzI_9g)
 
 **Sozialform:** Partnerarbeit
 
@@ -69,8 +69,8 @@ d) Worin unterscheidet sich der Datenschutz (durch Aktenvernichter) von der Date
 
 ## Aufgabe 5 — Umweltschutz: Kreislaufwirtschaftsgesetz & Verpackungsgesetz
 
-📺 **Vorbereitungsvideo:** [YouTube: „Abfallhierarchie Kreislaufwirtschaftsgesetz"](https://www.youtube.com/results?search_query=Abfallhierarchie+Kreislaufwirtschaftsgesetz) (https://www.youtube.com/results?search_query=Abfallhierarchie+Kreislaufwirtschaftsgesetz)
-📺 **Ergänzend:** [YouTube: „Verpackungsgesetz Duales System Grüner Punkt"](https://www.youtube.com/results?search_query=Verpackungsgesetz+Duales+System+Gr%C3%BCner+Punkt) (https://www.youtube.com/results?search_query=Verpackungsgesetz+Duales+System+Gr%C3%BCner+Punkt)
+📺 **Vorbereitungsvideo:** [YouTube: „Abfallhierarchie Kreislaufwirtschaftsgesetz"](https://www.youtube.com/watch?v=pV-wTLqZHEQ) (https://www.youtube.com/watch?v=pV-wTLqZHEQ)
+📺 **Ergänzend:** [YouTube: „Verpackungsgesetz Duales System Grüner Punkt"](https://www.youtube.com/watch?v=oylK48Y1xDc) (https://www.youtube.com/watch?v=oylK48Y1xDc)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -85,7 +85,7 @@ d) Welches Symbol kennzeichnet Elektrogeräte nach dem ElektroG und was darf dam
 
 ## Aufgabe 6 — Nachhaltiges Wirtschaften & Green IT
 
-📺 **Vorbereitungsvideo:** [YouTube: „Nachhaltigkeit Unternehmen Umweltsiegel Blauer Engel"](https://www.youtube.com/results?search_query=Nachhaltigkeit+Unternehmen+Umweltsiegel+Blauer+Engel) (https://www.youtube.com/results?search_query=Nachhaltigkeit+Unternehmen+Umweltsiegel+Blauer+Engel)
+📺 **Vorbereitungsvideo:** [YouTube: „Nachhaltigkeit Unternehmen Umweltsiegel Blauer Engel"](https://www.youtube.com/watch?v=zB-njPQZJcQ) (https://www.youtube.com/watch?v=zB-njPQZJcQ)
 
 **Sozialform:** Einzelarbeit
 

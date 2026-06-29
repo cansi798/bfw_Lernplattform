@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Bedeutung der Büroraumplanung
 
-📺 **Vorbereitungsvideo:** [YouTube: „Büroraumplanung Grundlagen"](https://www.youtube.com/results?search_query=B%C3%BCroraumplanung+Grundlagen) (https://www.youtube.com/results?search_query=B%C3%BCroraumplanung+Grundlagen)
+📺 **Vorbereitungsvideo:** [YouTube: „Büroraumplanung Grundlagen"](https://www.youtube.com/watch?v=_m_EtsDQ-DQ) (https://www.youtube.com/watch?v=_m_EtsDQ-DQ)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Wofür dient die DGUV Information 215-441 in der Büroraumplanung?
 
 ## Aufgabe 2 — Die sechs Teilflächen eines Büros
 
-📺 **Vorbereitungsvideo:** [YouTube: „Flächenarten Büroarbeitsplatz"](https://www.youtube.com/results?search_query=Fl%C3%A4chenarten+B%C3%BCroarbeitsplatz) (https://www.youtube.com/results?search_query=Fl%C3%A4chenarten+B%C3%BCroarbeitsplatz)
+📺 **Vorbereitungsvideo:** [YouTube: „Flächenarten Büroarbeitsplatz"](https://www.youtube.com/watch?v=oDpZqj8kUsg) (https://www.youtube.com/watch?v=oDpZqj8kUsg)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Erläutern Sie, warum die Bewegungsfläche für die Gesundheit der Beschäfti
 
 ## Aufgabe 3 — Flächenbedarf berechnen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Quadratmeter pro Arbeitsplatz Büro"](https://www.youtube.com/results?search_query=Quadratmeter+pro+Arbeitsplatz+B%C3%BCro) (https://www.youtube.com/results?search_query=Quadratmeter+pro+Arbeitsplatz+B%C3%BCro)
+📺 **Vorbereitungsvideo:** [YouTube: „Quadratmeter pro Arbeitsplatz Büro"](https://www.youtube.com/watch?v=NpMMa7LZork) (https://www.youtube.com/watch?v=NpMMa7LZork)
 
 **Sozialform:** Einzelarbeit
 
@@ -55,7 +55,7 @@ c) Wie ergibt sich laut Lehrbuch der Quadratmeterbedarf pro Arbeitsplatz?
 
 ## Aufgabe 4 — Büroformen vergleichen (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Büroformen Zellenbüro Großraumbüro"](https://www.youtube.com/results?search_query=B%C3%BCroformen+Zellenb%C3%BCro+Gro%C3%9Fraumb%C3%BCro) (https://www.youtube.com/results?search_query=B%C3%BCroformen+Zellenb%C3%BCro+Gro%C3%9Fraumb%C3%BCro)
+📺 **Vorbereitungsvideo:** [YouTube: „Büroformen Zellenbüro Großraumbüro"](https://www.youtube.com/watch?v=eTgZQb1RBxo) (https://www.youtube.com/watch?v=eTgZQb1RBxo)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -71,8 +71,8 @@ c) Welche Maßnahme kann den Geräuschpegel in einem Gruppenbüro senken?
 
 ## Aufgabe 5 — Moderne Bürokonzepte
 
-📺 **Vorbereitungsvideo:** [YouTube: „Desksharing non-territoriales Büro"](https://www.youtube.com/results?search_query=Desksharing+non+territoriales+B%C3%BCro) (https://www.youtube.com/results?search_query=Desksharing+non+territoriales+B%C3%BCro)
-📺 **Ergänzend:** [YouTube: „New Work Open Space Büro"](https://www.youtube.com/results?search_query=New+Work+Open+Space+B%C3%BCro) (https://www.youtube.com/results?search_query=New+Work+Open+Space+B%C3%BCro)
+📺 **Vorbereitungsvideo:** [YouTube: „Desksharing non-territoriales Büro"](https://www.youtube.com/watch?v=UvmJ4uPJ7xI) (https://www.youtube.com/watch?v=UvmJ4uPJ7xI)
+📺 **Ergänzend:** [YouTube: „New Work Open Space Büro"](https://www.youtube.com/watch?v=lIc7G7uLaEA) (https://www.youtube.com/watch?v=lIc7G7uLaEA)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -86,7 +86,7 @@ c) Diskutieren Sie: Welche Auswirkung hat zunehmendes Homeoffice/mobiles Arbeite
 
 ## Aufgabe 6 — Büroform situativ zuordnen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Kombibüro Gruppenbüro Unterschied"](https://www.youtube.com/results?search_query=Kombib%C3%BCro+Gruppenb%C3%BCro+Unterschied) (https://www.youtube.com/results?search_query=Kombib%C3%BCro+Gruppenb%C3%BCro+Unterschied)
+📺 **Vorbereitungsvideo:** [YouTube: „Kombibüro Gruppenbüro Unterschied"](https://www.youtube.com/watch?v=eTgZQb1RBxo) (https://www.youtube.com/watch?v=eTgZQb1RBxo)
 
 **Sozialform:** Einzelarbeit
 

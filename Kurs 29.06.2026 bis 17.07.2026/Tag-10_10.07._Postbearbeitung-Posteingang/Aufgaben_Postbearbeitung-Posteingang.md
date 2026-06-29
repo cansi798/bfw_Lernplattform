@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Bedeutung des Posteingangs
 
-📺 **Vorbereitungsvideo:** [YouTube: „Posteingang Poststelle Büro"](https://www.youtube.com/results?search_query=Posteingang+Poststelle+B%C3%BCro) (https://www.youtube.com/results?search_query=Posteingang+Poststelle+B%C3%BCro)
+📺 **Vorbereitungsvideo:** [YouTube: „Posteingang Poststelle Büro"](https://www.youtube.com/watch?v=XapW4h5kvx0) (https://www.youtube.com/watch?v=XapW4h5kvx0)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Erläutern Sie den Unterschied zwischen einer zentralen und einer dezentralen
 
 ## Aufgabe 2 — Möglichkeiten des Posteingangs
 
-📺 **Vorbereitungsvideo:** [YouTube: „Postzustellung Briefmonopol private Dienstleister"](https://www.youtube.com/results?search_query=Postzustellung+Briefmonopol+private+Dienstleister) (https://www.youtube.com/results?search_query=Postzustellung+Briefmonopol+private+Dienstleister)
+📺 **Vorbereitungsvideo:** [YouTube: „Postzustellung Briefmonopol private Dienstleister"](https://www.youtube.com/watch?v=Fjy9qtivkRM) (https://www.youtube.com/watch?v=Fjy9qtivkRM)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Seit wann ist der deutsche Briefmarkt liberalisiert, und welche Voraussetzung
 
 ## Aufgabe 3 — Postvollmacht und Arbeitsschritte
 
-📺 **Vorbereitungsvideo:** [YouTube: „Postvollmacht Posteingang Arbeitsschritte"](https://www.youtube.com/results?search_query=Postvollmacht+Posteingang+Arbeitsschritte) (https://www.youtube.com/results?search_query=Postvollmacht+Posteingang+Arbeitsschritte)
+📺 **Vorbereitungsvideo:** [YouTube: „Postvollmacht Posteingang Arbeitsschritte"](https://www.youtube.com/watch?v=KVr3ZLMX2oo) (https://www.youtube.com/watch?v=KVr3ZLMX2oo)
 
 **Sozialform:** Einzelarbeit
 
@@ -51,7 +51,7 @@ c) Bringen Sie die Arbeitsschritte beim Posteingang in die richtige Reihenfolge:
 
 ## Aufgabe 4 — Post öffnen: darf oder darf nicht? (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Briefgeheimnis persönlich vertraulich Post öffnen"](https://www.youtube.com/results?search_query=Briefgeheimnis+pers%C3%B6nlich+vertraulich+Post+%C3%B6ffnen) (https://www.youtube.com/results?search_query=Briefgeheimnis+pers%C3%B6nlich+vertraulich+Post+%C3%B6ffnen)
+📺 **Vorbereitungsvideo:** [YouTube: „Briefgeheimnis persönlich vertraulich Post öffnen"](https://www.youtube.com/watch?v=gakh2xIh3AM) (https://www.youtube.com/watch?v=gakh2xIh3AM)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -72,7 +72,7 @@ c) Wie unterscheidet man am Anschriftenfeld Geschäftspost von Privatpost?
 
 ## Aufgabe 5 — Kontrollieren und Stempeln
 
-📺 **Vorbereitungsvideo:** [YouTube: „Posteingangsstempel Leerkontrolle Anlagenkontrolle"](https://www.youtube.com/results?search_query=Posteingangsstempel+Leerkontrolle+Anlagenkontrolle) (https://www.youtube.com/results?search_query=Posteingangsstempel+Leerkontrolle+Anlagenkontrolle)
+📺 **Vorbereitungsvideo:** [YouTube: „Posteingangsstempel Leerkontrolle Anlagenkontrolle"](https://www.youtube.com/watch?v=fvS95J-Sg8M) (https://www.youtube.com/watch?v=fvS95J-Sg8M)
 
 **Sozialform:** Plenumsdiskussion
 
@@ -87,8 +87,8 @@ d) Nennen Sie zwei Zwecke, die der Posteingangsstempel erfüllt.
 
 ## Aufgabe 6 — Verteilen, digitaler Posteingang und Wertsendungen
 
-📺 **Vorbereitungsvideo:** [YouTube: „digitaler Posteingang Scannen OCR Dokumentenmanagement"](https://www.youtube.com/results?search_query=digitaler+Posteingang+Scannen+OCR+Dokumentenmanagement) (https://www.youtube.com/results?search_query=digitaler+Posteingang+Scannen+OCR+Dokumentenmanagement)
-📺 **Ergänzend:** [YouTube: „Einschreiben Wertbrief Nachnahme Posteingang"](https://www.youtube.com/results?search_query=Einschreiben+Wertbrief+Nachnahme+Posteingang) (https://www.youtube.com/results?search_query=Einschreiben+Wertbrief+Nachnahme+Posteingang)
+📺 **Vorbereitungsvideo:** [YouTube: „digitaler Posteingang Scannen OCR Dokumentenmanagement"](https://www.youtube.com/watch?v=vC38m6E-DQ0+Dokumentenmanagement) (https://www.youtube.com/watch?v=vC38m6E-DQ0+Dokumentenmanagement)
+📺 **Ergänzend:** [YouTube: „Einschreiben Wertbrief Nachnahme Posteingang"](https://www.youtube.com/watch?v=eEuG1GNZGOw) (https://www.youtube.com/watch?v=eEuG1GNZGOw)
 
 **Sozialform:** Partnerarbeit
 

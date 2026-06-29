@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Aufgabe 1 — Warum bewahrt ein Betrieb Schriftgut auf?
 
-📺 **Vorbereitungsvideo:** [YouTube: „Schriftgutverwaltung Grundlagen"](https://www.youtube.com/results?search_query=Schriftgutverwaltung+Grundlagen) (https://www.youtube.com/results?search_query=Schriftgutverwaltung+Grundlagen)
+📺 **Vorbereitungsvideo:** [YouTube: „Schriftgutverwaltung Grundlagen"](https://www.youtube.com/watch?v=zx9vxdezRyc) (https://www.youtube.com/watch?v=zx9vxdezRyc)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Warum wird die Schriftgutverwaltung (Registratur) als „Gedächtnis eines Un
 
 ## Aufgabe 2 — GoBD und ordnungsmäßige Aufbewahrung
 
-📺 **Vorbereitungsvideo:** [YouTube: „GoBD einfach erklärt"](https://www.youtube.com/results?search_query=GoBD+einfach+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=GoBD+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [YouTube: „GoBD einfach erklärt"](https://www.youtube.com/watch?v=r1kpfyHPcvI) (https://www.youtube.com/watch?v=r1kpfyHPcvI)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Erläutern Sie, warum die Unveränderbarkeit gespeicherter Belege so wichtig 
 
 ## Aufgabe 3 — Wertigkeitsstufen zuordnen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Wertigkeitsstufen Schriftgut"](https://www.youtube.com/results?search_query=Wertigkeitsstufen+Schriftgut+Aufbewahrung) (https://www.youtube.com/results?search_query=Wertigkeitsstufen+Schriftgut+Aufbewahrung)
+📺 **Vorbereitungsvideo:** [YouTube: „Wertigkeitsstufen Schriftgut"](https://www.youtube.com/watch?v=wsj-jRTouXY) (https://www.youtube.com/watch?v=wsj-jRTouXY)
 
 **Sozialform:** Einzelarbeit
 
@@ -53,7 +53,7 @@ c) Was geschieht mit Schriftstücken, die nur einen Tageswert haben?
 
 ## Aufgabe 4 — Aufbewahrungsfristen bestimmen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Aufbewahrungsfristen HGB AO"](https://www.youtube.com/results?search_query=Aufbewahrungsfristen+HGB+AO) (https://www.youtube.com/results?search_query=Aufbewahrungsfristen+HGB+AO)
+📺 **Vorbereitungsvideo:** [YouTube: „Aufbewahrungsfristen HGB AO"](https://www.youtube.com/watch?v=XHUau_xKmaY) (https://www.youtube.com/watch?v=XHUau_xKmaY)
 
 **Sozialform:** Partnerarbeit
 
@@ -68,7 +68,7 @@ d) Ein empfangener Handelsbrief wurde im Jahr 2025 empfangen. Bis wann muss er a
 
 ## Aufgabe 5 — Schriftgutkatalog erstellen
 
-📺 **Vorbereitungsvideo:** [YouTube: „Schriftgutkatalog Aktenplan"](https://www.youtube.com/results?search_query=Schriftgutkatalog+Aktenplan) (https://www.youtube.com/results?search_query=Schriftgutkatalog+Aktenplan)
+📺 **Vorbereitungsvideo:** [YouTube: „Schriftgutkatalog Aktenplan"](https://www.youtube.com/watch?v=h-lYj7edwQk) (https://www.youtube.com/watch?v=h-lYj7edwQk)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -84,7 +84,7 @@ c) Tragen Sie für die folgenden Schriftstücke Wertigkeitsstufe und (sofern vor
 
 ## Aufgabe 6 — Ablageorte und Registraturarten
 
-📺 **Vorbereitungsvideo:** [YouTube: „Zentrale dezentrale Ablage Registratur"](https://www.youtube.com/results?search_query=Zentrale+dezentrale+Ablage+Registratur) (https://www.youtube.com/results?search_query=Zentrale+dezentrale+Ablage+Registratur)
+📺 **Vorbereitungsvideo:** [YouTube: „Zentrale dezentrale Ablage Registratur"](https://www.youtube.com/watch?v=D2clvM7Bqfs) (https://www.youtube.com/watch?v=D2clvM7Bqfs)
 
 **Sozialform:** Einzelarbeit
 

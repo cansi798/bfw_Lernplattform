@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 12 · 14.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 12 · 14.07.2026 · 60 Fragen</span>
   <h1>Quiz: Dokumentenmanagement – Aufbewahrung &amp; Fristen</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Dokumentenmanagement-Aufbewahrung-und-Fristen.html</strong> und dem <strong>Handout_Dokumentenmanagement-Aufbewahrung-und-Fristen.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Dokumentenmanagement-Aufbewahrung-und-Fristen.html</strong> und dem <strong>Handout_Dokumentenmanagement-Aufbewahrung-und-Fristen.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -215,9 +215,9 @@ const QUESTIONS = [
   { topic: "Grundlagen", q: "Wie wird die Schriftgutverwaltung auch genannt?",
     options: ["Buchhaltung", "Inventur", "Registratur", "Disposition"],
     a: 2, e: "Die Schriftgutverwaltung wird auch als Registratur bezeichnet." },
-  { topic: "Grundlagen", q: "Welcher Begriff beschreibt das „Gedächtnis des Unternehmens"?",
+  { topic: "Grundlagen", q: "Welcher Begriff beschreibt das „Gedächtnis des Unternehmens“?",
     options: ["Die Kantine", "Die Buchhaltung", "Die Personalabteilung", "Die Schriftgutverwaltung/Registratur"],
-    a: 3, e: "Die Schriftgutverwaltung (Registratur) wird als „Gedächtnis eines Unternehmens" bezeichnet, weil dort das Wissen über vergangene Vorgänge gespeichert ist." },
+    a: 3, e: "Die Schriftgutverwaltung (Registratur) wird als „Gedächtnis eines Unternehmens“ bezeichnet, weil dort das Wissen über vergangene Vorgänge gespeichert ist." },
   { topic: "Aufbewahrungsgründe", q: "Welcher Grund der Aufbewahrung ist ein steuerlicher Grund?",
     options: ["Der schnelle Zugriff durch Kollegen", "Buchführungsunterlagen müssen für das Finanzamt prüfbar sein", "Das Archiv soll möglichst voll sein", "Die Unterlagen dienen der Werbung"],
     a: 1, e: "Steuerlich müssen Buchführungsunterlagen innerhalb der Fristen für Prüf- und Beweiszwecke (Finanzamt) verfügbar sein (AO)." },
@@ -277,7 +277,7 @@ const QUESTIONS = [
     a: 1, e: "Handelsbriefe: 6 Jahre. Fristbeginn 31.12.2024 + 6 Jahre = 31.12.2030." },
   { topic: "Fristen", q: "Welches Gesetz regelt die handelsrechtlichen Aufbewahrungsfristen?",
     options: ["HGB § 257", "BGB § 433", "StGB § 263", "GewO § 14"],
-    a: 0, e: "HGB § 257 („Aufbewahrung von Unterlagen. Aufbewahrungsfristen") regelt die handelsrechtlichen Fristen." },
+    a: 0, e: "HGB § 257 („Aufbewahrung von Unterlagen. Aufbewahrungsfristen“) regelt die handelsrechtlichen Fristen." },
   { topic: "Fristen", q: "Welche Vorschrift enthält die entsprechenden steuerlichen Aufbewahrungsregelungen?",
     options: ["HGB § 257", "UStG § 14", "AO § 147", "EStG § 19"],
     a: 2, e: "AO § 147 enthält die weitgehend deckungsgleichen steuerlichen Aufbewahrungsregelungen." },
@@ -303,7 +303,107 @@ const QUESTIONS = [
     a: 0, e: "Die Altregistratur (Archiv) enthält selten benötigte, aber noch aufbewahrungspflichtige Unterlagen sowie Dauerwert-Schriftgut." },
   { topic: "Registraturarten", q: "Was ist ein Vorteil der dezentralen Ablage?",
     options: ["Einheitliche Ordnung im ganzen Betrieb", "Entlastung der Arbeitsplätze von Unterlagen", "Schneller Zugriff direkt am Arbeitsplatz", "Weniger Personal in der Zentrale"],
-    a: 2, e: "Die dezentrale Ablage (am Arbeitsplatz/in der Abteilung) bietet vor allem schnellen Zugriff; die zentrale Ablage sorgt dagegen für einheitliche Ordnung." }
+    a: 2, e: "Die dezentrale Ablage (am Arbeitsplatz/in der Abteilung) bietet vor allem schnellen Zugriff; die zentrale Ablage sorgt dagegen für einheitliche Ordnung." },
+
+  // === Block F: Grundlagen & Schriftgutverwaltung (31-35) ===
+  { topic: "Grundlagen", q: "Was versteht man unter dem Begriff Schriftgut?",
+    options: ["Nur handgeschriebene Notizen", "Ausschließlich Rechnungen", "Nur digitale E-Mails", "Alle in einem Unternehmen anfallenden Informationen und Daten in geschriebener oder gedruckter Form (auf Papier oder Datenträgern)"],
+    a: 3, e: "Schriftgut sind alle in einem Unternehmen anfallenden Informationen und Daten in geschriebener oder gedruckter Form — auf Papier oder auf Datenträgern." },
+  { topic: "Aufbewahrungsgründe", q: "Welche drei Gründe für die Aufbewahrung von Schriftgut werden unterschieden?",
+    options: ["Betriebliche, rechtliche und steuerliche Gründe", "Private, öffentliche und geheime Gründe", "Kurz-, mittel- und langfristige Gründe", "Technische, organisatorische und personelle Gründe"],
+    a: 0, e: "Man unterscheidet betriebliche (schneller Zugriff), rechtliche (Beweis nach HGB) und steuerliche (Prüfbarkeit nach AO) Gründe." },
+  { topic: "Schriftgutverwaltung", q: "Welche der folgenden Überlegungen gehört NICHT zu den bei der Schriftgutverwaltung anzustellenden Überlegungen?",
+    options: ["Ablageort", "Werbestrategie für Neukunden", "Ablagetechnik", "Ordnungssystem"],
+    a: 1, e: "Zu den Überlegungen zählen Wertigkeit/Frist, Ablageort, Ablagetechnik, Aktenart und Ordnungssystem — eine Werbestrategie gehört nicht dazu." },
+  { topic: "Schriftgutverwaltung", q: "Was wird mit der Überlegung „Ablagetechnik\“ entschieden?",
+    options: ["In welcher Abteilung gearbeitet wird", "Welche Frist gilt", "Wer der Sachbearbeiter ist", "Ob die Schriftstücke lose oder geheftet abgelegt werden"],
+    a: 3, e: "Die Ablagetechnik legt fest, ob Schriftstücke lose oder geheftet abgelegt werden." },
+  { topic: "Schriftgutverwaltung", q: "Was legt die Überlegung „Aktenart\“ fest?",
+    options: ["Die Raumtemperatur im Archiv", "Den Drucker-Typ", "Ob als Einzel- oder als Sammelakte abgelegt wird", "Die Bürozeiten"],
+    a: 2, e: "Die Aktenart entscheidet, ob Schriftstücke als Einzel- oder als Sammelakte abgelegt werden." },
+
+  // === Block G: GoBD vertieft (36-38) ===
+  { topic: "GoBD", q: "Für welche Unterlagen gilt die Erleichterung der bildlichen/elektronischen Wiedergabe nach HGB § 257 Abs. 3 NICHT?",
+    options: ["Für empfangene Handelsbriefe", "Für Buchungsbelege", "Für Preislisten", "Für Eröffnungsbilanzen und Abschlüsse"],
+    a: 3, e: "Eröffnungsbilanzen und Abschlüsse sind von der elektronischen Wiedergabe ausgenommen (HGB § 257 Abs. 3) — sie müssen im Original aufbewahrt werden." },
+  { topic: "GoBD", q: "Was muss bei empfangenen Handelsbriefen und Buchungsbelegen bei elektronischer Wiedergabe sichergestellt sein?",
+    options: ["Inhaltliche Übereinstimmung genügt", "Bildliche Übereinstimmung mit dem Original", "Keine Übereinstimmung nötig", "Nur farbliche Übereinstimmung"],
+    a: 1, e: "Empfangene Handelsbriefe und Buchungsbelege müssen bildlich übereinstimmen; übrige Unterlagen nur inhaltlich (HGB § 257 Abs. 3)." },
+  { topic: "GoBD", q: "Wie müssen elektronisch gespeicherte Unterlagen während der Aufbewahrungsfrist verfügbar sein?",
+    options: ["Jederzeit innerhalb angemessener Frist verfügbar und lesbar gemacht werden können", "Nur am letzten Tag der Frist", "Nur für die Geschäftsführung", "Gar nicht"],
+    a: 0, e: "Die Unterlagen müssen während der gesamten Aufbewahrungsfrist jederzeit innerhalb angemessener Frist verfügbar und lesbar gemacht werden können." },
+
+  // === Block H: Wertigkeitsstufen vertieft (39-43) ===
+  { topic: "Wertigkeitsstufen", q: "Welche Reihenfolge ergibt die Eselsbrücke „Tagsüber Prüfe Gesetze Dauerhaft\“?",
+    options: ["Dauer-, Gesetzes-, Prüf-, Tageswert", "Prüf-, Tages-, Dauer-, Gesetzeswert", "Gesetzes-, Tages-, Prüf-, Dauerwert", "Tages-, Prüf-, Gesetzes-, Dauerwert"],
+    a: 3, e: "T-P-G-D = Tages-, Prüf-, Gesetzes-, Dauerwert — vom kürzesten bis zum längsten Aufbewahrungsbedarf." },
+  { topic: "Wertigkeitsstufen", q: "Welche Wertigkeitsstufe haben unverlangte Angebote?",
+    options: ["Gesetzeswert", "Tageswert", "Dauerwert", "Prüfwert"],
+    a: 1, e: "Unverlangte Angebote haben Tageswert; sie werden nach Kenntnisnahme vernichtet. (Verlangte Angebote dagegen haben Prüfwert.)" },
+  { topic: "Wertigkeitsstufen", q: "Welche Wertigkeitsstufe haben verlangte Angebote, Preislisten und Statistiken?",
+    options: ["Tageswert", "Gesetzeswert", "Prüfwert", "Dauerwert"],
+    a: 2, e: "Verlangte Angebote, Preislisten und Statistiken sind nur begrenzt bedeutsam und haben deshalb Prüfwert." },
+  { topic: "Wertigkeitsstufen", q: "Was darf bei Tageswert-Schriftstücken vor der Vernichtung getan werden?",
+    options: ["Sie 10 Jahre lagern", "Sie an das Finanzamt senden", "Sie notariell beglaubigen", "Interessante Artikel können ausgeschnitten werden"],
+    a: 3, e: "Tageswert-Schriftstücke werden nach Kenntnisnahme vernichtet — interessante Artikel können vorher ausgeschnitten werden." },
+
+  // === Block I: Fristen vertieft & Berechnung ===
+  { topic: "Fristen", q: "Welche Aufbewahrungsfrist gilt für Inventare und Eröffnungsbilanzen?",
+    options: ["10 Jahre", "6 Jahre", "8 Jahre", "3 Jahre"],
+    a: 0, e: "Inventare und Eröffnungsbilanzen sind — wie Bücher und Abschlüsse — 10 Jahre aufzubewahren." },
+  { topic: "Fristen", q: "Welche Aufbewahrungsfrist gilt für Lageberichte?",
+    options: ["8 Jahre", "10 Jahre", "6 Jahre", "5 Jahre"],
+    a: 1, e: "Lageberichte gehören zur 10-Jahres-Gruppe (Bücher, Inventare, Eröffnungsbilanzen, Jahresabschlüsse, Lageberichte)." },
+  { topic: "Fristen", q: "Welche Frist gilt für sonstige Unterlagen mit steuerlicher Bedeutung?",
+    options: ["10 Jahre", "8 Jahre", "12 Jahre", "6 Jahre"],
+    a: 3, e: "Sonstige steuerlich bedeutsame Unterlagen sind — wie Handelsbriefe — 6 Jahre aufzubewahren." },
+  { topic: "Fristen", q: "Welche Aufbewahrungsfrist gilt für Handelsbücher?",
+    options: ["6 Jahre", "8 Jahre", "10 Jahre", "4 Jahre"],
+    a: 2, e: "Handelsbücher sind 10 Jahre aufzubewahren (HGB § 257 / AO § 147)." },
+  { topic: "Fristen", q: "Ein Jahresabschluss wird 2025 festgestellt. Wann endet die Aufbewahrungsfrist?",
+    options: ["31.12.2035", "31.12.2033", "31.12.2031", "31.12.2036"],
+    a: 0, e: "Jahresabschluss: 10 Jahre. Fristbeginn 31.12.2025 + 10 Jahre = 31.12.2035." },
+  { topic: "Fristen", q: "Eine Quittung (Buchungsbeleg) entsteht im Jahr 2026. Wann endet die 8-jährige Aufbewahrungsfrist?",
+    options: ["31.12.2032", "31.12.2036", "31.12.2033", "31.12.2034"],
+    a: 3, e: "Buchungsbeleg: 8 Jahre. Fristbeginn 31.12.2026 + 8 Jahre = 31.12.2034." },
+  { topic: "Fristen", q: "Ein Handelsbrief wird am 05.05.2025 abgesandt. Wann endet die Aufbewahrungsfrist?",
+    options: ["31.12.2030", "31.12.2031", "31.12.2033", "05.05.2031"],
+    a: 1, e: "Handelsbrief: 6 Jahre. Fristbeginn 31.12.2025 + 6 Jahre = 31.12.2031 (das Fristende ist nie der Tagesgenaue Termin)." },
+  { topic: "Fristen", q: "Auf welches Datum fällt das Fristende einer Aufbewahrungsfrist grundsätzlich immer?",
+    options: ["Auf einen 31. Dezember", "Auf den 1. Januar", "Auf den letzten Geschäftstag", "Auf den Tag der Belegerstellung"],
+    a: 0, e: "Da die Frist mit dem Schluss des Kalenderjahres beginnt, liegt das Fristende stets auf einem 31. Dezember." },
+  { topic: "Fristen", q: "Durch welches Gesetz wurde die Frist für Buchungsbelege auf 8 Jahre verkürzt?",
+    options: ["Handelsgesetzbuch-Reform", "Datenschutz-Grundverordnung", "Viertes Bürokratieentlastungsgesetz (BEG IV)", "Mindestlohngesetz"],
+    a: 2, e: "Das Vierte Bürokratieentlastungsgesetz (BEG IV) verkürzte die Frist für Buchungsbelege von 10 auf 8 Jahre." },
+  { topic: "Fristen", q: "Seit wann gilt die verkürzte 8-Jahres-Frist für Buchungsbelege?",
+    options: ["seit 2020", "seit 2030", "seit 2015", "seit 2025"],
+    a: 3, e: "Das BEG IV ist seit 2025 in Kraft; seitdem gilt für Buchungsbelege die 8-Jahres-Frist." },
+  { topic: "Fristen", q: "Was ist ein Vorteil der verkürzten Aufbewahrungsfrist?",
+    options: ["Mehr Papierverbrauch", "Weniger Lager- und Archivierungsaufwand (Bürokratieabbau)", "Höhere Steuern", "Längere Betriebsprüfungen"],
+    a: 1, e: "Die kürzere Frist verringert den Lager- und Archivierungsaufwand — ein Beitrag zum Bürokratieabbau." },
+  { topic: "Fristen", q: "Was ist ein Handelsbrief?",
+    options: ["Eine unverbindliche Werbeanzeige", "Eine private Postkarte", "Jedes Schriftstück, das ein Handelsgeschäft betrifft", "Ein internes Memo ohne Geschäftsbezug"],
+    a: 2, e: "Ein Handelsbrief ist jedes Schriftstück, das ein Handelsgeschäft betrifft (Aufbewahrungsfrist 6 Jahre)." },
+  { topic: "Fristen", q: "Welches Schriftstück zählt NICHT zu den Handelsbriefen?",
+    options: ["Unverbindliche Werbung", "Ein Auftragsschreiben", "Eine Bestellung", "Ein Geschäftsbrief zu einem Handelsgeschäft"],
+    a: 0, e: "Nicht jedes Geschäftsschreiben ist ein Handelsbrief — z. B. unverbindliche Werbung betrifft kein konkretes Handelsgeschäft." },
+
+  // === Block J: Schriftgutkatalog, Ablageorte & Registratur (57-60) ===
+  { topic: "Schriftgutkatalog", q: "Welche drei Angaben enthält der Schriftgutkatalog zu jedem Schriftstück?",
+    options: ["Farbe, Größe und Gewicht", "Preis, Lieferant und Menge", "Wertigkeitsstufe, Aufbewahrungsfrist und Ablageort", "Absender, Empfänger und Datum"],
+    a: 2, e: "Der Schriftgutkatalog verzeichnet je Schriftstück Wertigkeitsstufe, Aufbewahrungsfrist und Ablageort." },
+  { topic: "Ablageorte", q: "Wofür ist die Abteilungsablage gedacht?",
+    options: ["Nur für Dauerwert-Unterlagen", "Für Unterlagen, die von mehreren Mitarbeitern bearbeitet oder verwaltet werden", "Für private Post der Mitarbeiter", "Ausschließlich für vernichtetes Schriftgut"],
+    a: 1, e: "Die Abteilungsablage ist für Unterlagen gedacht, die von mehreren Mitarbeitern gleichzeitig bearbeitet oder verwaltet werden." },
+  { topic: "Ablageorte", q: "Welches Hilfsmittel macht die Abteilungsablage für alle nachvollziehbar?",
+    options: ["Ein Werbeflyer", "Eine Kaffeeliste", "Ein Aktenplan", "Eine Telefonliste"],
+    a: 2, e: "Ein Aktenplan sorgt dafür, dass die Abteilungsablage für alle nachvollziehbar ist." },
+  { topic: "Registraturarten", q: "Welche Registraturart enthält laufende, aktive Vorgänge des aktuellen Geschäftsjahres?",
+    options: ["Altregistratur", "Tagesregistratur", "Zwischenregistratur", "Schlussregistratur"],
+    a: 1, e: "Die Tagesregistratur (laufende/aktive Registratur) enthält Vorgänge des aktuellen Geschäftsjahres; meist dezentral am Arbeitsplatz." },
+  { topic: "Registraturarten", q: "Was kennzeichnet die Zwischenregistratur?",
+    options: ["Abgeschlossene Vorgänge, die noch gelegentlich gebraucht werden — ausgelagert, aber gut erreichbar", "Täglich bearbeitete Vorgänge am Arbeitsplatz", "Vollständig vernichtete Unterlagen", "Nur Dauerwert-Unterlagen im Tresor"],
+    a: 0, e: "Die Zwischenregistratur enthält abgeschlossene Vorgänge, die noch gelegentlich gebraucht werden; sie ist ausgelagert, aber gut erreichbar." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 4 · 02.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 4 · 02.07.2026 · 60 Fragen</span>
   <h1>Quiz: Arbeitsschutz &amp; Gesundheit</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Arbeitsschutz-und-Gesundheit.html</strong> und dem <strong>Handout_Arbeitsschutz-und-Gesundheit.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Arbeitsschutz-und-Gesundheit.html</strong> und dem <strong>Handout_Arbeitsschutz-und-Gesundheit.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -250,7 +250,7 @@ const QUESTIONS = [
     a: 1, e: "Das Sozialgesetzbuch (SGB) schreibt vor, dass Unternehmen Sicherheitsbeauftragte schriftlich bestellen müssen." },
 
   // === Block B: Belastung & Stress (15-23) ===
-  { topic: "Belastung", q: "Was bedeutet der Begriff „Belastung” in der Arbeitswissenschaft?",
+  { topic: "Belastung", q: "Was bedeutet der Begriff „Belastung“ in der Arbeitswissenschaft?",
     options: ["Ausschließlich körperliche Schwerarbeit", "Nur negative Einflüsse", "Ein zunächst neutraler Begriff für alle Einflüsse, die von außen auf den Menschen einwirken", "Die Höhe des Gehalts"],
     a: 2, e: "Belastung ist arbeitswissenschaftlich zunächst neutral und bezeichnet alle Einflüsse, die von außen auf den Menschen einwirken." },
   { topic: "Beanspruchung", q: "Wovon hängt ab, wie stark sich jemand durch eine Belastung beansprucht fühlt?",
@@ -259,7 +259,7 @@ const QUESTIONS = [
   { topic: "Belastung", q: "Seit wann werden psychische Belastungen ausdrücklich im Arbeitsschutzgesetz berücksichtigt?",
     options: ["Seit Oktober 2013", "Seit 1950", "Seit 2020", "Gar nicht"],
     a: 0, e: "Seit Oktober 2013 werden psychische Belastungen ausdrücklich als Gesundheitsgefährdung angesehen und im Arbeitsschutzgesetz berücksichtigt." },
-  { topic: "Belastung", q: "Welche Gegenmaßnahme passt zum Belastungsfaktor „fehlende Rückmeldung / Leistung nicht gewürdigt”?",
+  { topic: "Belastung", q: "Welche Gegenmaßnahme passt zum Belastungsfaktor „fehlende Rückmeldung / Leistung nicht gewürdigt“?",
     options: ["Mehr Überstunden anordnen", "Regelmäßige Feedbackgespräche und Lob", "Die Beleuchtung dimmen", "Den Arbeitsplatz verlegen"],
     a: 1, e: "Gegen fehlende Rückmeldung und mangelnde Wertschätzung helfen regelmäßige Feedbackgespräche und Lob." },
   { topic: "Stress", q: "Was ist Stress ursprünglich?",
@@ -299,7 +299,99 @@ const QUESTIONS = [
     a: 0, e: "Das Opfer kann u. a. eine selbstkritische Prüfung vornehmen, den Täter ansprechen, das soziale Netzwerk und Selbstbewusstsein stärken, ein Mobbing-Tagebuch führen und früh reagieren." },
   { topic: "BGM", q: "Warum gehört Suchtprävention in das betriebliche Gesundheitsmanagement?",
     options: ["Weil Sucht den Umsatz steigert", "Weil Arbeitsbedingungen wie Leistungsdruck das Suchtrisiko erhöhen und Suchtmittel die Arbeitssicherheit gefährden", "Weil sie gesetzlich verboten ist", "Weil sie keine Rolle spielt"],
-    a: 1, e: "Hoher Leistungsdruck, ungünstige Arbeitszeiten und schlechtes Betriebsklima erhöhen das Suchtrisiko; Suchtmittel beeinträchtigen die Arbeitssicherheit. Daher gehört Suchtprävention ins BGM." }
+    a: 1, e: "Hoher Leistungsdruck, ungünstige Arbeitszeiten und schlechtes Betriebsklima erhöhen das Suchtrisiko; Suchtmittel beeinträchtigen die Arbeitssicherheit. Daher gehört Suchtprävention ins BGM." },
+
+  // === Block D: Recht & Akteure vertieft (31-44) ===
+  { topic: "Arbeitsschutz", q: "Welche Rechtsquellen ergänzen neben ArbSchG, ArbZG und ASiG den Arbeitsschutz?",
+    options: ["Gewerbeordnung und Arbeitsstättenverordnung", "Markenrecht und Patentrecht", "Mietrecht und Erbrecht", "Straßenverkehrsordnung und Baurecht"],
+    a: 0, e: "Zu den Rechtsgrundlagen des Arbeitsschutzes gehören neben ArbSchG, ArbZG und ASiG auch die Gewerbeordnung und die Arbeitsstättenverordnung." },
+  { topic: "ArbSchG", q: "Welchen Stellenwert haben individuelle Schutzmaßnahmen nach § 4 ArbSchG?",
+    options: ["Sie sind nachrangig gegenüber anderen Maßnahmen", "Sie haben immer Vorrang", "Sie sind verboten", "Sie ersetzen die Gefährdungsbeurteilung"],
+    a: 0, e: "Nach den Grundsätzen des § 4 ArbSchG sind individuelle Schutzmaßnahmen nachrangig gegenüber anderen (z. B. technischen und organisatorischen) Maßnahmen." },
+  { topic: "Unterweisung", q: "Wie müssen Inhalt und Zeitpunkt einer Unterweisung festgehalten werden?",
+    options: ["Schriftlich, von der unterwiesenen Person mit Unterschrift bestätigt", "Gar nicht, ein Gespräch genügt", "Nur mündlich gegenüber dem Betriebsrat", "Ausschließlich durch die Berufsgenossenschaft"],
+    a: 0, e: "Inhalt und Zeitpunkt der Unterweisung müssen schriftlich festgehalten und von der unterwiesenen Person mit Unterschrift bestätigt werden." },
+  { topic: "ASiG", q: "Warum sollen Betriebsärzte und Fachkräfte aus dem Betrieb heraus tätig werden?",
+    options: ["Weil Gefahren am wirksamsten aus dem Betrieb heraus bekämpft werden können", "Weil das billiger ist als externe Berater", "Weil das Gesetz externe Hilfe verbietet", "Weil sie sonst keine Aufgaben hätten"],
+    a: 0, e: "Das ASiG begründet die Bestellung damit, dass Gefahren am wirksamsten aus dem Betrieb heraus bekämpft werden können." },
+  { topic: "Belastung", q: "Welche Gegenmaßnahme passt zu „ständige Unterbrechung und unklare Kompetenzen“?",
+    options: ["Prioritäten setzen und Kompetenzen klar regeln", "Die Beleuchtung verstärken", "Mehr Lärm zulassen", "Feedbackgespräche abschaffen"],
+    a: 0, e: "Bei betrieblich-organisatorischen Belastungen wie ständigen Unterbrechungen und unklaren Kompetenzen helfen klare Prioritäten und eine klare Kompetenzregelung." },
+  { topic: "Work-Life-Balance", q: "Welche Maßnahme der Arbeitsorganisation fördert die Work-Life-Balance?",
+    options: ["Job Rotation und Job Enlargement", "Verbot von Teamarbeit", "Abschaffung von Pausen", "Verlängerung der Nachtschichten"],
+    a: 0, e: "Veränderte Arbeitsorganisation wie Job Rotation und Job Enlargement zählt zu den Maßnahmen, mit denen Unternehmen die Work-Life-Balance fördern." },
+  { topic: "Suchtprävention", q: "Wie sollte mit Alkoholproblemen von Kollegen umgegangen werden?",
+    options: ["Sie dürfen nicht verschwiegen oder gedeckt werden", "Sie sollten grundsätzlich ignoriert werden", "Sie sind Privatsache und tabu", "Sie sollten vertuscht werden, um Streit zu vermeiden"],
+    a: 0, e: "Wichtig ist: Alkoholprobleme von Kollegen dürfen nicht verschwiegen oder gedeckt werden, da Suchtmittel die Arbeitssicherheit beeinträchtigen." },
+  { topic: "ArbSchG", q: "Was verlangt § 4 ArbSchG im Umgang mit Gefahren?",
+    options: ["Gefahren nur zu dokumentieren", "Gefahren an ihrer Quelle zu bekämpfen", "Gefahren auf die Arbeitnehmer abzuwälzen", "Gefahren erst nach einem Unfall zu beseitigen"],
+    a: 1, e: "Ein Grundsatz des § 4 ArbSchG lautet, dass Gefahren an ihrer Quelle zu bekämpfen sind." },
+  { topic: "ArbZG", q: "Welche Beschäftigtengruppe genießt nach dem ArbZG besonderen Schutz?",
+    options: ["Führungskräfte", "Nachtarbeiter und Nachtarbeiterinnen", "Auszubildende im Büro", "Teilzeitkräfte"],
+    a: 1, e: "Das ArbZG sieht einen besonderen Schutz für Nachtarbeiter und Nachtarbeiterinnen vor." },
+  { topic: "Gefährdungsbeurteilung", q: "Wann muss eine Gefährdungsbeurteilung überprüft und aktualisiert werden?",
+    options: ["Niemals nach der Erstbeurteilung", "Wenn neue Arbeitsplätze eingerichtet oder neue Arbeitsverfahren eingeführt werden", "Nur wenn ein Mitarbeiter kündigt", "Nur alle 20 Jahre"],
+    a: 1, e: "Sie muss z. B. überprüft und aktualisiert werden, wenn neue Arbeitsplätze eingerichtet oder neue Arbeitsverfahren eingeführt werden." },
+  { topic: "Unterweisung", q: "Welche allgemeinen Themen gehören typischerweise in eine Unterweisung?",
+    options: ["Gehaltsverhandlung und Urlaubsplanung", "Brandschutz, Erste Hilfe, Notausgänge und Sammelpunkte", "Marketingstrategie und Kundenakquise", "Steuererklärung und Buchführung"],
+    a: 1, e: "Allgemeine Themen der Unterweisung sind u. a. Brandschutz, Erste Hilfe, Notausgänge und Sammelpunkte." },
+  { topic: "Gesetze", q: "Welche Eselsbrücke hilft, die drei wichtigsten Gesetze zu unterscheiden?",
+    options: ["Alle drei regeln dasselbe", "ArbZG = Zeit, ArbSchG = Schutz, ASiG = Sicherheitspersonal", "ASiG = Arbeitszeit, ArbZG = Schutz", "ArbSchG = Zeit, ArbZG = Sicherheit"],
+    a: 1, e: "Eselsbrücke: ArbZG = Zeit (Arbeitszeit), ArbSchG = Schutz (Schutzmaßnahmen), ASiG = Sicherheitspersonal (Bestellung von Fachkräften und Betriebsärzten)." },
+  { topic: "Stress", q: "Was geschieht im Körper bei der Kampf-oder-Flucht-Reaktion?",
+    options: ["Puls und Blutdruck sinken, der Körper entspannt", "Puls und Blutdruck steigen, die Muskeln spannen sich an, Stresshormone werden ausgeschüttet", "Nichts Messbares", "Nur die Körpertemperatur sinkt"],
+    a: 1, e: "Bei Kampf oder Flucht steigen Puls und Blutdruck, die Sinne werden geschärft, die Muskeln angespannt und Stresshormone werden ausgeschüttet." },
+  { topic: "Mobbing", q: "Was bedeutet das englische Verb „to mob“?",
+    options: ["Beraten und unterstützen", "Lärmend herfallen über, anpöbeln, angreifen, attackieren", "Loben und auszeichnen", "Ordnen und verwalten"],
+    a: 1, e: "„To mob“ bedeutet „lärmend herfallen über, anpöbeln, angreifen, attackieren“ — daher der Begriff Mobbing." },
+  { topic: "Mobbing", q: "Welche Folgen hat Mobbing für Betrieb und Volkswirtschaft?",
+    options: ["Steigende Gewinne", "Bessere Stimmung im Team", "Schlechtes Betriebsklima, Fehlzeiten und Fluktuation sowie volkswirtschaftliche Kosten in Milliardenhöhe", "Keinerlei Folgen"],
+    a: 2, e: "Mobbing führt im Betrieb zu schlechtem Klima, Fehlzeiten und Fluktuation; volkswirtschaftlich entstehen jährliche Kosten in Milliardenhöhe." },
+  { topic: "Gewerbeaufsicht", q: "Was kontrolliert das Gewerbeaufsichtsamt?",
+    options: ["Nur die Lohnzahlung", "Nur die Pausenzeiten", "Ob die Vorschriften zum Arbeits-, Umwelt- und Verbraucherschutz eingehalten werden", "Nur die Werbung der Unternehmen"],
+    a: 2, e: "Das Gewerbeaufsichtsamt kontrolliert, ob alle Vorschriften zum Arbeits-, Umwelt- und Verbraucherschutz eingehalten werden." },
+  { topic: "Unterweisung", q: "Wie soll eine Unterweisung durchgeführt werden?",
+    options: ["Ausschließlich schriftlich per E-Mail", "Nur einmalig per Aushang", "Mündlich, arbeitsplatzbezogen und praxisnah", "Nur durch das Gewerbeaufsichtsamt"],
+    a: 2, e: "Die Unterweisung erfolgt mündlich, arbeitsplatzbezogen und praxisnah — so, dass sie auch ausländische Arbeitnehmer verstehen." },
+  { topic: "Betriebsanweisung", q: "Wo wird eine Betriebsanweisung bereitgestellt?",
+    options: ["In der Personalakte verschlossen", "Nur im Intranet der Geschäftsführung", "Am Arbeitsplatz ausgehängt", "Beim Gewerbeaufsichtsamt hinterlegt"],
+    a: 2, e: "Die Betriebsanweisung wird vom Unternehmer erstellt und am Arbeitsplatz ausgehängt; sie enthält auch Hinweise für den Gefahrenfall und die Erste Hilfe." },
+  { topic: "Belastung", q: "Was sind „Fehlbelastungen“?",
+    options: ["Nur körperliche Schwerarbeit", "Ausschließlich Lärm am Arbeitsplatz", "Belastungen durch sowohl Über- als auch Unterforderung", "Eine gesetzlich erlaubte Höchstbelastung"],
+    a: 2, e: "Sowohl Über- als auch Unterforderung führen zu Fehlbelastungen." },
+  { topic: "Stress", q: "Welche Folgen kann ständiger (negativer) Stress langfristig haben?",
+    options: ["Ein gestärktes Immunsystem", "Dauerhaft bessere Konzentration", "Ein geschwächtes Immunsystem sowie begünstigte Herzerkrankungen und Rückenbeschwerden", "Keine gesundheitlichen Folgen"],
+    a: 2, e: "Ständiger Stress schwächt das Immunsystem und begünstigt Herzerkrankungen und Rückenbeschwerden; auch Burnout kann eine Folge sein." },
+  { topic: "Mobbing", q: "In welchem Fall liegt KEIN Mobbing vor?",
+    options: ["Bei wiederholter Schikane über Monate", "Wenn die Würde des Opfers angegriffen wird", "Bei einer einmaligen Aktion oder einer notwendigen organisatorischen Maßnahme", "Wenn die Parteien nicht auf Augenhöhe sind"],
+    a: 2, e: "Kein Mobbing liegt vor bei einer einmaligen Aktion, einer notwendigen organisatorischen Maßnahme oder wenn keine schikanöse Absicht dahintersteckt." },
+  { topic: "Ernährung", q: "In welchem Verhältnis wird eine Saftschorle zum Trinken im Büro empfohlen?",
+    options: ["3/4 Saft zu 1/4 Wasser", "Reiner Saft ohne Wasser", "1/3 Saft zu 2/3 Wasser", "Nur Wasser, kein Saft"],
+    a: 2, e: "Empfohlen wird eine Saftschorle im Verhältnis 1/3 Saft zu 2/3 Wasser; Kaffee und Alkohol sind Genussmittel und nur in kleinen Mengen sinnvoll." },
+  { topic: "ArbSchG", q: "Welche Beschäftigtengruppen sind nach § 4 ArbSchG besonders zu berücksichtigen?",
+    options: ["Nur Vollzeitbeschäftigte", "Nur Führungskräfte", "Ausschließlich Berufseinsteiger", "Besonders schutzbedürftige Beschäftigtengruppen"],
+    a: 3, e: "Nach § 4 ArbSchG sind besonders schutzbedürftige Beschäftigtengruppen zu berücksichtigen." },
+  { topic: "ArbZG", q: "Was gilt nach dem ArbZG grundsätzlich für Sonn- und Feiertage?",
+    options: ["Unbegrenzte Arbeitszeit ist erlaubt", "Es gelten dieselben Regeln wie werktags", "Sie sind komplett ausnahmslos arbeitsfrei", "Ein grundsätzliches Arbeitsverbot mit möglichen Ausnahmen"],
+    a: 3, e: "Grundsätzlich besteht für Sonn- und Feiertage ein Arbeitsverbot, wobei unter besonderen Voraussetzungen Ausnahmen möglich sind." },
+  { topic: "Gewerbeaufsicht", q: "Welche Befugnis zum Zutritt hat das Gewerbeaufsichtsamt?",
+    options: ["Nur nach schriftlicher Voranmeldung", "Nur mit Zustimmung des Betriebsrats", "Nur einmal jährlich", "Es darf Arbeitsstätten jederzeit betreten und besichtigen"],
+    a: 3, e: "Das Gewerbeaufsichtsamt darf Arbeitsstätten jederzeit betreten und besichtigen." },
+  { topic: "Gefährdungsbeurteilung", q: "Werden bei der Gefährdungsbeurteilung auch psychische Belastungen berücksichtigt?",
+    options: ["Nein, nur körperliche Gefahren", "Nur auf Wunsch des Mitarbeiters", "Nur in Großbetrieben", "Ja, psychische Belastungen werden ausdrücklich berücksichtigt"],
+    a: 3, e: "Nach § 5 ArbSchG werden ausdrücklich auch die psychischen Belastungen bei der Arbeit in die Gefährdungsbeurteilung einbezogen." },
+  { topic: "Unterweisung", q: "Wann findet die Erstunterweisung statt (z. B. bei Neueinstellung)?",
+    options: ["Frühestens nach einem Jahr", "Erst nach dem ersten Arbeitsunfall", "Nur auf Verlangen der Berufsgenossenschaft", "Vor Aufnahme der Tätigkeit"],
+    a: 3, e: "Die Erstunterweisung findet vor Aufnahme einer Tätigkeit statt — z. B. bei Neueinstellung, Versetzung oder Arbeit mit Gefahrstoffen (Beispiel: Martin Küster in der Produktion)." },
+  { topic: "ASiG", q: "Wofür steht der vollständige Name des Arbeitssicherheitsgesetzes (ASiG)?",
+    options: ["Gesetz über die Arbeitszeit im Büro", "Gesetz über den Mindestlohn", "Gesetz über Verbraucherschutz", "Gesetz über Betriebsärzte, Sicherheitsingenieure und andere Fachkräfte für Arbeitssicherheit"],
+    a: 3, e: "Das ASiG ist das „Gesetz über Betriebsärzte, Sicherheitsingenieure und andere Fachkräfte für Arbeitssicherheit“." },
+  { topic: "Belastung", q: "Welche Gegenmaßnahme passt zum Belastungsfaktor „Klima, Licht, Lärm“?",
+    options: ["Mehr Aufgaben verteilen", "Feedbackgespräche führen", "Kompetenzen klären", "Die gesetzlichen Bestimmungen zur Arbeitsumgebung anpassen/einhalten"],
+    a: 3, e: "Bei Belastungen der Arbeitsumgebung (Klima, Licht, Lärm) sind die gesetzlichen Bestimmungen anzupassen bzw. einzuhalten." },
+  { topic: "Burnout", q: "Wie entwickelt sich ein Burnout?",
+    options: ["Plötzlich von einem Tag auf den anderen", "Es ist eine ansteckende Krankheit", "Es ist eine klar definierte eigenständige Diagnose", "Schleichend; es ist keine eigenständige Krankheit mit genau definierter Diagnose"],
+    a: 3, e: "Burnout entsteht schleichend und ist keine eigenständige Krankheit mit genau definierter Diagnose; Mediziner sehen darin eine Vorstufe zur Depression." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

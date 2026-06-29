@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 11 · 13.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 11 · 13.07.2026 · 60 Fragen</span>
   <h1>Quiz: Postbearbeitung – Postausgang</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Postbearbeitung-Postausgang.html</strong> und dem <strong>Handout_Postbearbeitung-Postausgang.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Postbearbeitung-Postausgang.html</strong> und dem <strong>Handout_Postbearbeitung-Postausgang.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -205,14 +205,14 @@ footer {
 
 <script>
 const QUESTIONS = [
-  // === Block A: Ablauf, Kontrolle, Sortieren (1-7) ===
+  // === Block A: Poststelle, Ablauf, Kontrollieren, Sortieren (1-12) ===
   { topic: "Poststelle", q: "Was geschieht mit der Ausgangspost, wenn im Unternehmen eine Poststelle vorhanden ist?",
     options: ["Die in den Abteilungen gesammelte Ausgangspost wird zum Versenden in die Poststelle gebracht und dort versandfertig gemacht", "Jeder Mitarbeiter bringt seine Post selbst zur Postfiliale", "Die Post bleibt in der jeweiligen Abteilung liegen", "Die Post wird sofort ohne Bearbeitung abgeholt"],
     a: 0, e: "Die in den Abteilungen gesammelte Ausgangspost wird in die Poststelle gebracht; dort fallen die Arbeitsschritte an, um sie versandfertig zu machen." },
   { topic: "Ablauf", q: "Welche Reihenfolge der Arbeitsschritte ist korrekt?",
     options: ["Frankieren, Falzen, Kontrollieren, Aufgeben", "Kontrollieren, Sortieren, Falzen, Kuvertieren, Wiegen, Frankieren, Aufgeben", "Wiegen, Aufgeben, Sortieren, Falzen", "Kuvertieren, Kontrollieren, Aufgeben, Wiegen"],
     a: 1, e: "Der Postausgang läuft ab: Kontrollieren, Sortieren, Falzen, Kuvertieren/Verschließen, Wiegen, Frankieren, Aufgeben." },
-  { topic: "Kontrolle", q: "Worauf wird die Ausgangspost beim Schritt „Kontrolle” geprüft?",
+  { topic: "Kontrolle", q: "Worauf wird die Ausgangspost beim Schritt „Kontrolle“ geprüft?",
     options: ["Auf die Schriftart und das Papiergewicht", "Auf den Absender und die Briefmarkenfarbe", "Auf Unterschrift, Adresse und Vollständigkeit der Anlagen", "Nur auf das Gewicht"],
     a: 2, e: "Die Ausgangspost wird auf Unterschrift, Adresse und Vollständigkeit der Anlagen kontrolliert." },
   { topic: "Kontrolle", q: "Was muss geschehen, wenn die Sendung nicht in einem Fensterbriefumschlag verschickt wird und die Adresse fehlt?",
@@ -221,14 +221,32 @@ const QUESTIONS = [
   { topic: "Sortieren", q: "Nach welchen Kriterien wird die Ausgangspost sortiert?",
     options: ["Nach Sendungsart, Versandart, Gewicht sowie In- und Auslandssendungen", "Nur nach dem Alphabet der Empfänger", "Nach Farbe der Umschläge", "Nach Wunsch des Boten"],
     a: 0, e: "Sortiert wird nach Sendungsart, Versandart, Gewicht sowie In- und Auslandssendungen." },
-  { topic: "Verteilen", q: "Über welche automatische Anlage kann die Eingangspost im Unternehmen verteilt werden?",
-    options: ["Über eine Falzmaschine", "Über eine Schriftgutförderanlage wie z. B. ein Rohrpostsystem", "Über das Telefon", "Über die Klimaanlage"],
-    a: 1, e: "Die Eingangspost kann automatisch über Schriftgutförderanlagen wie z. B. ein Rohrpostsystem verteilt werden." },
-  { topic: "Posteingang", q: "Welchen Vorteil hat die Digitalisierung des Posteingangs?",
-    options: ["Höherer Papierverbrauch", "Langsamerer Informationsfluss", "Schnellerer Informationsfluss und jederzeit auffindbare Schriftstücke", "Die Post kann leichter verloren gehen"],
-    a: 2, e: "Die Digitalisierung sorgt für schnelleren Informationsfluss; die Schriftstücke sind jederzeit und schnell auffindbar und können nicht mehr verloren gehen." },
+  { topic: "Ablauf", q: "Aus wie vielen Arbeitsschritten besteht der Ablauf des Postausgangs?",
+    options: ["Aus drei Schritten", "Aus sieben Schritten", "Aus fünf Schritten", "Aus zehn Schritten"],
+    a: 1, e: "Der Postausgang läuft in sieben Schritten ab: Kontrollieren, Sortieren, Falzen, Kuvertieren/Verschließen, Wiegen, Frankieren, Aufgeben." },
+  { topic: "Ablauf", q: "Welcher Arbeitsschritt steht ganz am Anfang des Postausgangs?",
+    options: ["Frankieren", "Aufgeben", "Kontrollieren", "Wiegen"],
+    a: 2, e: "Der erste Schritt ist das Kontrollieren (Unterschrift, Adresse, Anlagen), bevor sortiert, gefalzt usw. wird." },
+  { topic: "Fensterumschlag", q: "Welchen Vorteil bietet der Fensterbriefumschlag?",
+    options: ["Er ist immer kostenlos", "Er macht das Wiegen überflüssig", "Er ersetzt die Frankierung", "Die Empfängeradresse ist durch das Sichtfenster sichtbar, ein erneutes Adressieren entfällt"],
+    a: 3, e: "Beim Fensterbriefumschlag wird die Empfängeradresse durch das Sichtfenster sichtbar, sodass ein zusätzliches Adressieren entfällt." },
+  { topic: "Briefformate", q: "Bis zu welchem Gewicht reicht ein Standardbrief?",
+    options: ["Bis 20 g", "Bis 50 g", "Bis 500 g", "Bis 1000 g"],
+    a: 0, e: "Der Standardbrief (klein, 1–3 Blatt) reicht bis 20 g." },
+  { topic: "Briefformate", q: "Bis zu welchem Gewicht darf ein Maxibrief wiegen?",
+    options: ["Bis 50 g", "Bis 1000 g", "Bis 20 g", "Bis 500 g"],
+    a: 1, e: "Der Maxibrief (dick / A4 mit Anlagen) reicht bis 1000 g." },
+  { topic: "Briefformate", q: "Welches Briefformat ist für einen ungefalteten DIN-A4-Brief bis 500 g vorgesehen?",
+    options: ["Standardbrief", "Kompaktbrief", "Großbrief", "Maxibrief"],
+    a: 2, e: "Der Großbrief ermöglicht DIN A4 ungefaltet und reicht bis 500 g." },
+  { topic: "Briefformate", q: "Womit steigt bei der Einteilung der Briefe das Porto?",
+    options: ["Mit der Schriftgröße", "Mit der Anzahl der Briefmarken", "Mit der Farbe des Umschlags", "Mit Format und Gewicht der Sendung"],
+    a: 3, e: "Briefe werden nach Format und Gewicht eingeteilt; mit beiden steigt das Porto." },
 
-  // === Block B: Versand- und Sendungsarten (8-15) ===
+  // === Block B: Versand- und Sendungsarten (13-30) ===
+  { topic: "Einschreiben", q: "Wofür eignet sich die Versandart Einschreiben besonders?",
+    options: ["Für anonyme Massenwerbung", "Für die dokumentierte Zustellung wichtiger, fristgebundener Briefe (z. B. Kündigungen)", "Für leere Umschläge", "Für Pakete über 30 kg"],
+    a: 1, e: "Das Einschreiben dient der dokumentierten Zustellung wichtiger, fristgebundener Briefe wie Kündigungen." },
   { topic: "Einschreiben", q: "Was kennzeichnet das Einschreiben Einwurf?",
     options: ["Der Brief wird gegen Unterschrift übergeben", "Eine Empfangsbestätigung geht an den Absender", "Der Brief wird nur dem Empfänger persönlich übergeben", "Der Postzusteller dokumentiert, dass der Brief in den Briefkasten/das Postfach eingeworfen wurde"],
     a: 3, e: "Beim Einschreiben Einwurf dokumentiert der Postzusteller, dass der Brief in den Briefkasten oder das Postfach des Empfängers eingeworfen wurde." },
@@ -238,72 +256,144 @@ const QUESTIONS = [
   { topic: "Einschreiben", q: "Was erhält der Absender beim Einschreiben Rückschein?",
     options: ["Eine Briefmarke zurück", "Eine Empfangsbestätigung mit Datum der Zustellung und Unterschrift des Empfängers", "Eine Gutschrift", "Nichts Besonderes"],
     a: 1, e: "Beim Einschreiben Rückschein wird dem Absender eine Empfangsbestätigung mit Datum der Zustellung und Unterschrift des Empfängers zugeschickt." },
+  { topic: "Einschreiben", q: "Was ist typisch für das Einschreiben Übergabe?",
+    options: ["Der Brief wird nur in den Briefkasten geworfen", "Der Brief wird ohne Nachweis zugestellt", "Der Zusteller übergibt den Brief gegen Unterschrift an den Empfänger oder einen Empfangsberechtigten, mit Sendungsverfolgung", "Der Empfänger zahlt bei Erhalt"],
+    a: 2, e: "Beim Einschreiben Übergabe wird der Brief gegen Unterschrift an den Empfänger oder einen Empfangsberechtigten (z. B. Ehepartner) übergeben; eine Sendungsverfolgung ist möglich." },
   { topic: "Haftung", q: "Bis zu welcher Höhe haftet die Deutsche Post beim Einschreiben (Übergabe) bei Verlust oder Beschädigung?",
     options: ["Bis 5,00 €", "Bis 10,00 €", "Maximal 25,00 €", "Unbegrenzt"],
     a: 2, e: "Bei Verlust oder Beschädigung haftet die Deutsche Post bis zum unmittelbaren Schaden, maximal 25,00 € beim Einschreiben (20,00 € beim Einschreiben Einwurf)." },
+  { topic: "Haftung", q: "Wie hoch ist die maximale Haftung beim Einschreiben Einwurf?",
+    options: ["25,00 €", "100,00 €", "50,00 €", "20,00 €"],
+    a: 3, e: "Beim Einschreiben Einwurf haftet die Deutsche Post bis maximal 20,00 € (beim normalen Einschreiben max. 25,00 €)." },
   { topic: "Einschreiben Wert", q: "Wann bietet sich die Versandart Einschreiben Wert an?",
     options: ["Nur für leere Umschläge", "Für sperrige Pakete über 30 kg", "Für anonyme Werbung", "Wenn Bargeld (bis 100 €) oder kleinere Sachwerte (bis 500 €) per Brief verschickt werden sollen"],
     a: 3, e: "Einschreiben Wert eignet sich für Bargeld (bis 100,00 €) oder kleinere Sachwerte (bis 500,00 €); der Versender erhält einen Einlieferungsnachweis und kann die Sendung verfolgen." },
+  { topic: "Einschreiben Wert", q: "Bis zu welchem Betrag dürfen Sachwerte per Einschreiben Wert versichert verschickt werden?",
+    options: ["Bis 500,00 €", "Bis 100,00 €", "Bis 1000,00 €", "Bis 25,00 €"],
+    a: 0, e: "Beim Einschreiben Wert sind Sachwerte bis 500,00 € und Bargeld bis 100,00 € abgedeckt." },
   { topic: "Warensendung", q: "Welche Aussage zur Warensendung ist richtig?",
     options: ["Sie eignet sich kostengünstig für kleinere Gegenstände und Werbesendungen, ist aber nicht versichert und nicht verfolgbar", "Sie ist immer versichert", "Sie bietet eine Sendungsverfolgung", "Sie ist nur für Bargeld gedacht"],
     a: 0, e: "Mit der Warensendung lassen sich kleinere Gegenstände und Werbesendungen kostengünstig verschicken; sie sind nicht versichert, und eine Sendungsverfolgung ist nicht möglich." },
   { topic: "Dialogpost", q: "Unter welcher Bedingung darf Dialogpost eingesetzt werden?",
     options: ["Ab 10 Empfängern", "Bei mind. 200 Empfängern derselben Leitregion bzw. 4 000 bundesweit (500 bei nur werblichen Inhalten)", "Nur bei einem einzigen Empfänger", "Nur im Ausland"],
     a: 1, e: "Dialogpost ist möglich ab mind. 200 Empfängern derselben Leitregion, 4 000 bundesweit oder 500 bundesweit (nur werbliche Inhalte)." },
+  { topic: "Dialogpost", q: "Was bedeutet bei der Dialogpost die „Übereinstimmung der Leitregion“?",
+    options: ["Gleiche Hausnummer der Empfänger", "Gleicher Straßenname der Empfänger", "Übereinstimmung der ersten beiden Ziffern der Postleitzahl", "Gleicher Empfängername"],
+    a: 2, e: "Eine Leitregion bedeutet die Übereinstimmung der ersten beiden Ziffern der Postleitzahl der Empfänger." },
+  { topic: "Dialogpost", q: "Wofür eignet sich die Dialogpost typischerweise?",
+    options: ["Für vertrauliche Vertragsoriginale", "Für Bargeldsendungen", "Für eilige Einzelsendungen", "Für Werbebriefe, Kundenmagazine oder Einladungen als Massenwerbung"],
+    a: 3, e: "Die Dialogpost ist eine kostengünstige Versandart für Massenwerbung wie Werbebriefe, Kundenmagazine oder Einladungen." },
   { topic: "Nachnahme", q: "Was kennzeichnet die Versandart Nachnahme?",
     options: ["Der Absender zahlt doppeltes Porto", "Die Sendung wird nie zugestellt", "Die Sendung wird erst gegen Bezahlung des Betrags an den Empfänger ausgehändigt", "Der Empfänger erhält Geld vom Absender"],
     a: 2, e: "Bei der Nachnahme wird die Sendung erst gegen Bezahlung des Betrags ausgehändigt; der eingezogene Betrag geht anschließend an den Absender." },
+  { topic: "Nachnahme", q: "Was geschieht mit dem bei der Nachnahme eingezogenen Betrag?",
+    options: ["Er wird an den Absender überwiesen", "Er bleibt bei der Deutschen Post", "Er wird an das Finanzamt abgeführt", "Er wird dem Empfänger erstattet"],
+    a: 0, e: "Der bei der Nachnahme eingezogene Betrag wird anschließend an den Absender überwiesen." },
+  { topic: "Sendungsarten", q: "Welche Versandart ist für den Versand eines Katalogs an Kunden typisch?",
+    options: ["Einschreiben Eigenhändig", "Nachnahme", "Warensendung", "Einschreiben Wert"],
+    a: 2, e: "Ein Katalog an Kunden wird typischerweise kostengünstig als Warensendung verschickt." },
 
-  // === Block C: Falzen, Kuvertieren, Frankieren (16-23) ===
+  // === Block C: Falzen, Kuvertieren, Wiegen, Frankieren (31-46) ===
   { topic: "Falzen", q: "Welche Falzart wird im Lehrbuch NICHT genannt?",
     options: ["Bruch-/Einfachfalz", "Kreuzfalz", "Wickelfalz", "Spiralfalz"],
-    a: 3, e: "Genannt werden Bruch-/Einfachfalz, Kreuzfalz, Zickzack-/Leporellofalz und Wickelfalz — einen „Spiralfalz” gibt es nicht." },
+    a: 3, e: "Genannt werden Bruch-/Einfachfalz, Kreuzfalz, Zickzack-/Leporellofalz und Wickelfalz — einen „Spiralfalz“ gibt es nicht." },
   { topic: "Falzen", q: "Mit welcher Falzart bringt man einen A4-Briefbogen in eine Briefhülle DIN lang mit Sichtfenster?",
     options: ["Zickzack- bzw. Leporellofalz (auf 1/3 A4)", "Kreuzfalz auf A6", "Einfachfalz auf A5", "Gar nicht möglich"],
     a: 0, e: "Der Zickzack-/Leporellofalz faltet den A4-Bogen auf 1/3 A4 — passend für eine DIN-lang-Hülle mit Sichtfenster." },
-  { topic: "Falzen", q: "Warum bietet das Lehrbuch unterschiedliche Falzarten an?",
-    options: ["Um das Papier zu zerstören", "Um für den Brief das passende und kostengünstigste Format für den Versand zu erhalten", "Um die Schrift unleserlich zu machen", "Aus rein dekorativen Gründen"],
-    a: 1, e: "Die Falzart soll das passende, aber auch das kostengünstigste Format für den Versand erzeugen." },
-  { topic: "Kuvertieren", q: "Was geschieht beim Schritt „Kuvertieren und Verschließen”?",
-    options: ["Die Post wird gewogen", "Die Adresse wird gedruckt", "Die Schriftstücke werden in geeignete Umschläge gesteckt und anschließend verschlossen", "Das Porto wird bezahlt"],
-    a: 2, e: "Beim Kuvertieren werden die Schriftstücke in geeignete Umschläge gesteckt (manuell oder mit Kuvertiermaschinen) und anschließend verschlossen." },
+  { topic: "Falzen", q: "In welche Briefhülle passt ein A4-Bogen nach dem Bruch-/Einfachfalz auf A5?",
+    options: ["DIN lang ohne Fenster", "C6 ohne Fenster", "C5 mit Sichtfenster", "C4"],
+    a: 2, e: "Der Bruch-/Einfachfalz faltet A4 auf A5; das passt in eine Briefhülle C5 mit Sichtfenster." },
+  { topic: "Falzen", q: "Auf welches Format wird ein A4-Bogen beim Kreuzfalz gebracht?",
+    options: ["Auf A5", "Auf 1/3 A4", "Auf A3", "Auf A6"],
+    a: 3, e: "Der Kreuzfalz faltet einen A4-Bogen auf A6 (passend für eine C6-Hülle)." },
+  { topic: "Falzen", q: "Welche Falzart faltet einen A4-Bogen auf 1/3 A4 für eine Briefhülle DIN lang (ohne Sichtfenster genannt)?",
+    options: ["Wickelfalz", "Kreuzfalz", "Bruch-/Einfachfalz", "Spiralfalz"],
+    a: 0, e: "Der Wickelfalz faltet A4 auf 1/3 A4 für eine DIN-lang-Hülle." },
+  { topic: "Kuvertieren", q: "Was geschieht beim Schritt „Kuvertieren und Verschließen“?",
+    options: ["Die Post wird gewogen", "Die Schriftstücke werden in geeignete Umschläge gesteckt und anschließend verschlossen", "Die Adresse wird gedruckt", "Das Porto wird bezahlt"],
+    a: 1, e: "Beim Kuvertieren werden die Schriftstücke in geeignete Umschläge gesteckt (manuell oder mit Kuvertiermaschinen) und anschließend verschlossen." },
+  { topic: "Kuvertieren", q: "Womit kann das Kuvertieren bei hohem Postaufkommen erfolgen?",
+    options: ["Mit der Briefwaage", "Mit der Frankiermaschine", "Mit Kuvertiermaschinen", "Mit der Adressiermaschine"],
+    a: 2, e: "Das Kuvertieren kann manuell oder maschinell mit Kuvertiermaschinen erfolgen." },
   { topic: "Wiegen", q: "Warum muss die Post vor dem Frankieren gewogen werden?",
     options: ["Um sie zu falten", "Um die Unterschrift zu prüfen", "Um den Absender zu ermitteln", "Weil sich das Porto nach dem Gewicht (und Format) richtet"],
     a: 3, e: "Bevor das Porto ermittelt werden kann, muss die Post gewogen werden — mittels mechanischer oder elektronischer Briefwaage." },
-  { topic: "Frankieren", q: "Was bedeutet „Frankieren”?",
-    options: ["Das Freimachen von Briefen und Paketen, also das Bezahlen des Portos", "Das Sortieren der Post", "Das Öffnen der Eingangspost", "Das Falten der Briefe"],
-    a: 0, e: "Frankieren heißt Freimachen, also das Bezahlen des Portos für Briefe, Pakete u. Ä." },
+  { topic: "Wiegen", q: "Womit wird die Post gewogen?",
+    options: ["Mit einer mechanischen oder elektronischen Briefwaage", "Mit der Frankiermaschine", "Mit der Falzmaschine", "Mit dem Rohrpostsystem"],
+    a: 0, e: "Das Wiegen erfolgt mittels mechanischer oder elektronischer Briefwaage." },
+  { topic: "Frankieren", q: "Was bedeutet „Frankieren“?",
+    options: ["Das Sortieren der Post", "Das Freimachen von Briefen und Paketen, also das Bezahlen des Portos", "Das Öffnen der Eingangspost", "Das Falten der Briefe"],
+    a: 1, e: "Frankieren heißt Freimachen, also das Bezahlen des Portos für Briefe, Pakete u. Ä." },
   { topic: "Frankierarten", q: "Welche Frankierart eignet sich besonders für Massenpost und muss von der Deutschen Post genehmigt werden?",
     options: ["Die einzelne Briefmarke", "Das DV-Verfahren", "Der Plusbrief", "Die Handschrift"],
     a: 1, e: "Das DV-Verfahren (Frankieren mittels EDV) muss von der Deutschen Post genehmigt werden und bietet sich bei Massenpost an." },
+  { topic: "Frankierarten", q: "Was ist ein Plusbrief?",
+    options: ["Ein Brief mit doppeltem Porto", "Ein Brief mit Rückschein", "Ein Umschlag mit bereits aufgedruckter Briefmarke", "Ein Brief ohne Frankierung"],
+    a: 2, e: "Der Plusbrief ist ein Umschlag mit aufgedruckter Briefmarke." },
+  { topic: "Frankiermaschine", q: "Womit bedruckt die Frankiermaschine den Briefumschlag?",
+    options: ["Nur mit der Empfängeradresse", "Nur mit dem Absender", "Mit der Unterschrift des Geschäftsführers", "Mit dem Postentgelt, dem Datum und evtl. einem Werbeaufdruck"],
+    a: 3, e: "Die Frankiermaschine bedruckt den Umschlag mit dem Postentgelt, dem Datum und evtl. einem Werbeaufdruck." },
+  { topic: "Frankiermaschine", q: "Was kennzeichnet das Wertvorgabesystem einer Frankiermaschine?",
+    options: ["Ein im Voraus bezahlter Betrag wird in der Maschine eingestellt und durch Stempeln der Sendungen verbraucht", "Der Betrag wird per Telefon beantragt", "Es werden Briefmarken aufgeklebt", "Die Maschine arbeitet ohne Bezahlung"],
+    a: 0, e: "Beim Wertvorgabesystem wird ein bestimmter Betrag im Voraus bezahlt, eingestellt und durch das Stempeln der Sendungen verbraucht." },
   { topic: "Frankiermaschine", q: "Was kennzeichnet das Fernwertvorgabesystem einer Frankiermaschine?",
-    options: ["Ein im Voraus bezahlter Betrag wird verstempelt", "Es werden Briefmarken aufgeklebt", "Der Entgelt-Betrag wird per Telefon oder PC beantragt, übermittelt und per Code in die Maschine eingegeben", "Die Maschine arbeitet ohne Bezahlung"],
-    a: 2, e: "Beim Fernwertvorgabesystem wird der Entgelt-Betrag per Telefon oder PC beantragt und mithilfe eines Codes in die Frankiermaschine eingegeben." },
+    options: ["Ein im Voraus bezahlter Betrag wird verstempelt", "Der Entgelt-Betrag wird per Telefon oder PC beantragt, übermittelt und per Code in die Maschine eingegeben", "Es werden Briefmarken aufgeklebt", "Die Maschine arbeitet ohne Bezahlung"],
+    a: 1, e: "Beim Fernwertvorgabesystem wird der Entgelt-Betrag per Telefon oder PC beantragt und mithilfe eines Codes in die Frankiermaschine eingegeben." },
 
-  // === Block D: Aufgeben, Poststraße, moderne Praxis (24-27) ===
-  { topic: "KEP-Dienste", q: "Wodurch unterscheidet sich der Paketdienst vom Expressdienst?",
-    options: ["Der Paketdienst ist immer schneller", "Der Paketdienst stellt nur Briefe zu", "Der Paketdienst garantiert eine feste Frist", "Der Paketdienst übernimmt keine Garantie der Laufzeit und beschränkt das Gewicht meist auf 30 kg"],
-    a: 3, e: "Anders als der Expressdienst übernimmt der Paketdienst keine Laufzeit-Garantie; die meisten beschränken das Höchstgewicht auf 30 kg." },
+  // === Block D: Aufgeben, KEP, Poststraße, moderne Praxis (47-54) ===
+  { topic: "Aufgeben", q: "Welche Wege gibt es, um versandfertige Post aufzugeben?",
+    options: ["Nur die Postfiliale", "Nur KEP-Dienste", "Postfiliale, Bring- und Abholservice sowie KEP-Dienste", "Nur die Frankiermaschine"],
+    a: 2, e: "Die Post kann über die Postfiliale, einen Bring- und Abholservice (HIN + WEG) oder KEP-Dienste aufgegeben werden." },
   { topic: "Aufgeben", q: "Was bietet der Dienst HIN + WEG der Deutschen Post?",
     options: ["Einen Bring- und Abholservice: morgens Geschäftspost bringen, nachmittags ausgehende Sendungen abholen", "Eine kostenlose Frankiermaschine", "Einen Übersetzungsdienst", "Eine Rechtsberatung"],
     a: 0, e: "Mit HIN + WEG bringt die Deutsche Post morgens die Geschäftspost ins Unternehmen und holt nachmittags die ausgehenden Sendungen ab." },
+  { topic: "KEP-Dienste", q: "Wofür steht die Abkürzung KEP?",
+    options: ["Kontroll-, Einschreib- und Postdienste", "Kurier-, Express- und Paketdienste", "Kuvertier-, Etiketten- und Portodienste", "Karton-, Express- und Paletten­dienste"],
+    a: 1, e: "KEP steht für Kurier-, Express- und Paketdienste." },
+  { topic: "KEP-Dienste", q: "Wodurch zeichnet sich der Kurierdienst aus?",
+    options: ["Er beschränkt das Gewicht auf 30 kg", "Er stellt nur Massenwerbung zu", "Er befördert die Sendung persönlich und direkt zum Empfänger — schnell und für vertrauliche Dokumente geeignet", "Er übernimmt keine Garantie"],
+    a: 2, e: "Der Kurierdienst befördert Sendungen persönlich und direkt zum Empfänger; er ist schnell und für vertrauliche, schutzbedürftige Dokumente geeignet." },
+  { topic: "KEP-Dienste", q: "Wodurch unterscheidet sich der Paketdienst vom Expressdienst?",
+    options: ["Der Paketdienst ist immer schneller", "Der Paketdienst stellt nur Briefe zu", "Der Paketdienst garantiert eine feste Frist", "Der Paketdienst übernimmt keine Garantie der Laufzeit und beschränkt das Gewicht meist auf 30 kg"],
+    a: 3, e: "Anders als der Expressdienst übernimmt der Paketdienst keine Laufzeit-Garantie; die meisten beschränken das Höchstgewicht auf 30 kg." },
+  { topic: "KEP-Dienste", q: "Was garantiert der Expressdienst?",
+    options: ["Dass die Sendung innerhalb einer bestimmten Frist beim Empfänger eintrifft", "Dass die Sendung kostenlos ist", "Dass die Sendung versichert ist", "Dass die Sendung anonym bleibt"],
+    a: 0, e: "Der Expressdienst garantiert, dass die Sendung innerhalb einer bestimmten Frist beim Empfänger eintrifft." },
+  { topic: "Dienstleister", q: "Welche Unternehmen zählen zu den privaten Versanddienstleistern?",
+    options: ["Nur die Deutsche Post", "DPD, GLS, UPS und Hermes", "Nur das Finanzamt", "Nur die IHK"],
+    a: 1, e: "Neben der Deutschen Post/DHL bieten private Dienstleister wie DPD, GLS, UPS und Hermes Brief- und Paketdienste an." },
   { topic: "Poststraße", q: "Was versteht man unter einer Poststraße?",
     options: ["Eine Straße vor der Postfiliale", "Hintereinandergeschaltete, zentral zusammengefasste Maschinen für Falzen, Kuvertieren, Verschließen, Trennen und Frankieren in einem automatischen Maschinengang", "Ein einzelner Briefkasten", "Ein Lieferweg des Boten"],
     a: 1, e: "Eine Poststraße fasst die Maschinen zentral zusammen und führt Falzen, Kuvertieren, Verschließen, Trennen nach Portoklassen und Frankieren automatisch aus." },
+  { topic: "Versandsoftware", q: "Welche Aufgabe übernimmt eine Versandsoftware?",
+    options: ["Sie ersetzt die Briefwaage durch Schätzung", "Sie öffnet die Eingangspost automatisch", "Sie ermittelt die günstigste Versandart und das Porto, erstellt Labels/Frankierungen, verwaltet Adressen und übergibt Daten elektronisch", "Sie druckt nur Werbung"],
+    a: 2, e: "Versandsoftware ermittelt die günstigste Versandart und das Porto, erstellt Labels/Frankierungen, verwaltet Adressen und übergibt die Daten elektronisch an den Dienstleister." },
   { topic: "Hybridpost", q: "Was beschreibt das Prinzip der Hybridpost?",
-    options: ["Briefe werden nur per Fahrrad zugestellt", "Briefe werden zweimal verschickt", "Das Unternehmen übergibt die Briefe digital; ein Dienstleister druckt, kuvertiert, frankiert und stellt sie physisch zu", "Es werden nur E-Mails versendet"],
-    a: 2, e: "Bei der Hybridpost übergibt das Unternehmen die Briefe digital; der Dienstleister druckt, kuvertiert, frankiert und stellt sie physisch zu (Medienbruch erst dort)." },
+    options: ["Briefe werden nur per Fahrrad zugestellt", "Briefe werden zweimal verschickt", "Es werden nur E-Mails versendet", "Das Unternehmen übergibt die Briefe digital; ein Dienstleister druckt, kuvertiert, frankiert und stellt sie physisch zu"],
+    a: 3, e: "Bei der Hybridpost übergibt das Unternehmen die Briefe digital; der Dienstleister druckt, kuvertiert, frankiert und stellt sie physisch zu (Medienbruch erst dort)." },
+  { topic: "Hybridpost", q: "Wo findet bei der Hybridpost der Medienbruch von digital zu Papier statt?",
+    options: ["Beim Dienstleister, der die digital übergebenen Briefe druckt", "Bereits im Unternehmen", "Beim Empfänger", "Es gibt keinen Medienbruch"],
+    a: 0, e: "Bei der Hybridpost erfolgt der Wechsel von digital zu Papier (Medienbruch) erst beim Dienstleister." },
 
-  // === Block E: Elektronische Post (28-30) ===
+  // === Block E: Elektronische Post (55-60) ===
   { topic: "Elektronische Post", q: "Warum müssen geschäftliche E-Mails Pflichtangaben enthalten?",
-    options: ["Weil das Finanzamt es zufällig verlangt", "Weil die Internetanbieter es vorschreiben", "Aus reiner Höflichkeit", "Weil sie den postalischen Geschäftsbrief ersetzen und nach dem EHUG die Pflichtangaben unabhängig von der Form gelten"],
-    a: 3, e: "E-Mails ersetzen den postalischen Geschäftsbrief; nach dem EHUG gelten die Pflichtangaben unabhängig davon, ob die Korrespondenz in Papierform oder elektronisch erfolgt." },
+    options: ["Weil das Finanzamt es zufällig verlangt", "Weil sie den postalischen Geschäftsbrief ersetzen und nach dem EHUG die Pflichtangaben unabhängig von der Form gelten", "Weil die Internetanbieter es vorschreiben", "Aus reiner Höflichkeit"],
+    a: 1, e: "E-Mails ersetzen den postalischen Geschäftsbrief; nach dem EHUG gelten die Pflichtangaben unabhängig davon, ob die Korrespondenz in Papierform oder elektronisch erfolgt." },
+  { topic: "Geschäftsbrief", q: "Welche Schriftstücke zählen ebenfalls zu den Geschäftsbriefen?",
+    options: ["Nur handschriftliche Notizen", "Nur Werbeprospekte", "Bestellungen, Lieferscheine, Rechnungen und Quittungen — auch als E-Mail oder Telefax", "Nur interne Telefonlisten"],
+    a: 2, e: "Zu den Geschäftsbriefen zählen auch Bestellungen, Lieferscheine, Rechnungen und Quittungen — auch in Form von E-Mail oder Telefax." },
   { topic: "Pflichtangaben", q: "Welche Angabe zählt NICHT zu den Pflichtangaben eines Geschäftsbriefs?",
-    options: ["Die genaue Adresse, Telefon-/Faxnummer oder Bankverbindung", "Die Firma", "Das Registergericht", "Die Handelsregisternummer"],
-    a: 0, e: "Die genaue Adresse, Telefon-/Faxnummern, ein Postfach oder die Bankverbindungen zählen nicht zu den Pflichtangaben." },
+    options: ["Die Firma", "Das Registergericht", "Die Handelsregisternummer", "Die genaue Adresse, Telefon-/Faxnummer oder Bankverbindung"],
+    a: 3, e: "Die genaue Adresse, Telefon-/Faxnummern, ein Postfach oder die Bankverbindungen zählen nicht zu den Pflichtangaben." },
+  { topic: "Pflichtangaben", q: "Wovon hängt ab, welche Pflichtangaben ein Geschäftsbrief enthalten muss?",
+    options: ["Von der Rechtsform des Unternehmens", "Von der Tageszeit des Versands", "Von der Anzahl der Mitarbeiter", "Von der Farbe des Briefpapiers"],
+    a: 0, e: "Welche Pflichtangaben nötig sind, hängt von der Rechtsform des Unternehmens ab (z. B. GmbH, AG, OHG)." },
+  { topic: "De-Mail / EGVP", q: "Was ist das EGVP?",
+    options: ["Ein neuer Briefmarkentyp", "Das Elektronische Gerichts- und Verwaltungspostfach für rechtsverbindlichen Schriftverkehr mit Gerichten und Behörden", "Eine Frankiermaschine", "Eine Falzart"],
+    a: 1, e: "Das EGVP (Elektronisches Gerichts- und Verwaltungspostfach) ermöglicht rechtsverbindlichen elektronischen Schriftverkehr mit Gerichten und Behörden." },
   { topic: "E-Signatur", q: "Welche Funktion hat die qualifizierte elektronische Signatur?",
-    options: ["Sie verschönert die E-Mail", "Sie ersetzt die eigenhändige Unterschrift, weist die Identität nach und sichert, dass das Dokument nicht verändert wurde", "Sie erhöht die Dateigröße", "Sie übersetzt den Text automatisch"],
-    a: 1, e: "Die qualifizierte elektronische Signatur ersetzt die eigenhändige Unterschrift, weist die Identität des Absenders nach und sichert die Unverändertheit (Integrität) des Dokuments." }
+    options: ["Sie verschönert die E-Mail", "Sie erhöht die Dateigröße", "Sie übersetzt den Text automatisch", "Sie ersetzt die eigenhändige Unterschrift, weist die Identität nach und sichert, dass das Dokument nicht verändert wurde"],
+    a: 3, e: "Die qualifizierte elektronische Signatur ersetzt die eigenhändige Unterschrift, weist die Identität des Absenders nach und sichert die Unverändertheit (Integrität) des Dokuments." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

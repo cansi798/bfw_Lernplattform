@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 9 · 09.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 9 · 09.07.2026 · 60 Fragen</span>
   <h1>Quiz: Kommunikationsformen &amp; Teamarbeit</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Kommunikationsformen-und-Teamarbeit.html</strong> und dem <strong>Handout_Kommunikationsformen-und-Teamarbeit.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Kommunikationsformen-und-Teamarbeit.html</strong> und dem <strong>Handout_Kommunikationsformen-und-Teamarbeit.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -212,7 +212,7 @@ const QUESTIONS = [
   { topic: "Grundlagen", q: "Wie nennt man das Verschlüsseln einer Absicht in Worte, Tonfall und Körpersprache durch den Sender?",
     options: ["Encodieren", "Decodieren", "Protokollieren", "Archivieren"],
     a: 0, e: "Das Verschlüsseln der Absicht in Zeichen durch den Sender heißt Encodieren; der Empfänger entschlüsselt sie beim Decodieren." },
-  { topic: "Grundlagen", q: "Was versteht man unter „Rauschen" in der Kommunikation?",
+  { topic: "Grundlagen", q: "Was versteht man unter „Rauschen“ in der Kommunikation?",
     options: ["Eine besonders laute Stimme", "Die Lautstärke des Senders", "Jede Störung, die die Übertragung der Nachricht beeinträchtigt", "Ein technisches Aufnahmegerät"],
     a: 2, e: "Rauschen ist jede Störung (Lärm, Ablenkung, unklare Worte, Vorurteile), die die Übertragung der Nachricht beeinträchtigt." },
   { topic: "Grundlagen", q: "Warum kann eine Nachricht beim Empfänger anders ankommen als gemeint?",
@@ -232,7 +232,7 @@ const QUESTIONS = [
     a: 3, e: "Die Appellebene drückt aus, wozu der Sender den Empfänger bewegen möchte (Aufforderung, Wunsch)." },
   { topic: "Watzlawick", q: "Welches Axiom stammt von Paul Watzlawick?",
     options: ["Kommunikation ist immer fehlerfrei", "Man kann nicht nicht kommunizieren", "Schweigen ist keine Kommunikation", "Nur Worte sind Kommunikation"],
-    a: 1, e: "Watzlawick: „Man kann nicht nicht kommunizieren" — auch Schweigen, Mimik oder Nicht-Antworten sind Botschaften." },
+    a: 1, e: "Watzlawick: „Man kann nicht nicht kommunizieren“ — auch Schweigen, Mimik oder Nicht-Antworten sind Botschaften." },
   { topic: "Watzlawick", q: "Was besagt das Axiom vom Inhalts- und Beziehungsaspekt?",
     options: ["Jede Kommunikation hat einen Inhalts- und einen Beziehungsaspekt, wobei die Beziehung den Inhalt bestimmt", "Inhalt ist immer wichtiger als Beziehung", "Beziehungen spielen in der Kommunikation keine Rolle", "Inhalt und Beziehung sind dasselbe"],
     a: 0, e: "Jede Kommunikation hat einen Inhalts- und einen Beziehungsaspekt; die Beziehung bestimmt, wie der Inhalt verstanden wird." },
@@ -284,7 +284,7 @@ const QUESTIONS = [
   { topic: "Teamarbeit", q: "Welches ist ein typischer Nachteil der Teamarbeit?",
     options: ["Weniger Ideen", "Keine Vertretung möglich", "Geringere Akzeptanz von Entscheidungen", "Höherer Abstimmungs- und Zeitaufwand sowie Konfliktpotenzial"],
     a: 3, e: "Teamarbeit erfordert mehr Abstimmung und Zeit und birgt Konfliktpotenzial sowie die Gefahr des sozialen Faulenzens." },
-  { topic: "Teamarbeit", q: "Was bedeutet „soziales Faulenzen" (Trittbrettfahren)?",
+  { topic: "Teamarbeit", q: "Was bedeutet „soziales Faulenzen“ (Trittbrettfahren)?",
     options: ["Pausen im Team", "Einzelne reduzieren ihre Leistung, weil sie sich auf das Team verlassen", "Gemeinsames Mittagessen", "Besonders hohe Leistung Einzelner"],
     a: 1, e: "Soziales Faulenzen bedeutet, dass Einzelne ihre Leistung zurückfahren, weil sie sich auf das Team verlassen." },
   { topic: "Tuckman", q: "Wie lautet die richtige Reihenfolge der Teamphasen nach Tuckman?",
@@ -300,8 +300,104 @@ const QUESTIONS = [
     options: ["Das Team lernt sich gerade erst kennen", "Das Team arbeitet effizient, selbstorganisiert und zielgerichtet", "Das Team streitet über Rollen", "Das Team wird aufgelöst"],
     a: 1, e: "In der Performing-Phase arbeitet das Team effizient, selbstorganisiert und konzentriert am gemeinsamen Ziel." },
   { topic: "Feedback", q: "Welche Feedbackregel ist richtig?",
-    options: ["Ich-Botschaften verwenden, konkret und wertschätzend auf beobachtbares Verhalten bezogen", "Möglichst pauschal mit „immer" und „nie" formulieren", "Die Person abwerten statt das Verhalten beschreiben", "Feedback möglichst spät und allgemein geben"],
-    a: 0, e: "Gutes Feedback ist zeitnah, konkret, in Ich-Botschaften, beschreibend statt bewertend und wertschätzend." }
+    options: ["Ich-Botschaften verwenden, konkret und wertschätzend auf beobachtbares Verhalten bezogen", "Möglichst pauschal mit „immer“ und „nie“ formulieren", "Die Person abwerten statt das Verhalten beschreiben", "Feedback möglichst spät und allgemein geben"],
+    a: 0, e: "Gutes Feedback ist zeitnah, konkret, in Ich-Botschaften, beschreibend statt bewertend und wertschätzend." },
+
+  // === Block E: Vertiefung Kommunikationsmodelle (31-42) ===
+  { topic: "Grundlagen", q: "Zwischen welchen vier Stationen kann eine Nachricht auf dem Weg „verloren gehen“?",
+    options: ["Lesen, Schreiben, Hören, Sehen", "Senden, Speichern, Drucken, Ablegen", "Gemeint, gesagt, gehört und verstanden", "Anfang, Mitte, Ende, Schluss"],
+    a: 2, e: "Zwischen „gemeint“, „gesagt“, „gehört“ und „verstanden“ liegen vier verschiedene Dinge — jede Station ist eine mögliche Fehlerquelle." },
+  { topic: "Grundlagen", q: "Was ist mit dem „Kanal“ im Sender-Empfänger-Modell gemeint?",
+    options: ["Das Übertragungsmedium der Nachricht (z. B. Luft, Telefon, E-Mail)", "Der reine Sachinhalt der Nachricht", "Die Stimmung des Empfängers", "Das Vorwissen des Senders"],
+    a: 0, e: "Der Kanal ist das Medium, über das die encodierte Nachricht übertragen wird — z. B. Luft (Gespräch), Telefon oder E-Mail." },
+  { topic: "Grundlagen", q: "Welche Funktion hat das Feedback im Kommunikationsprozess?",
+    options: ["Es verstärkt das Rauschen", "Es ersetzt das Encodieren", "Es macht den Kanal überflüssig", "Der Sender kann prüfen, ob er richtig verstanden wurde"],
+    a: 3, e: "Über das Feedback (die Rückmeldung des Empfängers) erfährt der Sender, ob seine Nachricht so angekommen ist, wie sie gemeint war." },
+  { topic: "Schulz von Thun", q: "Welche Seite einer Nachricht zeigt, was der Sender von sich selbst preisgibt?",
+    options: ["Sachebene", "Appellebene", "Selbstoffenbarungsebene", "Beziehungsebene"],
+    a: 2, e: "Die Selbstoffenbarungsebene offenbart, was der Sender über sich selbst mitteilt (z. B. Werte, Gefühle, Befinden)." },
+  { topic: "Schulz von Thun", q: "Mit welchem „Ohr“ hört ein Empfänger, der sich durch eine sachliche Aussage schnell kritisiert fühlt?",
+    options: ["Sachohr", "Appellohr", "Selbstoffenbarungsohr", "Beziehungsohr"],
+    a: 3, e: "Wer mit dem Beziehungsohr hört, bezieht Aussagen auf die Beziehung („Wie steht der andere zu mir?“) und fühlt sich leicht kritisiert." },
+  { topic: "Schulz von Thun", q: "Im Beispiel „Da ist ein Fehler in der Summenzeile“ — welcher Seite entspricht „Bitte korrigiere die Summenzeile“?",
+    options: ["Sachebene", "Selbstoffenbarung", "Appellebene", "Beziehungsebene"],
+    a: 2, e: "„Bitte korrigiere die Summenzeile“ ist der Appell — wozu der Sender den Empfänger veranlassen möchte." },
+  { topic: "Watzlawick", q: "Was beschreibt das Axiom der „Interpunktion“?",
+    options: ["Jeder sieht sich selbst nur als reagierend auf den anderen (Ursache und Wirkung zugleich)", "Man kann nicht nicht kommunizieren", "Kommunikation ist immer schriftlich", "Nur Inhalte zählen, die Beziehung nicht"],
+    a: 0, e: "Interpunktion: Kommunikation ist Ursache und Wirkung zugleich — jeder erlebt sich selbst nur als Reagierenden auf den anderen." },
+  { topic: "Watzlawick", q: "Was meint Watzlawick mit digitaler und analoger Kommunikation?",
+    options: ["Kommunikation per Computer gegenüber per Brief", "Nur Zahlen gegenüber nur Buchstaben", "Online- gegenüber Offline-Gesprächen", "Inhalte über Worte (digital) und über Körpersprache/Tonfall (analog)"],
+    a: 3, e: "Digital meint die Übertragung über Worte, analog die Übertragung über Körpersprache und Tonfall." },
+  { topic: "Watzlawick", q: "Eine Kommunikation „auf Augenhöhe“ bezeichnet Watzlawick als ...",
+    options: ["komplementär", "digital", "symmetrisch", "interpunktiert"],
+    a: 2, e: "Symmetrische Kommunikation findet auf Augenhöhe statt; komplementäre Kommunikation ist durch ein Gefälle geprägt (z. B. Vorgesetzte/Mitarbeitende)." },
+  { topic: "Watzlawick", q: "Wie viele Axiome hat Watzlawick formuliert?",
+    options: ["Vier", "Fünf", "Drei", "Sechs"],
+    a: 1, e: "Watzlawick hat fünf Axiome (Grundregeln) der Kommunikation formuliert." },
+  { topic: "Kommunikationsebenen", q: "Welche Merkhilfe ordnet die drei Ebenen richtig zu?",
+    options: ["Wer, Wann, Wo", "Schnell, Klar, Höflich", "Was (verbal), Wie (paraverbal), Womit (nonverbal)", "Sehen, Hören, Fühlen"],
+    a: 2, e: "Eselsbrücke: verbal = Was ich sage, paraverbal = Wie ich es sage (Stimme), nonverbal = Womit der Körper es begleitet." },
+  { topic: "Telefon", q: "Warum ist am Telefon der freundliche Tonfall besonders entscheidend?",
+    options: ["Weil das Bild (die Körpersprache) fehlt und nur die Stimme wirkt", "Weil Telefonate immer aufgezeichnet werden", "Weil der Inhalt unwichtig ist", "Weil man dabei nicht nachfragen kann"],
+    a: 0, e: "Am Telefon fehlt die sichtbare Körpersprache — die paraverbale Ebene (Tonfall, Stimme) übernimmt deshalb die Hauptwirkung." },
+
+  // === Block F: Kommunikationsformen, E-Mail & Telefon (43-52) ===
+  { topic: "Kommunikationsformen", q: "Welcher Vorteil spricht für die mündliche Kommunikation?",
+    options: ["Sie ist immer beweissicher", "Sie erreicht beliebig viele Empfänger gleichzeitig", "Sie hinterlässt automatisch einen Nachweis", "Sie ist schnell und erlaubt sofortiges Nachfragen"],
+    a: 3, e: "Mündliche Kommunikation ist schnell, ermöglicht sofortiges Nachfragen und überträgt Tonfall und Körpersprache." },
+  { topic: "Kommunikationsformen", q: "Welcher Nachteil gilt für die schriftliche Kommunikation?",
+    options: ["Sie ist nie dokumentiert", "Tonfall und Körpersprache fehlen, und es kann zu Verzögerungen kommen", "Sie lässt sich nicht an mehrere Empfänger verteilen", "Man kann sie nicht in Ruhe formulieren"],
+    a: 1, e: "Schriftliche Kommunikation ist beweissicher und in Ruhe formulierbar, doch Tonfall und Körpersprache fehlen und es kann zu Verzögerungen kommen." },
+  { topic: "Kommunikationsformen", q: "Wofür eignen sich Messenger und Chat im Büro am besten?",
+    options: ["Für rechtsverbindliche Verträge", "Für die dauerhafte, beweissichere Korrespondenz", "Für kurze, informelle und schnelle Abstimmungen im Team", "Für vertrauliche Kritikgespräche"],
+    a: 2, e: "Messenger/Chat eignen sich für kurze, informelle und schnelle Abstimmungen — sie ersetzen aber keine verbindliche, dokumentierte Korrespondenz." },
+  { topic: "Kommunikationsformen", q: "Wie lautet die Faustregel zur Wahl der Kommunikationsform?",
+    options: ["Immer die schnellste Form wählen", "Immer mündlich kommunizieren", "Immer möglichst viele Personen einbeziehen", "Je vertraulicher oder verbindlicher, desto eher persönlich bzw. schriftlich"],
+    a: 3, e: "Faustregel: Je vertraulicher oder verbindlicher der Anlass, desto eher persönlich (vertraulich) bzw. schriftlich (verbindlich)." },
+  { topic: "Telefon", q: "Welche Angabe gehört NICHT zwingend in eine Telefonnotiz?",
+    options: ["Die Lieblingsfarbe des Anrufers", "Wann angerufen wurde", "Worum es ging", "Was zu tun ist (z. B. Rückruf)"],
+    a: 0, e: "Die Telefonnotiz hält fest: wer, wann, für wen, worum es ging und was zu tun ist — persönliche Vorlieben gehören nicht dazu." },
+  { topic: "E-Mail", q: "In welchem Gesetz sind die Pflichtangaben geschäftlicher E-Mails geregelt?",
+    options: ["Im Bürgerlichen Gesetzbuch allein", "Im Grundgesetz", "Im EHUG (Gesetz über das elektronische Handelsregister …)", "In der Straßenverkehrsordnung"],
+    a: 2, e: "Das EHUG regelt, dass der Empfänger geschäftlicher E-Mails im gleichen Umfang über den Absender informiert werden soll wie bei einem Geschäftsbrief." },
+  { topic: "E-Mail", q: "Welche zusätzlichen Pflichtangaben sind zu beachten, wenn ein E-Mail-Vordruck als Rechnung dient?",
+    options: ["Keine zusätzlichen Angaben", "Nur die Telefonnummer", "Nur die Bankverbindung", "Die Pflichtangaben nach § 14 UStG (z. B. die Umsatzsteuer-Identifikationsnummer)"],
+    a: 3, e: "Wird ein E-Mail-Vordruck als Rechnung verwendet, sind zusätzlich die Pflichtangaben nach § 14 Umsatzsteuergesetz (UStG) zu beachten." },
+  { topic: "E-Mail-Knigge", q: "Wie sollte man laut E-Mail-Knigge mit CC und BCC umgehen?",
+    options: ["Möglichst alle Kollegen in CC setzen", "CC sparsam einsetzen, BCC bei Verteilern nutzen", "BCC immer für die direkten Adressaten nutzen", "CC und BCC grundsätzlich nie verwenden"],
+    a: 1, e: "Empfänger bewusst wählen: „An“ nur an Verantwortliche, „CC“ sparsam, „BCC“ bei Verteilern." },
+  { topic: "E-Mail-Knigge", q: "Was bedeutet die Regel „eine E-Mail — ein Anliegen“?",
+    options: ["Jede E-Mail kurz und klar auf ein Thema beschränken", "Möglichst viele Themen in eine E-Mail packen", "Nie einen Betreff schreiben", "Anhänge grundsätzlich weglassen"],
+    a: 0, e: "„Eine E-Mail — ein Anliegen“ heißt: kurz und klar formulieren und sich pro E-Mail auf ein Thema beschränken." },
+  { topic: "E-Mail", q: "Welche Angabe zählt — je nach Rechtsform — zu den Pflichtangaben einer Geschäfts-E-Mail?",
+    options: ["Die private Handynummer", "Die Bankverbindung", "Die Handelsregisternummer und das Registergericht", "Das Postfach"],
+    a: 2, e: "Zu den Pflichtangaben zählen je nach Rechtsform u. a. Firma, Rechtsform, Sitz, Registergericht und Handelsregisternummer — nicht aber Bankverbindung oder Postfach." },
+
+  // === Block G: Teamarbeit, Tuckman & Feedback (53-60) ===
+  { topic: "Teamarbeit", q: "Welcher Vorteil spricht für Teamarbeit?",
+    options: ["Geringerer Abstimmungsaufwand", "Weniger Konflikte als bei Einzelarbeit", "Es ist nie eine Vertretung nötig", "Mehr Ideen und Kreativität sowie höhere Akzeptanz von Entscheidungen"],
+    a: 3, e: "Zu den Vorteilen der Teamarbeit zählen mehr Ideen und Kreativität, sich ergänzende Stärken und eine höhere Akzeptanz von Entscheidungen." },
+  { topic: "Teamarbeit", q: "Was bezeichnet „Gruppendenken“ (Gruppendruck) als Nachteil der Teamarbeit?",
+    options: ["Die gleichmäßige Verteilung von Ideen", "Die Tendenz, sich der Mehrheitsmeinung anzupassen statt kritisch zu prüfen", "Eine besonders hohe Kreativität", "Die geordnete Auflösung des Teams"],
+    a: 1, e: "Gruppendenken/Gruppendruck meint, dass sich Einzelne der Mehrheitsmeinung anpassen, statt kritisch zu hinterfragen — ein Risiko der Teamarbeit." },
+  { topic: "Teamarbeit", q: "Welche Maßnahme hilft gegen soziales Faulenzen?",
+    options: ["Möglichst große Teams bilden", "Ziele bewusst unklar halten", "Klare Rollen, messbare Einzelbeiträge und überschaubare Teamgröße", "Auf jegliches Feedback verzichten"],
+    a: 2, e: "Gegen soziales Faulenzen helfen klare Rollen, messbare Einzelbeiträge, eine überschaubare Teamgröße und transparente Ziele." },
+  { topic: "Teamarbeit", q: "Warum sind erfolgreiche Teams meist „gemischt“?",
+    options: ["Weil alle dieselbe Rolle übernehmen sollen", "Weil sich unterschiedliche Stärken und Rollen (Ideengeber, Umsetzer, Prüfer …) ergänzen", "Weil Vielfalt immer zu Streit führt", "Weil dann niemand Verantwortung tragen muss"],
+    a: 1, e: "Gemischte Teams brauchen Ideengeber, Umsetzer, Koordinatoren und kritische Prüfer — die Vielfalt der Rollen ist ein Vorteil, wenn sie geklärt ist." },
+  { topic: "Tuckman", q: "Wodurch ist die Forming-Phase gekennzeichnet?",
+    options: ["Das Team findet sich, ist höflich-unsicher, Rollen sind noch unklar", "Das Team arbeitet bereits auf Höchstleistung", "Das Team streitet offen über Rollen und Einfluss", "Das Team wird aufgelöst"],
+    a: 0, e: "In der Forming-Phase (Orientierung) findet sich das Team; man ist höflich und unsicher, Ziele und Rollen sind noch unklar." },
+  { topic: "Tuckman", q: "Was geschieht in der Norming-Phase?",
+    options: ["Das Team zerfällt", "Es kommt zu offenem Streit über Einfluss", "Das Team lernt sich gerade erst kennen", "Gemeinsame Regeln und Rollen werden gefunden, der Zusammenhalt wächst"],
+    a: 3, e: "In der Norming-Phase (Organisation) werden gemeinsame Regeln und Rollen gefunden, der Zusammenhalt wächst." },
+  { topic: "Tuckman", q: "Was kennzeichnet die Adjourning-Phase?",
+    options: ["Abschluss, Auswertung und Auflösung des Teams (z. B. am Projektende)", "Der Beginn der Zusammenarbeit", "Die Konfliktphase über Rollen", "Die Phase der höchsten Effizienz"],
+    a: 0, e: "Adjourning (Auflösung) umfasst Abschluss, Auswertung und Auflösung des Teams, z. B. am Projektende." },
+  { topic: "Feedback", q: "Welche Formulierung entspricht einer Ich-Botschaft?",
+    options: ["„Du machst immer alles falsch.“", "„Ich habe den Eindruck, dass die Abstimmung zuletzt schwierig war.“", "„Nie hältst du Termine ein.“", "„Alle finden, dass du zu langsam bist.“"],
+    a: 1, e: "Eine Ich-Botschaft beschreibt die eigene Wahrnehmung („Ich habe den Eindruck …“) statt Du-Vorwürfe oder Pauschalurteile zu äußern." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);
@@ -423,7 +519,7 @@ function answer(qi, oi) {
     q.appendChild(exp);
     q.classList.add('locked');
   } else {
-    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    // Nur „angekreuzt“-Status, keine Bewertung anzeigen
     opts[oi].style.borderColor = 'var(--bfw-primary)';
     opts[oi].style.background = 'var(--bfw-bg-teal)';
     opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
@@ -447,7 +543,7 @@ function updateScore() {
 }
 
 function finishNow() {
-  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet“ gewertet
   // und alle Lösungen+Erklärungen werden offengelegt.
   for (let i = 0; i < QUESTIONS.length; i++) {
     const q = document.getElementById(`q-${i}`);

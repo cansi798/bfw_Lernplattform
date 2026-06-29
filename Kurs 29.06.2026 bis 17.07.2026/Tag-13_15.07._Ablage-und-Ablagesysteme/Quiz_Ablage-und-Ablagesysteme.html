@@ -163,15 +163,15 @@ footer {
 <div class="container">
 
 <header>
-  <span class="tag-pill">Tag 13 · 15.07.2026 · 30 Fragen</span>
+  <span class="tag-pill">Tag 13 · 15.07.2026 · 60 Fragen</span>
   <h1>Quiz: Ablage &amp; Ablagesysteme</h1>
   <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
-  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 30 Fragen basieren direkt auf der <strong>Praesentation_Ablage-und-Ablagesysteme.html</strong> und dem <strong>Handout_Ablage-und-Ablagesysteme.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Ablage-und-Ablagesysteme.html</strong> und dem <strong>Handout_Ablage-und-Ablagesysteme.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
 </header>
 
 <div class="controls">
   <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
-  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">30</span> · Richtig: <span id="correct">0</span></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
 </div>
 
 <div class="controls" style="gap: 0.6rem;">
@@ -193,7 +193,7 @@ footer {
 
 <div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
   <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
-  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">30</span></span>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
   <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
 </div>
 
@@ -301,7 +301,105 @@ const QUESTIONS = [
     a: 0, e: "Der Aktenplan (Informationsstrukturplan) ist der einheitliche Rahmen mit systematischer, logischer Ordnung; über Hauptgruppen, Untergruppen und Stichworte werden Unterlagen sicher eingeordnet (oft als Dezimalklassifikation 0–9)." },
   { topic: "Kosten der Ablage", q: "Warum ist die günstigste Registraturform nicht automatisch die wirtschaftlichste?",
     options: ["Weil Material immer kostenlos ist", "Weil geringe Materialkosten durch hohen Raum- und Arbeitszeitaufwand (Suchen, Bearbeiten) aufgewogen werden können", "Weil teure Formen grundsätzlich besser sind", "Weil die Kosten keine Rolle spielen"],
-    a: 1, e: "Wirtschaftlich ist die Form mit den insgesamt niedrigsten Kosten: Geringe Materialkosten nützen wenig, wenn Raumbedarf und Arbeitszeit (Lochen, Suchen, Bearbeiten) hoch sind." }
+    a: 1, e: "Wirtschaftlich ist die Form mit den insgesamt niedrigsten Kosten: Geringe Materialkosten nützen wenig, wenn Raumbedarf und Arbeitszeit (Lochen, Suchen, Bearbeiten) hoch sind." },
+
+  // === Block E: Ablageorte & Ablagetechnik – Vertiefung (31-40) ===
+  { topic: "Ablageorte", q: "Was kennzeichnet die Abteilungsablage?",
+    options: ["Sie ist ausschließlich für Unterlagen mit Dauerwert vorgesehen", "Hier liegen nur die persönlichen Notizen eines einzelnen Mitarbeiters", "Von mehreren Mitarbeitern genutzte Unterlagen, gut erreichbar in der Abteilung (ein Aktenplan hilft)", "Sie befindet sich grundsätzlich im Keller des Unternehmens"],
+    a: 2, e: "In der Abteilungsablage werden von mehreren Mitarbeitern bearbeitete oder verwaltete Unterlagen für alle gut erreichbar abgelegt; ein Aktenplan macht die Ablage nachvollziehbar." },
+  { topic: "Ablageorte", q: "Welche Unterlagen werden typischerweise in der Zentralregistratur bzw. im Archiv aufbewahrt?",
+    options: ["Nur die aktuell bearbeiteten Vorgänge", "Ausschließlich digitale Dateien", "Die Tagespost vor der Verteilung", "Selten benötigte Unterlagen, solche mit gesetzlicher Aufbewahrungspflicht und Unterlagen mit Dauerwert"],
+    a: 3, e: "Im Archiv bzw. der Zentralregistratur liegen selten benötigte Unterlagen, Schriftgut mit gesetzlicher Aufbewahrungspflicht sowie Unterlagen mit Dauerwert." },
+  { topic: "Ablagetechnik", q: "Welcher Nachteil ist für die geheftete Ablage typisch?",
+    options: ["Höherer Zeitaufwand, weil vor dem Abheften gelocht werden muss", "Hohe Verlustgefahr der Schriftstücke", "Sehr schlechte Übersicht", "Sie ist nur für lose Einzelblätter geeignet"],
+    a: 0, e: "Die geheftete Ablage erfordert mehr Zeit, da die Schriftstücke vor dem Abheften gelocht werden müssen." },
+  { topic: "Ablagetechnik", q: "Für welche Schriftstücke eignet sich die Loseblattablage besonders?",
+    options: ["Für eine große Anzahl gleichartiger Dauerbelege", "Für Schriftstücke, die im Arbeitsprozess weitergegeben werden und schnell zur Hand sein müssen", "Für Unterlagen mit gesetzlicher Aufbewahrungspflicht", "Für Bilanzen und Steuerbescheide"],
+    a: 1, e: "Die Loseblattablage eignet sich für Schriftstücke, die im Arbeitsprozess weitergegeben werden, nicht zu umfangreich sind und schnell zur Hand sein müssen." },
+  { topic: "Ablagetechnik", q: "Wie werden die Schriftstücke bei der Loseblattablage aufbewahrt?",
+    options: ["Gelocht in Ordnern abgeheftet", "Fest verklebt in Mappen", "Ungeheftet (lose) in Mappen oder Sichthüllen eingelegt", "Einzeln laminiert"],
+    a: 2, e: "Bei der Loseblattablage werden die Schriftstücke ungeheftet, also lose, in Schriftgutbehälter wie Mappen oder Sichthüllen eingelegt." },
+  { topic: "Aktenarten", q: "Welches Beispiel passt zur Einzelakte?",
+    options: ["Ein Ordner mit allen Eingangsrechnungen", "Eine Mappe mit sämtlichen Lieferscheinen", "Eine Sammlung aller Bestellungen eines Monats", "Die Personalakte eines einzelnen Mitarbeiters"],
+    a: 3, e: "Die Einzelakte enthält die Schriftstücke zu einem Vorgang oder Fall - z. B. die Personalakte eines Mitarbeiters." },
+  { topic: "Aktenarten", q: "Welches Beispiel passt zur Sammelakte?",
+    options: ["Ein Ordner mit Lieferscheinen oder Rechnungen verschiedener Geschäftsvorfälle", "Die Personalakte eines Mitarbeiters", "Die Akte zu einem einzelnen Bauprojekt", "Die Krankenakte eines Patienten"],
+    a: 0, e: "In der Sammelakte werden Schriftstücke zu verschiedenen, aber gleichartigen Vorgängen abgelegt, z. B. Lieferscheine oder Rechnungen." },
+  { topic: "Aktenarten", q: "Welche Eselsbrücke hilft bei der Unterscheidung von Einzel- und Sammelakte?",
+    options: ["Einzel = viele gleiche, Sammel = ein Fall", "Einzel = ein Fall, Sammel = viele gleiche", "Einzel = digital, Sammel = analog", "Einzel = teuer, Sammel = günstig"],
+    a: 1, e: "Merksatz: Einzel = ein Fall (z. B. Personalakte), Sammel = viele gleiche (z. B. Eingangsrechnungen)." },
+  { topic: "Liegende Registratur", q: "Wofür eignet sich die liegende Registratur (Flachablage)?",
+    options: ["Für eine große Anzahl von Einzelakten in der Abteilungsablage", "Für die Kundenkartei nach Namen", "Für Akten, die aktuell im laufenden Arbeitsprozess oder nur selten benötigt werden", "Für Handakten, die ständig griffbereit sein müssen"],
+    a: 2, e: "Die Flachablage eignet sich für Akten, die aktuell im laufenden Arbeitsprozess sind oder nur selten benötigt werden." },
+  { topic: "Stehende Registratur", q: "Wofür ist die Ordnerregistratur besonders geeignet?",
+    options: ["Für lose Einzelblätter ohne festes Kriterium", "Für Handakten direkt am Arbeitsplatz", "Für Unterlagen, die ständig weitergegeben werden", "Für umfangreiche Sammelakten wie Rechnungskopien und Lieferscheine"],
+    a: 3, e: "Die Ordnerregistratur eignet sich für umfangreiche Sammelakten, z. B. Rechnungskopien und Lieferscheine." },
+
+  // === Block F: Registraturformen – Vertiefung (41-48) ===
+  { topic: "Stehende Registratur", q: "Welche Vorteile bietet die Stehsammlerregistratur?",
+    options: ["Schneller Zugriff und gute Raumausnutzung durch die Schriftgutbehälter", "Geringste Materialkosten aller Formen", "Maximale Flexibilität bei unregelmäßigem Aktenanfall", "Kein Platzbedarf"],
+    a: 0, e: "Vorteile der Stehsammlerregistratur sind der schnelle Zugriff und die gute Raumausnutzung durch die Schriftgutbehälter." },
+  { topic: "Stehende Registratur", q: "Welcher Nachteil ist für die Stehsammlerregistratur typisch?",
+    options: ["Schriftstücke gehen häufig verloren", "Durch die feststehende Bodenbreite der Kassetten fehlt die Flexibilität", "Sehr schlechte Übersicht", "Extrem hohe Anschaffungskosten"],
+    a: 1, e: "Durch die feststehende Bodenbreite der Kassetten ist die Stehsammlerregistratur wenig flexibel; bei unregelmäßigem Aktenanfall muss Platz frei gehalten werden." },
+  { topic: "Hängende Registratur", q: "Welche Schriftgutbehälter gehören zur Hängeregistratur?",
+    options: ["Aktendeckel, Schnellhefter und Jurismappe", "Ordner und Stehsammler", "Hängemappen, Hängetaschen, Hängeordner, Hängehefter und Hängesammler", "Pendelmappen und Pendeltaschen"],
+    a: 2, e: "Zur Hängeregistratur gehören Hängemappen, Hängetaschen, Hängeordner, Hängehefter und Hängesammler." },
+  { topic: "Hängende Registratur", q: "Welche Schriftgutbehälter gehören zur Pendelregistratur?",
+    options: ["Einstellmappen und Kassetten", "Aktendeckel und Jurismappe", "Hängemappen und Hängeordner", "Pendelmappen, Pendeltaschen, Pendelhefter und Pendelsammler"],
+    a: 3, e: "Zur Pendelregistratur gehören Pendelmappen, Pendeltaschen, Pendelhefter und Pendelsammler." },
+  { topic: "Hängende Registratur", q: "Wofür eignet sich die Hängeregistratur?",
+    options: ["Für Handakten am Arbeitsplatz und größere Akten der Abteilungsablage", "Nur für die zentrale Archivierung mit Dauerwert", "Ausschließlich für lose Notizzettel", "Nur für Bilanzen und Steuerbescheide"],
+    a: 0, e: "Die Hängeregistratur eignet sich für Handakten am Arbeitsplatz und größere Akten der Abteilungsablage; sie kann auch ungeheftet abgelegt werden." },
+  { topic: "Hängende Registratur", q: "Wofür eignet sich die Pendelregistratur besonders?",
+    options: ["Für genau eine umfangreiche Einzelakte", "Für eine große Anzahl von Einzelakten in der Abteilungsablage", "Für lose Schriftstücke am Arbeitsplatz", "Für die liegende Flachablage"],
+    a: 1, e: "Die Pendelregistratur eignet sich für eine große Anzahl von Einzelakten in der Abteilungsablage." },
+  { topic: "Registratur", q: "Welche Registraturform nutzt den Raum bis zur Griffhöhe und damit die Stellfläche besser aus?",
+    options: ["Die Hängeregistratur", "Die liegende Flachablage", "Die Pendelregistratur", "Die Ordnerregistratur"],
+    a: 2, e: "Die Pendelregistratur nutzt die Stellfläche besser aus, da kein Auszug nötig ist und der Raum bis zur Griffhöhe genutzt werden kann." },
+  { topic: "Registratur", q: "Bei welcher Registraturform kann nur bis zur Sichthöhe abgelegt werden, was mehr Raum erfordert?",
+    options: ["Pendelregistratur", "Ordnerregistratur", "Stehsammlerregistratur", "Hängeregistratur"],
+    a: 3, e: "Bei der Hängeregistratur kann nur bis zur Sichthöhe abgelegt werden, weshalb sie mehr Raum benötigt." },
+
+  // === Block G: Ordnungssysteme – Vertiefung (49-56) ===
+  { topic: "Ordnungssysteme", q: "Welche Eigenschaft muss ein gutes Ordnungssystem erfüllen?",
+    options: ["Es muss allgemein anerkannt und allen Mitarbeitern bekannt sein", "Es darf nur dem Archivar bekannt sein", "Es sollte möglichst oft gewechselt werden", "Es muss ausschließlich digital geführt werden"],
+    a: 0, e: "Ein gutes Ordnungssystem ist allgemein anerkannt und allen bekannt - nur so finden alle Mitarbeiter Schriftstücke schnell und ohne Rückfragen wieder." },
+  { topic: "Ordnungssysteme", q: "Wie wird der Umlaut 'ä' bei der alphabetischen Ordnung nach DIN 5007 (Wörterbuch-Variante) behandelt?",
+    options: ["Wie 'ae' am Wortende", "Wie der Grundbuchstabe 'a'", "Wie 'e'", "Er wird grundsätzlich ans Ende gestellt"],
+    a: 1, e: "In der Wörterbuch-Variante der DIN 5007 wird der Umlaut wie der Grundbuchstabe behandelt: ä = a." },
+  { topic: "Ordnungssysteme", q: "Wie wird 'ß' bei der alphabetischen Ordnung nach DIN 5007 eingeordnet?",
+    options: ["Wie 'b'", "Es wird ignoriert", "Wie 'ss'", "Wie 'sz' am Wortanfang"],
+    a: 2, e: "Das 'ß' wird bei der alphabetischen Ordnung wie 'ss' eingeordnet (Wörterbuch-Variante)." },
+  { topic: "Ordnungssysteme", q: "Wofür steht das Kürzel 'AR' in der mnemotechnischen Ordnung?",
+    options: ["Auftragsregister", "Archivregal", "Abteilungsregistratur", "Ausgangsrechnung"],
+    a: 3, e: "In der mnemotechnischen Ordnung steht 'AR' als Gedächtnishilfe für Ausgangsrechnung." },
+  { topic: "Ordnungssysteme", q: "Wofür steht das Kürzel 'ER' in der mnemotechnischen Ordnung?",
+    options: ["Eingangsrechnung", "Einzelregister", "Endregistratur", "Ersatzrechnung"],
+    a: 0, e: "'ER' steht als Gedächtnishilfe für Eingangsrechnung; die Rechnungsnummer dient der genauen Einordnung." },
+  { topic: "Ordnungssysteme", q: "Woher stammt der Begriff 'mnemotechnisch' und was bedeutet er?",
+    options: ["Vom lateinischen 'memoria' = Aktenschrank", "Vom griechischen 'Mneme' = Gedächtnis - es werden Gedächtnishilfen genutzt", "Vom englischen 'memory card' = Speicherkarte", "Er bedeutet 'rein numerische Ordnung'"],
+    a: 1, e: "Mnemotechnisch leitet sich vom griechischen 'Mneme' = Gedächtnis ab; es werden Gedächtnishilfen (Kürzel) zur Einordnung genutzt." },
+  { topic: "Ordnungssysteme", q: "Nach welchem Kriterium ordnet die geografische Ordnung, und wofür ist sie nützlich?",
+    options: ["Nach fortlaufender Nummer - für Belege", "Nach Jahren - für Bilanzen", "Nach räumlichem Kriterium (z. B. Vertriebsgebiet) - nützlich z. B. im Außendienst", "Nach Anfangsbuchstaben - für Kundennamen"],
+    a: 2, e: "Die geografische Ordnung legt nach räumlichen Kriterien (Land, Region, PLZ, Vertriebsgebiet) ab und ist z. B. im Außendienst nützlich." },
+  { topic: "Ordnungssysteme", q: "Welche Eselsbrücke fasst die sechs Ordnungssysteme zusammen?",
+    options: ["FIFO - LIFO", "Der PDCA-Zyklus", "Die ABC-Analyse", "A-N-A-M-C-G (Alphabetisch, Numerisch, Alphanumerisch, Mnemotechnisch, Chronologisch, Geografisch)"],
+    a: 3, e: "Die Eselsbrücke 'A-N-A-M-C-G' steht für Alphabetisch, Numerisch, Alphanumerisch, Mnemotechnisch, Chronologisch und Geografisch." },
+
+  // === Block H: Ordnungshilfsmittel & Aktenplan – Vertiefung (57-60) ===
+  { topic: "Ordnungshilfsmittel", q: "Wozu dienen Register- und Trennblätter?",
+    options: ["Sie schaffen Übersicht in Ordnern - verfügbar mit alphabetischen und numerischen Ordnungsreihen", "Sie ersetzen den Aktenplan vollständig", "Sie dienen ausschließlich der Aktenvernichtung", "Sie sind Schriftgutbehälter der Flachablage"],
+    a: 0, e: "Register- und Trennblätter helfen, Übersicht in Ordnern herzustellen; sie sind mit alphabetischen und numerischen Ordnungsreihen verfügbar." },
+  { topic: "Ordnungshilfsmittel", q: "Wozu dienen Leitkarten?",
+    options: ["Zum Lochen der Schriftstücke", "Zur Unterteilung der Schriftstücke in Gruppen bei Hängemappen oder Karteikästen", "Als Schriftgutbehälter der liegenden Registratur", "Zur Beschriftung der Ordnerrücken"],
+    a: 1, e: "Leitkarten ermöglichen bei Hängemappen oder Karteikästen eine Unterteilung der Schriftstücke in Gruppen." },
+  { topic: "Ordnungshilfsmittel", q: "Was sind Reiter als Ordnungshilfsmittel?",
+    options: ["Spezielle Hängemappen für Bilanzen", "Trennblätter mit Sichtlöchern für die Wiedervorlage", "Inhaltsschilder aus Metall oder Kunststoff, die auf die Schriftgutbehälter gesteckt werden", "Die nummerierten Hauptgruppen des Aktenplans"],
+    a: 2, e: "Reiter bestehen aus Metall oder Kunststoff (Fenster- oder Vollsichtreiter), tragen Inhaltsschilder und werden auf die Schriftgutbehälter gesteckt." },
+  { topic: "Aktenplan", q: "Wie ist ein Aktenplan als Dezimalklassifikation aufgebaut?",
+    options: ["Die Hauptgruppen werden mit Buchstaben A-Z benannt", "Es werden ausschließlich römische Ziffern verwendet", "Jedes Stichwort erhält eine zufällige Nummer", "Die Hauptgruppen werden mit den Ziffern 0-9 nummeriert, Untergruppen und Stichworte durch weitere Ziffern verfeinert (z. B. 5 Personal → 51 Personalverwaltung → 514 Urlaubsanträge)"],
+    a: 3, e: "Bei der Dezimalklassifikation werden die Hauptgruppen mit den Ziffern 0-9 nummeriert und durch weitere Ziffern verfeinert, z. B. 5 Personal → 51 Personalverwaltung → 514 Urlaubsanträge." }
 ];
 
 let answers = new Array(QUESTIONS.length).fill(null);

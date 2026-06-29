@@ -9,7 +9,7 @@ _© Can Siebert · 2026_
 
 ## Teil A — Integrierte Fallstudie: „Ein Tag bei der Lindner & Partner GmbH"
 
-📺 **Vorbereitungsvideo:** [YouTube: „Büroorganisation Grundlagen"](https://www.youtube.com/results?search_query=B%C3%BCroorganisation+Grundlagen) (https://www.youtube.com/results?search_query=B%C3%BCroorganisation+Grundlagen)
+📺 **Vorbereitungsvideo:** [YouTube: „Büroorganisation Grundlagen"](https://www.youtube.com/watch?v=_m_EtsDQ-DQ) (https://www.youtube.com/watch?v=_m_EtsDQ-DQ)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -52,7 +52,7 @@ a) **Kombibüro** — vereint störungsfreie Einzelarbeit/vertrauliche Gespräch
 
 ### Aufgabe 1 — Büroraum, Ausstattung & Umgebung (Tag 1–3)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Ergonomie Bildschirmarbeitsplatz"](https://www.youtube.com/results?search_query=Ergonomie+Bildschirmarbeitsplatz) (https://www.youtube.com/results?search_query=Ergonomie+Bildschirmarbeitsplatz)
+📺 **Vorbereitungsvideo:** [YouTube: „Ergonomie Bildschirmarbeitsplatz"](https://www.youtube.com/watch?v=lZHAXBKssA0) (https://www.youtube.com/watch?v=lZHAXBKssA0)
 
 **Sozialform:** Einzelarbeit
 
@@ -67,7 +67,7 @@ d) Welche drei Bestandteile bilden das Raumklima?
 
 ### Aufgabe 2 — Arbeitsschutz & Gesundheit (Tag 4)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsschutzgesetz einfach erklärt"](https://www.youtube.com/results?search_query=Arbeitsschutzgesetz+einfach+erkl%C3%A4rt) (https://www.youtube.com/results?search_query=Arbeitsschutzgesetz+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [YouTube: „Arbeitsschutzgesetz einfach erklärt"](https://www.youtube.com/watch?v=uOgrdnNIJFY) (https://www.youtube.com/watch?v=uOgrdnNIJFY)
 
 **Sozialform:** Partnerarbeit
 
@@ -82,7 +82,7 @@ d) Welches Instrument verpflichtet den Arbeitgeber, Gefahren am Arbeitsplatz sys
 
 ### Aufgabe 3 — Zeit- und Terminmanagement (Tag 5–6)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Eisenhower Prinzip ALPEN Methode"](https://www.youtube.com/results?search_query=Eisenhower+Prinzip+ALPEN+Methode) (https://www.youtube.com/results?search_query=Eisenhower+Prinzip+ALPEN+Methode)
+📺 **Vorbereitungsvideo:** [YouTube: „Eisenhower Prinzip ALPEN Methode"](https://www.youtube.com/watch?v=dWQoldjrB1s) (https://www.youtube.com/watch?v=dWQoldjrB1s)
 
 **Sozialform:** Einzelarbeit
 
@@ -97,7 +97,7 @@ d) Was besagt die Wiedervorlage in der Terminüberwachung?
 
 ### Aufgabe 4 — Besprechung, Protokoll & Kommunikation (Tag 7–9)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Protokoll schreiben DIN 5008"](https://www.youtube.com/results?search_query=Protokoll+schreiben+DIN+5008) (https://www.youtube.com/results?search_query=Protokoll+schreiben+DIN+5008)
+📺 **Vorbereitungsvideo:** [YouTube: „Protokoll schreiben DIN 5008"](https://www.youtube.com/watch?v=0hPEBUHJw94) (https://www.youtube.com/watch?v=0hPEBUHJw94)
 
 **Sozialform:** Gruppenarbeit
 
@@ -112,7 +112,7 @@ d) Nennen Sie zwei Feedbackregeln.
 
 ### Aufgabe 5 — Post, Aufbewahrung & Ablage (Tag 10–13)
 
-📺 **Vorbereitungsvideo:** [YouTube: „Aufbewahrungsfristen HGB AO"](https://www.youtube.com/results?search_query=Aufbewahrungsfristen+HGB+AO) (https://www.youtube.com/results?search_query=Aufbewahrungsfristen+HGB+AO)
+📺 **Vorbereitungsvideo:** [YouTube: „Aufbewahrungsfristen HGB AO"](https://www.youtube.com/watch?v=XHUau_xKmaY) (https://www.youtube.com/watch?v=XHUau_xKmaY)
 
 **Sozialform:** Einzelarbeit
 
@@ -127,7 +127,7 @@ d) Nennen Sie drei Ordnungssysteme der Ablage.
 
 ### Aufgabe 6 — Digitales DMS, Datenschutz & Umweltschutz (Tag 14) — Komplexe Handlungsaufgabe
 
-📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagement DSGVO Büro"](https://www.youtube.com/results?search_query=Dokumentenmanagement+DSGVO+B%C3%BCro) (https://www.youtube.com/results?search_query=Dokumentenmanagement+DSGVO+B%C3%BCro)
+📺 **Vorbereitungsvideo:** [YouTube: „Dokumentenmanagement DSGVO Büro"](https://www.youtube.com/watch?v=XQyH0yRzL34) (https://www.youtube.com/watch?v=XQyH0yRzL34)
 
 **Sozialform:** Gruppenarbeit (Handlungssituation)
 
