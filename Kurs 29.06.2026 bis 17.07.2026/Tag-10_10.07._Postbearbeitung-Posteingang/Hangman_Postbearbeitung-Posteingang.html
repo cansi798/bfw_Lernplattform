@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Hängemann Tag 10 — Postbearbeitung: Posteingang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA;
+  --bfw-bg-teal:#ECFEFF; --bfw-border:#E2E8F0; --bfw-success:#10B981; --bfw-danger:#EF4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 560px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+.hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
+.hint b { color: var(--bfw-primary-dark); }
+.stage { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+.stage svg { width: 200px; height: 220px; }
+.lives { text-align: center; font-size: 0.9rem; color: var(--bfw-ink-soft); margin-bottom: 0.75rem; }
+.word { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 1rem; }
+.slot { width: 34px; height: 44px; border-bottom: 4px solid var(--bfw-ink-soft); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; text-transform: uppercase; }
+.slot.revealed { color: var(--bfw-primary-dark); }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin-bottom: 0.75rem; }
+.msg.win { color: var(--bfw-success); } .msg.lose { color: var(--bfw-danger); }
+.keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.key { width: 40px; height: 46px; border: none; border-radius: 8px; background: #E2E8F0; color: var(--bfw-ink); font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.key:disabled { cursor: default; opacity: 0.55; }
+.key.right { background: var(--bfw-success); color: white; } .key.wrong { background: var(--bfw-danger); color: white; }
+.key:active:not(:disabled) { transform: translateY(1px); }
+.controls { text-align: center; margin: 1rem 0; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 10 · Hängemann</span>
+    <h1>Postbearbeitung: Posteingang</h1>
+  </header>
+  <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
+  <div class="stage">
+    <svg viewBox="0 0 200 220">
+      <!-- Galgen -->
+      <line x1="20" y1="210" x2="120" y2="210" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="210" x2="50" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="20" x2="130" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="130" y1="20" x2="130" y2="45" stroke="#0F766E" stroke-width="6"/>
+      <!-- Körperteile (per JS eingeblendet) -->
+      <circle id="p0" cx="130" cy="62" r="17" stroke="#EF4444" stroke-width="4" fill="none" style="display:none"/>
+      <line id="p1" x1="130" y1="79" x2="130" y2="140" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p2" x1="130" y1="95" x2="105" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p3" x1="130" y1="95" x2="155" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p4" x1="130" y1="140" x2="110" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p5" x1="130" y1="140" x2="150" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+    </svg>
+  </div>
+  <div class="lives" id="lives"></div>
+  <div class="word" id="word"></div>
+  <div class="msg" id="msg"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Wort</button></div>
+  <div class="stats" id="stats"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag10';
+const WORDS = [{"word":"POSTFACH","hint":"In einer Filiale gemieteter Behälter; macht unabhängig von den Zustellzeiten."},{"word":"POSTSTELLE","hint":"Eigene Abteilung größerer Unternehmen für die gesamte Postbearbeitung."},{"word":"POSTEINGANG","hint":"Erster Umschlagplatz für eingehende Informationen im Unternehmen."},{"word":"IRRLÄUFER","hint":"Fehlgeleitete Sendung, die ungeöffnet dem Zusteller zurückgegeben wird."},{"word":"WERTSENDUNG","hint":"Einschreiben, Wertbrief oder Nachnahme; wird gesondert erfasst und verwahrt."},{"word":"ROHRPOST","hint":"Schriftgutförderanlage zur automatischen Verteilung im Gebäude."},{"word":"QUITTUNG","hint":"Nachweis über den Empfang; bei Wertsendungen für die Annahme nötig."},{"word":"VERTRAULICH","hint":"Zusatz auf privater Post, die ungeöffnet weitergeleitet wird."},{"word":"LIZENZ","hint":"Erlaubnis der Bundesnetzagentur für private Briefdienstleister."},{"word":"POSTGESETZ","hint":"Rechtsgrundlage; verpflichtet die Deutsche Post AG zur Zustellung."},{"word":"SEKRETARIAT","hint":"Bearbeitet in kleineren Firmen die ein- und ausgehende Post."},{"word":"SCANNER","hint":"Gerät zum Einlesen der Eingangspost ins EDV-System."},{"word":"POSTVOLLMACHT","hint":"Schriftliche Erklärung, um Geschäftspost rechtsgültig annehmen zu dürfen."},{"word":"LEERKONTROLLE","hint":"Prüfung, ob der Umschlag nach Entnahme des Inhalts vollständig geleert ist."},{"word":"ANLAGE","hint":"Beilage zu einem Brief; wird auf Vollständigkeit geprüft."},{"word":"POSTBUCH","hint":"Verzeichnis zur Erfassung von Wertsendungen im Eingang."},{"word":"EINSCHREIBEN","hint":"Sendung, die gegen Quittung übergeben wird."},{"word":"NACHNAHME","hint":"Sendung, bei der der Betrag erst bei Zustellung kassiert wird."},{"word":"WERTBRIEF","hint":"Sendung mit angegebenem Geldwert; gesondert behandelt."},{"word":"STEMPEL","hint":"Aufdruck mit Datum rechts oben neben der Anschrift."},{"word":"EMPFÄNGER","hint":"Person oder Firma, an die eine Sendung gerichtet ist."},{"word":"ABSENDER","hint":"Person oder Firma, die eine Sendung verschickt."},{"word":"ANSCHRIFT","hint":"Adresse des Empfängers auf dem Umschlag."},{"word":"UMSCHLAG","hint":"Hülle des Briefs; wird bei fehlendem Absender angeheftet."},{"word":"ZUSTELLER","hint":"Person, die Sendungen an den Empfänger ausliefert."},{"word":"ZUSTELLUNG","hint":"Auslieferung einer Sendung an den Empfänger."},{"word":"BRIEFÖFFNER","hint":"Gerät zum maschinellen Aufschneiden von Umschlägen."},{"word":"ANNAHME","hint":"Entgegennahme der eingehenden Sendungen als erster Arbeitsschritt."},{"word":"VORSORTIEREN","hint":"Ordnen der ungeöffneten Post in Empfängergruppen."},{"word":"KONTROLLE","hint":"Prüfung auf Vollständigkeit von Inhalt und Anlagen."},{"word":"VERTEILEN","hint":"Weitergabe der Post an die zuständigen Stellen."},{"word":"STEMPELN","hint":"Anbringen des Eingangsvermerks auf dem Schriftstück."},{"word":"ÖFFNEN","hint":"Aufschneiden des Umschlags zur Entnahme des Inhalts."},{"word":"BOTE","hint":"Person, die Sendungen persönlich überbringt."},{"word":"KURIER","hint":"Dienstleister, der eilige Sendungen persönlich zustellt."},{"word":"BRIEFMONOPOL","hint":"Aufgehobenes Alleinrecht auf Briefbeförderung (seit 2008)."},{"word":"PAKET","hint":"Größere Sendung; von der Post zugestellt."},{"word":"PÄCKCHEN","hint":"Kleine Sendung zwischen Brief und Paket."},{"word":"BRIEF","hint":"Häufigste schriftliche Sendung im Eingang."},{"word":"TELEFAX","hint":"Fernkopie; ein Eingangsweg neben Brief und E-Mail."},{"word":"EMPFANG","hint":"Stelle, an der Post persönlich abgegeben werden kann."},{"word":"GESCHÄFTSPOST","hint":"An die Firma gerichtete Post; darf geöffnet werden."},{"word":"PRIVATPOST","hint":"An eine Person gerichtet; wird ungeöffnet weitergeleitet."},{"word":"ARCHIVIERUNG","hint":"Dauerhafte Speicherung eingescannter Eingangspost im System."},{"word":"DOKUMENT","hint":"Einzelnes Schriftstück; wird gescannt und abgelegt."},{"word":"TEXTERKENNUNG","hint":"Verfahren (OCR), das Gescanntes durchsuchbar macht."},{"word":"BEHÖRDE","hint":"Amt; die Bundesnetzagentur ist ein Beispiel dafür."},{"word":"FILIALE","hint":"Standort der Post; dort wird das gemietete Fach geleert."},{"word":"ABTEILUNG","hint":"Organisationseinheit; bearbeitet bei dezentraler Lösung eigene Post."},{"word":"BETRIEBSRAT","hint":"Gremium; an es gerichtete Post wird ungeöffnet weitergeleitet."},{"word":"VERMERK","hint":"Handschriftliche Notiz auf dem Brief, z. B. bei fehlender Anlage."},{"word":"NACHWEIS","hint":"Beleg über Empfang oder Übergabe einer Sendung."},{"word":"BEHÄLTER","hint":"Gemietetes Fach in der Filiale zur Aufnahme der Post."},{"word":"UHRZEIT","hint":"Zeitangabe, die der Eingangsstempel zusätzlich enthalten kann."},{"word":"DATUM","hint":"Tagesangabe im Posteingangsstempel."},{"word":"URKUNDE","hint":"Amtliches Papier, das nicht gestempelt wird; Umschlag beifügen."},{"word":"ZEUGNIS","hint":"Bescheinigung, die nicht gestempelt wird."},{"word":"VERTRAG","hint":"Rechtsverbindliches Dokument, das nicht gestempelt wird."},{"word":"SCHECK","hint":"Zahlungspapier, das nicht gestempelt wird."},{"word":"PERSÖNLICH","hint":"Zusatz auf Post, die ungeöffnet weiterzuleiten ist."},{"word":"INHALT","hint":"Das, was nach dem Öffnen aus dem Umschlag entnommen wird."},{"word":"POSTBOTE","hint":"Person, die die Briefe ins Unternehmen bringt."},{"word":"SORTIEREN","hint":"Ordnen der Post nach zuständigen Stellen."},{"word":"BRIEFMARKT","hint":"Seit 2008 für private Anbieter geöffneter Bereich."},{"word":"DIGITAL","hint":"Elektronische Form des Eingangs; wird immer wichtiger."}];
+const MAX_WRONG = 6;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'.split('');
+const STORAGE = 'hangman_' + DAY_ID;
+
+let target='', hint='', wrong=0, guessed=new Set(), over=false, lastIdx=-1;
+function pickWord(){ let i; do { i=Math.floor(Math.random()*WORDS.length); } while(WORDS.length>1 && i===lastIdx); lastIdx=i; return WORDS[i]; }
+
+function loadStats(){ try { return JSON.parse(localStorage.getItem(STORAGE)) || {played:0,won:0}; } catch(e){ return {played:0,won:0}; } }
+function saveStats(s){ try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch(e){} }
+function renderStats(){ const s=loadStats(); document.getElementById('stats').textContent = `Gespielt: ${s.played} · Gewonnen: ${s.won}`; }
+
+function newGame(){
+  const pick = pickWord();
+  target = pick.word.toUpperCase(); hint = pick.hint;
+  wrong=0; guessed=new Set(); over=false;
+  document.getElementById('hintText').textContent = hint;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  for(let i=0;i<MAX_WRONG;i++) document.getElementById('p'+i).style.display='none';
+  buildWord(); buildKeyboard(); updateLives();
+}
+
+function buildWord(){
+  const w=document.getElementById('word'); w.innerHTML='';
+  for(const ch of target){
+    const s=document.createElement('div'); s.className='slot';
+    if(guessed.has(ch) || over){ s.textContent=ch; s.classList.add('revealed'); }
+    w.appendChild(s);
+  }
+}
+function buildKeyboard(){
+  const kb=document.getElementById('keyboard'); kb.innerHTML='';
+  ALPHABET.forEach(ch=>{
+    const b=document.createElement('button'); b.className='key'; b.textContent=ch;
+    if(guessed.has(ch)){ b.disabled=true; b.classList.add(target.includes(ch)?'right':'wrong'); }
+    if(over) b.disabled=true;
+    b.onclick=()=>guess(ch);
+    kb.appendChild(b);
+  });
+}
+function updateLives(){ document.getElementById('lives').textContent = `Fehlversuche: ${wrong} / ${MAX_WRONG}`; }
+
+function guess(ch){
+  if(over || guessed.has(ch)) return;
+  guessed.add(ch);
+  if(target.includes(ch)){ buildWord(); buildKeyboard(); checkWin(); }
+  else { wrong++; document.getElementById('p'+(wrong-1)).style.display='block'; updateLives(); buildKeyboard(); if(wrong>=MAX_WRONG) lose(); }
+}
+function checkWin(){ if([...target].every(c=>guessed.has(c))){ over=true; const m=document.getElementById('msg'); m.textContent='🎉 Gewonnen! '+target; m.className='msg win'; const s=loadStats(); s.played++; s.won++; saveStats(s); renderStats(); buildKeyboard(); } }
+function lose(){ over=true; const m=document.getElementById('msg'); m.textContent='Verloren! Das Wort war: '+target; m.className='msg lose'; buildWord(); buildKeyboard(); const s=loadStats(); s.played++; saveStats(s); renderStats(); }
+
+document.addEventListener('keydown', e=>{ const c=e.key.toUpperCase(); if(/^[A-ZÄÖÜß]$/.test(c)) guess(c); });
+
+renderStats(); newGame();
+</script>
+</body>
+</html>

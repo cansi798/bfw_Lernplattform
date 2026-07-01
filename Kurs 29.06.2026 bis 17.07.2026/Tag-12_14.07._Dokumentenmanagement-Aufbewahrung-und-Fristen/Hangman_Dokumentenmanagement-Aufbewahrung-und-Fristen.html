@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Hängemann Tag 12 — Dokumentenmanagement: Aufbewahrung & Fristen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA;
+  --bfw-bg-teal:#ECFEFF; --bfw-border:#E2E8F0; --bfw-success:#10B981; --bfw-danger:#EF4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 560px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+.hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
+.hint b { color: var(--bfw-primary-dark); }
+.stage { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+.stage svg { width: 200px; height: 220px; }
+.lives { text-align: center; font-size: 0.9rem; color: var(--bfw-ink-soft); margin-bottom: 0.75rem; }
+.word { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 1rem; }
+.slot { width: 34px; height: 44px; border-bottom: 4px solid var(--bfw-ink-soft); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; text-transform: uppercase; }
+.slot.revealed { color: var(--bfw-primary-dark); }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin-bottom: 0.75rem; }
+.msg.win { color: var(--bfw-success); } .msg.lose { color: var(--bfw-danger); }
+.keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.key { width: 40px; height: 46px; border: none; border-radius: 8px; background: #E2E8F0; color: var(--bfw-ink); font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.key:disabled { cursor: default; opacity: 0.55; }
+.key.right { background: var(--bfw-success); color: white; } .key.wrong { background: var(--bfw-danger); color: white; }
+.key:active:not(:disabled) { transform: translateY(1px); }
+.controls { text-align: center; margin: 1rem 0; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 12 · Hängemann</span>
+    <h1>Dokumentenmanagement: Aufbewahrung & Fristen</h1>
+  </header>
+  <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
+  <div class="stage">
+    <svg viewBox="0 0 200 220">
+      <!-- Galgen -->
+      <line x1="20" y1="210" x2="120" y2="210" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="210" x2="50" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="20" x2="130" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="130" y1="20" x2="130" y2="45" stroke="#0F766E" stroke-width="6"/>
+      <!-- Körperteile (per JS eingeblendet) -->
+      <circle id="p0" cx="130" cy="62" r="17" stroke="#EF4444" stroke-width="4" fill="none" style="display:none"/>
+      <line id="p1" x1="130" y1="79" x2="130" y2="140" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p2" x1="130" y1="95" x2="105" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p3" x1="130" y1="95" x2="155" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p4" x1="130" y1="140" x2="110" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p5" x1="130" y1="140" x2="150" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+    </svg>
+  </div>
+  <div class="lives" id="lives"></div>
+  <div class="word" id="word"></div>
+  <div class="msg" id="msg"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Wort</button></div>
+  <div class="stats" id="stats"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag12';
+const WORDS = [{"word":"SCHRIFTGUT","hint":"Alle in einem Unternehmen anfallenden Unterlagen in geschriebener oder gedruckter Form."},{"word":"REGISTRATUR","hint":"Geordnete Aufbewahrung und Verwaltung der Unterlagen; „Gedächtnis des Unternehmens\"."},{"word":"TAGESWERT","hint":"Wertigkeitsstufe ohne bleibenden Wert; nach Kenntnisnahme vernichtbar (z. B. Prospekt)."},{"word":"PRÜFWERT","hint":"Wertigkeitsstufe von begrenzter Bedeutung; nach der Kontrolle wird über Vernichtung entschieden."},{"word":"DAUERWERT","hint":"Wertigkeitsstufe von besonderer Bedeutung; aufzubewahren, solange das Unternehmen besteht."},{"word":"AKTENPLAN","hint":"Systematische Gliederung für eine nachvollziehbare Ordnung des Schriftguts."},{"word":"FRISTBEGINN","hint":"Setzt mit dem Schluss des Kalenderjahres ein, in dem das Schriftstück entstand."},{"word":"HANDELSBUCH","hint":"Aufzeichnung der Geschäftsvorfälle; Aufbewahrungsfrist 10 Jahre."},{"word":"KONTOAUSZUG","hint":"Beleg der Bank über Kontobewegungen; ein typischer Buchungsbeleg."},{"word":"ARCHIV","hint":"Zentrale Aufbewahrung selten benötigter, aber noch aufbewahrungspflichtiger Unterlagen."},{"word":"INVENTAR","hint":"Verzeichnis aller Vermögensgegenstände und Schulden; 10 Jahre aufzubewahren."},{"word":"MAHNUNG","hint":"Schriftliche Zahlungserinnerung an einen säumigen Schuldner."},{"word":"HANDELSBRIEF","hint":"Jedes Schriftstück, das ein Handelsgeschäft betrifft; 6 Jahre aufzubewahren."},{"word":"BUCHUNGSBELEG","hint":"Nachweis für eine Buchung (z. B. Rechnung, Quittung); seit BEG IV 8 Jahre."},{"word":"GESETZESWERT","hint":"Wertigkeitsstufe mit vorgeschriebener Aufbewahrungsfrist nach HGB und AO."},{"word":"GESCHÄFTSBRIEF","hint":"Schreiben im Geschäftsverkehr; nicht jedes zählt als Handelsbrief."},{"word":"RECHNUNG","hint":"Zahlungsaufforderung für gelieferte Ware oder Leistung; ein Buchungsbeleg."},{"word":"QUITTUNG","hint":"Schriftliche Bestätigung über eine empfangene Zahlung."},{"word":"BELEG","hint":"Schriftlicher Nachweis für einen Geschäftsvorfall."},{"word":"FRIST","hint":"Gesetzlich bestimmter Zeitraum, in dem Unterlagen aufbewahrt werden müssen."},{"word":"FRISTENDE","hint":"Zeitpunkt, an dem die Aufbewahrungspflicht ausläuft; stets ein 31. Dezember."},{"word":"KALENDERJAHR","hint":"Zeitraum vom 1. Januar bis 31. Dezember; sein Schluss löst den Fristbeginn aus."},{"word":"AUFBEWAHRUNG","hint":"Geordnetes Verwahren von Unterlagen über eine bestimmte Dauer."},{"word":"LAGEBERICHT","hint":"Darstellung von Geschäftsverlauf und Lage; 10 Jahre aufzubewahren."},{"word":"BILANZ","hint":"Gegenüberstellung von Vermögen und Schulden zum Abschlussstichtag."},{"word":"BEWEISKRAFT","hint":"Eigenschaft eines unveränderten Belegs, vor Gericht oder Finanzamt zu gelten."},{"word":"FINANZAMT","hint":"Behörde, die die Buchführung nach der Abgabenordnung prüft."},{"word":"BUCHFÜHRUNG","hint":"Systematische Aufzeichnung aller Geschäftsvorfälle."},{"word":"ABGABENORDNUNG","hint":"Steuerliches Grundgesetz mit Regelungen zu Aufbewahrungspflichten (§ 147)."},{"word":"STEUERRECHT","hint":"Rechtsgebiet, das Prüfbarkeit und Aufbewahrung für das Finanzamt regelt."},{"word":"KAUFMANN","hint":"Person, die ein Handelsgewerbe betreibt; nach HGB buchführungspflichtig."},{"word":"KAUFVERTRAG","hint":"Vereinbarung über Kauf und Verkauf einer Ware; anfallendes Schriftgut."},{"word":"ANGEBOT","hint":"Verbindliche Offerte eines Lieferanten; verlangt hat es oft Prüfwert."},{"word":"ANFRAGE","hint":"Bitte an einen Lieferanten um ein Angebot."},{"word":"KÜNDIGUNG","hint":"Schriftliche Beendigung eines Vertrags, z. B. eines Arbeitsverhältnisses."},{"word":"ARBEITSVERTRAG","hint":"Schriftliche Vereinbarung zwischen Arbeitgeber und Beschäftigtem."},{"word":"PREISLISTE","hint":"Übersicht der Preise eines Anbieters; typisches Schriftgut mit Prüfwert."},{"word":"STATISTIK","hint":"Zahlenmäßige Auswertung; oft nur von begrenzter Bedeutung."},{"word":"PROSPEKT","hint":"Werbematerial ohne bleibenden Wert; nach Kenntnisnahme vernichtbar."},{"word":"ZEITUNG","hint":"Täglich erscheinendes Druckwerk; typisches Schriftgut mit Tageswert."},{"word":"WERBUNG","hint":"Unverlangte Anpreisung; zählt nicht als Handelsbrief."},{"word":"PATENT","hint":"Gewerbliches Schutzrecht; die Unterlagen haben Dauerwert."},{"word":"GRÜNDUNG","hint":"Entstehung des Unternehmens; die zugehörigen Unterlagen haben Dauerwert."},{"word":"WERTIGKEIT","hint":"Einstufung des Schriftguts nach seiner Bedeutung und Aufbewahrungsdauer."},{"word":"ORDNUNG","hint":"Übersichtliches System der Ablage nach einem festen Prinzip."},{"word":"ABLAGE","hint":"Das Verwahren von Schriftstücken an einem festgelegten Ort."},{"word":"ABLAGEORT","hint":"Stelle, an der Schriftgut verwahrt wird; je häufiger genutzt, desto näher am Platz."},{"word":"EINZELAKTE","hint":"Aktenart, bei der ein Vorgang für sich abgelegt wird."},{"word":"SAMMELAKTE","hint":"Aktenart, bei der mehrere gleichartige Vorgänge zusammengefasst werden."},{"word":"AKTENART","hint":"Überlegung, ob als Einzel- oder Sammelmappe abgelegt wird."},{"word":"ARBEITSPLATZ","hint":"Ort der dezentralen Ablage für häufig benötigte Unterlagen."},{"word":"ABTEILUNG","hint":"Organisationseinheit mit gemeinsam genutzter, nachvollziehbarer Ablage."},{"word":"DATENTRÄGER","hint":"Medium zur elektronischen Speicherung von Unterlagen."},{"word":"VERNICHTUNG","hint":"Endgültige Beseitigung von Schriftgut nach Fristablauf."},{"word":"KENNTNISNAHME","hint":"Zur-Kenntnis-Nehmen; danach darf Schriftgut mit Tageswert weg."},{"word":"GESCHÄFTSJAHR","hint":"Zwölfmonatiger Zeitraum der Rechnungslegung eines Betriebs."},{"word":"DOKUMENTATION","hint":"Festhalten und Nachweis der Geschäftsvorfälle für Prüfzwecke."},{"word":"LESBARKEIT","hint":"Anforderung, dass digitale Unterlagen jederzeit wieder darstellbar sind."},{"word":"DATENZUGRIFF","hint":"Recht des Finanzamts, auf elektronische Unterlagen zuzugreifen (GoBD)."},{"word":"SCHRIFTSTÜCK","hint":"Einzelnes Dokument, das einen Vorgang festhält."},{"word":"UNTERLAGEN","hint":"Sammelbegriff für die aufzubewahrenden Dokumente eines Betriebs."},{"word":"AUFZEICHNUNG","hint":"Schriftliche Festhaltung von Vorgängen, die aufzubewahren ist."},{"word":"ORDNUNGSSYSTEM","hint":"Logisches Prinzip, nach dem Schriftstücke abgeheftet werden."},{"word":"ALTREGISTRATUR","hint":"Ablage für selten benötigte, aber noch aufbewahrungspflichtige Unterlagen."},{"word":"ZENTRALARCHIV","hint":"Gemeinsame zentrale Verwahrung, die einzelne Abteilungen entlastet."},{"word":"WIEDERGABE","hint":"Bildliche oder inhaltliche Darstellung eines Originals auf einem Datenträger."},{"word":"GEDÄCHTNIS","hint":"Bild für die Registratur als Speicher des betrieblichen Wissens."},{"word":"DOPPELABLAGE","hint":"Mehrfaches Verwahren desselben Vorgangs; durch den Katalog zu vermeiden."},{"word":"VERZEICHNIS","hint":"Geordnete Auflistung, z. B. aller Schriftstücke mit Frist und Ort."},{"word":"GLIEDERUNG","hint":"Systematische Aufteilung, die den Aktenplan strukturiert."}];
+const MAX_WRONG = 6;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'.split('');
+const STORAGE = 'hangman_' + DAY_ID;
+
+let target='', hint='', wrong=0, guessed=new Set(), over=false, lastIdx=-1;
+function pickWord(){ let i; do { i=Math.floor(Math.random()*WORDS.length); } while(WORDS.length>1 && i===lastIdx); lastIdx=i; return WORDS[i]; }
+
+function loadStats(){ try { return JSON.parse(localStorage.getItem(STORAGE)) || {played:0,won:0}; } catch(e){ return {played:0,won:0}; } }
+function saveStats(s){ try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch(e){} }
+function renderStats(){ const s=loadStats(); document.getElementById('stats').textContent = `Gespielt: ${s.played} · Gewonnen: ${s.won}`; }
+
+function newGame(){
+  const pick = pickWord();
+  target = pick.word.toUpperCase(); hint = pick.hint;
+  wrong=0; guessed=new Set(); over=false;
+  document.getElementById('hintText').textContent = hint;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  for(let i=0;i<MAX_WRONG;i++) document.getElementById('p'+i).style.display='none';
+  buildWord(); buildKeyboard(); updateLives();
+}
+
+function buildWord(){
+  const w=document.getElementById('word'); w.innerHTML='';
+  for(const ch of target){
+    const s=document.createElement('div'); s.className='slot';
+    if(guessed.has(ch) || over){ s.textContent=ch; s.classList.add('revealed'); }
+    w.appendChild(s);
+  }
+}
+function buildKeyboard(){
+  const kb=document.getElementById('keyboard'); kb.innerHTML='';
+  ALPHABET.forEach(ch=>{
+    const b=document.createElement('button'); b.className='key'; b.textContent=ch;
+    if(guessed.has(ch)){ b.disabled=true; b.classList.add(target.includes(ch)?'right':'wrong'); }
+    if(over) b.disabled=true;
+    b.onclick=()=>guess(ch);
+    kb.appendChild(b);
+  });
+}
+function updateLives(){ document.getElementById('lives').textContent = `Fehlversuche: ${wrong} / ${MAX_WRONG}`; }
+
+function guess(ch){
+  if(over || guessed.has(ch)) return;
+  guessed.add(ch);
+  if(target.includes(ch)){ buildWord(); buildKeyboard(); checkWin(); }
+  else { wrong++; document.getElementById('p'+(wrong-1)).style.display='block'; updateLives(); buildKeyboard(); if(wrong>=MAX_WRONG) lose(); }
+}
+function checkWin(){ if([...target].every(c=>guessed.has(c))){ over=true; const m=document.getElementById('msg'); m.textContent='🎉 Gewonnen! '+target; m.className='msg win'; const s=loadStats(); s.played++; s.won++; saveStats(s); renderStats(); buildKeyboard(); } }
+function lose(){ over=true; const m=document.getElementById('msg'); m.textContent='Verloren! Das Wort war: '+target; m.className='msg lose'; buildWord(); buildKeyboard(); const s=loadStats(); s.played++; saveStats(s); renderStats(); }
+
+document.addEventListener('keydown', e=>{ const c=e.key.toUpperCase(); if(/^[A-ZÄÖÜß]$/.test(c)) guess(c); });
+
+renderStats(); newGame();
+</script>
+</body>
+</html>

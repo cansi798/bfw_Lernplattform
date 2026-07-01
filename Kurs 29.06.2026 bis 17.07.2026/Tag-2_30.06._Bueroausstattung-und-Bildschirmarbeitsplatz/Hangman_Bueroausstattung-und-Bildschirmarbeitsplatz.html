@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Hängemann Tag 2 — Büroausstattung & ergonomischer Bildschirmarbeitsplatz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA;
+  --bfw-bg-teal:#ECFEFF; --bfw-border:#E2E8F0; --bfw-success:#10B981; --bfw-danger:#EF4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 560px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+.hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
+.hint b { color: var(--bfw-primary-dark); }
+.stage { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+.stage svg { width: 200px; height: 220px; }
+.lives { text-align: center; font-size: 0.9rem; color: var(--bfw-ink-soft); margin-bottom: 0.75rem; }
+.word { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 1rem; }
+.slot { width: 34px; height: 44px; border-bottom: 4px solid var(--bfw-ink-soft); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; text-transform: uppercase; }
+.slot.revealed { color: var(--bfw-primary-dark); }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin-bottom: 0.75rem; }
+.msg.win { color: var(--bfw-success); } .msg.lose { color: var(--bfw-danger); }
+.keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.key { width: 40px; height: 46px; border: none; border-radius: 8px; background: #E2E8F0; color: var(--bfw-ink); font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.key:disabled { cursor: default; opacity: 0.55; }
+.key.right { background: var(--bfw-success); color: white; } .key.wrong { background: var(--bfw-danger); color: white; }
+.key:active:not(:disabled) { transform: translateY(1px); }
+.controls { text-align: center; margin: 1rem 0; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 2 · Hängemann</span>
+    <h1>Büroausstattung & ergonomischer Bildschirmarbeitsplatz</h1>
+  </header>
+  <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
+  <div class="stage">
+    <svg viewBox="0 0 200 220">
+      <!-- Galgen -->
+      <line x1="20" y1="210" x2="120" y2="210" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="210" x2="50" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="20" x2="130" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="130" y1="20" x2="130" y2="45" stroke="#0F766E" stroke-width="6"/>
+      <!-- Körperteile (per JS eingeblendet) -->
+      <circle id="p0" cx="130" cy="62" r="17" stroke="#EF4444" stroke-width="4" fill="none" style="display:none"/>
+      <line id="p1" x1="130" y1="79" x2="130" y2="140" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p2" x1="130" y1="95" x2="105" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p3" x1="130" y1="95" x2="155" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p4" x1="130" y1="140" x2="110" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p5" x1="130" y1="140" x2="150" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+    </svg>
+  </div>
+  <div class="lives" id="lives"></div>
+  <div class="word" id="word"></div>
+  <div class="msg" id="msg"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Wort</button></div>
+  <div class="stats" id="stats"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag2';
+const WORDS = [{"word":"ERGONOMIE","hint":"Teilgebiet der Arbeitswissenschaft; passt die Arbeit an den Menschen an."},{"word":"BÜROSTUHL","hint":"Anpassbares Sitzmöbel mit mindestens fünf wegrollsicheren Rollen (DIN EN 1335)."},{"word":"SITZDYNAMIK","hint":"Wechsel zwischen vorderer, mittlerer und hinterer Position entlastet die Bandscheiben."},{"word":"SITZHÖHE","hint":"Nach DIN EN 1335 stufenlos von 42 bis 50 cm verstellbar."},{"word":"RÜCKENLEHNE","hint":"Verstellbarer Teil des Stuhls zum Anlehnen; Breite mindestens 36–48 cm."},{"word":"ARMLEHNEN","hint":"Auflagen für die Arme; müssen in der Höhe verstellbar sein."},{"word":"TASTATUR","hint":"Vom Bildschirm getrennte, neigbare Eingabeeinheit mit reflexionsarmer Oberfläche."},{"word":"BILDSCHIRM","hint":"Muss flimmer- und verzerrungsfrei sein; Helligkeit und Kontrast einstellbar."},{"word":"PRÜFSIEGEL","hint":"GS und CE sind die einzig gesetzlich geregelten Zeichen für Produktsicherheit."},{"word":"MONOTONIE","hint":"Eintönige, gleichförmige Arbeit, vor der guter Arbeitsschutz bewahren soll."},{"word":"FUSSSTÜTZE","hint":"Hilfsmittel für feste Fußauflage, das der Arbeitgeber auf Wunsch bereitstellt."},{"word":"SOFTWARE","hint":"Ergonomisch, wenn sie an Kenntnisse und Aufgabe anpassbar ist und Fehler verzeiht."},{"word":"ARBEITSTISCH","hint":"Büromöbel; Mindestfläche 160 mal 80 Zentimeter."},{"word":"ARBEITSPLATZ","hint":"Ort im Büro mit Stuhl, Tisch, Monitor, Maus und Vorlagenhalter."},{"word":"BÜRODREHSTUHL","hint":"Sitzmöbel mit fünf Rollen, das sich um die eigene Achse dreht."},{"word":"SITZTIEFE","hint":"Maß von vorn nach hinten auf der Fläche; mindestens 38 bis 44 cm."},{"word":"SITZBREITE","hint":"Seitliches Maß der Fläche; mindestens 40 bis 48 cm."},{"word":"SITZFLÄCHE","hint":"Waagerechter Teil des Stuhls, auf dem man Platz nimmt."},{"word":"BANDSCHEIBEN","hint":"Puffer zwischen den Wirbeln; werden durch dynamisches Sitzen entlastet."},{"word":"SICHTABSTAND","hint":"Empfohlene Entfernung Auge zum Monitor: 50 bis 70 cm."},{"word":"SEHACHSE","hint":"Waagerechte Blicklinie; die oberste Bildschirmzeile liegt leicht darunter."},{"word":"SPIEGELUNG","hint":"Störende Reflexion; vermeidbar durch rechten Winkel zum Fenster."},{"word":"ELLENBOGEN","hint":"Gelenk zwischen Ober- und Unterarm; hier bildet man 90 Grad."},{"word":"HANDBALLEN","hint":"Weicher Teil der Hand; soll vor der Eingabeleiste aufliegen können."},{"word":"UNTERARM","hint":"Teil des Arms zwischen Handgelenk und Ellenbogen."},{"word":"OBERSCHENKEL","hint":"Beinabschnitt zwischen Hüfte und Knie; bildet 90 Grad zum Unterschenkel."},{"word":"UNTERSCHENKEL","hint":"Beinabschnitt zwischen Knie und Fuß."},{"word":"MECHANIK","hint":"Technik im Stuhl, die Neigung von Sitz und Lehne steuert."},{"word":"WIPPMECHANIK","hint":"Sitztechnik; Winkel bleibt konstant, Gefühl wie im Schaukelstuhl."},{"word":"PENDELMECHANIK","hint":"Neigung wird durch Gewichtsverlagerung gesteuert, ähnlich einem Sitzball."},{"word":"SITZBALL","hint":"Elastische Kugel als bewegliche Sitzgelegenheit."},{"word":"GESUNDHEIT","hint":"Zustand des Wohlbefindens, den der Arbeitsschutz erhalten soll."},{"word":"ARBEITSUNFALL","hint":"Verletzungsereignis bei der Tätigkeit; Ergonomie soll davor schützen."},{"word":"ARBEITSSCHUTZ","hint":"Maßnahmen gegen Unfälle und Krankheiten am Job."},{"word":"SKELETT","hint":"Knochengerüst; Erkrankungen daran sind eine häufige Krankheitsursache."},{"word":"HALTUNG","hint":"Körperposition beim Sitzen; sollte oft gewechselt werden."},{"word":"STEHHÖHE","hint":"Arbeitshöhe im Stehen, zwischen 95 und 120 cm."},{"word":"ARBEITSHÖHE","hint":"Einstellbare Höhe der Tischplatte für bequemes Arbeiten."},{"word":"TISCHHÖHE","hint":"Richtig, wenn Unterarme flach aufliegen und Schultern locker bleiben."},{"word":"ELEKTROMOTOR","hint":"Antrieb, der die Platte eines Steh-Sitz-Tisches hebt und senkt."},{"word":"GASFEDER","hint":"Mechanischer Zylinder zum Verstellen der Höhe ohne Strom."},{"word":"VORLAGENHALTER","hint":"Ständer für Dokumente neben dem Monitor; auch Manuskripthalter genannt."},{"word":"DOCKINGSTATION","hint":"Andockeinheit, die einen Laptop im Dauerbetrieb ergänzt."},{"word":"DRUCKER","hint":"Gerät, das digitale Dokumente auf Papier ausgibt."},{"word":"HELLIGKEIT","hint":"Leuchtstärke des Bildes; muss individuell einstellbar sein."},{"word":"KONTRAST","hint":"Hell-Dunkel-Unterschied am Monitor; individuell regelbar."},{"word":"ZEILENABSTAND","hint":"Vertikaler Abstand der Textzeilen; sollte anpassbar sein."},{"word":"ARBEITSSTÄTTE","hint":"Ort des Arbeitens; eine Verordnung regelt Sicherheit und Gesundheit dort."},{"word":"VERORDNUNG","hint":"Rechtsvorschrift; die ArbStättV ist ein Beispiel dafür."},{"word":"PRÜFKRITERIEN","hint":"Vorgaben der DIN EN 1335, nach denen Stühle getestet werden."},{"word":"HERSTELLER","hint":"Produzent, der mit dem CE-Zeichen die EU-Konformität bestätigt."},{"word":"SICHERHEIT","hint":"Zustand ohne Gefahr; Kern des GS- und CE-Zeichens."},{"word":"BINNENMARKT","hint":"Gemeinsamer EU-Wirtschaftsraum; das CE-Zeichen gilt als Reisepass dafür."},{"word":"STEHARBEIT","hint":"Tätigkeit im Stehen; sollte 20 bis 30 Minuten nicht überschreiten."},{"word":"SITZARBEIT","hint":"Tätigkeit im Sitzen; eine der drei Zonen am Arbeitsplatz."},{"word":"KENNTNISSE","hint":"Wissen der Nutzer, an das gute Software anpassbar sein muss."},{"word":"LEISTUNG","hint":"Arbeitsergebnis; eine heimliche Kontrolle davon ist unzulässig."},{"word":"FLIMMERFREI","hint":"Eigenschaft eines ruhigen Bildes ohne störendes Zittern."},{"word":"REISEPASS","hint":"Ausweis für Reisen; Bild für das CE-Zeichen im EU-Markt."},{"word":"BODENBELAG","hint":"Untergrund im Raum; bestimmt, welche Rollen der Stuhl braucht."},{"word":"ARBEITSFLÄCHE","hint":"Nutzbare Tischgröße; mindestens 160 mal 80 cm."}];
+const MAX_WRONG = 6;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'.split('');
+const STORAGE = 'hangman_' + DAY_ID;
+
+let target='', hint='', wrong=0, guessed=new Set(), over=false, lastIdx=-1;
+function pickWord(){ let i; do { i=Math.floor(Math.random()*WORDS.length); } while(WORDS.length>1 && i===lastIdx); lastIdx=i; return WORDS[i]; }
+
+function loadStats(){ try { return JSON.parse(localStorage.getItem(STORAGE)) || {played:0,won:0}; } catch(e){ return {played:0,won:0}; } }
+function saveStats(s){ try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch(e){} }
+function renderStats(){ const s=loadStats(); document.getElementById('stats').textContent = `Gespielt: ${s.played} · Gewonnen: ${s.won}`; }
+
+function newGame(){
+  const pick = pickWord();
+  target = pick.word.toUpperCase(); hint = pick.hint;
+  wrong=0; guessed=new Set(); over=false;
+  document.getElementById('hintText').textContent = hint;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  for(let i=0;i<MAX_WRONG;i++) document.getElementById('p'+i).style.display='none';
+  buildWord(); buildKeyboard(); updateLives();
+}
+
+function buildWord(){
+  const w=document.getElementById('word'); w.innerHTML='';
+  for(const ch of target){
+    const s=document.createElement('div'); s.className='slot';
+    if(guessed.has(ch) || over){ s.textContent=ch; s.classList.add('revealed'); }
+    w.appendChild(s);
+  }
+}
+function buildKeyboard(){
+  const kb=document.getElementById('keyboard'); kb.innerHTML='';
+  ALPHABET.forEach(ch=>{
+    const b=document.createElement('button'); b.className='key'; b.textContent=ch;
+    if(guessed.has(ch)){ b.disabled=true; b.classList.add(target.includes(ch)?'right':'wrong'); }
+    if(over) b.disabled=true;
+    b.onclick=()=>guess(ch);
+    kb.appendChild(b);
+  });
+}
+function updateLives(){ document.getElementById('lives').textContent = `Fehlversuche: ${wrong} / ${MAX_WRONG}`; }
+
+function guess(ch){
+  if(over || guessed.has(ch)) return;
+  guessed.add(ch);
+  if(target.includes(ch)){ buildWord(); buildKeyboard(); checkWin(); }
+  else { wrong++; document.getElementById('p'+(wrong-1)).style.display='block'; updateLives(); buildKeyboard(); if(wrong>=MAX_WRONG) lose(); }
+}
+function checkWin(){ if([...target].every(c=>guessed.has(c))){ over=true; const m=document.getElementById('msg'); m.textContent='🎉 Gewonnen! '+target; m.className='msg win'; const s=loadStats(); s.played++; s.won++; saveStats(s); renderStats(); buildKeyboard(); } }
+function lose(){ over=true; const m=document.getElementById('msg'); m.textContent='Verloren! Das Wort war: '+target; m.className='msg lose'; buildWord(); buildKeyboard(); const s=loadStats(); s.played++; saveStats(s); renderStats(); }
+
+document.addEventListener('keydown', e=>{ const c=e.key.toUpperCase(); if(/^[A-ZÄÖÜß]$/.test(c)) guess(c); });
+
+renderStats(); newGame();
+</script>
+</body>
+</html>

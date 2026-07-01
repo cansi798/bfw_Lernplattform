@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Wordle Tag 13 — Ablage & Ablagesysteme</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-border:#E2E8F0;
+  --g-correct:#10B981; --g-present:#F59E0B; --g-absent:#94A3B8;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 560px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+.hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
+.hint b { color: var(--bfw-primary-dark); }
+.grid { display: grid; gap: 6px; justify-content: center; margin-bottom: 1rem; }
+.row { display: grid; gap: 6px; }
+.tile { width: 46px; height: 46px; border: 2px solid var(--bfw-border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; background: white; transition: transform 0.1s; }
+.tile.filled { border-color: var(--bfw-ink-soft); }
+.tile.correct { background: var(--g-correct); border-color: var(--g-correct); color: white; }
+.tile.present { background: var(--g-present); border-color: var(--g-present); color: white; }
+.tile.absent { background: var(--g-absent); border-color: var(--g-absent); color: white; }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin-bottom: 0.75rem; }
+.msg.win { color: var(--g-correct); } .msg.lose { color: #EF4444; }
+.keyboard { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.krow { display: flex; gap: 5px; justify-content: center; width: 100%; }
+.key { flex: 1; min-width: 26px; max-width: 44px; height: 52px; border: none; border-radius: 7px; background: #E2E8F0; color: var(--bfw-ink); font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.key.wide { flex: 1.6; font-size: 0.75rem; max-width: 66px; }
+.key.correct { background: var(--g-correct); color: white; } .key.present { background: var(--g-present); color: white; } .key.absent { background: var(--g-absent); color: white; }
+.key:active { transform: translateY(1px); }
+.controls { text-align: center; margin: 1rem 0; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 13 · Wordle</span>
+    <h1>Ablage & Ablagesysteme</h1>
+  </header>
+  <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Wort</button></div>
+  <div class="stats" id="stats"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag13';
+const WORDS = [{"word":"AKTENPLAN","hint":"Einheitlicher Strukturplan mit Haupt- und Untergruppen für die Schriftgutablage."},{"word":"EINZELAKTE","hint":"Enthält die Schriftstücke zu einem einzelnen Vorgang oder Fall, z. B. Personalakte."},{"word":"SAMMELAKTE","hint":"Enthält Schriftstücke zu verschiedenen, aber gleichartigen Vorgängen, z. B. Rechnungen."},{"word":"FLACHABLAGE","hint":"Liegende Registratur; Schriftstücke werden flach übereinandergelegt."},{"word":"STEHSAMMLER","hint":"Stehender Behälter zum Einstellen von Mappen und Schriftgut."},{"word":"HÄNGEMAPPE","hint":"Schriftgutbehälter der hängenden Registratur; übersichtlich und flexibel."},{"word":"PENDELMAPPE","hint":"Behälter der hängenden Pendelregistratur; wird zum Zugriff ganz entnommen."},{"word":"AKTENDECKEL","hint":"Einfacher Behälter der Flachablage, neben Schnellhefter und Jurismappe."},{"word":"REGISTRATUR","hint":"Geordnete Aufbewahrung von Schriftgut; liegend, stehend oder hängend."},{"word":"LEITKARTE","hint":"Unterteilt Hängemappen oder Karteikästen in Gruppen."},{"word":"REITER","hint":"Aufgesteckte Beschriftungshilfe aus Metall oder Kunststoff mit Inhaltsschild."},{"word":"ARCHIV","hint":"Ort für dauerhaft aufzubewahrende Unterlagen mit Dauerwert."},{"word":"ABLAGE","hint":"Geordnetes Aufbewahren von Schriftgut im Büro."},{"word":"ABLAGEORT","hint":"Stelle, an der Unterlagen je nach Zugriffshäufigkeit verwahrt werden."},{"word":"ABTEILUNG","hint":"Organisationseinheit; ihre gemeinsame Ablage nutzen mehrere Mitarbeiter."},{"word":"ARBEITSPLATZ","hint":"Ort am Schreibtisch für aktuell bearbeitetes Schriftgut."},{"word":"ORDNER","hint":"Stehender Behälter mit beschriftbarem Rücken zum Abheften."},{"word":"MAPPE","hint":"Faltbehälter für lose Schriftstücke."},{"word":"HEFTER","hint":"Behälter zum Einheften gelochter Blätter."},{"word":"SCHNELLHEFTER","hint":"Behälter der Flachablage neben Aktendeckel und Jurismappe."},{"word":"JURISMAPPE","hint":"Behälter der liegenden Flachablage mit Innenklappen."},{"word":"HÄNGETASCHE","hint":"Geschlossener Behälter der hängenden Registratur."},{"word":"HÄNGEORDNER","hint":"In Schienen eingehängter Behälter mit beschriftbarem Rücken."},{"word":"HÄNGEHEFTER","hint":"In Schienen eingehängter Behälter zum Einheften von Blättern."},{"word":"HÄNGESAMMLER","hint":"Sammelbehälter der hängenden Registratur."},{"word":"PENDELTASCHE","hint":"Behälter der Pendelregistratur mit seitlicher Sicht."},{"word":"PENDELHEFTER","hint":"Zum Einheften geeigneter Behälter der Pendelregistratur."},{"word":"PENDELSAMMLER","hint":"Sammelbehälter der Pendelregistratur."},{"word":"EINSTELLMAPPE","hint":"Mappe, die in einen Stehsammler gestellt wird."},{"word":"KASSETTE","hint":"Geschlossener Kasten zum Aufbewahren von Schriftgut."},{"word":"SCHRIFTGUT","hint":"Gesamtheit der schriftlichen Unterlagen eines Betriebs."},{"word":"SCHRIFTSTÜCK","hint":"Einzelnes beschriftetes Blatt oder Dokument."},{"word":"UNTERLAGEN","hint":"Aufzubewahrende Dokumente und Belege."},{"word":"ZUGRIFF","hint":"Häufigkeit des Zugreifens bestimmt den Ablageort."},{"word":"DAUERWERT","hint":"Eigenschaft dauerhaft aufzubewahrender Unterlagen."},{"word":"ALPHABET","hint":"Buchstabenfolge, nach der gemäß DIN 5007 sortiert wird."},{"word":"UMLAUT","hint":"Ä, Ö oder Ü; wird beim Sortieren wie der Grundbuchstabe behandelt."},{"word":"ORDNUNGSWORT","hint":"Maßgebliches Wort für die alphabetische Einordnung, z. B. Kundenname."},{"word":"STICHWORT","hint":"Kennzeichnender Begriff im Aktenplan."},{"word":"HAUPTGRUPPE","hint":"Oberste Ebene im Aktenplan, Ziffern 0 bis 9."},{"word":"UNTERGRUPPE","hint":"Verfeinerung einer Hauptgruppe im Aktenplan."},{"word":"WIEDERVORLAGE","hint":"Erneutes Vorlegen eines Vorgangs zum Termin."},{"word":"TERMINPLANUNG","hint":"Zeitliches Einplanen von Aufgaben und Fristen."},{"word":"PERSONALAKTE","hint":"Einzelakte mit allen Unterlagen eines Mitarbeiters."},{"word":"RECHNUNG","hint":"Zahlungsbeleg, oft in einer Sammelakte abgelegt."},{"word":"LIEFERSCHEIN","hint":"Beleg über gelieferte Waren, numerisch ablegbar."},{"word":"AUFTRAG","hint":"Bestellung, z. B. nach Nummer geheftet abgelegt."},{"word":"LIEFERANT","hint":"Verkäufer von Waren; Name als Ordnungswort nutzbar."},{"word":"VORGANG","hint":"Zusammengehörender Geschäftsfall in einer Akte."},{"word":"ZIFFER","hint":"Zahlzeichen 0 bis 9 im Aufbau der Dezimalklassifikation."},{"word":"GEDÄCHTNIS","hint":"Merkhilfe; Grundlage der mnemotechnischen Ordnung."},{"word":"RAUMKOSTEN","hint":"Aufwand für Stell- und Stapelfläche der Ablage."},{"word":"ARBEITSZEIT","hint":"Zeitaufwand fürs Lochen, Abheften und Suchen."},{"word":"SUCHZEIT","hint":"Dauer, bis ein Schriftstück wiedergefunden ist."},{"word":"TRENNBLATT","hint":"Ordnungshilfe, die einen Ordner unterteilt."},{"word":"REGISTER","hint":"Ordnungshilfe mit alphabetischer oder numerischer Reihe."},{"word":"KARTEIKASTEN","hint":"Behälter für Karten, mit Leitkarten unterteilbar."},{"word":"SICHTHÜLLE","hint":"Durchsichtige Hülle für ungelochte Blätter."},{"word":"LOCHEN","hint":"Vorbereiten von Blättern zum Abheften."},{"word":"ABHEFTEN","hint":"Einordnen gelochter Blätter in einen Ordner."},{"word":"INHALTSSCHILD","hint":"Beschriftung, die auf einen Reiter gesteckt wird."},{"word":"FENSTERREITER","hint":"Beschriftungshilfe mit Sichtfenster für ein Schild."},{"word":"POSTLEITZAHL","hint":"Kriterium der geografischen Ordnung."},{"word":"VERTRIEB","hint":"Bereich, dessen Gebiet geografisch abgelegt wird."}];
+const MAX_ROWS = 6;
+const LAYOUT = [['Q','W','E','R','T','Z','U','I','O','P','Ü'],['A','S','D','F','G','H','J','K','L','Ö','Ä'],['ENTER','Y','X','C','V','B','N','M','ß','DEL']];
+const STORAGE = 'wordle_' + DAY_ID;
+
+let target='', hint='', row=0, col=0, guesses=[], over=false, keyState={}, lastIdx=-1;
+function pickWord(){ let i; do { i=Math.floor(Math.random()*WORDS.length); } while(WORDS.length>1 && i===lastIdx); lastIdx=i; return WORDS[i]; }
+
+function loadStats(){ try { return JSON.parse(localStorage.getItem(STORAGE)) || {played:0,won:0}; } catch(e){ return {played:0,won:0}; } }
+function saveStats(s){ try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch(e){} }
+function renderStats(){ const s=loadStats(); document.getElementById('stats').textContent = `Gespielt: ${s.played} · Gewonnen: ${s.won}`; }
+
+function newGame(){
+  const pick = pickWord();
+  target = pick.word.toUpperCase(); hint = pick.hint;
+  row=0; col=0; over=false; guesses=Array.from({length:MAX_ROWS},()=>''); keyState={};
+  document.getElementById('hintText').textContent = hint;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  buildGrid(); buildKeyboard();
+}
+
+function buildGrid(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  g.style.gridTemplateRows=`repeat(${MAX_ROWS}, auto)`;
+  // adaptive Kachelgröße, damit auch lange Wörter (bis 14) passen
+  const avail = Math.min(520, (g.clientWidth || 520));
+  const size = Math.max(28, Math.min(46, Math.floor((avail - (target.length-1)*6) / target.length)));
+  const fs = Math.round(size*0.55);
+  for(let r=0;r<MAX_ROWS;r++){
+    const rowEl=document.createElement('div'); rowEl.className='row';
+    rowEl.style.gridTemplateColumns=`repeat(${target.length}, ${size}px)`;
+    for(let c=0;c<target.length;c++){ const t=document.createElement('div'); t.className='tile'; t.id=`t-${r}-${c}`; t.style.width=size+'px'; t.style.height=size+'px'; t.style.fontSize=fs+'px'; rowEl.appendChild(t); }
+    g.appendChild(rowEl);
+  }
+}
+
+function buildKeyboard(){
+  const kb=document.getElementById('keyboard'); kb.innerHTML='';
+  LAYOUT.forEach(rw=>{
+    const rowEl=document.createElement('div'); rowEl.className='krow';
+    rw.forEach(k=>{
+      const b=document.createElement('button'); b.className='key'+(k==='ENTER'||k==='DEL'?' wide':'');
+      b.textContent = k==='DEL'?'⌫':k; b.dataset.key=k;
+      if(keyState[k]) b.classList.add(keyState[k]);
+      b.onclick=()=>press(k);
+      rowEl.appendChild(b);
+    });
+    kb.appendChild(rowEl);
+  });
+}
+
+function press(k){
+  if(over) return;
+  if(k==='ENTER'){ submit(); return; }
+  if(k==='DEL'){ if(col>0){ col--; guesses[row]=guesses[row].slice(0,-1); paintCurrent(); } return; }
+  if(col<target.length){ guesses[row]+=k; col++; paintCurrent(); }
+}
+
+function paintCurrent(){
+  for(let c=0;c<target.length;c++){ const t=document.getElementById(`t-${row}-${c}`); const ch=guesses[row][c]||''; t.textContent=ch; t.classList.toggle('filled', !!ch); }
+}
+
+function submit(){
+  const guess=guesses[row];
+  if(guess.length!==target.length){ flash('Bitte '+target.length+' Buchstaben eingeben.'); return; }
+  // Färbung mit Duplikat-Behandlung
+  const res=new Array(target.length).fill('absent');
+  const counts={};
+  for(const ch of target) counts[ch]=(counts[ch]||0)+1;
+  for(let c=0;c<target.length;c++){ if(guess[c]===target[c]){ res[c]='correct'; counts[guess[c]]--; } }
+  for(let c=0;c<target.length;c++){ if(res[c]==='correct') continue; if(counts[guess[c]]>0){ res[c]='present'; counts[guess[c]]--; } }
+  for(let c=0;c<target.length;c++){
+    const t=document.getElementById(`t-${row}-${c}`); t.classList.add(res[c]);
+    const k=guess[c]; const rank={absent:0,present:1,correct:2};
+    if(!keyState[k] || rank[res[c]]>rank[keyState[k]]) keyState[k]=res[c];
+  }
+  buildKeyboard();
+  if(guess===target){ win(); return; }
+  row++; col=0;
+  if(row>=MAX_ROWS){ lose(); }
+}
+
+function win(){ over=true; const m=document.getElementById('msg'); m.textContent='🎉 Richtig! '+target; m.className='msg win'; const s=loadStats(); s.played++; s.won++; saveStats(s); renderStats(); }
+function lose(){ over=true; const m=document.getElementById('msg'); m.textContent='Schade! Das Wort war: '+target; m.className='msg lose'; const s=loadStats(); s.played++; saveStats(s); renderStats(); }
+function flash(txt){ const m=document.getElementById('msg'); m.textContent=txt; setTimeout(()=>{ if(!over) m.textContent=''; }, 1500); }
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='Enter') press('ENTER');
+  else if(e.key==='Backspace') press('DEL');
+  else { const c=e.key.toUpperCase(); if(/^[A-ZÄÖÜß]$/.test(c)) press(c); }
+});
+
+renderStats(); newGame();
+</script>
+</body>
+</html>

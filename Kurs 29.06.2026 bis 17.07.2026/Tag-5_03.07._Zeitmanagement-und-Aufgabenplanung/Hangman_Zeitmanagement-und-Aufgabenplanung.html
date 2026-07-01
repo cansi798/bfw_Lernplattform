@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Hängemann Tag 5 — Zeitmanagement & Aufgabenplanung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA;
+  --bfw-bg-teal:#ECFEFF; --bfw-border:#E2E8F0; --bfw-success:#10B981; --bfw-danger:#EF4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 560px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+.hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
+.hint b { color: var(--bfw-primary-dark); }
+.stage { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+.stage svg { width: 200px; height: 220px; }
+.lives { text-align: center; font-size: 0.9rem; color: var(--bfw-ink-soft); margin-bottom: 0.75rem; }
+.word { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 1rem; }
+.slot { width: 34px; height: 44px; border-bottom: 4px solid var(--bfw-ink-soft); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; text-transform: uppercase; }
+.slot.revealed { color: var(--bfw-primary-dark); }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin-bottom: 0.75rem; }
+.msg.win { color: var(--bfw-success); } .msg.lose { color: var(--bfw-danger); }
+.keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.key { width: 40px; height: 46px; border: none; border-radius: 8px; background: #E2E8F0; color: var(--bfw-ink); font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.key:disabled { cursor: default; opacity: 0.55; }
+.key.right { background: var(--bfw-success); color: white; } .key.wrong { background: var(--bfw-danger); color: white; }
+.key:active:not(:disabled) { transform: translateY(1px); }
+.controls { text-align: center; margin: 1rem 0; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 5 · Hängemann</span>
+    <h1>Zeitmanagement & Aufgabenplanung</h1>
+  </header>
+  <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
+  <div class="stage">
+    <svg viewBox="0 0 200 220">
+      <!-- Galgen -->
+      <line x1="20" y1="210" x2="120" y2="210" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="210" x2="50" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="20" x2="130" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="130" y1="20" x2="130" y2="45" stroke="#0F766E" stroke-width="6"/>
+      <!-- Körperteile (per JS eingeblendet) -->
+      <circle id="p0" cx="130" cy="62" r="17" stroke="#EF4444" stroke-width="4" fill="none" style="display:none"/>
+      <line id="p1" x1="130" y1="79" x2="130" y2="140" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p2" x1="130" y1="95" x2="105" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p3" x1="130" y1="95" x2="155" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p4" x1="130" y1="140" x2="110" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p5" x1="130" y1="140" x2="150" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+    </svg>
+  </div>
+  <div class="lives" id="lives"></div>
+  <div class="word" id="word"></div>
+  <div class="msg" id="msg"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Wort</button></div>
+  <div class="stats" id="stats"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag5';
+const WORDS = [{"word":"PARETO","hint":"80/20-Regel: 20 % der Zeit bewirken 80 % des Erfolgs."},{"word":"EISENHOWER","hint":"Prinzip nach Dringlichkeit und Wichtigkeit; wichtig vor dringend."},{"word":"ALPEN","hint":"Methode für den Tagesplan in fünf Schritten; nur ca. 60 % verplanen."},{"word":"POMODORO","hint":"Technik mit festen Arbeitsintervallen und kurzen Pausen."},{"word":"CHECKLISTE","hint":"Liste zur Prüfung von Vollständigkeit; vergangenheitsbezogen."},{"word":"ZEITDIEB","hint":"Zeitfresser im Arbeitsalltag; äußere oder innere Form."},{"word":"RUHEPAUSE","hint":"Nach § 4 ArbZG mind. 30 Min bei mehr als 6 h Arbeit."},{"word":"PRIORITÄT","hint":"Rangfolge von Aufgaben nach Wichtigkeit (A, B oder C)."},{"word":"DELEGIEREN","hint":"Aufgaben an andere abgeben (Eisenhower-Feld 3)."},{"word":"PUFFERZEIT","hint":"Reserve für Unvorhergesehenes; ca. 40 % des Tages freihalten."},{"word":"SMART","hint":"Regel für Ziele: spezifisch, messbar, akzeptiert, realistisch, terminiert."},{"word":"STÖRUNG","hint":"Zeitfresser; unterteilt in äußere und innere Formen."},{"word":"ZEITMANAGEMENT","hint":"Effektive Nutzung der vorhandenen Zeit mit Methoden und Hilfsmitteln."},{"word":"SELBST","hint":"Eisenhower-Feld 1: wichtig und dringend, sofort ___ erledigen."},{"word":"SÄGEBLATT","hint":"Bildhafter Name des Effekts von Leistungsverlust durch Unterbrechungen."},{"word":"SALAMITAKTIK","hint":"Zerlegen großer Aufgaben in kleine, überschaubare Scheiben."},{"word":"LEISTUNGSKURVE","hint":"Verlauf der Leistungsfähigkeit über den Tag."},{"word":"LEISTUNGSHOCH","hint":"Zeit der höchsten Leistung, meist 08–12 Uhr."},{"word":"LEISTUNGSTIEF","hint":"Phase geringer Leistung, meist nach der Mittagspause."},{"word":"MITTAGSPAUSE","hint":"Unterbrechung um die Tagesmitte; danach oft ein Leistungstief."},{"word":"STRESS","hint":"Belastung, deren Vermeidung ein Ziel guter Zeiteinteilung ist."},{"word":"ZUFRIEDENHEIT","hint":"Positives Ziel guter Zeiteinteilung neben Work-Life-Balance."},{"word":"DRINGLICHKEIT","hint":"Kriterium mit konkretem Termin; eine der Eisenhower-Achsen."},{"word":"WICHTIGKEIT","hint":"Kriterium, ob eine Aufgabe einem Ziel näherbringt."},{"word":"ROUTINE","hint":"Wiederkehrende C-Aufgabe, gut für den Nachmittag."},{"word":"PAPIERKORB","hint":"Eisenhower-Feld 4: nicht wichtig, nicht dringend."},{"word":"TERMIN","hint":"Fester Zeitpunkt; Eisenhower-Feld 2 verlangt einen solchen."},{"word":"AUFGABE","hint":"Zu erledigende Tätigkeit; Grundeinheit der Tagesplanung."},{"word":"MUSS","hint":"A-Priorität: hoch, selbst und zuerst zu erledigen."},{"word":"SOLL","hint":"B-Priorität: mittlere Bedeutung, meist nachmittags."},{"word":"KANN","hint":"C-Priorität: niedrig, oft zeitraubend, wenig Ertrag."},{"word":"REIHENFOLGE","hint":"Ordnung, in der Aufgaben abgearbeitet werden."},{"word":"NACHKONTROLLE","hint":"Letzter Schritt der ALPEN-Methode: Erledigtes prüfen."},{"word":"STILLE","hint":"Fest geplante ___ Stunde für ungestörtes Arbeiten."},{"word":"STUNDE","hint":"Fest geplanter Termin mit sich selbst gegen den Sägeblatteffekt."},{"word":"UNTERBRECHUNG","hint":"Häufige Störung, die zum Sägeblatteffekt führt."},{"word":"LÄRM","hint":"Äußere Störung durch Geräusche am Arbeitsplatz."},{"word":"MÜDIGKEIT","hint":"Innere Störung durch fehlende Wachheit."},{"word":"LUSTLOSIGKEIT","hint":"Innere Störung durch fehlende Motivation."},{"word":"DISZIPLIN","hint":"Selbststeuerung; ihr Fehlen ist eine innere Störung."},{"word":"REDSELIGKEIT","hint":"Innere Störung durch zu viel Reden."},{"word":"ANGSTGEFÜHL","hint":"Innere Störung durch Sorge oder Furcht."},{"word":"WARTEZEIT","hint":"Äußere Störung, z. B. am Drucker."},{"word":"BURNOUT","hint":"Erschöpfungssyndrom; Pausen senken das Risiko dafür."},{"word":"ORGANISATION","hint":"Mittel gegen äußere Störungen neben festen Regeln."},{"word":"MOTIVIEREN","hint":"Sich selbst antreiben; Teilkompetenz des Selbstmanagements."},{"word":"FEEDBACK","hint":"Rückmeldung, die man sich zur Selbststeuerung gibt."},{"word":"PLANUNG","hint":"Vorausschauendes Ordnen von Aufgaben und Zeit."},{"word":"ERFOLG","hint":"Ergebnis; laut Pareto durch wenige Aufgaben stark beeinflusst."},{"word":"VORMITTAG","hint":"Tageszeit für die wichtigsten Aufgaben."},{"word":"NACHMITTAG","hint":"Tageszeit für Routine wie Ablage."},{"word":"ABLAGE","hint":"Routinetätigkeit, gut für die Zeit nach dem Mittag."},{"word":"NOTFALL","hint":"Wichtig und dringend; sofort selbst zu erledigen."},{"word":"ABGABETERMIN","hint":"Frist, die eine Aufgabe dringend macht."},{"word":"ARBEITSZEIT","hint":"Vom ArbZG geregelte Dauer der beruflichen Tätigkeit."},{"word":"ARBEITSPLATZ","hint":"Ort der Tätigkeit; unordentlich wird er zur äußeren Störung."},{"word":"KOLLEGE","hint":"Mitarbeiter; kann durch Nachfragen zur äußeren Störung werden."},{"word":"TELEFON","hint":"Gerät, dessen Klingeln eine typische äußere Störung ist."},{"word":"TERMINPLAN","hint":"Übersicht fester Zeitpunkte; hier trägt man die stille Stunde ein."},{"word":"WESENTLICH","hint":"Was wirklich zählt; dafür soll genug Zeit bleiben."},{"word":"ZEITFRESSER","hint":"Anderer Name für einen Dieb der Arbeitszeit."},{"word":"ZEITVERLUST","hint":"Bis zu 28 % durch den Sägeblatteffekt."},{"word":"ÜBERFORDERUNG","hint":"Zustand, dessen Vermeidung ein Ziel des Zeitmanagements ist."},{"word":"STRESSPEGEL","hint":"Belastungsniveau, das durch Pausen gesenkt wird."},{"word":"MORGENMENSCH","hint":"Person mit Leistungshoch am frühen Vormittag."},{"word":"ABENDMENSCH","hint":"Person mit Leistungshoch am Nachmittag oder später."},{"word":"ARBEITSUNFALL","hint":"Laut DGUV durch Pausen im Risiko gesenktes Ereignis."},{"word":"SCHRITT","hint":"Kleiner Teilabschnitt einer zerlegten Aufgabe."},{"word":"SCHEIBE","hint":"Bildhafter Teil der Salamitaktik."},{"word":"ERLEDIGEN","hint":"Eine Aufgabe abschließen; A-Aufgaben zuerst und selbst."}];
+const MAX_WRONG = 6;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'.split('');
+const STORAGE = 'hangman_' + DAY_ID;
+
+let target='', hint='', wrong=0, guessed=new Set(), over=false, lastIdx=-1;
+function pickWord(){ let i; do { i=Math.floor(Math.random()*WORDS.length); } while(WORDS.length>1 && i===lastIdx); lastIdx=i; return WORDS[i]; }
+
+function loadStats(){ try { return JSON.parse(localStorage.getItem(STORAGE)) || {played:0,won:0}; } catch(e){ return {played:0,won:0}; } }
+function saveStats(s){ try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch(e){} }
+function renderStats(){ const s=loadStats(); document.getElementById('stats').textContent = `Gespielt: ${s.played} · Gewonnen: ${s.won}`; }
+
+function newGame(){
+  const pick = pickWord();
+  target = pick.word.toUpperCase(); hint = pick.hint;
+  wrong=0; guessed=new Set(); over=false;
+  document.getElementById('hintText').textContent = hint;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  for(let i=0;i<MAX_WRONG;i++) document.getElementById('p'+i).style.display='none';
+  buildWord(); buildKeyboard(); updateLives();
+}
+
+function buildWord(){
+  const w=document.getElementById('word'); w.innerHTML='';
+  for(const ch of target){
+    const s=document.createElement('div'); s.className='slot';
+    if(guessed.has(ch) || over){ s.textContent=ch; s.classList.add('revealed'); }
+    w.appendChild(s);
+  }
+}
+function buildKeyboard(){
+  const kb=document.getElementById('keyboard'); kb.innerHTML='';
+  ALPHABET.forEach(ch=>{
+    const b=document.createElement('button'); b.className='key'; b.textContent=ch;
+    if(guessed.has(ch)){ b.disabled=true; b.classList.add(target.includes(ch)?'right':'wrong'); }
+    if(over) b.disabled=true;
+    b.onclick=()=>guess(ch);
+    kb.appendChild(b);
+  });
+}
+function updateLives(){ document.getElementById('lives').textContent = `Fehlversuche: ${wrong} / ${MAX_WRONG}`; }
+
+function guess(ch){
+  if(over || guessed.has(ch)) return;
+  guessed.add(ch);
+  if(target.includes(ch)){ buildWord(); buildKeyboard(); checkWin(); }
+  else { wrong++; document.getElementById('p'+(wrong-1)).style.display='block'; updateLives(); buildKeyboard(); if(wrong>=MAX_WRONG) lose(); }
+}
+function checkWin(){ if([...target].every(c=>guessed.has(c))){ over=true; const m=document.getElementById('msg'); m.textContent='🎉 Gewonnen! '+target; m.className='msg win'; const s=loadStats(); s.played++; s.won++; saveStats(s); renderStats(); buildKeyboard(); } }
+function lose(){ over=true; const m=document.getElementById('msg'); m.textContent='Verloren! Das Wort war: '+target; m.className='msg lose'; buildWord(); buildKeyboard(); const s=loadStats(); s.played++; saveStats(s); renderStats(); }
+
+document.addEventListener('keydown', e=>{ const c=e.key.toUpperCase(); if(/^[A-ZÄÖÜß]$/.test(c)) guess(c); });
+
+renderStats(); newGame();
+</script>
+</body>
+</html>
