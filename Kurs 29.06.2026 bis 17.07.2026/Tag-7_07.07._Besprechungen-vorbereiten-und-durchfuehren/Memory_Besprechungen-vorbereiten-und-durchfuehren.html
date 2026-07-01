@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Memory Tag 7 — Besprechungen vorbereiten & durchführen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0; --bfw-success:#10B981;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 820px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; background: white; border: 1px solid var(--bfw-border); border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); }
+.stats b { color: var(--bfw-primary-dark); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 620px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+.mcard { position: relative; min-height: 120px; border-radius: 12px; cursor: pointer; border: 2px solid var(--bfw-border);
+  background: var(--bfw-primary); color: white; display: flex; align-items: center; justify-content: center;
+  padding: 0.6rem; text-align: center; transition: transform 0.12s, background 0.2s; user-select: none; }
+.mcard:active { transform: scale(0.98); }
+.mcard .content { display: none; font-size: 0.82rem; line-height: 1.35; color: var(--bfw-ink); overflow: auto; max-height: 150px; }
+.mcard .facedown { font-size: 1.8rem; }
+.mcard .label { position: absolute; top: 5px; left: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.mcard.up { background: white; cursor: default; }
+.mcard.up.term { border-color: var(--bfw-primary); }
+.mcard.up.term .content { font-weight: 700; font-size: 1rem; color: var(--bfw-primary-dark); }
+.mcard.up .content { display: block; }
+.mcard.up .facedown { display: none; }
+.mcard.up .label { color: var(--bfw-ink-soft); }
+.mcard.matched { background: var(--bfw-bg-green); border-color: var(--bfw-success); cursor: default; }
+.mcard.matched .content { display: block; }
+.mcard.matched .facedown { display: none; }
+.mcard.matched.term .content { color: #065F46; }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin: 1rem 0; }
+.msg.win { color: var(--bfw-success); }
+.controls { text-align: center; margin-top: 0.5rem; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats2 { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 7 · Memory</span>
+    <h1>Besprechungen vorbereiten & durchführen</h1>
+  </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Finde die zusammengehörenden Paare: Jede Karte zeigt entweder einen <b>Begriff</b> oder eine <b>Definition</b>.
+    Decke zwei Karten auf – gehören Begriff und Definition zusammen, bleiben sie offen (grün).</p>
+    <p>Passt es nicht, werden beide wieder umgedreht. Ziel: alle <b>8 Paare</b> mit möglichst wenigen Zügen aufdecken – so prägst du dir Begriffe und ihre Bedeutung ein.</p>
+  </details>
+  <div class="stats">
+    <div>Paare: <b id="pairs">0</b> / 8</div>
+    <div>Züge: <b id="moves">0</b></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Spiel</button></div>
+  <div class="stats2" id="best"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag7';
+const PAIRS = [{"term":"Sitzung/Besprechung","def":"Zusammenkunft mehrerer Personen zur Information, Aussprache oder Entscheidung über betriebliche Themen."},{"term":"Vorbereitungsaspekte","def":"Die vor einer Sitzung zu klärenden Punkte: Datum/Uhrzeit, Raum, Teilnehmer, Zeitbedarf, TOP, Unterlagen und Protokoll."},{"term":"Tagesordnung","def":"Geordnete Liste der in einer Sitzung zu behandelnden Themen (Tagesordnungspunkte, TOP), jeweils mit Ziel."},{"term":"Tagesordnungspunkt (TOP)","def":"Einzelner Punkt der Tagesordnung mit klarem Ziel, Verantwortlichem und eingeplanter Zeit."},{"term":"Einladung","def":"Schriftliche Aufforderung zur Teilnahme, die alle Pflichtangaben (Art, Datum/Ort, Zeitbedarf, TOP, Verantwortliche, Anlagen, Protokollführer) enthält."},{"term":"Einberufungsfrist","def":"Gesetzlich oder organisatorisch vorgegebener Mindestabstand zwischen Einladung und Sitzung (z. B. § 51 GmbHG: mind. eine Woche)."},{"term":"Sitzungsablauf","def":"Strukturierte zeitliche Abfolge der TOP, oft mit festen, wiederkehrenden Punkten."},{"term":"Leitung","def":"Person, die die Sitzung eröffnet, leitet und schließt sowie auf Ziel, Zeit und Ergebnisse achtet."},{"term":"Moderation","def":"Steuerung der Diskussion: das Wort erteilen, zusammenfassen, die Gruppe beim Thema und am Zeitplan halten."},{"term":"Protokollführung","def":"Person, die Verlauf, Ergebnisse und Beschlüsse einer Sitzung schriftlich festhält."},{"term":"Videokonferenz","def":"Austausch von Gesprächspartnern an verschiedenen Orten per Videokonferenzsystem und schnellem Internet; ermöglicht gemeinsames Arbeiten an Dateien."},{"term":"Telefonkonferenz","def":"Telefonat mit mehr als drei Teilnehmern; benötigt spezielle Software, teils virtuelle Konferenzräume mit PIN."},{"term":"Dreierkonferenz","def":"Telefonkonferenz mit genau drei Teilnehmern."},{"term":"Hybridmeeting","def":"Besprechung, bei der ein Teil der Teilnehmer vor Ort und ein anderer Teil online zugeschaltet ist."},{"term":"Online-Tool zur Terminfindung","def":"Kostenloses Hilfsmittel (z. B. Doodle, Google Kalender) zur Abstimmung passender Termine."},{"term":"Warum ist gute Vorbereitung für eine Sitzung unverzichtbar?","def":"Nur mit guter Planung verlaufen Sitzungen zufriedenstellend und effektiv – das gilt auch für kleine Teambesprechungen."},{"term":"Welche Probleme drohen bei mangelnder Vorbereitung?","def":"Wichtige Inhalte werden nicht thematisiert, die Sitzung beginnt verspätet und dauert länger, und Beschlüsse werden nicht festgehalten, nicht nachverfolgt und vergessen."},{"term":"Warum kostet eine schlecht vorbereitete Besprechung „doppelt\"?","def":"Einmal durch die verschwendete Zeit aller Anwesenden und ein zweites Mal, weil offene Punkte später erneut bearbeitet werden müssen."},{"term":"Wieso ist Vorbereitung „gelebte Wirtschaftlichkeit\"?","def":"Weil sie Zeit- und Doppelaufwand vermeidet und so Kosten spart."},{"term":"Wann entscheidet sich meist, ob eine Sitzung effektiv verläuft?","def":"Schon vor dem ersten Wort – bei der Vorbereitung."},{"term":"Wann sollte man mit der Planung einer wöchentlichen Teamsitzung beginnen?","def":"In der Regel reicht es, 2–3 Tage vorher zu beginnen."},{"term":"Warum muss eine offizielle Sitzung früher vorbereitet werden?","def":"Weil bei offiziellen Sitzungen (z. B. Gesellschafterversammlung einer GmbH) gesetzliche Regeln und Fristen einzuhalten sind."},{"term":"Was regelt § 51 GmbHG zur Einberufung?","def":"Die Versammlung wird durch Einladung der Gesellschafter per eingeschriebenem Brief berufen, mit einer Frist von mindestens einer Woche."},{"term":"Wovon hängt der nötige Zeitabstand bis zur Sitzung ab?","def":"Von der Art der Sitzung und den konkreten Bedingungen vor Ort."},{"term":"Welche Fragen gehören zum Aspekt „Datum und Uhrzeit\"?","def":"Gibt es andere Sitzungen zum geplanten Termin? Sind Teilnehmer eventuell verhindert?"},{"term":"Was ist beim Aspekt „Raum reservieren und vorbereiten\" zu klären?","def":"Welcher Raum ist geeignet und verfügbar, werden Medien/technische Hilfsmittel benötigt und wurde der Raum reserviert?"},{"term":"Was ist beim Aspekt „Teilnehmer\" zu klären?","def":"Wer gehört zum Teilnehmerkreis und welche Unterlagen benötigen die Teilnehmer zur Vorbereitung?"},{"term":"Warum gehört Verpflegung zur guten Vorbereitung?","def":"Getränke (bei längeren Sitzungen Snacks) halten die Konzentration aufrecht und signalisieren Wertschätzung gegenüber den Teilnehmern."},{"term":"Welche wiederkehrenden Punkte können einen festen Platz im Ablauf erhalten?","def":"Immer wiederkehrende Punkte wie „Genehmigung des Protokolls\" oder „Verschiedenes\"."},{"term":"Welche Ziele kann ein Tagesordnungspunkt haben?","def":"Information, Ideensammlung, Erfahrungsaustausch, Aussprache, Entscheidungsfindung oder Beschlussfassung."},{"term":"Warum sind vage TOP-Formulierungen (z. B. nur „Sortiment\") gefährlich?","def":"Es bleibt unklar, was besprochen werden soll; die Teilnehmer können sich nicht gezielt vorbereiten und gehen ohne durchdachte Vorschläge in die Sitzung."},{"term":"Wie sieht eine präzise TOP-Formulierung aus?","def":"Ziel und Gegenstand nennen, z. B. „Aussprache und Entscheidung über die Sortimentserweiterung der Warengruppe Handelswaren Bürotechnik (Anlagen 1 und 2)\"."},{"term":"Wann wird die Einladung erstellt?","def":"Erst dann, wenn die Vorbereitungen weitgehend abgeschlossen sind."},{"term":"Warum sollte die Einladung möglichst präzise formuliert sein?","def":"Je präziser die Inhalte, desto besser können sich Teilnehmer vorbereiten und Mitverantwortung für eine effektive Durchführung übernehmen."},{"term":"Nenne Pflichtangaben einer detaillierten Einladung.","def":"Art der Sitzung, Datum/Uhrzeit/Ort, voraussichtlicher Zeitbedarf, TOP mit Ziel, Berichterstatter/Verantwortliche, Hinweis auf Anlagen, Anmeldehinweis und Name des Protokollführers."},{"term":"Für wen ist der Hinweis „Anmeldung erforderlich\" gedacht?","def":"Für außerbetriebliche Teilnehmer."},{"term":"Bei welchen Sitzungen wird der Name des Protokollführers angegeben?","def":"Bei innerbetrieblichen Sitzungen."},{"term":"Countdown: Was ist ca. 2 Wochen vorher zu tun?","def":"Ziel/Anlass klären, Teilnehmerkreis festlegen und den Termin abstimmen."},{"term":"Countdown: Was ist ca. 10 Tage vorher zu tun?","def":"Raum reservieren, Technik und Verpflegung klären."},{"term":"Countdown: Was ist ca. 1 Woche vorher zu tun?","def":"TOP sammeln, Reihenfolge und Zeiten festlegen und die Einladung versenden (Fristen beachten)."},{"term":"Countdown: Was ist 2–3 Tage vorher zu tun?","def":"Unterlagen und Anlagen zusammenstellen und versenden."},{"term":"Countdown: Was ist am Sitzungstag zu tun?","def":"Raum und Technik prüfen, Moderationsmaterial bereitlegen und Getränke bereitstellen."},{"term":"Eselsbrücke zum Vorbereitungs-Countdown","def":"„Ziel – Raum – Runde – Reihenfolge – Einladung – Unterlagen – Check\": erst Ziel, dann Raum/Technik, Teilnehmerkreis, Reihenfolge der TOP, Einladung, Unterlagen und Check vor Ort."},{"term":"Wer ist für das Gelingen einer Sitzung verantwortlich?","def":"Nicht nur die Leitung, sondern auch die Teilnehmer tragen Verantwortung."},{"term":"Aufgaben der Leitung in der Besprechung?","def":"Sie eröffnet und schließt die Sitzung, achtet auf Ziel, Zeit und Beschlussfähigkeit und sorgt für Ergebnisse."},{"term":"Aufgaben der Moderation in der Besprechung?","def":"Sie steuert die Diskussion, erteilt das Wort, fasst zusammen und hält die Gruppe beim Thema und am Zeitplan – oft in Personalunion mit der Leitung."},{"term":"Wann wird die Protokollführung benannt?","def":"Bereits in der Vorbereitung."},{"term":"Warum beginnt die Sitzung pünktlich?","def":"Sie beginnt pünktlich, auch wenn noch nicht alle eingetroffen sind, und hält den vorgesehenen Zeitrahmen ein."},{"term":"Welche Funktion hat die Tagesordnung während der Durchführung?","def":"Sie dient als Leitfaden; die Themen werden zielorientiert abgearbeitet, ohne Abschweifen und Binnengespräche."},{"term":"Strukturierter Ablauf der Besprechung eines TOP?","def":"Einführungs-/Informationsphase, Diskussionsphase, Entscheidungsphase – kurz: fragen – zuhören – klären – festhalten."},{"term":"Wie sieht respektvolle Kommunikation in der Sitzung aus?","def":"Man fällt dem Redner nicht ins Wort, bemüht sich um Konsens, sieht sich als gleichwertige Gesprächspartner und spricht unterschiedliche Vorstellungen offen an."},{"term":"Welcher Grundsatz gilt für Redebeiträge?","def":"Jeder bemüht sich um kurze Beiträge."},{"term":"Schwieriger Typ „Dauerredner\" – Verhalten und Reaktion?","def":"Hat zu allem etwas zu sagen; die Moderation begrenzt freundlich und verweist auf Zeit und Thema."},{"term":"Schwieriger Typ „Desinteressierter\" – Verhalten und Reaktion?","def":"Schaut immer wieder auf die Uhr; die Moderation bindet ihn gezielt ein und fragt nach seiner Meinung."},{"term":"Schwieriger Typ „Abteilungswitzbold\" – Verhalten und Reaktion?","def":"Macht Scherze auf Kosten anderer und zieht Beiträge ins Lächerliche; die Moderation führt sachlich zum Thema zurück und schätzt Beiträge wert."},{"term":"Warum planen Unternehmen alternative Besprechungsformen?","def":"Weil Besprechungen viel Arbeitszeit beanspruchen; alternative Formen (v. a. Video- und Telefonkonferenzen) erfordern nicht die Anwesenheit aller an einem Ort."},{"term":"Was wird für eine Videokonferenz technisch benötigt?","def":"Ein spezielles Videokonferenzsystem und ein schneller Internetanschluss."},{"term":"Welche Vor- und Nachteile hat die Videokonferenz?","def":"Sie spart Flug-, Hotel- und Verpflegungskosten sowie Zeit; zunächst fallen jedoch Anschaffungskosten für die Technik an."},{"term":"Nenne gängige Plattformen und Terminfindungs-Tools.","def":"Plattformen: Microsoft Teams, Zoom oder Webex; Terminfindung: Doodle oder Google Kalender."},{"term":"Etikette für Video- und Hybridkonferenzen?","def":"Pünktlich sein und Technik testen, Mikrofon stummschalten wenn man nicht spricht (Kamera an), ruhiger Hintergrund, klare Agenda/Moderation und Remote-Teilnehmer aktiv einbinden."}];       // [{term, def}, ...] – ganzer Tagespool
+const PAIRS_PER_GAME = 8;
+const STORAGE = 'memory_' + DAY_ID;
+
+let deck=[], flipped=[], matched=0, moves=0, busy=false;
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function loadBest(){ try { return JSON.parse(localStorage.getItem(STORAGE)); } catch(e){ return null; } }
+function saveBest(m){ try { localStorage.setItem(STORAGE, JSON.stringify(m)); } catch(e){} }
+function renderBest(){ const b=loadBest(); document.getElementById('best').textContent = b!=null ? `Bestleistung: ${b} Züge` : ''; }
+
+function newGame(){
+  const n = Math.min(PAIRS_PER_GAME, PAIRS.length);
+  const chosen = shuffle(PAIRS.map((p,i)=>i)).slice(0, n);
+  deck = [];
+  chosen.forEach((pi, k) => {
+    deck.push({ pair:k, kind:'term', text:PAIRS[pi].term });
+    deck.push({ pair:k, kind:'def',  text:PAIRS[pi].def  });
+  });
+  shuffle(deck);
+  flipped=[]; matched=0; moves=0; busy=false;
+  document.getElementById('pairs').textContent='0';
+  document.getElementById('pairs').nextSibling; // noop
+  document.getElementById('moves').textContent='0';
+  document.querySelector('.stats').firstElementChild.innerHTML = `Paare: <b id="pairs">0</b> / ${n}`;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  render();
+  renderBest();
+}
+
+function render(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  deck.forEach((card, i)=>{
+    const el=document.createElement('div');
+    el.className='mcard'; el.id='c'+i;
+    el.innerHTML = `<span class="label"></span><span class="facedown">🧠</span><span class="content"></span>`;
+    el.onclick=()=>flip(i);
+    g.appendChild(el);
+  });
+}
+
+function flip(i){
+  if(busy) return;
+  const card=deck[i]; const el=document.getElementById('c'+i);
+  if(el.classList.contains('up') || el.classList.contains('matched')) return;
+  el.classList.add('up', card.kind);
+  el.querySelector('.content').textContent = card.text;
+  el.querySelector('.label').textContent = card.kind==='term' ? 'Begriff' : 'Definition';
+  flipped.push(i);
+  if(flipped.length===2){
+    moves++; document.getElementById('moves').textContent=moves;
+    const [a,b]=flipped;
+    if(deck[a].pair===deck[b].pair && deck[a].kind!==deck[b].kind){
+      // Treffer
+      document.getElementById('c'+a).classList.add('matched');
+      document.getElementById('c'+b).classList.add('matched');
+      flipped=[]; matched++;
+      document.getElementById('pairs').textContent=matched;
+      if(matched === deck.length/2) win();
+    } else {
+      busy=true;
+      setTimeout(()=>{
+        [a,b].forEach(idx=>{ const e=document.getElementById('c'+idx); e.classList.remove('up','term','def'); e.querySelector('.content').textContent=''; e.querySelector('.label').textContent=''; });
+        flipped=[]; busy=false;
+      }, 1000);
+    }
+  }
+}
+
+function win(){
+  const m=document.getElementById('msg'); m.textContent=`🎉 Geschafft in ${moves} Zügen!`; m.className='msg win';
+  const best=loadBest();
+  if(best==null || moves<best){ saveBest(moves); renderBest(); m.textContent += ' Neue Bestleistung!'; }
+}
+
+newGame();
+</script>
+</body>
+</html>

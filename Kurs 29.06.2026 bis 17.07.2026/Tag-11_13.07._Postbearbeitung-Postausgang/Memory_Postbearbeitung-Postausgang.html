@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Memory Tag 11 — Postbearbeitung: Postausgang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0; --bfw-success:#10B981;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 820px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; background: white; border: 1px solid var(--bfw-border); border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); }
+.stats b { color: var(--bfw-primary-dark); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 620px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+.mcard { position: relative; min-height: 120px; border-radius: 12px; cursor: pointer; border: 2px solid var(--bfw-border);
+  background: var(--bfw-primary); color: white; display: flex; align-items: center; justify-content: center;
+  padding: 0.6rem; text-align: center; transition: transform 0.12s, background 0.2s; user-select: none; }
+.mcard:active { transform: scale(0.98); }
+.mcard .content { display: none; font-size: 0.82rem; line-height: 1.35; color: var(--bfw-ink); overflow: auto; max-height: 150px; }
+.mcard .facedown { font-size: 1.8rem; }
+.mcard .label { position: absolute; top: 5px; left: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.mcard.up { background: white; cursor: default; }
+.mcard.up.term { border-color: var(--bfw-primary); }
+.mcard.up.term .content { font-weight: 700; font-size: 1rem; color: var(--bfw-primary-dark); }
+.mcard.up .content { display: block; }
+.mcard.up .facedown { display: none; }
+.mcard.up .label { color: var(--bfw-ink-soft); }
+.mcard.matched { background: var(--bfw-bg-green); border-color: var(--bfw-success); cursor: default; }
+.mcard.matched .content { display: block; }
+.mcard.matched .facedown { display: none; }
+.mcard.matched.term .content { color: #065F46; }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin: 1rem 0; }
+.msg.win { color: var(--bfw-success); }
+.controls { text-align: center; margin-top: 0.5rem; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats2 { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 11 · Memory</span>
+    <h1>Postbearbeitung: Postausgang</h1>
+  </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Finde die zusammengehörenden Paare: Jede Karte zeigt entweder einen <b>Begriff</b> oder eine <b>Definition</b>.
+    Decke zwei Karten auf – gehören Begriff und Definition zusammen, bleiben sie offen (grün).</p>
+    <p>Passt es nicht, werden beide wieder umgedreht. Ziel: alle <b>8 Paare</b> mit möglichst wenigen Zügen aufdecken – so prägst du dir Begriffe und ihre Bedeutung ein.</p>
+  </details>
+  <div class="stats">
+    <div>Paare: <b id="pairs">0</b> / 8</div>
+    <div>Züge: <b id="moves">0</b></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Spiel</button></div>
+  <div class="stats2" id="best"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag11';
+const PAIRS = [{"term":"Poststelle","def":"Zentrale Stelle im Unternehmen, in der die gesammelte Ausgangspost versandfertig gemacht wird."},{"term":"Kontrollieren","def":"Prüfung der Ausgangspost auf Unterschrift, Adresse und Vollständigkeit der Anlagen."},{"term":"Sortieren","def":"Ordnen der Post nach Sendungsart, Versandart, Gewicht sowie In- und Auslandssendungen."},{"term":"Welche sieben Arbeitsschritte umfasst der Postausgang in richtiger Reihenfolge?","def":"Kontrollieren, Sortieren, Falzen, Kuvertieren/Verschließen, Wiegen, Frankieren, Aufgeben."},{"term":"Eselsbrücke für die sieben Postausgangsschritte","def":"„Karl Sortiert Flink, Kuvertiert, Wiegt, Frankiert, Aufgibt“ – Ko-So-Fa-Ku-Wi-Fr-Auf."},{"term":"Wiegen","def":"Ermitteln des Gewichts einer Sendung mit mechanischer oder elektronischer Briefwaage als Grundlage für das Porto."},{"term":"Aufgeben","def":"Übergabe der versandfertigen Post an den Versanddienstleister (Poststelle-Schritt sieben)."},{"term":"Fensterbriefumschlag","def":"Umschlag mit Sichtfenster; die Empfängeradresse wird durch das Fenster sichtbar, ein erneutes Adressieren entfällt."},{"term":"Wonach teilt die Deutsche Post Briefe ein?","def":"Nach Format und Gewicht – mit steigendem Format und Gewicht steigt das Porto."},{"term":"Standardbrief","def":"Kleines, dünnes Briefformat (z. B. 1–3 Blatt) bis 20 g."},{"term":"Kompaktbrief","def":"Etwas dickeres Briefformat bis 50 g."},{"term":"Großbrief","def":"Briefformat für DIN A4 ungefaltet, bis 500 g."},{"term":"Maxibrief","def":"Dickes Briefformat, DIN A4 mit Anlagen, bis 1000 g."},{"term":"Warensendung","def":"Kostengünstige Versandart für kleinere Gegenstände und Werbesendungen; nicht versichert, keine Sendungsverfolgung."},{"term":"Nachnahme","def":"Versandart, bei der die Sendung erst gegen Bezahlung des Betrags an den Empfänger ausgehändigt und der Betrag anschließend an den Absender überwiesen wird."},{"term":"Dialogpost","def":"Versandart für Massenwerbung an mind. 200 Empfänger derselben Leitregion bzw. 4.000/500 Empfänger bundesweit."},{"term":"Voraussetzungen der Dialogpost","def":"Mind. 200 Empfänger derselben Leitregion (erste zwei PLZ-Ziffern), 4.000 bundesweit oder 500 bundesweit bei rein werblichen Inhalten."},{"term":"Einschreiben","def":"Versandart zur dokumentierten Zustellung wichtiger Briefe; Varianten: Einwurf, Übergabe, Eigenhändig, Rückschein."},{"term":"Einschreiben Einwurf","def":"Der Zusteller dokumentiert, dass der Brief in den Briefkasten oder das Postfach des Empfängers eingeworfen wurde."},{"term":"Einschreiben (Übergabe)","def":"Der Zusteller übergibt den Brief gegen Unterschrift an den Empfänger oder einen Empfangsberechtigten; Sendungsverfolgung möglich."},{"term":"Einschreiben Eigenhändig","def":"Übergabe nur gegen Unterschrift und ausschließlich an den Empfänger oder einen schriftlich Bevollmächtigten."},{"term":"Einschreiben Rückschein","def":"Persönliche Übergabe gegen Unterschrift; eine Empfangsbestätigung mit Datum und Unterschrift wird dem Absender zugeschickt."},{"term":"Wie hoch haftet die Deutsche Post bei Einschreiben?","def":"Bis zur Höhe des unmittelbaren Schadens, maximal 25,00 € bei Einschreiben bzw. 20,00 € bei Einschreiben Einwurf."},{"term":"Einschreiben Wert","def":"Versandart für Bargeld (bis 100,00 €) oder Sachwerte (bis 500,00 €) mit Einlieferungsnachweis und Sendungsverfolgung."},{"term":"Wie hoch erstattet die Post im Haftungsfall bei Einschreiben Wert?","def":"Bis max. 500,00 € bei Sachwerten und max. 100,00 € bei Bargeld."},{"term":"Falzen","def":"Falten der Schriftstücke ins passende, kostengünstige Format; Falzarten: Einfach-, Kreuz-, Zickzack-/Leporello-, Wickelfalz."},{"term":"Ziel des Falzens","def":"Ein möglichst kleines, aber zulässiges und kostengünstiges Format erreichen, um Porto zu sparen."},{"term":"Bruch-/Einfachfalz","def":"Einmaliges Falten, z. B. A4 auf A5 (in C5 mit Sichtfenster) oder A5 auf A6 (in C6)."},{"term":"Kreuzfalz","def":"Mehrfaches Falten über Kreuz, z. B. A4 auf A6, passend für eine C6-Briefhülle."},{"term":"Zickzack-/Leporellofalz","def":"Falten in Zickzack-Form, z. B. A4 auf 1/3 A4, passend für eine DIN-lang-Hülle mit Sichtfenster."},{"term":"Wickelfalz","def":"Nach innen einrollendes Falten, z. B. A4 auf 1/3 A4, passend für eine DIN-lang-Briefhülle."},{"term":"Kuvertieren","def":"Einstecken der Schriftstücke in geeignete Umschläge, manuell oder mit Kuvertiermaschinen."},{"term":"Frankieren","def":"Freimachen einer Sendung, also das Bezahlen des Portos."},{"term":"Briefmarken (Postwertzeichen)","def":"Frankierart, die sich für einzelne Briefe eignet."},{"term":"Plusbrief","def":"Umschlag mit bereits aufgedruckter Briefmarke."},{"term":"DV-Verfahren","def":"Frankieren mittels EDV; muss von der Deutschen Post genehmigt werden und eignet sich für Massenpost."},{"term":"Frankiermaschine","def":"Maschine, die den Umschlag mit Postentgelt, Datum und evtl. Werbeaufdruck bedruckt; bei Paketen auf selbstklebendem Frankierstreifen."},{"term":"Online-Frankierung","def":"Moderne Frankierart, bei der das Porto am PC bezahlt und als Marke/Code ausgedruckt wird."},{"term":"Wertvorgabesystem","def":"Im Voraus bezahlter Betrag wird in der Frankiermaschine eingestellt und durch das Stempeln der Sendungen verbraucht."},{"term":"Fernwertvorgabesystem","def":"Der Entgelt-Betrag wird per Telefon oder PC beantragt und per Code in die Frankiermaschine eingegeben."},{"term":"KEP-Dienste","def":"Kurier-, Express- und Paketdienste; befördern Sendungen schnell, fristgarantiert oder als Paket (bis 30 kg)."},{"term":"Postfiliale (als Aufgabeweg)","def":"Einlieferung der versandfertigen Post am Schalter."},{"term":"HIN + WEG","def":"Bring- und Abholservice der Deutschen Post: morgens Anlieferung der Geschäftspost ins Unternehmen, nachmittags Abholung der ausgehenden Sendungen."},{"term":"Kurierdienst","def":"Befördert Sendungen persönlich und direkt zum Empfänger; schnell, geeignet für vertrauliche, besonders schutzbedürftige Dokumente oder kleine Sendungen."},{"term":"Expressdienst","def":"Übernimmt die Beförderung und garantiert, dass die Sendung innerhalb einer bestimmten Frist beim Empfänger eintrifft."},{"term":"Paketdienst","def":"Übernimmt keine Laufzeitgarantie; die meisten Paketdienste beschränken das Höchstgewicht auf 30 kg."},{"term":"Welche privaten Dienstleister bieten Brief- und Paketdienste an?","def":"Neben Deutscher Post/DHL z. B. DPD, GLS, UPS und Hermes – oft mit eigener Sendungsverfolgung und Versandsoftware."},{"term":"Poststraße","def":"Hintereinandergeschaltete Maschinen, die Falzen, Kuvertieren, Verschließen, Trennen und Frankieren automatisch ausführen."},{"term":"Für welche Unternehmen ist eine Poststraße ideal?","def":"Für Unternehmen mit hohem Postaufkommen, da mehrere Arbeitsschritte in einem automatischen Maschinengang ablaufen."},{"term":"Versandsoftware","def":"Ermittelt automatisch die günstigste Versandart und das Porto, erstellt Labels und Frankierungen, verwaltet Adressen und übergibt Daten elektronisch an den Dienstleister."},{"term":"Hybridpost","def":"Digital übergebene Briefe werden vom Dienstleister gedruckt, kuvertiert, frankiert und physisch zugestellt."},{"term":"Wo erfolgt bei der Hybridpost der Medienbruch?","def":"Erst beim Dienstleister – der Wechsel von digital zu Papier findet dort statt, nicht mehr im Unternehmen."},{"term":"EHUG","def":"Gesetz über das elektronische Handels-, Genossenschafts- und Unternehmensregister; regelt die Pflichtangaben in E-Mails."},{"term":"Warum müssen geschäftliche E-Mails Pflichtangaben enthalten?","def":"Weil sie den postalischen Geschäftsbrief ersetzen; laut EHUG bzw. EU-Publizitätsrichtlinie gelten die Pflichtangaben unabhängig von Papier- oder elektronischer Form."},{"term":"Welche Dokumente zählen ebenfalls zu den Geschäftsbriefen?","def":"Auch Bestellungen, Lieferscheine, Rechnungen und Quittungen – ebenso in Form von E-Mail oder Telefax."},{"term":"Pflichtangaben bei einer GmbH","def":"Firma, Rechtsform, Sitz, Registergericht, Handelsregisternummer, alle Geschäftsführer und ggf. der Aufsichtsratsvorsitzende."},{"term":"Was zählt NICHT zu den Pflichtangaben?","def":"Genaue Adresse, Telefon-/Faxnummern, Postfach oder Bankverbindungen."},{"term":"De-Mail","def":"Verschlüsselter, nachweisbarer E-Mail-Dienst für verbindliche elektronische Kommunikation."},{"term":"EGVP","def":"Elektronisches Gerichts- und Verwaltungspostfach für rechtsverbindlichen Schriftverkehr mit Gerichten und Behörden."},{"term":"Elektronische Signatur","def":"Ersetzt die eigenhändige Unterschrift; weist die Identität des Absenders nach und sichert die Unverändertheit (Integrität) des Dokuments."}];       // [{term, def}, ...] – ganzer Tagespool
+const PAIRS_PER_GAME = 8;
+const STORAGE = 'memory_' + DAY_ID;
+
+let deck=[], flipped=[], matched=0, moves=0, busy=false;
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function loadBest(){ try { return JSON.parse(localStorage.getItem(STORAGE)); } catch(e){ return null; } }
+function saveBest(m){ try { localStorage.setItem(STORAGE, JSON.stringify(m)); } catch(e){} }
+function renderBest(){ const b=loadBest(); document.getElementById('best').textContent = b!=null ? `Bestleistung: ${b} Züge` : ''; }
+
+function newGame(){
+  const n = Math.min(PAIRS_PER_GAME, PAIRS.length);
+  const chosen = shuffle(PAIRS.map((p,i)=>i)).slice(0, n);
+  deck = [];
+  chosen.forEach((pi, k) => {
+    deck.push({ pair:k, kind:'term', text:PAIRS[pi].term });
+    deck.push({ pair:k, kind:'def',  text:PAIRS[pi].def  });
+  });
+  shuffle(deck);
+  flipped=[]; matched=0; moves=0; busy=false;
+  document.getElementById('pairs').textContent='0';
+  document.getElementById('pairs').nextSibling; // noop
+  document.getElementById('moves').textContent='0';
+  document.querySelector('.stats').firstElementChild.innerHTML = `Paare: <b id="pairs">0</b> / ${n}`;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  render();
+  renderBest();
+}
+
+function render(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  deck.forEach((card, i)=>{
+    const el=document.createElement('div');
+    el.className='mcard'; el.id='c'+i;
+    el.innerHTML = `<span class="label"></span><span class="facedown">🧠</span><span class="content"></span>`;
+    el.onclick=()=>flip(i);
+    g.appendChild(el);
+  });
+}
+
+function flip(i){
+  if(busy) return;
+  const card=deck[i]; const el=document.getElementById('c'+i);
+  if(el.classList.contains('up') || el.classList.contains('matched')) return;
+  el.classList.add('up', card.kind);
+  el.querySelector('.content').textContent = card.text;
+  el.querySelector('.label').textContent = card.kind==='term' ? 'Begriff' : 'Definition';
+  flipped.push(i);
+  if(flipped.length===2){
+    moves++; document.getElementById('moves').textContent=moves;
+    const [a,b]=flipped;
+    if(deck[a].pair===deck[b].pair && deck[a].kind!==deck[b].kind){
+      // Treffer
+      document.getElementById('c'+a).classList.add('matched');
+      document.getElementById('c'+b).classList.add('matched');
+      flipped=[]; matched++;
+      document.getElementById('pairs').textContent=matched;
+      if(matched === deck.length/2) win();
+    } else {
+      busy=true;
+      setTimeout(()=>{
+        [a,b].forEach(idx=>{ const e=document.getElementById('c'+idx); e.classList.remove('up','term','def'); e.querySelector('.content').textContent=''; e.querySelector('.label').textContent=''; });
+        flipped=[]; busy=false;
+      }, 1000);
+    }
+  }
+}
+
+function win(){
+  const m=document.getElementById('msg'); m.textContent=`🎉 Geschafft in ${moves} Zügen!`; m.className='msg win';
+  const best=loadBest();
+  if(best==null || moves<best){ saveBest(moves); renderBest(); m.textContent += ' Neue Bestleistung!'; }
+}
+
+newGame();
+</script>
+</body>
+</html>

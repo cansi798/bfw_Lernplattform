@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Memory Tag 10 — Postbearbeitung: Posteingang</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0; --bfw-success:#10B981;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 820px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; background: white; border: 1px solid var(--bfw-border); border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); }
+.stats b { color: var(--bfw-primary-dark); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 620px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+.mcard { position: relative; min-height: 120px; border-radius: 12px; cursor: pointer; border: 2px solid var(--bfw-border);
+  background: var(--bfw-primary); color: white; display: flex; align-items: center; justify-content: center;
+  padding: 0.6rem; text-align: center; transition: transform 0.12s, background 0.2s; user-select: none; }
+.mcard:active { transform: scale(0.98); }
+.mcard .content { display: none; font-size: 0.82rem; line-height: 1.35; color: var(--bfw-ink); overflow: auto; max-height: 150px; }
+.mcard .facedown { font-size: 1.8rem; }
+.mcard .label { position: absolute; top: 5px; left: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.mcard.up { background: white; cursor: default; }
+.mcard.up.term { border-color: var(--bfw-primary); }
+.mcard.up.term .content { font-weight: 700; font-size: 1rem; color: var(--bfw-primary-dark); }
+.mcard.up .content { display: block; }
+.mcard.up .facedown { display: none; }
+.mcard.up .label { color: var(--bfw-ink-soft); }
+.mcard.matched { background: var(--bfw-bg-green); border-color: var(--bfw-success); cursor: default; }
+.mcard.matched .content { display: block; }
+.mcard.matched .facedown { display: none; }
+.mcard.matched.term .content { color: #065F46; }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin: 1rem 0; }
+.msg.win { color: var(--bfw-success); }
+.controls { text-align: center; margin-top: 0.5rem; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats2 { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 10 · Memory</span>
+    <h1>Postbearbeitung: Posteingang</h1>
+  </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Finde die zusammengehörenden Paare: Jede Karte zeigt entweder einen <b>Begriff</b> oder eine <b>Definition</b>.
+    Decke zwei Karten auf – gehören Begriff und Definition zusammen, bleiben sie offen (grün).</p>
+    <p>Passt es nicht, werden beide wieder umgedreht. Ziel: alle <b>8 Paare</b> mit möglichst wenigen Zügen aufdecken – so prägst du dir Begriffe und ihre Bedeutung ein.</p>
+  </details>
+  <div class="stats">
+    <div>Paare: <b id="pairs">0</b> / 8</div>
+    <div>Züge: <b id="moves">0</b></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Spiel</button></div>
+  <div class="stats2" id="best"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag10';
+const PAIRS = [{"term":"Posteingang","def":"Erster Umschlagplatz für eingehende Informationen; Annahme und Bearbeitung der eingehenden Post."},{"term":"Poststelle","def":"Eigene Abteilung größerer Unternehmen, die die gesamte Postbearbeitung übernimmt."},{"term":"Zentrale Poststelle","def":"Eine Stelle bearbeitet die gesamte Post des Unternehmens; einheitlich und spezialisiert."},{"term":"Dezentrale Poststelle","def":"Jede Abteilung bearbeitet ihre Post selbst; kurze Wege, hohe Sachnähe."},{"term":"Postfach","def":"In einer Postfiliale gemieteter Behälter; macht unabhängig von den Zustellzeiten des Postboten."},{"term":"Service Hin + Weg","def":"Service der Deutschen Post AG: Briefe werden zu vereinbarten Zeiten gebracht und abgeholt."},{"term":"Bundesnetzagentur","def":"Behörde, die privaten Brief- und Paketdienstleistern die nötige Lizenz erteilt."},{"term":"Postvollmacht","def":"Rechtsgültige schriftliche Erklärung, um Geschäftspost (auch Einschreiben/eigenhändig) entgegennehmen zu können."},{"term":"Irrläufer","def":"Fehlgeleitete Sendung, die ungeöffnet dem Zusteller oder Dienstleister zurückgegeben wird."},{"term":"Leerkontrolle","def":"Prüfung, ob der Briefumschlag nach Entnahme des Inhalts vollständig geleert wurde."},{"term":"Anlagenkontrolle","def":"Prüfung, ob alle im Brief genannten Anlagen beigefügt sind; fehlende werden vermerkt."},{"term":"Posteingangsstempel","def":"Stempel rechts oben neben der Anschrift mit Datum, Uhrzeit und Bearbeitungsvermerken."},{"term":"Wertsendung","def":"Einschreiben, Wertbrief oder Nachnahme; wird gesondert erfasst, quittiert und sicher verwahrt."},{"term":"Schriftgutförderanlage","def":"Technik zur automatischen Verteilung der Post, z. B. ein Rohrpostsystem."},{"term":"Posteingangssystem","def":"System, das die Arbeitsschritte des Posteingangs automatisiert (Öffnen, Entnahme, Scannen)."},{"term":"OCR","def":"Optical Character Recognition; Texterkennung, die gescannte Dokumente durchsuchbar macht."},{"term":"Digitale Archivierung","def":"Speicherung der eingescannten Eingangspost im EDV-System; jederzeit auffindbar."},{"term":"Warum ist der Posteingang so bedeutend?","def":"Er ist der erste Umschlagplatz für ein- und ausgehende Informationen; über ihn laufen Aufträge, Rechnungen, Verträge und Behördenschreiben."},{"term":"Wer bearbeitet die Post in kleineren Unternehmen?","def":"Meist das Sekretariat: Es nimmt eingehende Post an, sortiert, öffnet und verteilt sie und versendet die ausgehende Post."},{"term":"Wer bearbeitet die Post in größeren Unternehmen?","def":"Eine eigene Abteilung, die Poststelle."},{"term":"Vorteile der zentralen Poststelle?","def":"Einheitliche und spezialisierte Bearbeitung der gesamten Post mit effizienter Technik."},{"term":"Vorteile und Nachteil der dezentralen Poststelle?","def":"Kurze Wege und hohe Sachnähe, weil jede Abteilung ihre Post selbst bearbeitet; Nachteil ist die mehrfache Ausstattung."},{"term":"Wer ist laut Postgesetz zur Zustellung verpflichtet und berechtigt?","def":"Die Deutsche Post AG; sie darf Briefe, Päckchen und Pakete dem Empfänger zustellen."},{"term":"Wozu dient ein Postfach?","def":"Es macht unabhängig von den Zustellzeiten des Postboten; die Post wird in einer Filiale abgeholt."},{"term":"Welche Kosten fallen für ein Postfach an?","def":"Eine einmalige Einrichtungspauschale; die Größe hängt vom täglichen Postaufkommen ab."},{"term":"Was leistet der Service Hin + Weg?","def":"Die Deutsche Post AG bringt Briefe zu vereinbarten Zeiten ins Unternehmen und holt die ausgehenden Briefe dort ab."},{"term":"Seit wann ist der deutsche Briefmarkt liberalisiert?","def":"Seit dem 1. Januar 2008 mit der Aufhebung des Briefmonopols."},{"term":"Was benötigen private Briefdienstleister zur Beförderung?","def":"Eine Lizenz der Bundesnetzagentur."},{"term":"Bekannte private internationale Brief- und Paketdienstleister?","def":"Zum Beispiel TNT, FedEx und UPS."},{"term":"Welche weiteren Eingangswege gibt es neben dem Briefweg?","def":"Fax, E-Mail, persönliche Abgabe am Empfang sowie Zustellung durch Boten (Kuriere, Fahrer anderer Firmen)."},{"term":"Eselsbrücke zu den Eingangswegen der Post","def":"\"Post kommt per Bote, Brief, Fax und E-Mail.\" Der digitale Eingang (E-Mail, E-Rechnung) wird immer wichtiger."},{"term":"Was wird benötigt, um Geschäftspost überhaupt entgegennehmen zu können?","def":"Eine rechtsgültige Postvollmacht."},{"term":"Welche Angaben enthält eine Postvollmacht?","def":"Vollmachtgeber, Bevollmächtigter, Gültigkeitsdauer, Umfang der Vollmacht (normale Post, Einschreiben, eigenhändig), Ausstellungsdatum und Unterschrift des Vollmachtgebers."},{"term":"Wie lautet die Reihenfolge der Arbeitsschritte beim Posteingang?","def":"Annehmen, Vorsortieren, Öffnen, Kontrollieren, Stempeln, Verteilen."},{"term":"Was geschieht beim Schritt Annehmen?","def":"Die Sendungen werden vom Zusteller oder Dienstleister entgegengenommen."},{"term":"In welchem Zustand wird die Post vorsortiert?","def":"Ungeöffnet."},{"term":"In welche Gruppen wird die Post vorsortiert?","def":"Geschäftsbriefe, private Briefe, Post an die Geschäftsleitung, an die Personalabteilung und den Betriebsrat sowie Irrläufer."},{"term":"Wie werden Irrläufer behandelt?","def":"Sie werden ungeöffnet dem Postzusteller oder dem privaten Dienstleister zurückgegeben."},{"term":"Welche Post wird ungeöffnet weitergeleitet?","def":"Private Briefe sowie Post an die Geschäftsleitung, die Personalabteilung und den Betriebsrat."},{"term":"Woran erkennt man private Post?","def":"Im Anschriftenfeld wird zuerst der Name einer natürlichen Person genannt und erst dann die Firma; oft steht der Zusatz \"Persönlich\" oder \"Vertraulich\"."},{"term":"Was tun, wenn private Post versehentlich geöffnet wurde?","def":"Sie wieder verschließen und mit dem Vermerk \"versehentlich geöffnet\" weiterleiten."},{"term":"Faustregel: Wann darf ein Brief geöffnet werden?","def":"Steht die Firma zuerst und dann der Name, ist es Geschäftspost und darf geöffnet werden."},{"term":"Was besagt das Urteil LAG Hamm 2003 (AZ: 14 Sa 1972/02)?","def":"Steht zuerst der Name einer Privatperson und fehlt der Zusatz \"Persönlich/Vertraulich\", darf der Brief in der Poststelle geöffnet werden."},{"term":"Welche Geräte werden zum Öffnen der Post verwendet?","def":"Ein Handbrieföffner bei geringem Postaufkommen oder ein automatischer Brieföffner."},{"term":"Beispiel Anschrift Geschäftsbrief: darf geöffnet werden?","def":"Ja: Firma zuerst (z. B. \"BüroKonzept KG, Herrn Achim Langner\") bedeutet Geschäftspost."},{"term":"Beispiel Anschrift Privatbrief: darf geöffnet werden?","def":"Nein: Steht \"Persönlich\" und der Name der Privatperson vor der Firma, wird der Brief nicht geöffnet."},{"term":"Was ist die Leerkontrolle?","def":"Die Prüfung, ob der Umschlag nach Entnahme des Inhalts vollständig geleert wurde."},{"term":"Was ist die Anlagenkontrolle?","def":"Die Prüfung, ob alle im Brief genannten Anlagen beigefügt sind."},{"term":"Was tun, wenn eine Anlage fehlt?","def":"Dies wird handschriftlich auf dem Brief vermerkt."},{"term":"Wann wird der Briefumschlag als Nachweis angeheftet?","def":"Wenn die Absenderangabe fehlt, es sich um amtlich zugestellte Sendungen handelt oder Briefdatum und Poststempel zeitlich ungewöhnlich weit auseinanderliegen."},{"term":"Wo wird der Posteingangsstempel angebracht?","def":"Rechts oben neben der Anschrift des Empfängers."},{"term":"Was enthält der Posteingangsstempel?","def":"Das aktuelle Datum, evtl. die Uhrzeit sowie Platz für Bearbeitungs- und Erledigungsvermerke."},{"term":"Welche Dokumente werden nicht gestempelt?","def":"Urkunden, Zeugnisse, Verträge, Schecks und Zeichnungen; hier wird stattdessen der Umschlag gestempelt und beigefügt."},{"term":"Wozu dient der Posteingangsstempel?","def":"Zum Abgleich von Schriftstück- und Eingangsdatum (Prüfung von Zustellverzögerungen) und zum Feststellen der innerbetrieblichen Bearbeitungszeit."},{"term":"Welche Möglichkeiten der Postverteilung gibt es?","def":"Ablage in Mitarbeiter- oder Abteilungsfächer, Verteilung durch einen Boten oder automatische Verteilung über Schriftgutförderanlagen (z. B. Rohrpost)."},{"term":"Wie werden Wertsendungen behandelt?","def":"Sie werden gegen Quittung angenommen, in einem Eingangs- bzw. Postbuch erfasst und sicher verwahrt oder gegen Nachweis übergeben."},{"term":"Wofür wird bei Einschreiben und eigenhändigen Sendungen die Postvollmacht benötigt?","def":"Für die Annahme gegen Quittung, damit die Sendung rechtswirksam entgegengenommen werden kann."},{"term":"Welche Schritte automatisiert ein Posteingangssystem?","def":"Maschinelles Öffnen der Umschläge, automatische Entnahme des Inhalts mit elektronischer Leerkontrolle sowie Einlesen per Scanner ins EDV-System."},{"term":"Wozu dient die OCR-Texterkennung beim Scannen?","def":"Sie wandelt den eingescannten Brief in durchsuchbaren Text um und legt ihn im Dokumentenmanagementsystem (DMS) ab, oft mit automatischer Zuordnung zum Vorgang."},{"term":"Welche Vorteile bringt die Digitalisierung des Posteingangs?","def":"Schnellerer Informationsfluss, kürzere Bearbeitungszeit, jederzeit auffindbare Schriftstücke, weniger Papier, höhere Auskunftsfähigkeit, kein Postverlust und effizientere Prozesse."}];       // [{term, def}, ...] – ganzer Tagespool
+const PAIRS_PER_GAME = 8;
+const STORAGE = 'memory_' + DAY_ID;
+
+let deck=[], flipped=[], matched=0, moves=0, busy=false;
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function loadBest(){ try { return JSON.parse(localStorage.getItem(STORAGE)); } catch(e){ return null; } }
+function saveBest(m){ try { localStorage.setItem(STORAGE, JSON.stringify(m)); } catch(e){} }
+function renderBest(){ const b=loadBest(); document.getElementById('best').textContent = b!=null ? `Bestleistung: ${b} Züge` : ''; }
+
+function newGame(){
+  const n = Math.min(PAIRS_PER_GAME, PAIRS.length);
+  const chosen = shuffle(PAIRS.map((p,i)=>i)).slice(0, n);
+  deck = [];
+  chosen.forEach((pi, k) => {
+    deck.push({ pair:k, kind:'term', text:PAIRS[pi].term });
+    deck.push({ pair:k, kind:'def',  text:PAIRS[pi].def  });
+  });
+  shuffle(deck);
+  flipped=[]; matched=0; moves=0; busy=false;
+  document.getElementById('pairs').textContent='0';
+  document.getElementById('pairs').nextSibling; // noop
+  document.getElementById('moves').textContent='0';
+  document.querySelector('.stats').firstElementChild.innerHTML = `Paare: <b id="pairs">0</b> / ${n}`;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  render();
+  renderBest();
+}
+
+function render(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  deck.forEach((card, i)=>{
+    const el=document.createElement('div');
+    el.className='mcard'; el.id='c'+i;
+    el.innerHTML = `<span class="label"></span><span class="facedown">🧠</span><span class="content"></span>`;
+    el.onclick=()=>flip(i);
+    g.appendChild(el);
+  });
+}
+
+function flip(i){
+  if(busy) return;
+  const card=deck[i]; const el=document.getElementById('c'+i);
+  if(el.classList.contains('up') || el.classList.contains('matched')) return;
+  el.classList.add('up', card.kind);
+  el.querySelector('.content').textContent = card.text;
+  el.querySelector('.label').textContent = card.kind==='term' ? 'Begriff' : 'Definition';
+  flipped.push(i);
+  if(flipped.length===2){
+    moves++; document.getElementById('moves').textContent=moves;
+    const [a,b]=flipped;
+    if(deck[a].pair===deck[b].pair && deck[a].kind!==deck[b].kind){
+      // Treffer
+      document.getElementById('c'+a).classList.add('matched');
+      document.getElementById('c'+b).classList.add('matched');
+      flipped=[]; matched++;
+      document.getElementById('pairs').textContent=matched;
+      if(matched === deck.length/2) win();
+    } else {
+      busy=true;
+      setTimeout(()=>{
+        [a,b].forEach(idx=>{ const e=document.getElementById('c'+idx); e.classList.remove('up','term','def'); e.querySelector('.content').textContent=''; e.querySelector('.label').textContent=''; });
+        flipped=[]; busy=false;
+      }, 1000);
+    }
+  }
+}
+
+function win(){
+  const m=document.getElementById('msg'); m.textContent=`🎉 Geschafft in ${moves} Zügen!`; m.className='msg win';
+  const best=loadBest();
+  if(best==null || moves<best){ saveBest(moves); renderBest(); m.textContent += ' Neue Bestleistung!'; }
+}
+
+newGame();
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Memory Tag 14 — Digitales DMS, Datenschutz & Umweltschutz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0; --bfw-success:#10B981;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 820px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; background: white; border: 1px solid var(--bfw-border); border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); }
+.stats b { color: var(--bfw-primary-dark); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 620px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+.mcard { position: relative; min-height: 120px; border-radius: 12px; cursor: pointer; border: 2px solid var(--bfw-border);
+  background: var(--bfw-primary); color: white; display: flex; align-items: center; justify-content: center;
+  padding: 0.6rem; text-align: center; transition: transform 0.12s, background 0.2s; user-select: none; }
+.mcard:active { transform: scale(0.98); }
+.mcard .content { display: none; font-size: 0.82rem; line-height: 1.35; color: var(--bfw-ink); overflow: auto; max-height: 150px; }
+.mcard .facedown { font-size: 1.8rem; }
+.mcard .label { position: absolute; top: 5px; left: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.mcard.up { background: white; cursor: default; }
+.mcard.up.term { border-color: var(--bfw-primary); }
+.mcard.up.term .content { font-weight: 700; font-size: 1rem; color: var(--bfw-primary-dark); }
+.mcard.up .content { display: block; }
+.mcard.up .facedown { display: none; }
+.mcard.up .label { color: var(--bfw-ink-soft); }
+.mcard.matched { background: var(--bfw-bg-green); border-color: var(--bfw-success); cursor: default; }
+.mcard.matched .content { display: block; }
+.mcard.matched .facedown { display: none; }
+.mcard.matched.term .content { color: #065F46; }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin: 1rem 0; }
+.msg.win { color: var(--bfw-success); }
+.controls { text-align: center; margin-top: 0.5rem; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats2 { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 14 · Memory</span>
+    <h1>Digitales DMS, Datenschutz & Umweltschutz</h1>
+  </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Finde die zusammengehörenden Paare: Jede Karte zeigt entweder einen <b>Begriff</b> oder eine <b>Definition</b>.
+    Decke zwei Karten auf – gehören Begriff und Definition zusammen, bleiben sie offen (grün).</p>
+    <p>Passt es nicht, werden beide wieder umgedreht. Ziel: alle <b>8 Paare</b> mit möglichst wenigen Zügen aufdecken – so prägst du dir Begriffe und ihre Bedeutung ein.</p>
+  </details>
+  <div class="stats">
+    <div>Paare: <b id="pairs">0</b> / 8</div>
+    <div>Züge: <b id="moves">0</b></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Spiel</button></div>
+  <div class="stats2" id="best"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag14';
+const PAIRS = [{"term":"DMS","def":"Dokumentenmanagementsystem; wandelt papiergebundene Schriftstücke in elektronische Dokumente um und verwaltet sie datenbankgestützt."},{"term":"Revisionssichere Archivierung","def":"Speicherung, bei der Dokumente unveränderbar, vollständig, nachvollziehbar und über die Aufbewahrungsfrist wiederauffindbar sind (HGB § 257, GoBD)."},{"term":"GoBD","def":"Grundsätze zur ordnungsmäßigen Führung und Aufbewahrung von Büchern, Aufzeichnungen und Unterlagen in elektronischer Form."},{"term":"Workflow","def":"Automatisch gesteuerter Ablauf von Bearbeitungs- und Freigabeschritten eines Dokuments im DMS (z. B. Rechnungsprüfung, Freigabe, Buchung)."},{"term":"Versionierung","def":"Speicherung jeder Änderung als eigene Version, sodass ältere Stände nachvollziehbar erhalten bleiben."},{"term":"Cloud-DMS","def":"Dokumentenmanagement als Online-Dienst mit ortsunabhängigem Zugriff; wichtig für Homeoffice, erfordert aber besondere Aufmerksamkeit für Datenschutz und Vertragsgestaltung."},{"term":"Datenschutz","def":"Maßnahmen zum Schutz natürlicher Personen vor Verletzung ihrer Persönlichkeitsrechte durch Missbrauch personenbezogener Daten."},{"term":"Datensicherheit","def":"Maßnahmen zum Schutz von Hard-, Software und Daten vor Verlust, Zerstörung und Missbrauch durch Unbefugte."},{"term":"Personenbezogene Daten","def":"Alle Informationen, die sich auf eine identifizierte oder identifizierbare natürliche Person beziehen (Art. 4 Nr. 1 EU-DSGVO)."},{"term":"EU-DSGVO","def":"Europäische Datenschutz-Grundverordnung; zentrale Rechtsgrundlage des Datenschutzes."},{"term":"BDSG","def":"Bundesdatenschutzgesetz; ergänzt die EU-DSGVO auf nationaler Ebene."},{"term":"Datenschutzbeauftragter","def":"Person mit Kontroll- und Beratungsfunktion; verpflichtend ab 20 ständig mit automatisierter Datenverarbeitung Beschäftigten (§ 38 BDSG)."},{"term":"Generationenprinzip","def":"Backup-Verfahren mit mindestens drei aufeinander aufbauenden Sicherungen (Großvater – Vater – Sohn)."},{"term":"USV","def":"Unterbrechungsfreie Stromversorgung; wird zwischen Computer und Steckdose geschaltet und überbrückt einen Stromausfall, bis die Daten gesichert sind."},{"term":"Kreislaufwirtschaftsgesetz (KrWG)","def":"Bundesgesetz zum Abfallrecht; legt in § 6 die Abfallhierarchie fest, um Abfälle zu reduzieren und Ressourcen zu schonen."},{"term":"Abfallhierarchie","def":"Rangfolge: Vermeidung, Vorbereitung zur Wiederverwendung, Recycling, sonstige Verwertung, Beseitigung."},{"term":"Verpackungsgesetz (VerpackG)","def":"Regelt seit 2019 das Inverkehrbringen, die Rücknahme und Verwertung von Verpackungen über ein duales System."},{"term":"ElektroG","def":"Elektro- und Elektronikgerätegesetz; regelt die umweltverträgliche Entsorgung von Elektro- und Elektronikgeräten."},{"term":"Nachhaltigkeit","def":"Grundsatz, heutige Bedürfnisse so zu befriedigen, dass künftigen Generationen alle Ressourcen in gleicher Menge und Qualität zur Verfügung stehen."},{"term":"Green IT","def":"Umwelt- und ressourcenschonender Einsatz von Informationstechnik über den gesamten Lebenszyklus."},{"term":"Einheitliches Dateiablagesystem","def":"Ordnung der elektronischen Ablage, bei der Ordnerstrukturen von digitaler und Papierablage aufeinander abgestimmt und die Dateibenennung einheitlich geregelt sind."},{"term":"Welche Datenträger dienen der magnetischen und optischen Speicherung?","def":"Magnetisch: Festplatten und Magnetbänder; optisch: CD und DVD; mobil: Speicherkarten und USB-Sticks."},{"term":"Nenne Vorteile eines DMS.","def":"Schneller Zugriff (Volltextsuche), Wegfall von Verteilerkopien, weniger Dokumentenverlust, geringer Platzbedarf, weniger monotone Ablage, Zugriff auch bei Bearbeitung."},{"term":"Welche Rechtsgrundlage erlaubt die elektronische Speicherung aufbewahrungspflichtiger Unterlagen?","def":"HGB § 257 (3) gibt für Unterlagen mit Aufbewahrungsfrist die Regelung zur elektronischen Datenspeicherung vor."},{"term":"Eselsbrücke U-V-N-W (revisionssicher)","def":"Unveränderbar, Vollständig, Nachvollziehbar, Wiederauffindbar – die vier Kernanforderungen der revisionssicheren Archivierung."},{"term":"Was schützt der Datenschutz, was die Datensicherheit?","def":"Datenschutz schützt natürliche Personen (Persönlichkeitsrechte), Datensicherheit schützt Hard-, Software und Daten."},{"term":"Beispiele für personenbezogene Daten","def":"Name, E-Mail-Adresse, Bankdaten, Kreditkartennummer und IP-Adresse."},{"term":"Wann muss laut Art. 37 EU-DSGVO ein Datenschutzbeauftragter ernannt werden?","def":"Wenn das Kerngeschäft des Unternehmens die Überwachung personenbezogener Daten ist."},{"term":"Ab wie vielen Beschäftigten verlangt § 38 BDSG einen Datenschutzbeauftragten?","def":"Wenn mindestens zwanzig Personen ständig mit der automatisierten Verarbeitung personenbezogener Daten beschäftigt sind."},{"term":"Welche Stellung hat der Datenschutzbeauftragte?","def":"Er ist der Unternehmensleitung unmittelbar unterstellt, bei Kontrollaufgaben aber weisungsfrei und genießt besonderen Kündigungsschutz."},{"term":"Warum kann der IT-Leiter meist nicht Datenschutzbeauftragter sein?","def":"Er müsste sich in bestimmten Bereichen selbst kontrollieren – es entstünde ein Interessenkonflikt."},{"term":"Aufgaben des Datenschutzbeauftragten","def":"Unterrichtung/Beratung der Leitung, Überwachung der Einhaltung, Schulung der Mitarbeiter, Zusammenarbeit mit der Aufsichtsbehörde und Beratung bei der Datenschutz-Folgenabschätzung."},{"term":"Betroffene (Datenschutz)","def":"Die Personen, deren Daten erhoben, verarbeitet und genutzt werden."},{"term":"Auskunftsrecht (Art. 15 DSGVO)","def":"Recht auf Information über Art, Empfänger und Zweck der gespeicherten Daten."},{"term":"Recht auf Berichtigung (Art. 16 DSGVO)","def":"Recht auf Korrektur falscher personenbezogener Daten."},{"term":"Recht auf Löschung (Art. 17 DSGVO)","def":"„Recht auf Vergessenwerden“ – Löschung bei unzulässiger Speicherung."},{"term":"Recht auf Einschränkung (Art. 18 DSGVO)","def":"Die Verarbeitung wird während einer Prüfung ausgesetzt."},{"term":"Recht auf Datenübertragbarkeit (Art. 20 DSGVO)","def":"Herausgabe der Daten in einem maschinenlesbaren Format."},{"term":"Widerspruchsrecht (Art. 21 DSGVO)","def":"Widerspruch gegen die Verarbeitung ist jederzeit möglich."},{"term":"Nenne technisch-organisatorische Maßnahmen des Datenschutzes.","def":"Passwortgeschützte Benutzerkonten, Antivirenschutz auf jedem Rechner, Firewalls sowie Sensibilisierung und Schulung der Mitarbeiter."},{"term":"Aufbewahrung vs. Löschpflicht","def":"Während der Aufbewahrungsfrist (z. B. Rechnungen) darf nicht gelöscht werden; nach Fristablauf greift die Löschpflicht aus dem Datenschutz und die Unterlagen sind zu vernichten."},{"term":"Wie werden Unterlagen sicher vernichtet?","def":"Mit Aktenvernichtern im Streifenschnitt oder – sicherer – im Partikelschnitt."},{"term":"Datensicherung","def":"Alle Maßnahmen zum Schutz von Daten, Datenträgern und Programmen vor Übertragungsfehlern, Verfälschungen, Vernichtung, Diebstahl und unberechtigtem Zugriff."},{"term":"In welchen fünf Bereichen ist Datensicherung zu gewährleisten?","def":"Datenerfassung, Datenübertragung, Datenträger, Rechnerausfall und Computerkriminalität."},{"term":"Maßnahmen bei Rechnerausfall","def":"Notstromanlage (USV) und Plattenspiegelung (Duplexing)."},{"term":"Maßnahmen gegen Computerkriminalität","def":"Zugriffskontrolle, Passwort, Kennzahl (PIN) und Virenschutzprogramme."},{"term":"Umweltschutz","def":"Alle Maßnahmen zum Schutz der Umwelt und zur Vermeidung von Umweltbelastungen; wirkt sich oft auch wirtschaftlich positiv aus."},{"term":"Unterschied Wiederverwertung, Wiederverwendung, Weiterverwendung","def":"Wiederverwertung: Altstoff im gleichen Prozess (Glas einschmelzen); Wiederverwendung: gebrauchtes Produkt für denselben Zweck (Pfandflasche); Weiterverwendung: für anderen Zweck (Autoreifen als Schiffsfender)."},{"term":"Was sind die drei Säulen des dualen Systems?","def":"Altpapier, Glas sowie gelber Sack/gelbe Tonne; Hersteller registrieren sich bei der Zentralen Stelle Verpackungsregister (z. B. Grüner Punkt/DSD)."},{"term":"Welche Verpackungstypen unterscheidet das VerpackG?","def":"Verkaufsverpackungen (inkl. Service-/Versandverpackungen), Umverpackungen und Transportverpackungen."},{"term":"Wofür steht das Symbol der durchgestrichenen Mülltonne?","def":"Es kennzeichnet Elektro-Altgeräte, die private Haushalte nicht über den Restmüll entsorgen dürfen (ElektroG)."},{"term":"Wo müssen sich Elektrogeräte-Hersteller registrieren?","def":"Bei der „Gemeinsamen Stelle der Hersteller“ (Stiftung EAR); bei Verstößen drohen Bußgelder bis zu 100.000,00 Euro."},{"term":"Welche Händler sind zur Rücknahme von Elektro-Altgeräten verpflichtet?","def":"Große Händler mit über 400 m² Verkaufs-/Lagerfläche; kleine Geräte (Kantenlänge unter 25 cm) sind immer kostenlos zurückzunehmen."},{"term":"Woher stammt der Begriff Nachhaltigkeit?","def":"Aus der Forstwirtschaft: Es dürfen nicht mehr Bäume gefällt werden, als nachwachsen."},{"term":"Blauer Engel","def":"Umweltzeichen der Bundesregierung für umwelt- und gesundheitsfreundliche Produkte."},{"term":"Energy Star","def":"Kennzeichnung stromsparender IT-Geräte (US-Umweltbehörde EPA)."},{"term":"EU-Umweltblume (Ecolabel)","def":"EU-Siegel, das den gesamten Lebenszyklus eines Produkts bewertet."},{"term":"TCO Certified","def":"Siegel für nachhaltige Gestaltung, Herstellung und Verwendung von IT-Produkten."},{"term":"FSC / PEFC","def":"Siegel für Holz- und Papierprodukte aus nachhaltig bewirtschafteten Wäldern."},{"term":"Wie lässt sich im Büro Energie sparen?","def":"Licht/Bildschirm beim Verlassen abschalten, Drucker nur bei Bedarf, stoßlüften statt Kippstellung, Bewegungsmelder, Geräte zum Feierabend komplett abschalten (Stand-by verbraucht weiter Strom) und auf LED umstellen."}];       // [{term, def}, ...] – ganzer Tagespool
+const PAIRS_PER_GAME = 8;
+const STORAGE = 'memory_' + DAY_ID;
+
+let deck=[], flipped=[], matched=0, moves=0, busy=false;
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function loadBest(){ try { return JSON.parse(localStorage.getItem(STORAGE)); } catch(e){ return null; } }
+function saveBest(m){ try { localStorage.setItem(STORAGE, JSON.stringify(m)); } catch(e){} }
+function renderBest(){ const b=loadBest(); document.getElementById('best').textContent = b!=null ? `Bestleistung: ${b} Züge` : ''; }
+
+function newGame(){
+  const n = Math.min(PAIRS_PER_GAME, PAIRS.length);
+  const chosen = shuffle(PAIRS.map((p,i)=>i)).slice(0, n);
+  deck = [];
+  chosen.forEach((pi, k) => {
+    deck.push({ pair:k, kind:'term', text:PAIRS[pi].term });
+    deck.push({ pair:k, kind:'def',  text:PAIRS[pi].def  });
+  });
+  shuffle(deck);
+  flipped=[]; matched=0; moves=0; busy=false;
+  document.getElementById('pairs').textContent='0';
+  document.getElementById('pairs').nextSibling; // noop
+  document.getElementById('moves').textContent='0';
+  document.querySelector('.stats').firstElementChild.innerHTML = `Paare: <b id="pairs">0</b> / ${n}`;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  render();
+  renderBest();
+}
+
+function render(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  deck.forEach((card, i)=>{
+    const el=document.createElement('div');
+    el.className='mcard'; el.id='c'+i;
+    el.innerHTML = `<span class="label"></span><span class="facedown">🧠</span><span class="content"></span>`;
+    el.onclick=()=>flip(i);
+    g.appendChild(el);
+  });
+}
+
+function flip(i){
+  if(busy) return;
+  const card=deck[i]; const el=document.getElementById('c'+i);
+  if(el.classList.contains('up') || el.classList.contains('matched')) return;
+  el.classList.add('up', card.kind);
+  el.querySelector('.content').textContent = card.text;
+  el.querySelector('.label').textContent = card.kind==='term' ? 'Begriff' : 'Definition';
+  flipped.push(i);
+  if(flipped.length===2){
+    moves++; document.getElementById('moves').textContent=moves;
+    const [a,b]=flipped;
+    if(deck[a].pair===deck[b].pair && deck[a].kind!==deck[b].kind){
+      // Treffer
+      document.getElementById('c'+a).classList.add('matched');
+      document.getElementById('c'+b).classList.add('matched');
+      flipped=[]; matched++;
+      document.getElementById('pairs').textContent=matched;
+      if(matched === deck.length/2) win();
+    } else {
+      busy=true;
+      setTimeout(()=>{
+        [a,b].forEach(idx=>{ const e=document.getElementById('c'+idx); e.classList.remove('up','term','def'); e.querySelector('.content').textContent=''; e.querySelector('.label').textContent=''; });
+        flipped=[]; busy=false;
+      }, 1000);
+    }
+  }
+}
+
+function win(){
+  const m=document.getElementById('msg'); m.textContent=`🎉 Geschafft in ${moves} Zügen!`; m.className='msg win';
+  const best=loadBest();
+  if(best==null || moves<best){ saveBest(moves); renderBest(); m.textContent += ' Neue Bestleistung!'; }
+}
+
+newGame();
+</script>
+</body>
+</html>

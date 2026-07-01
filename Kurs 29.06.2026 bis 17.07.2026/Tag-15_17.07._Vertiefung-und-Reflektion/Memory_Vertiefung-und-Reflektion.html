@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Memory Tag 15 — Vertiefung & Reflektion</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0; --bfw-success:#10B981;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 820px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; background: white; border: 1px solid var(--bfw-border); border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); }
+.stats b { color: var(--bfw-primary-dark); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 620px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+.mcard { position: relative; min-height: 120px; border-radius: 12px; cursor: pointer; border: 2px solid var(--bfw-border);
+  background: var(--bfw-primary); color: white; display: flex; align-items: center; justify-content: center;
+  padding: 0.6rem; text-align: center; transition: transform 0.12s, background 0.2s; user-select: none; }
+.mcard:active { transform: scale(0.98); }
+.mcard .content { display: none; font-size: 0.82rem; line-height: 1.35; color: var(--bfw-ink); overflow: auto; max-height: 150px; }
+.mcard .facedown { font-size: 1.8rem; }
+.mcard .label { position: absolute; top: 5px; left: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.mcard.up { background: white; cursor: default; }
+.mcard.up.term { border-color: var(--bfw-primary); }
+.mcard.up.term .content { font-weight: 700; font-size: 1rem; color: var(--bfw-primary-dark); }
+.mcard.up .content { display: block; }
+.mcard.up .facedown { display: none; }
+.mcard.up .label { color: var(--bfw-ink-soft); }
+.mcard.matched { background: var(--bfw-bg-green); border-color: var(--bfw-success); cursor: default; }
+.mcard.matched .content { display: block; }
+.mcard.matched .facedown { display: none; }
+.mcard.matched.term .content { color: #065F46; }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin: 1rem 0; }
+.msg.win { color: var(--bfw-success); }
+.controls { text-align: center; margin-top: 0.5rem; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats2 { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 15 · Memory</span>
+    <h1>Vertiefung & Reflektion</h1>
+  </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Finde die zusammengehörenden Paare: Jede Karte zeigt entweder einen <b>Begriff</b> oder eine <b>Definition</b>.
+    Decke zwei Karten auf – gehören Begriff und Definition zusammen, bleiben sie offen (grün).</p>
+    <p>Passt es nicht, werden beide wieder umgedreht. Ziel: alle <b>8 Paare</b> mit möglichst wenigen Zügen aufdecken – so prägst du dir Begriffe und ihre Bedeutung ein.</p>
+  </details>
+  <div class="stats">
+    <div>Paare: <b id="pairs">0</b> / 8</div>
+    <div>Züge: <b id="moves">0</b></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Spiel</button></div>
+  <div class="stats2" id="best"></div>
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'bp-tag15';
+const PAIRS = [{"term":"Teilflächen","def":"Die sechs Bestandteile (Stell-, Bewegungs-, Funktions-, Benutzer-, Verkehrswege-, Besucher-/Besprechungsfläche), aus denen sich der Flächenbedarf ergibt."},{"term":"Kombibüro","def":"Einzelbüros an der Fensterfront plus zentrale Multifunktionszone; vereint Einzel- und Teamarbeit."},{"term":"Ergonomie","def":"Anpassung der Arbeit an den Menschen; Bürodrehstuhl nach DIN EN 1335."},{"term":"Steh-Sitz-Dynamik","def":"Wechsel der Körperhaltung im Verhältnis ca. 60 % sitzen, 30 % stehen, 10 % gehen."},{"term":"ASR A3.5","def":"Technische Regel zum Raumklima; Räume möglichst nicht über 26 °C, ab 30 °C Maßnahmenpflicht."},{"term":"Gefährdungsbeurteilung","def":"Pflicht des Arbeitgebers nach § 5 ArbSchG, Gefahren am Arbeitsplatz systematisch zu ermitteln und zu bewerten."},{"term":"Belastung / Beanspruchung","def":"Belastung = äußere Einwirkung (für alle gleich); Beanspruchung = individuelle Auswirkung auf die Person."},{"term":"ALPEN-Methode","def":"Tagesplanung: Aufgaben notieren, Länge schätzen, Pufferzeiten, Entscheidungen/Prioritäten, Nachkontrolle."},{"term":"Eisenhower-Prinzip","def":"Priorisierung von Aufgaben nach Wichtigkeit und Dringlichkeit (A/B/C/Papierkorb)."},{"term":"SMART","def":"Regel zur Zielformulierung: spezifisch, messbar, attraktiv, realistisch, terminiert."},{"term":"Wiedervorlage","def":"Verfahren der Terminüberwachung; Vorgänge werden zum festgelegten Termin erneut vorgelegt."},{"term":"Tagesordnung (TOP)","def":"Geordnete Liste der Besprechungspunkte; Teil von Einladung und Vorbereitung."},{"term":"Protokoll","def":"Schriftliche Aufzeichnung einer Besprechung mit den Funktionen Information, Beweis und Organisation."},{"term":"Beschlussprotokoll","def":"Protokollart, die ausschließlich die gefassten Beschlüsse festhält."},{"term":"Vier Seiten einer Nachricht","def":"Modell von Schulz von Thun: Sach-, Selbstoffenbarungs-, Beziehungs- und Appellebene."},{"term":"Tuckman-Phasen","def":"Teamentwicklung: Forming, Storming, Norming, Performing, Adjourning."},{"term":"Posteingangsstempel","def":"Stempel zur Dokumentation von Eingangsdatum (und Bearbeitung) eines Schriftstücks."},{"term":"Poststraße","def":"Maschineller Ablauf des Postausgangs (Falzen, Kuvertieren, Verschließen, Frankieren)."},{"term":"GoBD","def":"Grundsätze ordnungsmäßiger Buchführung und Aufbewahrung in digitaler Form (Unveränderbarkeit, Revisionssicherheit)."},{"term":"Aufbewahrungsfristen","def":"HGB § 257 / AO § 147: 6, 8 oder 10 Jahre; Fristbeginn mit Schluss des Kalenderjahres."},{"term":"Ordnungssysteme","def":"Verfahren der Ablage: alphabetisch, numerisch, chronologisch, geografisch, alphanumerisch."},{"term":"DMS","def":"Dokumentenmanagementsystem zur digitalen Erfassung, Verwaltung und Archivierung von Dokumenten."},{"term":"TOM","def":"Technisch-organisatorische Maßnahmen zum Schutz personenbezogener Daten nach DSGVO."},{"term":"Blauer Engel","def":"Bekanntes Umweltsiegel für umweltfreundliche Produkte (z. B. Recyclingpapier)."},{"term":"DGUV Information 215-441","def":"Leitfaden für die Büroraumplanung; Grundlage für die gesunde und produktive Gestaltung von Arbeitsplätzen."},{"term":"Flächenrichtwert Bildschirmarbeitsplatz","def":"Etwa 8–10 m² pro Arbeitsplatz."},{"term":"Vier klassische Büroformen","def":"Zellenbüro, Gruppenbüro, Großraumbüro und Kombibüro."},{"term":"Vorteil des Zellenbüros","def":"Ruhe und Vertraulichkeit für konzentriertes Einzelarbeiten."},{"term":"Reversibles Büro","def":"Modernes Bürokonzept, das flexibel umgebaut und an wechselnde Bedürfnisse angepasst werden kann."},{"term":"Non-territoriales Büro (Desksharing)","def":"Konzept mit weniger festen Arbeitsplätzen als Beschäftigten; Plätze werden geteilt."},{"term":"DIN EN 1335","def":"Norm für den Bürodrehstuhl (Anforderungen an Maße, Sicherheit und Verstellbarkeit)."},{"term":"Empfohlener Blickabstand zum Bildschirm","def":"50–70 cm."},{"term":"90-Grad-Regel beim Sitzen","def":"Ellenbogen, Hüfte und Knie bilden jeweils etwa einen 90°-Winkel."},{"term":"GS-Zeichen","def":"„Geprüfte Sicherheit\" – freiwilliges Prüfsiegel, das durch eine unabhängige Stelle geprüft wird."},{"term":"CE-Kennzeichnung","def":"Konformitätserklärung des Herstellers; Pflicht für das Inverkehrbringen im EU-Binnenmarkt."},{"term":"Bestandteile des Raumklimas","def":"Lufttemperatur, Luftfeuchtigkeit und Luftbewegung."},{"term":"Temperaturgrenzen nach ASR A3.5","def":"Räume möglichst nicht über 26 °C; ab 30 °C besteht Maßnahmenpflicht."},{"term":"In welcher Einheit wird Lärm gemessen?","def":"Als Schalldruckpegel in dB(A)."},{"term":"Sieben Umweltfaktoren im Büro","def":"Raumklima, Beleuchtung, Lärm, Farbe, Pflanzen sowie Schutz vor Strahlung und Gefahrstoffen (z. B. Tonerstaub)."},{"term":"ArbSchG","def":"Arbeitsschutzgesetz; regelt Grundpflichten, § 5 Gefährdungsbeurteilung und § 12 Unterweisung."},{"term":"ArbZG","def":"Arbeitszeitgesetz; regelt Höchstarbeitszeit, Pausen und Ruhezeiten."},{"term":"ASiG","def":"Arbeitssicherheitsgesetz; verpflichtet zur Bestellung von Betriebsarzt und Fachkraft für Arbeitssicherheit."},{"term":"Eustress und Distress","def":"Eustress ist positiver, Distress negativer (krankmachender) Stress; dauerhafter Distress kann zu Burnout führen."},{"term":"Aufsichtsbehörden im Arbeitsschutz","def":"Berufsgenossenschaft und Gewerbeaufsichtsamt."},{"term":"Pareto-Prinzip","def":"80/20-Regel: 80 % der Ergebnisse entstehen mit 20 % des Aufwands."},{"term":"ABC-Analyse","def":"Einteilung von Aufgaben in A- (sehr wichtig), B- (wichtig) und C-Aufgaben (weniger wichtig)."},{"term":"Sägeblatteffekt","def":"Leistungsverlust durch ständige Unterbrechungen; wird durch eine „stille Stunde\" vermieden."},{"term":"Leistungskurve","def":"Persönlicher Rhythmus von Leistungshochs und -tiefs im Tagesverlauf, den man bei der Planung nutzen soll."},{"term":"Woraus besteht ein Termin?","def":"Aus Kalenderdatum und Uhrzeit."},{"term":"Terminarten","def":"Feste/variable, Einzel-/Serien- und interne/externe Termine."},{"term":"§ 7 BUrlG","def":"Regelt die Urlaubsplanung (Zeitpunkt und Übertragung des Urlaubs)."},{"term":"Drei Funktionen eines Protokolls","def":"Information, Beweis und Organisation."},{"term":"Fünf Protokollarten","def":"Wort-, Verlaufs-, Kurz-/Ergebnis-, Beschluss- und Gedächtnisprotokoll."},{"term":"DIN 5008","def":"Norm für den Aufbau von Schriftstücken; gliedert das Protokoll in Kopf, Text und Fuß."},{"term":"Sprache im Protokoll","def":"Präsens, sachlich, indirekte Rede mit Konjunktiv I/II; Anträge und Beschlüsse wörtlich."},{"term":"Sender-Empfänger-Modell","def":"Grundmodell der Kommunikation; Störungen entstehen durch Rauschen und Missverständnisse."},{"term":"Operator „nennen/aufzählen\"","def":"Nur die geforderten Begriffe auflisten, ohne Begründung."},{"term":"Operator „erläutern/beschreiben\"","def":"In ganzen Sätzen erklären und begründen."},{"term":"Operator „beurteilen/bewerten\"","def":"Eine eigene, mit Argumenten gestützte Stellungnahme abgeben."},{"term":"Ab welchem Prozentsatz gilt die Note „ausreichend\"?","def":"Der IHK-Notenschlüssel beginnt bei „ausreichend\" ab 50 %."}];       // [{term, def}, ...] – ganzer Tagespool
+const PAIRS_PER_GAME = 8;
+const STORAGE = 'memory_' + DAY_ID;
+
+let deck=[], flipped=[], matched=0, moves=0, busy=false;
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function loadBest(){ try { return JSON.parse(localStorage.getItem(STORAGE)); } catch(e){ return null; } }
+function saveBest(m){ try { localStorage.setItem(STORAGE, JSON.stringify(m)); } catch(e){} }
+function renderBest(){ const b=loadBest(); document.getElementById('best').textContent = b!=null ? `Bestleistung: ${b} Züge` : ''; }
+
+function newGame(){
+  const n = Math.min(PAIRS_PER_GAME, PAIRS.length);
+  const chosen = shuffle(PAIRS.map((p,i)=>i)).slice(0, n);
+  deck = [];
+  chosen.forEach((pi, k) => {
+    deck.push({ pair:k, kind:'term', text:PAIRS[pi].term });
+    deck.push({ pair:k, kind:'def',  text:PAIRS[pi].def  });
+  });
+  shuffle(deck);
+  flipped=[]; matched=0; moves=0; busy=false;
+  document.getElementById('pairs').textContent='0';
+  document.getElementById('pairs').nextSibling; // noop
+  document.getElementById('moves').textContent='0';
+  document.querySelector('.stats').firstElementChild.innerHTML = `Paare: <b id="pairs">0</b> / ${n}`;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  render();
+  renderBest();
+}
+
+function render(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  deck.forEach((card, i)=>{
+    const el=document.createElement('div');
+    el.className='mcard'; el.id='c'+i;
+    el.innerHTML = `<span class="label"></span><span class="facedown">🧠</span><span class="content"></span>`;
+    el.onclick=()=>flip(i);
+    g.appendChild(el);
+  });
+}
+
+function flip(i){
+  if(busy) return;
+  const card=deck[i]; const el=document.getElementById('c'+i);
+  if(el.classList.contains('up') || el.classList.contains('matched')) return;
+  el.classList.add('up', card.kind);
+  el.querySelector('.content').textContent = card.text;
+  el.querySelector('.label').textContent = card.kind==='term' ? 'Begriff' : 'Definition';
+  flipped.push(i);
+  if(flipped.length===2){
+    moves++; document.getElementById('moves').textContent=moves;
+    const [a,b]=flipped;
+    if(deck[a].pair===deck[b].pair && deck[a].kind!==deck[b].kind){
+      // Treffer
+      document.getElementById('c'+a).classList.add('matched');
+      document.getElementById('c'+b).classList.add('matched');
+      flipped=[]; matched++;
+      document.getElementById('pairs').textContent=matched;
+      if(matched === deck.length/2) win();
+    } else {
+      busy=true;
+      setTimeout(()=>{
+        [a,b].forEach(idx=>{ const e=document.getElementById('c'+idx); e.classList.remove('up','term','def'); e.querySelector('.content').textContent=''; e.querySelector('.label').textContent=''; });
+        flipped=[]; busy=false;
+      }, 1000);
+    }
+  }
+}
+
+function win(){
+  const m=document.getElementById('msg'); m.textContent=`🎉 Geschafft in ${moves} Zügen!`; m.className='msg win';
+  const best=loadBest();
+  if(best==null || moves<best){ saveBest(moves); renderBest(); m.textContent += ' Neue Bestleistung!'; }
+}
+
+newGame();
+</script>
+</body>
+</html>
