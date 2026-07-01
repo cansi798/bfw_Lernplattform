@@ -265,6 +265,7 @@ a.btn-logout:hover { color: var(--bfw-primary-dark); border-color: var(--bfw-pri
 .tag-link.md .link-icon { background: var(--bfw-bg-amber); color: var(--bfw-accent); }
 .tag-link.video .link-icon { background: #EDE9FE; color: #6D28D9; }
 .tag-link.audio .link-icon { background: #DCFCE7; color: #15803D; }
+.tag-link.cards .link-icon { background: var(--bfw-bg-green); color: #047857; }
 .tag-link-label { flex: 1; font-weight: 500; }
 .tag-link-arrow { color: var(--bfw-ink-soft); font-size: 0.9rem; }
 
@@ -805,6 +806,11 @@ function renderTage() {
           <a class="tag-link html" href="${base}/Quiz_${t.slug}.html" target="_blank" rel="noopener">
             <span class="link-icon">?</span>
             <span class="tag-link-label">Quiz</span>
+            <span class="tag-link-arrow">→</span>
+          </a>
+          <a class="tag-link cards" href="${base}/Karteikarten_${t.slug}.html" target="_blank" rel="noopener">
+            <span class="link-icon">🗂</span>
+            <span class="tag-link-label">Karteikarten (60)</span>
             <span class="tag-link-arrow">→</span>
           </a>
           <a class="tag-link pdf" href="${base}/Aufgabenheft_${t.slug}.pdf" target="_blank" rel="noopener">

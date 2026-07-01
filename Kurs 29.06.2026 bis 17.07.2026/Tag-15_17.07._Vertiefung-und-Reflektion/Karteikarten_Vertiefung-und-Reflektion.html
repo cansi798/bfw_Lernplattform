@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Karteikarten Tag 15 — Vertiefung & Reflektion (60 Karten)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem;
+}
+.container { max-width: 720px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary);
+  color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem;
+  letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 { font-size: 2rem; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.05rem; }
+
+/* Fortschritt / Leitner-Fächer */
+.stats {
+  background: white; border: 1px solid var(--bfw-border); border-radius: 14px;
+  padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+  display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.boxes { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.box-chip {
+  font-size: 0.8rem; font-weight: 600; padding: 0.35rem 0.7rem; border-radius: 999px;
+  background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); color: var(--bfw-ink-soft);
+}
+.box-chip b { color: var(--bfw-primary-dark); }
+.mastered { font-weight: 700; color: var(--bfw-success); }
+.progress { width: 100%; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; margin-top: 0.5rem; }
+.progress > div { height: 100%; background: var(--bfw-success); border-radius: 999px; transition: width 0.3s; width: 0; }
+
+/* Karte */
+.card-scene { perspective: 1200px; margin-bottom: 1.25rem; }
+.card {
+  position: relative; width: 100%; min-height: 320px; cursor: pointer;
+  transform-style: preserve-3d; transition: transform 0.5s; transition-timing-function: cubic-bezier(.4,.2,.2,1);
+}
+.card.flipped { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 18px; padding: 2rem; display: flex; flex-direction: column; justify-content: center;
+  box-shadow: 0 6px 24px rgba(15,23,42,0.08); border: 1px solid var(--bfw-border);
+}
+.face-front { background: white; }
+.face-back { background: linear-gradient(160deg, #ffffff 0%, var(--bfw-bg-green) 100%); transform: rotateY(180deg); }
+.card-topic {
+  align-self: flex-start; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--bfw-primary-dark); background: var(--bfw-bg-teal);
+  padding: 0.25rem 0.6rem; border-radius: 999px; margin-bottom: 1rem;
+}
+.card-label { font-size: 0.75rem; color: var(--bfw-ink-soft); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.card-front-text { font-size: 1.5rem; font-weight: 600; line-height: 1.35; color: var(--bfw-ink); }
+.card-back-text { font-size: 1.12rem; line-height: 1.55; color: var(--bfw-ink); }
+.flip-hint { margin-top: auto; padding-top: 1rem; font-size: 0.85rem; color: var(--bfw-ink-soft); }
+
+/* Buttons */
+.actions { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+.btn { flex: 1; padding: 0.9rem 1rem; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; font-family: inherit; }
+.btn:active { transform: translateY(1px); }
+.btn-flip { background: var(--bfw-primary); color: white; }
+.btn-known { background: var(--bfw-success); color: white; }
+.btn-again { background: var(--bfw-bg-amber); color: #92400E; border: 1px solid #FCD34D; }
+.btn-ghost { background: white; color: var(--bfw-ink-soft); border: 1px solid var(--bfw-border); }
+.mini-actions { display: flex; gap: 0.75rem; justify-content: center; }
+.mini-actions .btn { flex: 0 1 auto; padding: 0.55rem 1rem; font-size: 0.85rem; }
+.hidden { display: none !important; }
+
+/* Abschluss */
+.done { background: white; border: 1px solid var(--bfw-border); border-radius: 18px; padding: 2.5rem 2rem; text-align: center; box-shadow: 0 6px 24px rgba(15,23,42,0.08); }
+.done h2 { color: var(--bfw-success); font-size: 1.8rem; margin-bottom: 0.75rem; }
+.done p { color: var(--bfw-ink-soft); margin-bottom: 1.5rem; line-height: 1.6; }
+.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+.how b { color: var(--bfw-ink); }
+footer { text-align: center; margin-top: 2rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Tag 15 · Karteikarten</span>
+    <h1>Vertiefung & Reflektion</h1>
+    <p class="subtitle">60 Lernkarten · Begriff → Definition · Leitner-System</p>
+  </header>
+
+  <div class="how">
+    <b>So funktioniert's:</b> Lesen Sie die Vorderseite, überlegen Sie die Antwort, dann <b>Umdrehen</b>.
+    Wussten Sie es? → <b>Gewusst</b> (Karte wandert ins nächste Fach). Nicht sicher? → <b>Nochmal</b>
+    (Karte kommt zurück in Fach 1). Ziel: alle Karten in Fach 3. Ihr Fortschritt wird im Browser gespeichert.
+  </div>
+
+  <div class="stats">
+    <div class="boxes" id="boxes"></div>
+    <div class="mastered" id="mastered">0 / 60 gemeistert</div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </div>
+
+  <div id="quizArea">
+    <div class="card-scene">
+      <div class="card" id="card" onclick="flipCard()">
+        <div class="face face-front">
+          <span class="card-topic" id="frontTopic">Thema</span>
+          <div class="card-label">Begriff / Frage</div>
+          <div class="card-front-text" id="frontText">…</div>
+          <div class="flip-hint">👆 Zum Umdrehen tippen</div>
+        </div>
+        <div class="face face-back">
+          <span class="card-topic" id="backTopic">Thema</span>
+          <div class="card-label">Definition / Antwort</div>
+          <div class="card-back-text" id="backText">…</div>
+          <div class="flip-hint">Wussten Sie es?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions" id="flipRow">
+      <button class="btn btn-flip" onclick="flipCard()">Umdrehen</button>
+    </div>
+    <div class="actions hidden" id="gradeRow">
+      <button class="btn btn-again" onclick="grade(false)">↺ Nochmal</button>
+      <button class="btn btn-known" onclick="grade(true)">✓ Gewusst</button>
+    </div>
+    <div class="mini-actions">
+      <button class="btn btn-ghost" onclick="shuffleRestart()">🔀 Neu mischen</button>
+      <button class="btn btn-ghost" onclick="resetProgress()">♻ Fortschritt zurücksetzen</button>
+    </div>
+  </div>
+
+  <div id="doneArea" class="done hidden">
+    <h2>🎉 Alle Karten gemeistert!</h2>
+    <p id="doneText">Sie haben alle 60 Karten sicher beantwortet. Starke Leistung!</p>
+    <div class="mini-actions">
+      <button class="btn btn-flip" onclick="resetProgress()">Von vorne beginnen</button>
+    </div>
+  </div>
+
+  <footer>BFW Lernplattform · Büroprozesse (M-067) · © Can Siebert 2026</footer>
+</div>
+
+<script>
+const DAY_ID = 'bp-tag15';
+const MAX_BOX = 3;                    // Fach 3 = gemeistert
+const CARDS = [{"topic":"Glossar","front":"Teilflächen","back":"Die sechs Bestandteile (Stell-, Bewegungs-, Funktions-, Benutzer-, Verkehrswege-, Besucher-/Besprechungsfläche), aus denen sich der Flächenbedarf ergibt."},{"topic":"Glossar","front":"Kombibüro","back":"Einzelbüros an der Fensterfront plus zentrale Multifunktionszone; vereint Einzel- und Teamarbeit."},{"topic":"Glossar","front":"Ergonomie","back":"Anpassung der Arbeit an den Menschen; Bürodrehstuhl nach DIN EN 1335."},{"topic":"Glossar","front":"Steh-Sitz-Dynamik","back":"Wechsel der Körperhaltung im Verhältnis ca. 60 % sitzen, 30 % stehen, 10 % gehen."},{"topic":"Glossar","front":"ASR A3.5","back":"Technische Regel zum Raumklima; Räume möglichst nicht über 26 °C, ab 30 °C Maßnahmenpflicht."},{"topic":"Glossar","front":"Gefährdungsbeurteilung","back":"Pflicht des Arbeitgebers nach § 5 ArbSchG, Gefahren am Arbeitsplatz systematisch zu ermitteln und zu bewerten."},{"topic":"Glossar","front":"Belastung / Beanspruchung","back":"Belastung = äußere Einwirkung (für alle gleich); Beanspruchung = individuelle Auswirkung auf die Person."},{"topic":"Glossar","front":"ALPEN-Methode","back":"Tagesplanung: Aufgaben notieren, Länge schätzen, Pufferzeiten, Entscheidungen/Prioritäten, Nachkontrolle."},{"topic":"Glossar","front":"Eisenhower-Prinzip","back":"Priorisierung von Aufgaben nach Wichtigkeit und Dringlichkeit (A/B/C/Papierkorb)."},{"topic":"Glossar","front":"SMART","back":"Regel zur Zielformulierung: spezifisch, messbar, attraktiv, realistisch, terminiert."},{"topic":"Glossar","front":"Wiedervorlage","back":"Verfahren der Terminüberwachung; Vorgänge werden zum festgelegten Termin erneut vorgelegt."},{"topic":"Glossar","front":"Tagesordnung (TOP)","back":"Geordnete Liste der Besprechungspunkte; Teil von Einladung und Vorbereitung."},{"topic":"Glossar","front":"Protokoll","back":"Schriftliche Aufzeichnung einer Besprechung mit den Funktionen Information, Beweis und Organisation."},{"topic":"Glossar","front":"Beschlussprotokoll","back":"Protokollart, die ausschließlich die gefassten Beschlüsse festhält."},{"topic":"Glossar","front":"Vier Seiten einer Nachricht","back":"Modell von Schulz von Thun: Sach-, Selbstoffenbarungs-, Beziehungs- und Appellebene."},{"topic":"Glossar","front":"Tuckman-Phasen","back":"Teamentwicklung: Forming, Storming, Norming, Performing, Adjourning."},{"topic":"Glossar","front":"Posteingangsstempel","back":"Stempel zur Dokumentation von Eingangsdatum (und Bearbeitung) eines Schriftstücks."},{"topic":"Glossar","front":"Poststraße","back":"Maschineller Ablauf des Postausgangs (Falzen, Kuvertieren, Verschließen, Frankieren)."},{"topic":"Glossar","front":"GoBD","back":"Grundsätze ordnungsmäßiger Buchführung und Aufbewahrung in digitaler Form (Unveränderbarkeit, Revisionssicherheit)."},{"topic":"Glossar","front":"Aufbewahrungsfristen","back":"HGB § 257 / AO § 147: 6, 8 oder 10 Jahre; Fristbeginn mit Schluss des Kalenderjahres."},{"topic":"Glossar","front":"Ordnungssysteme","back":"Verfahren der Ablage: alphabetisch, numerisch, chronologisch, geografisch, alphanumerisch."},{"topic":"Glossar","front":"DMS","back":"Dokumentenmanagementsystem zur digitalen Erfassung, Verwaltung und Archivierung von Dokumenten."},{"topic":"Glossar","front":"TOM","back":"Technisch-organisatorische Maßnahmen zum Schutz personenbezogener Daten nach DSGVO."},{"topic":"Glossar","front":"Blauer Engel","back":"Bekanntes Umweltsiegel für umweltfreundliche Produkte (z. B. Recyclingpapier)."},{"topic":"Büroraum & Ergonomie","front":"DGUV Information 215-441","back":"Leitfaden für die Büroraumplanung; Grundlage für die gesunde und produktive Gestaltung von Arbeitsplätzen."},{"topic":"Büroraum & Ergonomie","front":"Flächenrichtwert Bildschirmarbeitsplatz","back":"Etwa 8–10 m² pro Arbeitsplatz."},{"topic":"Büroraum & Ergonomie","front":"Vier klassische Büroformen","back":"Zellenbüro, Gruppenbüro, Großraumbüro und Kombibüro."},{"topic":"Büroraum & Ergonomie","front":"Vorteil des Zellenbüros","back":"Ruhe und Vertraulichkeit für konzentriertes Einzelarbeiten."},{"topic":"Büroraum & Ergonomie","front":"Reversibles Büro","back":"Modernes Bürokonzept, das flexibel umgebaut und an wechselnde Bedürfnisse angepasst werden kann."},{"topic":"Büroraum & Ergonomie","front":"Non-territoriales Büro (Desksharing)","back":"Konzept mit weniger festen Arbeitsplätzen als Beschäftigten; Plätze werden geteilt."},{"topic":"Büroraum & Ergonomie","front":"DIN EN 1335","back":"Norm für den Bürodrehstuhl (Anforderungen an Maße, Sicherheit und Verstellbarkeit)."},{"topic":"Büroraum & Ergonomie","front":"Empfohlener Blickabstand zum Bildschirm","back":"50–70 cm."},{"topic":"Büroraum & Ergonomie","front":"90-Grad-Regel beim Sitzen","back":"Ellenbogen, Hüfte und Knie bilden jeweils etwa einen 90°-Winkel."},{"topic":"Büroraum & Ergonomie","front":"GS-Zeichen","back":"„Geprüfte Sicherheit\" – freiwilliges Prüfsiegel, das durch eine unabhängige Stelle geprüft wird."},{"topic":"Büroraum & Ergonomie","front":"CE-Kennzeichnung","back":"Konformitätserklärung des Herstellers; Pflicht für das Inverkehrbringen im EU-Binnenmarkt."},{"topic":"Arbeitsumgebung & Schutz","front":"Bestandteile des Raumklimas","back":"Lufttemperatur, Luftfeuchtigkeit und Luftbewegung."},{"topic":"Arbeitsumgebung & Schutz","front":"Temperaturgrenzen nach ASR A3.5","back":"Räume möglichst nicht über 26 °C; ab 30 °C besteht Maßnahmenpflicht."},{"topic":"Arbeitsumgebung & Schutz","front":"In welcher Einheit wird Lärm gemessen?","back":"Als Schalldruckpegel in dB(A)."},{"topic":"Arbeitsumgebung & Schutz","front":"Sieben Umweltfaktoren im Büro","back":"Raumklima, Beleuchtung, Lärm, Farbe, Pflanzen sowie Schutz vor Strahlung und Gefahrstoffen (z. B. Tonerstaub)."},{"topic":"Arbeitsumgebung & Schutz","front":"ArbSchG","back":"Arbeitsschutzgesetz; regelt Grundpflichten, § 5 Gefährdungsbeurteilung und § 12 Unterweisung."},{"topic":"Arbeitsumgebung & Schutz","front":"ArbZG","back":"Arbeitszeitgesetz; regelt Höchstarbeitszeit, Pausen und Ruhezeiten."},{"topic":"Arbeitsumgebung & Schutz","front":"ASiG","back":"Arbeitssicherheitsgesetz; verpflichtet zur Bestellung von Betriebsarzt und Fachkraft für Arbeitssicherheit."},{"topic":"Arbeitsumgebung & Schutz","front":"Eustress und Distress","back":"Eustress ist positiver, Distress negativer (krankmachender) Stress; dauerhafter Distress kann zu Burnout führen."},{"topic":"Arbeitsumgebung & Schutz","front":"Aufsichtsbehörden im Arbeitsschutz","back":"Berufsgenossenschaft und Gewerbeaufsichtsamt."},{"topic":"Zeit & Termine","front":"Pareto-Prinzip","back":"80/20-Regel: 80 % der Ergebnisse entstehen mit 20 % des Aufwands."},{"topic":"Zeit & Termine","front":"ABC-Analyse","back":"Einteilung von Aufgaben in A- (sehr wichtig), B- (wichtig) und C-Aufgaben (weniger wichtig)."},{"topic":"Zeit & Termine","front":"Sägeblatteffekt","back":"Leistungsverlust durch ständige Unterbrechungen; wird durch eine „stille Stunde\" vermieden."},{"topic":"Zeit & Termine","front":"Leistungskurve","back":"Persönlicher Rhythmus von Leistungshochs und -tiefs im Tagesverlauf, den man bei der Planung nutzen soll."},{"topic":"Zeit & Termine","front":"Woraus besteht ein Termin?","back":"Aus Kalenderdatum und Uhrzeit."},{"topic":"Zeit & Termine","front":"Terminarten","back":"Feste/variable, Einzel-/Serien- und interne/externe Termine."},{"topic":"Zeit & Termine","front":"§ 7 BUrlG","back":"Regelt die Urlaubsplanung (Zeitpunkt und Übertragung des Urlaubs)."},{"topic":"Besprechung & Kommunikation","front":"Drei Funktionen eines Protokolls","back":"Information, Beweis und Organisation."},{"topic":"Besprechung & Kommunikation","front":"Fünf Protokollarten","back":"Wort-, Verlaufs-, Kurz-/Ergebnis-, Beschluss- und Gedächtnisprotokoll."},{"topic":"Besprechung & Kommunikation","front":"DIN 5008","back":"Norm für den Aufbau von Schriftstücken; gliedert das Protokoll in Kopf, Text und Fuß."},{"topic":"Besprechung & Kommunikation","front":"Sprache im Protokoll","back":"Präsens, sachlich, indirekte Rede mit Konjunktiv I/II; Anträge und Beschlüsse wörtlich."},{"topic":"Besprechung & Kommunikation","front":"Sender-Empfänger-Modell","back":"Grundmodell der Kommunikation; Störungen entstehen durch Rauschen und Missverständnisse."},{"topic":"IHK-Prüfung","front":"Operator „nennen/aufzählen\"","back":"Nur die geforderten Begriffe auflisten, ohne Begründung."},{"topic":"IHK-Prüfung","front":"Operator „erläutern/beschreiben\"","back":"In ganzen Sätzen erklären und begründen."},{"topic":"IHK-Prüfung","front":"Operator „beurteilen/bewerten\"","back":"Eine eigene, mit Argumenten gestützte Stellungnahme abgeben."},{"topic":"IHK-Prüfung","front":"Ab welchem Prozentsatz gilt die Note „ausreichend\"?","back":"Der IHK-Notenschlüssel beginnt bei „ausreichend\" ab 50 %."}];
+
+const STORAGE_KEY = 'kk_' + DAY_ID;
+let boxes = {};                       // cardIndex -> Fach (1..3)
+let queue = [];                       // zu übende Karten-Indizes (Reihenfolge)
+let current = null;
+
+function loadState() {
+  try { boxes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch (e) { boxes = {}; }
+  CARDS.forEach((_, i) => { if (!boxes[i]) boxes[i] = 1; });
+}
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(boxes)); } catch (e) {} }
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildQueue() {
+  queue = shuffle(CARDS.map((_, i) => i).filter(i => boxes[i] < MAX_BOX));
+}
+
+function renderStats() {
+  const counts = [0, 0, 0];
+  CARDS.forEach((_, i) => counts[boxes[i] - 1]++);
+  document.getElementById('boxes').innerHTML =
+    counts.map((c, k) => `<span class="box-chip">Fach ${k + 1}: <b>${c}</b></span>`).join('');
+  const mastered = counts[MAX_BOX - 1];
+  document.getElementById('mastered').textContent = `${mastered} / ${CARDS.length} gemeistert`;
+  document.getElementById('progressBar').style.width = (mastered / CARDS.length * 100) + '%';
+}
+
+function showCard() {
+  if (queue.length === 0) { finish(); return; }
+  current = queue[0];
+  const c = CARDS[current];
+  document.getElementById('card').classList.remove('flipped');
+  document.getElementById('frontTopic').textContent = c.topic;
+  document.getElementById('backTopic').textContent = c.topic;
+  document.getElementById('frontText').textContent = c.front;
+  document.getElementById('backText').textContent = c.back;
+  document.getElementById('flipRow').classList.remove('hidden');
+  document.getElementById('gradeRow').classList.add('hidden');
+}
+
+function flipCard() {
+  const card = document.getElementById('card');
+  card.classList.toggle('flipped');
+  const flipped = card.classList.contains('flipped');
+  document.getElementById('flipRow').classList.toggle('hidden', flipped);
+  document.getElementById('gradeRow').classList.toggle('hidden', !flipped);
+}
+
+function grade(known) {
+  if (current === null) return;
+  if (known) { boxes[current] = Math.min(MAX_BOX, boxes[current] + 1); }
+  else { boxes[current] = 1; }
+  saveState();
+  queue.shift();
+  if (!known) queue.push(current);        // falsche Karte kommt später wieder
+  else if (boxes[current] < MAX_BOX) queue.push(current);
+  renderStats();
+  showCard();
+}
+
+function finish() {
+  document.getElementById('quizArea').classList.add('hidden');
+  document.getElementById('doneArea').classList.remove('hidden');
+}
+
+function shuffleRestart() {
+  document.getElementById('doneArea').classList.add('hidden');
+  document.getElementById('quizArea').classList.remove('hidden');
+  buildQueue();
+  renderStats();
+  showCard();
+}
+
+function resetProgress() {
+  CARDS.forEach((_, i) => boxes[i] = 1);
+  saveState();
+  shuffleRestart();
+}
+
+// Init
+loadState();
+renderStats();
+buildQueue();
+if (queue.length === 0) finish(); else showCard();
+</script>
+</body>
+</html>
