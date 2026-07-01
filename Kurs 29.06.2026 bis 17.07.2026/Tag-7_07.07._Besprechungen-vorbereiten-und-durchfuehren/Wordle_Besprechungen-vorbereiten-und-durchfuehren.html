@@ -19,6 +19,10 @@ header { text-align: center; margin-bottom: 1rem; }
 h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
 .hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
 .hint b { color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.tile.lock { border-color: var(--g-correct); background: #ECFDF5; }
 .grid { display: grid; gap: 6px; justify-content: center; margin-bottom: 1rem; }
 .row { display: grid; gap: 6px; }
 .tile { width: 46px; height: 46px; border: 2px solid var(--bfw-border); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; background: white; transition: transform 0.1s; }
@@ -46,6 +50,13 @@ footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(-
     <span class="tag-pill">Tag 7 · Wordle</span>
     <h1>Besprechungen vorbereiten & durchführen</h1>
   </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Errate das gesuchte Fachwort in <b>6 Versuchen</b>. Der Hinweis oben verrät, worum es geht.
+    Tippe ein Wort mit der passenden Buchstabenzahl und drücke <b>Enter</b>. Nach jedem Versuch färben sich die Felder:</p>
+    <p>🟩 <b>Grün</b> = richtiger Buchstabe an der richtigen Stelle &nbsp;·&nbsp; 🟨 <b>Gelb</b> = Buchstabe kommt vor, aber an anderer Stelle &nbsp;·&nbsp; ⬜ <b>Grau</b> = Buchstabe kommt nicht vor.</p>
+    <p>Richtig platzierte (grüne) Buchstaben werden in der nächsten Reihe <b>automatisch vorausgefüllt</b>.</p>
+  </details>
   <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
   <div class="grid" id="grid"></div>
   <div class="msg" id="msg"></div>
@@ -61,7 +72,8 @@ const MAX_ROWS = 6;
 const LAYOUT = [['Q','W','E','R','T','Z','U','I','O','P','Ü'],['A','S','D','F','G','H','J','K','L','Ö','Ä'],['ENTER','Y','X','C','V','B','N','M','ß','DEL']];
 const STORAGE = 'wordle_' + DAY_ID;
 
-let target='', hint='', row=0, col=0, guesses=[], over=false, keyState={}, lastIdx=-1;
+let target='', hint='', row=0, over=false, keyState={}, lastIdx=-1;
+let curRow=[], locked=new Set(), knownGreens={};
 function pickWord(){ let i; do { i=Math.floor(Math.random()*WORDS.length); } while(WORDS.length>1 && i===lastIdx); lastIdx=i; return WORDS[i]; }
 
 function loadStats(){ try { return JSON.parse(localStorage.getItem(STORAGE)) || {played:0,won:0}; } catch(e){ return {played:0,won:0}; } }
@@ -71,10 +83,18 @@ function renderStats(){ const s=loadStats(); document.getElementById('stats').te
 function newGame(){
   const pick = pickWord();
   target = pick.word.toUpperCase(); hint = pick.hint;
-  row=0; col=0; over=false; guesses=Array.from({length:MAX_ROWS},()=>''); keyState={};
+  row=0; over=false; keyState={}; knownGreens={};
   document.getElementById('hintText').textContent = hint;
   document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
-  buildGrid(); buildKeyboard();
+  buildGrid(); initRow(); buildKeyboard();
+}
+
+// Neue Reihe vorbereiten: bereits bekannte grüne Buchstaben vorausfüllen & sperren
+function initRow(){
+  curRow = new Array(target.length).fill('');
+  locked = new Set();
+  for(const p in knownGreens){ curRow[+p] = knownGreens[p]; locked.add(+p); }
+  paintCurrent();
 }
 
 function buildGrid(){
@@ -110,17 +130,19 @@ function buildKeyboard(){
 function press(k){
   if(over) return;
   if(k==='ENTER'){ submit(); return; }
-  if(k==='DEL'){ if(col>0){ col--; guesses[row]=guesses[row].slice(0,-1); paintCurrent(); } return; }
-  if(col<target.length){ guesses[row]+=k; col++; paintCurrent(); }
+  if(k==='DEL'){ for(let i=target.length-1;i>=0;i--){ if(curRow[i] && !locked.has(i)){ curRow[i]=''; break; } } paintCurrent(); return; }
+  // Buchstabe an erster freier Stelle einfügen (gesperrte grüne Felder werden übersprungen)
+  for(let i=0;i<target.length;i++){ if(!curRow[i]){ curRow[i]=k; break; } }
+  paintCurrent();
 }
 
 function paintCurrent(){
-  for(let c=0;c<target.length;c++){ const t=document.getElementById(`t-${row}-${c}`); const ch=guesses[row][c]||''; t.textContent=ch; t.classList.toggle('filled', !!ch); }
+  for(let c=0;c<target.length;c++){ const t=document.getElementById(`t-${row}-${c}`); const ch=curRow[c]||''; t.textContent=ch; t.classList.toggle('filled', !!ch); t.classList.toggle('lock', locked.has(c)); }
 }
 
 function submit(){
-  const guess=guesses[row];
-  if(guess.length!==target.length){ flash('Bitte '+target.length+' Buchstaben eingeben.'); return; }
+  if(curRow.some(c=>!c)){ flash('Bitte alle '+target.length+' Felder ausfüllen.'); return; }
+  const guess=curRow.join('');
   // Färbung mit Duplikat-Behandlung
   const res=new Array(target.length).fill('absent');
   const counts={};
@@ -132,10 +154,13 @@ function submit(){
     const k=guess[c]; const rank={absent:0,present:1,correct:2};
     if(!keyState[k] || rank[res[c]]>rank[keyState[k]]) keyState[k]=res[c];
   }
+  // bekannte grüne Buchstaben merken (für Autofill der nächsten Reihe)
+  for(let c=0;c<target.length;c++){ if(res[c]==='correct') knownGreens[c]=guess[c]; }
   buildKeyboard();
   if(guess===target){ win(); return; }
-  row++; col=0;
-  if(row>=MAX_ROWS){ lose(); }
+  row++;
+  if(row>=MAX_ROWS){ lose(); return; }
+  initRow();
 }
 
 function win(){ over=true; const m=document.getElementById('msg'); m.textContent='🎉 Richtig! '+target; m.className='msg win'; const s=loadStats(); s.played++; s.won++; saveStats(s); renderStats(); }

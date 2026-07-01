@@ -18,6 +18,9 @@ header { text-align: center; margin-bottom: 1rem; }
 h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
 .hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
 .hint b { color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
 .stage { display: flex; justify-content: center; margin-bottom: 0.5rem; }
 .stage svg { width: 200px; height: 220px; }
 .lives { text-align: center; font-size: 0.9rem; color: var(--bfw-ink-soft); margin-bottom: 0.75rem; }
@@ -43,6 +46,12 @@ footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(-
     <span class="tag-pill">Tag 4 · Hängemann</span>
     <h1>Arbeitsschutz & Gesundheit</h1>
   </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Errate das gesuchte Fachwort Buchstabe für Buchstabe. Der <b>Hinweis</b> oben hilft dir dabei.</p>
+    <p>Klicke einen Buchstaben (oder tippe ihn auf der Tastatur). <b>Richtige</b> Buchstaben erscheinen im Wort, <b>falsche</b> zeichnen Stück für Stück den Galgen.</p>
+    <p>Bei <b>6 Fehlversuchen</b> ist die Runde verloren – das gesuchte Wort wird dann aufgelöst.</p>
+  </details>
   <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
   <div class="stage">
     <svg viewBox="0 0 200 220">

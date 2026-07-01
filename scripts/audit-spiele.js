@@ -33,11 +33,15 @@ function auditHtml(html, game) {
   if (!m) { p.push(`${game}: WORDS-Array fehlt`); return { p, n: 0 }; }
   let arr; try { arr = JSON.parse(m[1]); } catch(e){ p.push(`${game}: WORDS nicht parsebar`); return {p,n:0}; }
   // Funktionalität: Kernfunktionen vorhanden
-  const fns = game==='Wordle' ? ['function press','function submit','function newGame'] : ['function guess','function lose','function newGame'];
+  const fns = game==='Wordle'
+    ? ['function press','function submit','function newGame','function initRow','knownGreens','function pickWord']
+    : ['function guess','function lose','function newGame','function pickWord'];
   fns.forEach(f => { if (!html.includes(f)) p.push(`${game}: ${f} fehlt`); });
-  // Darstellung: Grundgerüst
+  // Darstellung: Grundgerüst + Spielanleitung
   if (!/id="keyboard"/.test(html)) p.push(`${game}: Keyboard-Markup fehlt`);
   if (!/id="hintText"/.test(html)) p.push(`${game}: Hinweis-Container fehlt`);
+  if (!/Spielanleitung/.test(html)) p.push(`${game}: Spielanleitung fehlt`);
+  if (game==='Wordle' && !/tile\.lock|classList\.toggle\('lock'/.test(html)) p.push('Wordle: Autofill-Markierung (lock) fehlt');
   return { p, n: arr.length };
 }
 
