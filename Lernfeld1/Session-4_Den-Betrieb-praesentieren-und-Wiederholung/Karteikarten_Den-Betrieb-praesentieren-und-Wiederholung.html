@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Karteikarten Session 4 — Den Betrieb präsentieren (60 Karten)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink); min-height: 100vh; padding: 2rem 1rem 6rem;
+}
+.container { max-width: 720px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary);
+  color: white; border-radius: 999px; font-weight: 600; font-size: 0.85rem;
+  letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 { font-size: 2rem; color: var(--bfw-primary-dark); margin-bottom: 0.4rem; letter-spacing: -0.01em; }
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.05rem; }
+
+/* Fortschritt / Leitner-Fächer */
+.stats {
+  background: white; border: 1px solid var(--bfw-border); border-radius: 14px;
+  padding: 1rem 1.25rem; margin-bottom: 1.25rem;
+  display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.boxes { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+.box-chip {
+  font-size: 0.8rem; font-weight: 600; padding: 0.35rem 0.7rem; border-radius: 999px;
+  background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); color: var(--bfw-ink-soft);
+}
+.box-chip b { color: var(--bfw-primary-dark); }
+.mastered { font-weight: 700; color: var(--bfw-success); }
+.progress { width: 100%; background: var(--bfw-bg-teal); height: 10px; border-radius: 999px; overflow: hidden; margin-top: 0.5rem; }
+.progress > div { height: 100%; background: var(--bfw-success); border-radius: 999px; transition: width 0.3s; width: 0; }
+
+/* Karte */
+.card-scene { perspective: 1200px; margin-bottom: 1.25rem; }
+.card {
+  position: relative; width: 100%; min-height: 320px; cursor: pointer;
+  transform-style: preserve-3d; transition: transform 0.5s; transition-timing-function: cubic-bezier(.4,.2,.2,1);
+}
+.card.flipped { transform: rotateY(180deg); }
+.face {
+  position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 18px; padding: 2rem; display: flex; flex-direction: column; justify-content: center;
+  box-shadow: 0 6px 24px rgba(15,23,42,0.08); border: 1px solid var(--bfw-border);
+}
+.face-front { background: white; }
+.face-back { background: linear-gradient(160deg, #ffffff 0%, var(--bfw-bg-green) 100%); transform: rotateY(180deg); }
+.card-topic {
+  align-self: flex-start; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--bfw-primary-dark); background: var(--bfw-bg-teal);
+  padding: 0.25rem 0.6rem; border-radius: 999px; margin-bottom: 1rem;
+}
+.card-label { font-size: 0.75rem; color: var(--bfw-ink-soft); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.card-front-text { font-size: 1.5rem; font-weight: 600; line-height: 1.35; color: var(--bfw-ink); }
+.card-back-text { font-size: 1.12rem; line-height: 1.55; color: var(--bfw-ink); }
+.flip-hint { margin-top: auto; padding-top: 1rem; font-size: 0.85rem; color: var(--bfw-ink-soft); }
+
+/* Buttons */
+.actions { display: flex; gap: 0.75rem; margin-bottom: 1rem; }
+.btn { flex: 1; padding: 0.9rem 1rem; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600;
+  cursor: pointer; transition: transform 0.1s, box-shadow 0.2s; font-family: inherit; }
+.btn:active { transform: translateY(1px); }
+.btn-flip { background: var(--bfw-primary); color: white; }
+.btn-known { background: var(--bfw-success); color: white; }
+.btn-again { background: var(--bfw-bg-amber); color: #92400E; border: 1px solid #FCD34D; }
+.btn-ghost { background: white; color: var(--bfw-ink-soft); border: 1px solid var(--bfw-border); }
+.mini-actions { display: flex; gap: 0.75rem; justify-content: center; }
+.mini-actions .btn { flex: 0 1 auto; padding: 0.55rem 1rem; font-size: 0.85rem; }
+.hidden { display: none !important; }
+
+/* Abschluss */
+.done { background: white; border: 1px solid var(--bfw-border); border-radius: 18px; padding: 2.5rem 2rem; text-align: center; box-shadow: 0 6px 24px rgba(15,23,42,0.08); }
+.done h2 { color: var(--bfw-success); font-size: 1.8rem; margin-bottom: 0.75rem; }
+.done p { color: var(--bfw-ink-soft); margin-bottom: 1.5rem; line-height: 1.6; }
+.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1.25rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+.how b { color: var(--bfw-ink); }
+footer { text-align: center; margin-top: 2rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Session 4 · Karteikarten</span>
+    <h1>Den Betrieb präsentieren</h1>
+    <p class="subtitle">60 Lernkarten · Begriff → Definition · Leitner-System</p>
+  </header>
+
+  <div class="how">
+    <b>So funktioniert's:</b> Lesen Sie die Vorderseite, überlegen Sie die Antwort, dann <b>Umdrehen</b>.
+    Wussten Sie es? → <b>Gewusst</b> (Karte wandert ins nächste Fach). Nicht sicher? → <b>Nochmal</b>
+    (Karte kommt zurück in Fach 1). Ziel: alle Karten in Fach 3. Ihr Fortschritt wird im Browser gespeichert.
+  </div>
+
+  <div class="stats">
+    <div class="boxes" id="boxes"></div>
+    <div class="mastered" id="mastered">0 / 60 gemeistert</div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </div>
+
+  <div id="quizArea">
+    <div class="card-scene">
+      <div class="card" id="card" onclick="flipCard()">
+        <div class="face face-front">
+          <span class="card-topic" id="frontTopic">Thema</span>
+          <div class="card-label">Begriff / Frage</div>
+          <div class="card-front-text" id="frontText">…</div>
+          <div class="flip-hint">👆 Zum Umdrehen tippen</div>
+        </div>
+        <div class="face face-back">
+          <span class="card-topic" id="backTopic">Thema</span>
+          <div class="card-label">Definition / Antwort</div>
+          <div class="card-back-text" id="backText">…</div>
+          <div class="flip-hint">Wussten Sie es?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="actions" id="flipRow">
+      <button class="btn btn-flip" onclick="flipCard()">Umdrehen</button>
+    </div>
+    <div class="actions hidden" id="gradeRow">
+      <button class="btn btn-again" onclick="grade(false)">↺ Nochmal</button>
+      <button class="btn btn-known" onclick="grade(true)">✓ Gewusst</button>
+    </div>
+    <div class="mini-actions">
+      <button class="btn btn-ghost" onclick="shuffleRestart()">🔀 Neu mischen</button>
+      <button class="btn btn-ghost" onclick="resetProgress()">♻ Fortschritt zurücksetzen</button>
+    </div>
+  </div>
+
+  <div id="doneArea" class="done hidden">
+    <h2>🎉 Alle Karten gemeistert!</h2>
+    <p id="doneText">Sie haben alle 60 Karten sicher beantwortet. Starke Leistung!</p>
+    <div class="mini-actions">
+      <button class="btn btn-flip" onclick="resetProgress()">Von vorne beginnen</button>
+    </div>
+  </div>
+
+  <footer>BFW Lernplattform · Lernfeld 1 · © Can Siebert 2026</footer>
+</div>
+
+<script>
+const DAY_ID = 'lf1-s4';
+const MAX_BOX = 3;                    // Fach 3 = gemeistert
+const CARDS = [{"topic":"Präsentation","front":"Präsentation","back":"Anschauliche, verständliche und überzeugende Darstellung von Informationen vor einem Publikum unter Einsatz von Visualisierung."},{"topic":"Präsentation","front":"Ziele einer Präsentation","back":"Informieren (Wissen vermitteln), überzeugen (für eine Idee gewinnen) und aktivieren (zum Handeln anregen)."},{"topic":"Präsentation","front":"Zielgruppe (Adressaten)","back":"Das Publikum, an das sich die Präsentation richtet; bestimmt Inhalt, Sprache, Umfang und Medienwahl."},{"topic":"Präsentation","front":"Adressatenanalyse","back":"Untersuchung von Vorwissen, Interessen, Größe und Erwartungen des Publikums vor der Vorbereitung."},{"topic":"Präsentation","front":"Vier Vorbereitungsschritte","back":"Thema eingrenzen, roten Faden entwickeln, Informationen beschaffen, Zeit planen."},{"topic":"Präsentation","front":"Roter Faden","back":"Logische, nachvollziehbare Gliederung, die alle Teile einer Präsentation sinnvoll verbindet."},{"topic":"Präsentation","front":"Thema eingrenzen","back":"Kernbotschaft festlegen und unwichtige Nebenaspekte weglassen — weniger ist mehr."},{"topic":"Präsentation","front":"Informationsbeschaffung","back":"Verlässliche Quellen nutzen, Zahlen und Beispiele sammeln und das Wichtigste auswählen."},{"topic":"Präsentation","front":"Zeitplanung","back":"Ablauf auf die verfügbare Redezeit abstimmen und einüben; Ein-/Ausstieg zusammen ca. 20–30 %."},{"topic":"Aufbau","front":"Aufbau einer Präsentation","back":"Dreischritt: Einleitung – Hauptteil – Schluss."},{"topic":"Aufbau","front":"Einleitung","back":"Begrüßen, Thema und Ziel nennen, Interesse wecken, Ablauf ankündigen."},{"topic":"Aufbau","front":"Hauptteil","back":"Kernaussagen strukturiert, mit Beispielen und Visualisierung darstellen; roten Faden halten."},{"topic":"Aufbau","front":"Schluss","back":"Kernbotschaft zusammenfassen, Fazit/Appell geben, danken und Fragen zulassen."},{"topic":"Medien","front":"Beamer/PowerPoint","back":"Projektionsmedium für große Gruppen; Bilder und Animationen möglich, aber technikabhängig."},{"topic":"Medien","front":"Flipchart","back":"Papierblock auf Ständer; flexibel und live beschreibbar, geeignet für kleine Gruppen."},{"topic":"Medien","front":"Whiteboard","back":"Weiße Tafel, spontan beschreib- und löschbar; nicht speicherbar, geringe Reichweite."},{"topic":"Medien","front":"Pinnwand","back":"Stellwand für Moderationskarten; zum Sammeln und Ordnen von Ideen, bezieht alle ein."},{"topic":"Medien","front":"Moderationskarten","back":"Beschriftbare Karten für Pinnwände; kurze Aussagen, flexibel umsortierbar."},{"topic":"Medien","front":"Handout","back":"Begleitunterlage zum Nachlesen; entlastet die Folien und wird meist erst am Ende verteilt."},{"topic":"Medien","front":"Wann Handout verteilen?","back":"In der Regel erst am Ende, damit es während des Vortrags nicht ablenkt."},{"topic":"Foliengestaltung","front":"KISS-Prinzip","back":"„Keep it short and simple\" — Folien so einfach und reduziert wie möglich gestalten."},{"topic":"Foliengestaltung","front":"6×6-Regel","back":"Höchstens ca. sechs Stichpunkte je Folie und ca. sechs Wörter je Stichpunkt."},{"topic":"Foliengestaltung","front":"Schriftgröße auf Folien","back":"Groß und gut lesbar, Richtwert mindestens ca. 24 pt."},{"topic":"Foliengestaltung","front":"Kontrast","back":"Dunkle Schrift auf hellem Grund (oder umgekehrt); keine grellen Farbkombinationen."},{"topic":"Foliengestaltung","front":"Einheitlichkeit","back":"Gleiche Schriftart, Farben und Aufbau auf allen Folien einer Präsentation."},{"topic":"Foliengestaltung","front":"Bilder statt Text","back":"Zahlen als Diagramm, Zusammenhänge als Schaubild darstellen statt lange Texte."},{"topic":"Foliengestaltung","front":"Visualisierung","back":"Anschauliche Darstellung von Inhalten durch Bilder, Diagramme, Schaubilder oder Objekte."},{"topic":"Foliengestaltung","front":"Textwüste","back":"Überladene Folie mit zu viel Text; lenkt ab und wirkt langweilig — vermeiden."},{"topic":"Vortrag","front":"Freies Sprechen","back":"Mit Stichwortkarten statt Ablesen vortragen; wirkt lebendig und glaubwürdig."},{"topic":"Vortrag","front":"Stimme und Tempo","back":"Deutlich sprechen, nicht zu schnell, Pausen bewusst einsetzen."},{"topic":"Vortrag","front":"Blickkontakt","back":"Das Publikum anschauen, nicht die Folien oder den Boden."},{"topic":"Vortrag","front":"Körpersprache","back":"Wirkung durch Haltung, Gestik, Mimik und Blickkontakt; unterstützt oder untergräbt den Vortrag."},{"topic":"Vortrag","front":"Lampenfieber","back":"Nervosität vor/während eines Auftritts; durch Vorbereitung, Atmung und Routine beherrschbar."},{"topic":"Vortrag","front":"Mittel gegen Lampenfieber","back":"Gute Vorbereitung und Proben, tief durchatmen, langsam beginnen, Blickkontaktpunkt suchen."},{"topic":"Vortrag","front":"Umgang mit Fragen","back":"Fragen zulassen, ruhig und ehrlich beantworten; Rückmeldungen annehmen."},{"topic":"Betrieb","front":"Unternehmenssteckbrief","back":"Kompakte Übersicht eines Betriebs: Branche, Rechtsform, Produkte, Standort, Leitbild/Ziele."},{"topic":"Betrieb","front":"Branche","back":"Wirtschaftszweig, in dem ein Unternehmen tätig ist (z. B. Büromöbelherstellung)."},{"topic":"Betrieb","front":"Leitbild","back":"Grundsätze und Ziele, für die ein Unternehmen steht (wirtschaftlich, ökologisch, sozial)."},{"topic":"Betrieb","front":"Standort","back":"Sitz und weitere Niederlassungen eines Unternehmens."},{"topic":"Feedback","front":"Feedbackregeln","back":"Erst Positives, konkret und beschreibend, in Ich-Form, wertschätzend und umsetzbar."},{"topic":"Feedback","front":"Bewertungskriterien Präsentation","back":"Aufbau/roter Faden, Inhalt/Verständlichkeit, Foliengestaltung, Vortragsweise, Zeiteinhaltung."},{"topic":"Feedback","front":"Ich-Botschaft","back":"Rückmeldung aus eigener Sicht formulieren („Ich hätte mir mehr Beispiele gewünscht\")."},{"topic":"Präsentation","front":"Kernbotschaft","back":"Die eine zentrale Aussage, die beim Publikum hängen bleiben soll."},{"topic":"Präsentation","front":"Abgrenzung Vortrag/Präsentation","back":"Die Präsentation setzt bewusst Visualisierung und Publikumsansprache ein, der reine Vortrag nicht."},{"topic":"Wiederholung S1","front":"Berufsbildungsgesetz (BBiG)","back":"Gesetz, das die Berufsausbildung regelt (Grundlage des dualen Systems)."},{"topic":"Wiederholung S1","front":"Duales System","back":"Ausbildung an zwei Lernorten: Betrieb und Berufsschule."},{"topic":"Wiederholung S1","front":"Pflichten der Auszubildenden","back":"Lern-/Sorgfaltspflicht, Weisungen befolgen, Berufsschule besuchen."},{"topic":"Wiederholung S1","front":"Pflichten der Ausbildenden","back":"Inhalte vermitteln, Ausbildungsmittel bereitstellen, Vergütung zahlen."},{"topic":"Wiederholung S1","front":"Jugendarbeitsschutzgesetz","back":"Schützt jugendliche Beschäftigte, u. a. bei Arbeitszeit, Pausen und gefährlichen Arbeiten."},{"topic":"Wiederholung S1","front":"JAV","back":"Jugend- und Auszubildendenvertretung; vertritt die Interessen junger und auszubildender Beschäftigter."},{"topic":"Wiederholung S1","front":"Betriebsrat","back":"Gewählte Vertretung der Arbeitnehmer im Betrieb; Organ der Mitbestimmung."},{"topic":"Wiederholung S2","front":"Bedürfnis","back":"Empfundener Mangel mit dem Wunsch, ihn zu beseitigen."},{"topic":"Wiederholung S2","front":"Bedarf","back":"Mit Kaufkraft versehenes Bedürfnis."},{"topic":"Wiederholung S2","front":"Nachfrage","back":"Am Markt konkret geäußerter Bedarf."},{"topic":"Wiederholung S2","front":"Einfacher Wirtschaftskreislauf","back":"Verbindet Haushalte und Unternehmen: Arbeit gegen Einkommen, Güter gegen Geld."},{"topic":"Wiederholung S2","front":"Ökonomische Ziele","back":"Gewinnmaximierung, Produktivität, Rentabilität und Liquidität."},{"topic":"Wiederholung S2","front":"Zielkonflikt","back":"Zwei Ziele widersprechen sich (z. B. Personalkosten senken vs. sichere Arbeitsplätze)."},{"topic":"Wiederholung S3","front":"Firma","back":"Name, unter dem ein Kaufmann seine Geschäfte betreibt und die Unterschrift leistet."},{"topic":"Wiederholung S3","front":"Personengesellschaft","back":"z. B. OHG oder KG; Gesellschafter haften meist persönlich und unbeschränkt."},{"topic":"Wiederholung S3","front":"Kapitalgesellschaft","back":"z. B. GmbH oder AG; Haftung grundsätzlich auf das Gesellschaftsvermögen beschränkt."}];
+
+const STORAGE_KEY = 'kk_' + DAY_ID;
+let boxes = {};                       // cardIndex -> Fach (1..3)
+let queue = [];                       // zu übende Karten-Indizes (Reihenfolge)
+let current = null;
+
+function loadState() {
+  try { boxes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch (e) { boxes = {}; }
+  CARDS.forEach((_, i) => { if (!boxes[i]) boxes[i] = 1; });
+}
+function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(boxes)); } catch (e) {} }
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function buildQueue() {
+  queue = shuffle(CARDS.map((_, i) => i).filter(i => boxes[i] < MAX_BOX));
+}
+
+function renderStats() {
+  const counts = [0, 0, 0];
+  CARDS.forEach((_, i) => counts[boxes[i] - 1]++);
+  document.getElementById('boxes').innerHTML =
+    counts.map((c, k) => `<span class="box-chip">Fach ${k + 1}: <b>${c}</b></span>`).join('');
+  const mastered = counts[MAX_BOX - 1];
+  document.getElementById('mastered').textContent = `${mastered} / ${CARDS.length} gemeistert`;
+  document.getElementById('progressBar').style.width = (mastered / CARDS.length * 100) + '%';
+}
+
+function showCard() {
+  if (queue.length === 0) { finish(); return; }
+  current = queue[0];
+  const c = CARDS[current];
+  document.getElementById('card').classList.remove('flipped');
+  document.getElementById('frontTopic').textContent = c.topic;
+  document.getElementById('backTopic').textContent = c.topic;
+  document.getElementById('frontText').textContent = c.front;
+  document.getElementById('backText').textContent = c.back;
+  document.getElementById('flipRow').classList.remove('hidden');
+  document.getElementById('gradeRow').classList.add('hidden');
+}
+
+function flipCard() {
+  const card = document.getElementById('card');
+  card.classList.toggle('flipped');
+  const flipped = card.classList.contains('flipped');
+  document.getElementById('flipRow').classList.toggle('hidden', flipped);
+  document.getElementById('gradeRow').classList.toggle('hidden', !flipped);
+}
+
+function grade(known) {
+  if (current === null) return;
+  if (known) { boxes[current] = Math.min(MAX_BOX, boxes[current] + 1); }
+  else { boxes[current] = 1; }
+  saveState();
+  queue.shift();
+  if (!known) queue.push(current);        // falsche Karte kommt später wieder
+  else if (boxes[current] < MAX_BOX) queue.push(current);
+  renderStats();
+  showCard();
+}
+
+function finish() {
+  document.getElementById('quizArea').classList.add('hidden');
+  document.getElementById('doneArea').classList.remove('hidden');
+}
+
+function shuffleRestart() {
+  document.getElementById('doneArea').classList.add('hidden');
+  document.getElementById('quizArea').classList.remove('hidden');
+  buildQueue();
+  renderStats();
+  showCard();
+}
+
+function resetProgress() {
+  CARDS.forEach((_, i) => boxes[i] = 1);
+  saveState();
+  shuffleRestart();
+}
+
+// Init
+loadState();
+renderStats();
+buildQueue();
+if (queue.length === 0) finish(); else showCard();
+</script>
+</body>
+</html>

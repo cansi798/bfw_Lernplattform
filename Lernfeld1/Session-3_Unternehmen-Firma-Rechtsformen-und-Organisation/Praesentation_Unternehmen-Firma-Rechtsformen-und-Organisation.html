@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Session 3 — Das Unternehmen: Firma, Rechtsformen &amp; Organisation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* kompaktere Tabelle für große Vergleiche */
+table.compact { font-size: 0.95rem; }
+table.compact th, table.compact td { padding: 0.5rem 0.7rem; }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Session 3</span>
+    <h1>Das Unternehmen: Firma, Rechtsformen &amp; Organisation</h1>
+    <p class="subtitle">Wer ist Kaufmann? Welche Rechtsform passt? Wie ist ein Betrieb aufgebaut?</p>
+    <div class="cover-meta">
+      <span><strong>Lernfeld</strong>Die eigene Rolle im Betrieb mitgestalten und den Betrieb präsentieren</span>
+      <span><strong>Zielgruppe</strong>Kaufleute für Büromanagement (IHK)</span>
+      <span><strong>Quelle</strong>Lehrwerk Kap. 1 (HGB)</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie in dieser Session lernen</h2>
+    <p class="subtitle">Am Ende können Sie...</p>
+    <ul class="checklist">
+      <li>den <strong>Kaufmannsbegriff</strong> (Ist-, Kann-, Formkaufmann) erklären</li>
+      <li>die <strong>Firma</strong>, ihre Arten und die <strong>fünf Firmengrundsätze</strong> beschreiben</li>
+      <li>Aufbau und Bedeutung des <strong>Handelsregisters</strong> (Abt. A/B) erläutern</li>
+      <li>die wichtigsten <strong>Rechtsformen</strong> nach Haftung, Kapital und Organen vergleichen</li>
+      <li><strong>Prokura</strong> und <strong>Handlungsvollmacht</strong> unterscheiden</li>
+      <li>die <strong>Aufbau- und Ablauforganisation</strong> eines Betriebs darstellen</li>
+      <li><strong>Leitbild, Unternehmensziele</strong> und <strong>Nachhaltigkeit</strong> einordnen</li>
+    </ul>
+  </section>
+
+  <!-- 3. Überblick / Landkarte -->
+  <section class="slide">
+    <h2>Die große Landkarte dieser Session</h2>
+    <p>Damit Sie den roten Faden behalten — wir bewegen uns von der <strong>Person</strong> (Kaufmann) über die <strong>Hülle</strong> (Rechtsform &amp; Firma) bis zum <strong>Innenleben</strong> (Organisation).</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">1 · Wer handelt?</div>Kaufmannsbegriff, Firma, Handelsregister</div>
+      <div class="card amber"><div class="card-title">2 · In welcher Form?</div>Einzelunternehmen, Personen- &amp; Kapitalgesellschaften, Vollmachten</div>
+      <div class="card rose"><div class="card-title">3 · Wie aufgebaut?</div>Aufbau- &amp; Ablauforganisation, Leitbild, Ziele, Nachhaltigkeit</div>
+    </div>
+  </section>
+
+  <!-- 4. Kaufmannsbegriff -->
+  <section class="slide">
+    <h2>Wer ist „Kaufmann“ nach dem HGB?</h2>
+    <p>Das <strong>Handelsgesetzbuch (HGB)</strong> gilt nur für Kaufleute. Wer Kaufmann ist, hat besondere Rechte und Pflichten (z. B. Buchführung). Man unterscheidet drei Grundtypen:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Istkaufmann</div>Betreibt ein Handelsgewerbe, das einen kaufmännischen Geschäftsbetrieb <strong>erfordert</strong> (§ 1 HGB). Ist automatisch Kaufmann.</div>
+      <div class="card amber"><div class="card-title">Kannkaufmann</div>Kleingewerbe oder Land-/Forstwirtschaft. Wird Kaufmann nur, wenn er sich <strong>freiwillig</strong> einträgt (§ 2, § 3 HGB).</div>
+      <div class="card rose"><div class="card-title">Formkaufmann</div>Kapitalgesellschaften (AG, GmbH, KGaA) und eG. Kaufmann <strong>allein wegen der Rechtsform</strong>.</div>
+    </div>
+  </section>
+
+  <!-- 5. Deklaratorisch vs. konstitutiv -->
+  <section class="slide">
+    <h2>Eintragung: bezeugend oder begründend?</h2>
+    <p>Ein wichtiger Prüfungsklassiker: Welche <strong>Wirkung</strong> hat die Eintragung ins Handelsregister?</p>
+    <table>
+      <thead><tr><th>Begriff</th><th>Bedeutung</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td><strong>deklaratorisch</strong></td><td>rechtsbekundend — bestätigt nur eine schon wirksame Tatsache</td><td>Istkaufmann, Prokura</td></tr>
+        <tr><td><strong>konstitutiv</strong></td><td>rechtsbegründend — die Wirkung entsteht erst durch die Eintragung</td><td>Formkaufmann (GmbH, AG entstehen erst hier)</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      <strong>Istkaufmann = deklaratorisch</strong> (war schon Kaufmann). <strong>Formkaufmann = konstitutiv</strong> (wird erst durch die Eintragung geboren).
+    </div>
+  </section>
+
+  <!-- 6. Die Firma -->
+  <section class="slide">
+    <h2>Die Firma — der Name des Kaufmanns</h2>
+    <p>Achtung, häufiger Fehler: Die <strong>Firma</strong> ist <em>nicht</em> das Unternehmen selbst, sondern der <strong>Name</strong>, unter dem der Kaufmann Geschäfte betreibt und unterschreibt (§ 17 HGB).</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Firmenkern</div>Der eigentliche Name: Personenname, Gegenstand oder Fantasiebezeichnung.</div>
+      <div class="card amber"><div class="card-title">Firmenzusatz</div>Erläuterung zur Rechtsform oder Art des Geschäfts, z. B. e.K., OHG, GmbH.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 Beispiel</span>
+      „<strong>Duisdorfer BüroKonzept</strong> <span class="muted">(Kern)</span> <strong>KG</strong> <span class="muted">(Zusatz)</span>“
+    </div>
+  </section>
+
+  <!-- 7. Firmenarten -->
+  <section class="slide">
+    <h2>Die vier Firmenarten</h2>
+    <table>
+      <thead><tr><th>Art</th><th>Firmenkern enthält …</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Personenfirma</strong></td><td>Namen der beteiligten Personen</td><td>Gilles e.K.</td></tr>
+        <tr><td><strong>Sachfirma</strong></td><td>den Gegenstand des Unternehmens</td><td>Balthasar Transporte GmbH</td></tr>
+        <tr><td><strong>Mischfirma</strong></td><td>Namen <em>und</em> Gegenstand</td><td>Duisdorfer BüroKonzept KG</td></tr>
+        <tr><td><strong>Fantasiefirma</strong></td><td>einen frei erfundenen Namen</td><td>Kalyptus OHG</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Der Firmenzusatz (e.K., GmbH, KG …) bleibt in jedem Fall Pflicht.</p>
+  </section>
+
+  <!-- 8. Firmengrundsätze -->
+  <section class="slide">
+    <h2>Die fünf Firmengrundsätze</h2>
+    <p>Bei der Wahl der Firma muss der Kaufmann feste Regeln beachten:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Wahrheit &amp; Klarheit</div>Die Firma muss kennzeichnen und darf <strong>nicht irreführen</strong> (§ 18 HGB).</div>
+      <div class="card teal"><div class="card-title">Ausschließlichkeit</div>Muss sich von Firmen am selben Ort <strong>deutlich unterscheiden</strong> (§ 30 HGB).</div>
+      <div class="card amber"><div class="card-title">Beständigkeit</div>Bei Übernahme darf die alte Firma <strong>fortgeführt</strong> werden (§ 22 HGB).</div>
+      <div class="card amber"><div class="card-title">Öffentlichkeit</div>Muss zur Eintragung ins Handelsregister <strong>angemeldet</strong> werden (§ 29 HGB).</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>W</strong>ahrheit · <strong>K</strong>larheit · <strong>A</strong>usschließlichkeit · <strong>B</strong>eständigkeit · <strong>Ö</strong>ffentlichkeit
+    </div>
+  </section>
+
+  <!-- 9. Firmengrundsätze - Beispiele -->
+  <section class="slide">
+    <h2>Firmengrundsätze in der Praxis</h2>
+    <ul>
+      <li><strong>Wahrheit/Klarheit:</strong> Eine „Duisdorfer BüroKonzept KG“ dürfte sich nicht „Duisdorfer Immobilien KG“ nennen — das führt über den Gegenstand in die Irre.</li>
+      <li><strong>Ausschließlichkeit:</strong> Heißt schon eine „Frohn KG“ am Ort, muss ein neuer Namensvetter einen unterscheidenden Zusatz ergänzen (z. B. „Manfred Frohn KG Büroausstattung“).</li>
+      <li><strong>Beständigkeit:</strong> Übergibt Hans Frohn die „Frohn KG“ an seinen Sohn, darf dieser den bewährten Namen weiterführen.</li>
+    </ul>
+    <div class="merksatz">
+      <span class="merksatz-label">⚖️ Wichtig</span>
+      Die Firma kann <strong>nicht ohne das Handelsgeschäft</strong> verkauft werden (§ 23 HGB).
+    </div>
+  </section>
+
+  <!-- 10. Handelsregister -->
+  <section class="slide">
+    <h2>Das Handelsregister</h2>
+    <p>Ein <strong>elektronisch geführtes amtliches Verzeichnis</strong>, das vom Amtsgericht des Bezirks geführt wird (§ 8 HGB). <strong>Jeder</strong> darf es zu Informationszwecken einsehen — auch online (§ 9 HGB).</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Abteilung A</div>Einzelkaufleute &amp; Personengesellschaften: <strong>e.K., OHG, KG</strong></div>
+      <div class="card amber"><div class="card-title">Abteilung B</div>Kapitalgesellschaften: <strong>GmbH, AG</strong></div>
+    </div>
+    <p class="muted">Genossenschaften → gesondertes <strong>Genossenschaftsregister</strong>, Vereine → <strong>Vereinsregister</strong>.</p>
+  </section>
+
+  <!-- 11. Publizität / öffentlicher Glaube -->
+  <section class="slide">
+    <h2>Der „öffentliche Glaube“ des Registers (§ 15 HGB)</h2>
+    <p>Man kann sich auf die <strong>eingetragenen und bekanntgemachten</strong> Angaben verlassen — das schützt den Geschäftsverkehr (Publizität).</p>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 Fallbeispiel</span>
+      Die Prokura von Frau Sommer wird <strong>widerrufen und im Register gelöscht</strong>. Legt sie danach noch ihre alte Vollmacht vor, kann sie das Unternehmen nicht mehr wirksam vertreten — der Vertragspartner muss sich direkt an <strong>Frau Sommer</strong> halten.
+    </div>
+    <p class="muted">Merke: Eingetragene Tatsachen muss ein Dritter gegen sich gelten lassen — auch wenn er sie nicht kannte.</p>
+  </section>
+
+  <!-- 12. Rechtsformen Überblick -->
+  <section class="slide">
+    <h2>Rechtsformen im Überblick</h2>
+    <p>Die Rechtsform entscheidet über <strong>Haftung, Kapital, Leitung und Steuern</strong>. Drei große Gruppen:</p>
+    <div class="figure" id="fig-rechtsformen"></div>
+    <p class="caption">Von der einfachen Einzelunternehmung bis zur großen Kapitalgesellschaft.</p>
+  </section>
+
+  <!-- 13. Einzelunternehmung -->
+  <section class="slide">
+    <h2>Die Einzelunternehmung</h2>
+    <p>Gegründet von <strong>einer Person</strong>, die alleiniger Eigentümer ist, die Geschäfte führt und nach außen vertritt. Firmenzusatz: <strong>e.K. / e.Kfm. / e.Kffr.</strong></p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Vorteile</div>
+        <ul style="margin-left: 1rem;">
+          <li>Einfache, schnelle Gründung</li>
+          <li>Der Gewinn steht allein dem Inhaber zu</li>
+          <li>Volle Entscheidungsfreiheit</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Nachteil</div>
+        <ul style="margin-left: 1rem;">
+          <li><strong>Volle Haftung</strong> mit dem gesamten Privatvermögen</li>
+          <li>Verluste trägt der Inhaber allein</li>
+          <li>Kapital nur aus dem Privatvermögen</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. Personengesellschaften: GbR/OHG -->
+  <section class="slide">
+    <h2>Personengesellschaften: GbR &amp; OHG</h2>
+    <p>Ab <strong>zwei Personen</strong>, die ihr Kapital aus dem Privatvermögen einbringen und selbst Eigentümer sind.</p>
+    <div class="cards">
+      <div class="card amber"><div class="card-title">GbR</div>Gesellschaft bürgerlichen Rechts — die einfachste Personengesellschaft (kein Handelsgewerbe), Grundlage vieler kleiner Zusammenschlüsse.</div>
+      <div class="card teal"><div class="card-title">OHG</div>Offene Handelsgesellschaft. Jeder Gesellschafter führt <strong>allein</strong> die Geschäfte und vertritt allein.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">⚖️ Haftung der OHG</span>
+      Alle Gesellschafter haften <strong>unbeschränkt, unmittelbar und solidarisch</strong> — mit dem vollen Privatvermögen.
+    </div>
+  </section>
+
+  <!-- 15. Haftungsbegriffe erklärt -->
+  <section class="slide">
+    <h2>Die drei Haftungsbegriffe — leicht erklärt</h2>
+    <table>
+      <thead><tr><th>Begriff</th><th>Bedeutung</th></tr></thead>
+      <tbody>
+        <tr><td><strong>unbeschränkt</strong></td><td>Haftung mit dem <em>gesamten</em> Privatvermögen, nicht nur mit der Einlage.</td></tr>
+        <tr><td><strong>unmittelbar</strong></td><td>Der Gläubiger darf sich <em>direkt</em> an den Gesellschafter wenden.</td></tr>
+        <tr><td><strong>solidarisch</strong></td><td>Ein Gesellschafter kann für die <em>gesamte</em> Schuld herangezogen werden (gesamtschuldnerisch).</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Bildlich</span>
+      Der Gläubiger sucht sich den zahlungsfähigsten Gesellschafter aus und holt sich dort die <strong>ganze</strong> Forderung.
+    </div>
+  </section>
+
+  <!-- 16. KG -->
+  <section class="slide">
+    <h2>Die Kommanditgesellschaft (KG)</h2>
+    <p>Eine Personengesellschaft mit <strong>zwei Rollen</strong> — das ist ihr Kennzeichen:</p>
+    <div class="cards">
+      <div class="card rose">
+        <div class="card-title">Komplementär (Vollhafter)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Haftet <strong>unbeschränkt</strong> mit Privatvermögen</li>
+          <li>Führt die Geschäfte &amp; vertritt nach außen</li>
+        </ul>
+      </div>
+      <div class="card teal">
+        <div class="card-title">Kommanditist (Teilhafter)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Haftet nur mit seiner <strong>Kapitaleinlage</strong></li>
+          <li>Keine Geschäftsführung, keine Vertretung</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Beispiel: Die Duisdorfer BüroKonzept KG. Sonderform: GmbH &amp; Co. KG — hier haftet eine GmbH als Komplementär.</p>
+  </section>
+
+  <!-- 17. Kapitalgesellschaften Einführung -->
+  <section class="slide">
+    <h2>Kapitalgesellschaften — juristische Personen</h2>
+    <p>Eine Kapitalgesellschaft ist eine <strong>juristische Person</strong> mit eigener Rechtspersönlichkeit: Sie kann selbst Verträge schließen, klagen und verklagt werden.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kerngedanke</span>
+      Nicht die Personen, sondern das <strong>Kapital</strong> steht im Vordergrund. Die Gesellschafter haften grundsätzlich <strong>nur mit ihrer Einlage</strong> — ihr Privatvermögen bleibt geschützt.
+    </div>
+    <ul>
+      <li><strong>GmbH</strong> — Gesellschaft mit beschränkter Haftung</li>
+      <li><strong>UG (haftungsbeschränkt)</strong> — die „Mini-GmbH“</li>
+      <li><strong>AG</strong> — Aktiengesellschaft</li>
+    </ul>
+  </section>
+
+  <!-- 18. GmbH -->
+  <section class="slide">
+    <h2>Die GmbH im Detail</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Kapital</div>Mindeststammkapital <strong>25.000 €</strong> in Gesellschaftsanteilen.</div>
+      <div class="card teal"><div class="card-title">Haftung</div>Nur mit dem Gesellschaftsvermögen — Gesellschafter <strong>nicht persönlich</strong>.</div>
+      <div class="card amber"><div class="card-title">Organe</div><strong>Gesellschafterversammlung</strong> bestellt den/die <strong>Geschäftsführer</strong>.</div>
+      <div class="card amber"><div class="card-title">Vertretung</div>Durch <strong>Geschäftsführer</strong> oder Prokuristen.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 Gut zu wissen</span>
+      Geschäftsführer kann ein Gesellschafter <em>oder</em> ein Angestellter (Fremdgeschäftsführer) sein. Bei noch nicht voll eingezahlter Einlage besteht eine <strong>Nachschusspflicht</strong> bis zur Höhe des Geschäftsanteils.
+    </div>
+  </section>
+
+  <!-- 19. UG -->
+  <section class="slide">
+    <h2>Die UG (haftungsbeschränkt) — „Mini-GmbH“</h2>
+    <p>Seit 2008 möglich: der einfache Einstieg in die Kapitalgesellschaft mit <strong>vereinfachter Gründung</strong>.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Startkapital</div>Ab <strong>1 €</strong> Mindeststammkapital gründbar (daher „Ein-Euro-GmbH“).</div>
+      <div class="card amber"><div class="card-title">Spar-Pflicht</div>Gewinne dürfen <strong>nicht voll ausgeschüttet</strong> werden — es muss angespart werden, bis 25.000 € erreicht sind.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die UG ist rechtlich eine <strong>GmbH mit angezogener Handbremse</strong>: niedrige Hürde am Start, dafür Ansparpflicht bis zum vollen GmbH-Kapital.
+    </div>
+  </section>
+
+  <!-- 20. AG -->
+  <section class="slide">
+    <h2>Die Aktiengesellschaft (AG)</h2>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Kapital</div>Grundkapital <strong>mind. 50.000 €</strong>, zerlegt in <strong>Aktien</strong>.</div>
+      <div class="card teal"><div class="card-title">Eigentümer</div>Die <strong>Aktionäre</strong> — sie bilden die Hauptversammlung.</div>
+      <div class="card amber"><div class="card-title">Leitung</div>Ein bestellter <strong>Vorstand</strong> führt die Geschäfte (unabhängig).</div>
+      <div class="card amber"><div class="card-title">Gewinn</div>Ausschüttung nach Aktienanteil als <strong>Dividende</strong>.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🏛️ Organe der AG</span>
+      <strong>Hauptversammlung</strong> (Aktionäre) — <strong>Aufsichtsrat</strong> (Kontrolle, wählt den Vorstand) — <strong>Vorstand</strong> (Leitung).
+    </div>
+  </section>
+
+  <!-- 21. Genossenschaft -->
+  <section class="slide">
+    <h2>Die eingetragene Genossenschaft (eG)</h2>
+    <p>Ihr Zweck ist kein reines Gewinnstreben, sondern die <strong>Förderung ihrer Mitglieder</strong> (z. B. Volksbanken, Wohnungsgenossenschaften).</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Eigentümer</div>Die <strong>Mitglieder (Genossen)</strong> bringen Genossenschaftsanteile ein.</div>
+      <div class="card amber"><div class="card-title">Organe</div><strong>Mitglieder-/Vertreterversammlung</strong> wählt den <strong>Vorstand</strong>.</div>
+      <div class="card teal"><div class="card-title">Haftung</div>Die eG haftet mit ihrem <strong>gesamten Vermögen</strong>.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Prinzip</span>
+      „Was einer nicht schafft, das schaffen viele“ — gemeinsamer Vorteil statt maximaler Gewinn. Gewinne gehen nach Geschäftsguthaben oder Satzung an die Mitglieder.
+    </div>
+  </section>
+
+  <!-- 22. Rechtsformen-Vergleich (große Tabelle) -->
+  <section class="slide">
+    <h2>Rechtsformen im direkten Vergleich</h2>
+    <table class="compact">
+      <thead><tr><th>Merkmal</th><th>Einzelunt.</th><th>OHG</th><th>KG</th><th>GmbH</th><th>AG</th><th>eG</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Personen</strong></td><td>1</td><td>≥ 2</td><td>≥ 2 (Voll-/Teilhafter)</td><td>≥ 1</td><td>≥ 1</td><td>≥ 3</td></tr>
+        <tr><td><strong>Mindestkapital</strong></td><td>—</td><td>—</td><td>—</td><td>25.000 €</td><td>50.000 €</td><td>—</td></tr>
+        <tr><td><strong>Haftung</strong></td><td>voll privat</td><td>voll privat</td><td>Kompl. voll / Komm. Einlage</td><td>Einlage</td><td>Einlage (Aktie)</td><td>Vermögen der eG</td></tr>
+        <tr><td><strong>Leitung</strong></td><td>Inhaber</td><td>jeder Gesellsch.</td><td>Komplementär</td><td>Geschäftsführer</td><td>Vorstand</td><td>Vorstand</td></tr>
+        <tr><td><strong>Register</strong></td><td>Abt. A</td><td>Abt. A</td><td>Abt. A</td><td>Abt. B</td><td>Abt. B</td><td>Gen.-Register</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Faustregel: <strong>Personengesellschaft = persönliche Haftung</strong>, <strong>Kapitalgesellschaft = Haftung nur mit Kapital</strong>.</p>
+  </section>
+
+  <!-- 23. Vollmachten Überblick -->
+  <section class="slide">
+    <h2>Vollmachten: Wer darf was unterschreiben?</h2>
+    <p>Damit nicht nur der Inhaber handeln kann, gibt es <strong>Vollmachten</strong>. Zwei große Arten:</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Prokura (§§ 48–53 HGB)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Umfassende Vertretungsmacht für fast alle Handelsgeschäfte</li>
+          <li>Nur vom Inhaber erteilbar, <strong>Eintragung ins Handelsregister</strong></li>
+          <li>Unterschrift mit „<strong>ppa.</strong>“</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Handlungsvollmacht (§ 54 HGB)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Enger als die Prokura, <strong>keine</strong> Registereintragung</li>
+          <li>General-, Art- und Einzelvollmacht</li>
+          <li>Unterschrift mit „<strong>i. V.</strong>“ oder „<strong>i. A.</strong>“</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 24. Vollmachten Details -->
+  <section class="slide">
+    <h2>Grenzen und Zusätze der Vollmachten</h2>
+    <table>
+      <thead><tr><th>Vollmacht</th><th>Reichweite</th><th>Unterschrift</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Prokura</strong></td><td>fast alle Handelsgeschäfte (Grundstücksverkauf nur mit Sondervollmacht)</td><td>ppa.</td></tr>
+        <tr><td><strong>Generalvollmacht</strong></td><td>alle üblichen Geschäfte des Betriebs</td><td>i. V. (in Vollmacht)</td></tr>
+        <tr><td><strong>Artvollmacht</strong></td><td>eine bestimmte Art von Geschäften (z. B. Kassieren)</td><td>i. A. (im Auftrag)</td></tr>
+        <tr><td><strong>Einzelvollmacht</strong></td><td>ein einzelnes Geschäft (z. B. Briefmarkenkauf)</td><td>i. A.</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Auszubildende haben oft eine Art- und/oder Einzelvollmacht — der Handlungsrahmen wächst mit der Ausbildung.</p>
+  </section>
+
+  <!-- 25. Aufbauorganisation Begriffe -->
+  <section class="slide">
+    <h2>Aufbauorganisation: das Gerüst des Betriebs</h2>
+    <p>Die Aufbauorganisation legt fest, <strong>welche Stellen</strong> es gibt und <strong>wer wem</strong> übergeordnet ist.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Stelle</div>Kleinste Einheit — ein abgegrenzter Aufgabenbereich für einen Mitarbeiter.</div>
+      <div class="card amber"><div class="card-title">Instanz</div>Stelle <strong>mit Weisungsbefugnis</strong> (Leitungsstelle).</div>
+      <div class="card rose"><div class="card-title">Stabsstelle</div><strong>Berät</strong> die Instanz — <em>ohne</em> Weisungsbefugnis.</div>
+    </div>
+    <p class="muted">Beispiel Stabsstellen der BüroKonzept KG: Öffentlichkeitsarbeit, Qualitätssicherung, Marktforschung.</p>
+  </section>
+
+  <!-- 26. Organigramm Diagramm -->
+  <section class="slide">
+    <h2>Das Organigramm</h2>
+    <div class="figure" id="fig-organigramm"></div>
+    <p class="caption">Grafische Darstellung: Geschäftsführung an der Spitze, Stab beratend an der Seite, Bereiche darunter.</p>
+  </section>
+
+  <!-- 27. Leitungssysteme -->
+  <section class="slide">
+    <h2>Leitungssysteme im Vergleich</h2>
+    <table class="compact">
+      <thead><tr><th>System</th><th>Kennzeichen</th><th>Vorteil</th><th>Nachteil</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Einliniensystem</strong></td><td>eine Stelle → ein Vorgesetzter</td><td>klare Dienstwege</td><td>lange Wege</td></tr>
+        <tr><td><strong>Mehrliniensystem</strong></td><td>mehrere Fach-Vorgesetzte</td><td>Spezialisierung</td><td>Weisungskonflikte</td></tr>
+        <tr><td><strong>Stabliniensystem</strong></td><td>Einlinie + beratende Stäbe</td><td>Entlastung der Leitung</td><td>Stab ohne Verantwortung</td></tr>
+        <tr><td><strong>Matrixsystem</strong></td><td>zwei Dimensionen (Funktion × Projekt)</td><td>flexibel, projektnah</td><td>komplex, doppelte Führung</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Im <strong>Einliniensystem</strong> hat jeder genau einen Chef, im <strong>Matrixsystem</strong> gleich zwei (Fach- und Projektleitung).
+    </div>
+  </section>
+
+  <!-- 28. Ablauforganisation & Prozesse -->
+  <section class="slide">
+    <h2>Ablauforganisation &amp; Geschäftsprozesse</h2>
+    <p>Während die Aufbauorganisation das <em>Gerüst</em> zeigt, regelt die <strong>Ablauforganisation</strong> die zeitliche und logische <strong>Abfolge der Arbeitsschritte</strong> — das „Wie“ und „Wann“.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Kernprozess</div>Wertschöpfend, z. B. die <strong>Produktion der Büromöbel</strong>.</div>
+      <div class="card amber"><div class="card-title">Unterstützungsprozess</div>Flankierend, z. B. <strong>Buchhaltung, Personalwesen</strong>.</div>
+      <div class="card rose"><div class="card-title">Managementprozess</div>Steuernd, z. B. <strong>Planung, Organisation, Kontrolle</strong>.</div>
+    </div>
+    <p class="muted">Merke: Aufbau = <em>Statik</em> (Stellen), Ablauf = <em>Dynamik</em> (Prozesse).</p>
+  </section>
+
+  <!-- 29. Leitbild -->
+  <section class="slide">
+    <h2>Das Unternehmensleitbild</h2>
+    <p>Das Leitbild ist die <strong>schriftliche Selbstdarstellung</strong> eines Unternehmens: Wofür stehen wir? Welche Werte leiten uns?</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Nach innen</div>Orientierung und Motivation für die Beschäftigten — gemeinsame Werte und Ziele.</div>
+      <div class="card amber"><div class="card-title">Nach außen</div>Bild gegenüber Kunden, Partnern und Öffentlichkeit — schafft Vertrauen und Identität.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Ein gutes Leitbild beantwortet drei Fragen: <strong>Wer sind wir? Was wollen wir? Wie handeln wir?</strong>
+    </div>
+  </section>
+
+  <!-- 30. Unternehmensziele -->
+  <section class="slide">
+    <h2>Unternehmensziele</h2>
+    <p>Ziele geben die Richtung vor. Man unterscheidet:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Sachziele</div>Betreffen die <strong>Leistungserstellung</strong>: Art, Menge und Qualität der Güter/Dienstleistungen.</div>
+      <div class="card amber"><div class="card-title">Formalziele</div>Übergeordnete <strong>Erfolgsziele</strong>: Gewinn, Wirtschaftlichkeit, Rentabilität, Produktivität.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🎯 Drei Zieldimensionen</span>
+      <strong>Ökonomisch</strong> (wirtschaftlich) · <strong>Ökologisch</strong> (Umwelt) · <strong>Sozial</strong> (Menschen). Häufig stehen sie in Zielkonflikten und müssen abgewogen werden.
+    </div>
+  </section>
+
+  <!-- 31. Nachhaltigkeit -->
+  <section class="slide">
+    <h2>Nachhaltigkeit — die drei Säulen</h2>
+    <p>Nachhaltiges Wirtschaften heißt: die <strong>Bedürfnisse der Gegenwart</strong> decken, ohne die Möglichkeiten <strong>künftiger Generationen</strong> zu gefährden.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Ökonomische Säule</div>Dauerhaft wirtschaftlich erfolgreich sein — solide statt kurzfristig.</div>
+      <div class="card amber"><div class="card-title">Ökologische Säule</div>Umwelt und Ressourcen schonen — Energie, Material, Emissionen.</div>
+      <div class="card rose"><div class="card-title">Soziale Säule</div>Faire Arbeitsbedingungen, Gesundheit, gesellschaftliche Verantwortung.</div>
+    </div>
+    <p class="muted">Nur wenn alle drei Säulen im Gleichgewicht stehen, ist Wirtschaften wirklich nachhaltig.</p>
+  </section>
+
+  <!-- 32. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung</h2>
+    <ol class="numlist">
+      <li><strong>Kaufmann</strong>: Ist- (deklaratorisch), Kann- (freiwillig), Formkaufmann (konstitutiv).</li>
+      <li><strong>Firma</strong> = Name des Kaufmanns; fünf Grundsätze (W-K-A-B-Ö); vier Firmenarten.</li>
+      <li><strong>Handelsregister</strong>: Abt. A (Personen) / Abt. B (Kapital), öffentlicher Glaube.</li>
+      <li><strong>Rechtsformen</strong>: Personengesellschaft = volle Haftung, Kapitalgesellschaft = Haftung mit Kapital (GmbH 25.000 €, AG 50.000 €).</li>
+      <li><strong>Vollmachten</strong>: Prokura (ppa., eingetragen) vs. Handlungsvollmacht (i. V./i. A.).</li>
+      <li><strong>Organisation</strong>: Aufbau (Stelle/Instanz/Stab, Leitungssysteme) &amp; Ablauf (Prozesse).</li>
+      <li><strong>Leitbild, Ziele, Nachhaltigkeit</strong> geben Werte und Richtung vor.</li>
+    </ol>
+  </section>
+
+  <!-- 33. IHK-Bezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Typische Prüfungsanforderungen zu diesem Thema</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kaufmannsarten unterscheiden</li>
+          <li>Rechtsformen nach Haftung/Kapital nennen</li>
+          <li>Prokura vs. Handlungsvollmacht</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Passende Rechtsform begründet empfehlen</li>
+          <li>Organigramm/Leitungssystem einordnen</li>
+          <li>Zielkonflikte &amp; Nachhaltigkeit beurteilen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" = aufzählen · „<strong>erläutern</strong>" = begründen · „<strong>beurteilen</strong>" = eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 34. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Sie gründen ein kleines Unternehmen: Welche Rechtsform würden Sie wählen und warum?</li>
+      <li>Warum akzeptieren Menschen bei der KG die volle Haftung als Komplementär?</li>
+      <li>Welche Vor- und Nachteile hat die persönliche Haftung gegenüber der Haftungsbeschränkung?</li>
+      <li>Welche der drei Nachhaltigkeitssäulen ist Ihnen als Beschäftigte:r am wichtigsten?</li>
+    </ol>
+  </section>
+
+  <!-- 35. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Session 4</h2>
+    <p class="subtitle">Den Betrieb präsentieren</p>
+    <ul style="font-size: 1.2rem;">
+      <li>Vom <strong>inneren Aufbau</strong> (diese Session) zur <strong>Außendarstellung</strong> des Betriebs</li>
+      <li>Wie stellt man ein Unternehmen überzeugend <strong>vor</strong>?</li>
+      <li>Präsentationstechniken, Medien und Struktur einer Betriebspräsentation</li>
+      <li>Das <strong>Leitbild</strong> als Baustein der Unternehmensdarstellung</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Zur Wiederholung: <code>Quiz_Unternehmen-Firma-Rechtsformen-und-Organisation.html</code> (60 Fragen) und das <code>Handout_Unternehmen-Firma-Rechtsformen-und-Organisation.pdf</code>.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 35</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function line(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.3, stroke: color, strokeWidth: 1.6 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Rechtsformen-Übersicht
+  const c1 = document.getElementById('fig-rechtsformen');
+  if (c1) {
+    const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg1.setAttribute('viewBox', '0 0 900 250');
+    svg1.setAttribute('width', '900'); svg1.setAttribute('height', '250');
+    c1.appendChild(svg1);
+    makeRough(svg1, (rc, svg) => {
+      const gruppen = [
+        { t: 'Einzel-\nunternehmung', s: 'e.K.', c: '#ECFEFF', st: '#0F766E' },
+        { t: 'Personen-\ngesellschaften', s: 'GbR · OHG · KG', c: '#FEF3C7', st: '#F59E0B' },
+        { t: 'Kapital-\ngesellschaften', s: 'GmbH · UG · AG · eG', c: '#FFE4E6', st: '#F97316' }
+      ];
+      let x = 40;
+      gruppen.forEach((g) => {
+        box(rc, svg, x, 70, 250, 110, g.c, g.st);
+        const lines = g.t.split('\n');
+        lines.forEach((ln, k) => text(svg, x + 125, 110 + k * 26, ln, { bold: true, size: 20, color: g.st }));
+        text(svg, x + 125, 165, g.s, { size: 15, color: '#475569' });
+        x += 285;
+      });
+      text(svg, 450, 40, 'Die drei großen Gruppen der Rechtsformen', { size: 18, bold: true, color: '#0F766E' });
+      text(svg, 450, 220, 'persönliche Haftung  ⟶  Haftung nur mit Kapital', { size: 14, color: '#475569' });
+    });
+  }
+
+  // FIG: Organigramm (Einliniensystem mit Stab)
+  const c2 = document.getElementById('fig-organigramm');
+  if (c2) {
+    const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg2.setAttribute('viewBox', '0 0 900 320');
+    svg2.setAttribute('width', '900'); svg2.setAttribute('height', '320');
+    c2.appendChild(svg2);
+    makeRough(svg2, (rc, svg) => {
+      // Geschäftsführung
+      box(rc, svg, 350, 20, 200, 55, '#ECFEFF', '#0F766E');
+      text(svg, 450, 53, 'Geschäftsführung', { bold: true, size: 17, color: '#0F766E' });
+      // Stabsstelle
+      box(rc, svg, 620, 30, 200, 45, '#FEF3C7', '#F59E0B');
+      text(svg, 720, 58, 'Stab: Qualitätssicherung', { bold: true, size: 13, color: '#F97316' });
+      line(rc, svg, 550, 47, 620, 52, '#F59E0B');
+      // vertikale Linie nach unten
+      line(rc, svg, 450, 75, 450, 130, '#0F766E');
+      // horizontale Verteilerlinie
+      line(rc, svg, 130, 130, 770, 130, '#0F766E');
+      // Bereiche (Instanzen)
+      const bereiche = ['Beschaffung', 'Vertrieb', 'Kaufm. Verwaltung', 'Personalwesen', 'Technik'];
+      let bx = 50;
+      const positions = [];
+      bereiche.forEach((b) => {
+        line(rc, svg, bx + 80, 130, bx + 80, 165, '#0F766E');
+        box(rc, svg, bx, 165, 160, 50, '#ECFEFF', '#0F766E');
+        text(svg, bx + 80, 195, b, { bold: true, size: 13, color: '#0F766E' });
+        positions.push(bx + 80);
+        bx += 170;
+      });
+      // Beispiel untergeordnete Stelle unter Personalwesen
+      const px = positions[3];
+      line(rc, svg, px, 215, px, 250, '#F59E0B');
+      box(rc, svg, px - 90, 250, 180, 50, '#FEF3C7', '#F59E0B');
+      text(svg, px, 273, 'Stelle: Aus- und', { bold: true, size: 13, color: '#F97316' });
+      text(svg, px, 291, 'Weiterbildung', { bold: true, size: 13, color: '#F97316' });
+    });
+  }
+});
+</script>
+
+</body>
+</html>

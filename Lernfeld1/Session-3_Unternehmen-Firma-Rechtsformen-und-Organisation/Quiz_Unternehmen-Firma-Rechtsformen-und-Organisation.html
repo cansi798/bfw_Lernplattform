@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Session 3 — Firma, Rechtsformen &amp; Organisation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Session 3 · 60 Fragen</span>
+  <h1>Quiz: Das Unternehmen — Firma, Rechtsformen &amp; Organisation</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Unternehmen-Firma-Rechtsformen-und-Organisation.html</strong> und dem <strong>Handout_Unternehmen-Firma-Rechtsformen-und-Organisation.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Lernfeld 1 — Die eigene Rolle im Betrieb mitgestalten</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  { topic: "Kaufmann", q: "Wer gilt als Istkaufmann nach dem HGB?",
+    options: ["Wer ein Handelsgewerbe betreibt, das einen in kaufmännischer Weise eingerichteten Geschäftsbetrieb erfordert", "Jeder, der ein Kleingewerbe betreibt", "Nur Kapitalgesellschaften", "Nur eingetragene Vereine"],
+    a: 0, e: "Der Istkaufmann betreibt ein Handelsgewerbe, das nach Art und Umfang einen in kaufmännischer Weise eingerichteten Geschäftsbetrieb erfordert (§ 1 HGB)." },
+  { topic: "Kaufmann", q: "Welche Wirkung hat die Eintragung eines Istkaufmanns ins Handelsregister?",
+    options: ["Konstitutive (rechtsbegründende) Wirkung", "Deklaratorische (rechtsbekundende) Wirkung", "Gar keine Wirkung", "Sie hebt die Kaufmannseigenschaft auf"],
+    a: 1, e: "Beim Istkaufmann ist die Eintragung nur deklaratorisch: Er ist bereits vor der Eintragung Kaufmann; die Eintragung bezeugt dies lediglich." },
+  { topic: "Kaufmann", q: "Was ist ein Kannkaufmann?",
+    options: ["Eine Kapitalgesellschaft", "Ein Verein", "Ein Kleingewerbetreibender, der sich freiwillig ins Handelsregister eintragen lassen kann", "Ein Kaufmann, der niemals ins Register eingetragen werden darf"],
+    a: 2, e: "Der Kleingewerbetreibende ist zunächst kein Kaufmann, kann aber durch freiwillige Eintragung ins Handelsregister (§ 2 HGB) Kannkaufmann werden." },
+  { topic: "Kaufmann", q: "Welche Folge hat es, wenn sich ein Kleingewerbetreibender als Kannkaufmann eintragen lässt?",
+    options: ["Er verliert sein Gewerbe", "Er zahlt weniger Steuern", "Er darf keine Verträge mehr schließen", "Er muss die Buchführungspflichten nach HGB erfüllen"],
+    a: 3, e: "Mit der Eintragung als Kannkaufmann muss er die kaufmännischen Buchführungspflichten erfüllen und hat besondere Untersuchungs- und Rügepflichten." },
+  { topic: "Kaufmann", q: "Wer zählt zu den Formkaufleuten?",
+    options: ["Kapitalgesellschaften wie AG, GmbH, KGaA und die eingetragene Genossenschaft (eG)", "Nur Einzelunternehmer", "Nur die OHG", "Land- und forstwirtschaftliche Betriebe"],
+    a: 0, e: "Formkaufleute sind Kapitalgesellschaften (z. B. AG, GmbH, KGaA) sowie die eingetragene Genossenschaft. Sie werden erst mit Eintragung Kaufmann." },
+  { topic: "Kaufmann", q: "Welche Wirkung hat die Eintragung eines Formkaufmanns ins Handelsregister?",
+    options: ["Deklaratorische Wirkung", "Keine Wirkung", "Sie ist nur eine Formalität ohne Folgen", "Konstitutive (rechtsbegründende) Wirkung"],
+    a: 3, e: "Bei Formkaufleuten (Kapitalgesellschaften) ist die Eintragung konstitutiv: Erst mit der Eintragung entsteht die Gesellschaft als Kaufmann." },
+  { topic: "Firma", q: "Was versteht das HGB unter dem Begriff „Firma“?",
+    options: ["Das Gebäude des Unternehmens", "Die Anzahl der Mitarbeiter", "Der Name, unter dem ein Kaufmann seine Geschäfte betreibt und die Unterschrift abgibt", "Der Gewinn eines Unternehmens"],
+    a: 2, e: "Nach § 17 HGB ist die Firma der Name, unter dem der Kaufmann seine Geschäfte betreibt und die Unterschrift abgibt — nicht das Unternehmen selbst." },
+  { topic: "Firma", q: "Aus welchen zwei Bestandteilen besteht die Firma?",
+    options: ["Firmenkern und Firmenzusatz", "Vorname und Nachname", "Ort und Straße", "Kapital und Gewinn"],
+    a: 0, e: "Die Firma besteht aus einem Firmenkern (Name, Gegenstand oder Fantasiebezeichnung) und einem Firmenzusatz (z. B. Rechtsform)." },
+  { topic: "Firma", q: "Welcher Firmenzusatz ist bei einem Einzelkaufmann vorgeschrieben?",
+    options: ["GmbH", "AG", "OHG", "„eingetragener Kaufmann“ bzw. „e.K.“ (oder e.Kfm./e.Kffr.)"],
+    a: 3, e: "Einzelkaufleute müssen nach § 19 HGB den Zusatz „eingetragener Kaufmann/eingetragene Kauffrau“ bzw. eine Abkürzung wie e.K., e.Kfm., e.Kffr. führen." },
+  { topic: "Firmenarten", q: "Was kennzeichnet eine Personenfirma?",
+    options: ["Im Firmenkern sind die am Unternehmen beteiligten Personen mit Namen genannt", "Der Firmenkern ist ein Fantasiename", "Der Firmenkern leitet sich nur aus dem Gegenstand ab", "Es gibt keinen Firmenzusatz"],
+    a: 0, e: "Bei der Personenfirma stehen die beteiligten Personen mit Namen im Firmenkern, z. B. „Gilles e.K.“." },
+  { topic: "Firmenarten", q: "Woraus leitet sich der Firmenkern einer Sachfirma ab?",
+    options: ["Aus einem Fantasienamen", "Aus dem Gegenstand des Unternehmens", "Aus dem Namen des Inhabers", "Aus dem Gründungsjahr"],
+    a: 1, e: "Der Firmenkern der Sachfirma leitet sich aus dem Gegenstand (Tätigkeitsbereich) des Unternehmens ab." },
+  { topic: "Firmenarten", q: "Was ist typisch für eine Mischfirma?",
+    options: ["Sie enthält nur einen Fantasienamen", "Sie darf keinen Zusatz haben", "Im Firmenkern werden sowohl Namen als auch Gegenstand des Unternehmens genannt", "Sie ist nur bei der AG erlaubt"],
+    a: 2, e: "Die Mischfirma verbindet Namen und Gegenstand des Unternehmens im Firmenkern, z. B. „Duisdorfer BüroKonzept KG“." },
+  { topic: "Firmenarten", q: "Was steht im Firmenkern einer Fantasiefirma?",
+    options: ["Der Name des Inhabers", "Der Gegenstand des Unternehmens", "Der Sitz des Gerichts", "Ein Fantasiename"],
+    a: 3, e: "Bei der Fantasiefirma steht ein frei erfundener Fantasiename im Firmenkern, z. B. „Kalyptus OHG“." },
+  { topic: "Firmengrundsätze", q: "Welche Firmengrundsätze nennt das Lehrbuch?",
+    options: ["Firmenklarheit, Firmenwahrheit, Firmenausschließlichkeit, Firmenbeständigkeit, Firmenöffentlichkeit", "Firmenpreis, Firmenlohn, Firmengewinn", "Firmengröße, Firmenalter, Firmenfarbe", "Firmensteuer, Firmenabgabe, Firmenzoll"],
+    a: 0, e: "Die fünf Firmengrundsätze sind Firmenklarheit, Firmenwahrheit, Firmenausschließlichkeit, Firmenbeständigkeit und Firmenöffentlichkeit." },
+  { topic: "Firmengrundsätze", q: "Was fordert die Firmenwahrheit (§ 18 HGB)?",
+    options: ["Die Firma muss möglichst kurz sein", "Die Firma muss zur Kennzeichnung geeignet sein und darf nicht irreführen", "Die Firma muss den Gewinn nennen", "Die Firma muss englisch sein"],
+    a: 1, e: "Die Firmenwahrheit verlangt eine zur Kennzeichnung geeignete Firma mit Unterscheidungskraft, die nicht über geschäftliche Verhältnisse irreführt." },
+  { topic: "Firmengrundsätze", q: "Was besagt die Firmenausschließlichkeit (§ 30 HGB)?",
+    options: ["Jede neue Firma muss sich von bereits am selben Ort eingetragenen Firmen deutlich unterscheiden", "Jede Firma darf nur einmal weltweit existieren", "Eine Firma darf nie geändert werden", "Nur eine Firma pro Bundesland ist erlaubt"],
+    a: 2, e: "Die Firmenausschließlichkeit verlangt, dass sich eine neue Firma von den am selben Ort bereits eingetragenen Firmen deutlich unterscheidet." },
+  { topic: "Firmengrundsätze", q: "Was regelt die Firmenbeständigkeit (§ 22 HGB)?",
+    options: ["Die Firma muss alle 10 Jahre geändert werden", "Die Firma darf nur digital geführt werden", "Die Firma darf nie verkauft werden", "Wer ein bestehendes Handelsgeschäft erwirbt, darf die bisherige Firma fortführen"],
+    a: 3, e: "Die Firmenbeständigkeit erlaubt es, bei Erwerb eines Handelsgeschäfts die bisherige Firma fortzuführen — ggf. mit Nachfolgezusatz." },
+  { topic: "Handelsregister", q: "Von wem und wie wird das Handelsregister geführt?",
+    options: ["Elektronisch vom zuständigen Amtsgericht", "Von der IHK in Papierform", "Vom Finanzamt", "Von der jeweiligen Firma selbst"],
+    a: 0, e: "Das Handelsregister ist ein elektronisch geführtes amtliches Verzeichnis, das vom Amtsgericht des betreffenden Bezirks geführt wird (§ 8 HGB)." },
+  { topic: "Handelsregister", q: "Wer darf das Handelsregister einsehen?",
+    options: ["Nur die eingetragenen Kaufleute", "Nur Behörden", "Jeder Interessierte zu Informationszwecken (§ 9 HGB)", "Nur Rechtsanwälte"],
+    a: 2, e: "Die Einsichtnahme ins Handelsregister ist jedem zu Informationszwecken gestattet (§ 9 HGB) — auch online." },
+  { topic: "Handelsregister", q: "Welche Unternehmen werden in Abteilung A des Handelsregisters geführt?",
+    options: ["Nur Aktiengesellschaften", "Einzelkaufleute und Personengesellschaften (OHG, KG)", "Nur GmbHs", "Nur Vereine"],
+    a: 1, e: "In Abteilung A werden Einzelkaufleute und Personengesellschaften wie OHG und KG geführt." },
+  { topic: "Handelsregister", q: "Welche Unternehmen werden in Abteilung B des Handelsregisters geführt?",
+    options: ["Einzelkaufleute", "Offene Handelsgesellschaften", "Kommanditgesellschaften", "Kapitalgesellschaften wie GmbH und AG"],
+    a: 3, e: "In Abteilung B werden die Kapitalgesellschaften wie GmbH und AG geführt." },
+  { topic: "Handelsregister", q: "Wo werden eingetragene Genossenschaften (eG) geführt?",
+    options: ["Im gesonderten Genossenschaftsregister", "In Abteilung A des Handelsregisters", "In Abteilung B des Handelsregisters", "Im Vereinsregister"],
+    a: 0, e: "Eingetragene Genossenschaften werden im gesonderten Genossenschaftsregister geführt, eingetragene Vereine im Vereinsregister." },
+  { topic: "Handelsregister", q: "Was bedeutet der „öffentliche Glaube“ des Handelsregisters (§ 15 HGB)?",
+    options: ["Alle Eintragungen sind steuerfrei", "Man kann sich auf die eingetragenen und bekanntgemachten Tatsachen verlassen", "Nur der Kaufmann darf dem Register glauben", "Das Register ist geheim"],
+    a: 1, e: "Der öffentliche Glaube schützt den Rechtsverkehr: Ist eine Tatsache eingetragen und bekanntgemacht, muss ein Dritter sie gegen sich gelten lassen." },
+  { topic: "Handelsregister", q: "Welche Wirkung hat die Eintragung und Löschung einer Prokura im Handelsregister?",
+    options: ["Konstitutive Wirkung", "Gar keine Wirkung", "Rechtsbezeugende (deklaratorische) Wirkung", "Sie macht die Prokura ungültig"],
+    a: 2, e: "Die Eintragung und Löschung der Prokura hat deklaratorische (rechtsbezeugende) Wirkung — sie bestätigt die bereits wirksame Tatsache." },
+  { topic: "Einzelunternehmung", q: "Von wie vielen Personen wird eine Einzelunternehmung gegründet?",
+    options: ["Von mindestens drei Personen", "Von einer Person", "Von zwei Personen", "Von mindestens fünf Personen"],
+    a: 1, e: "Die Einzelunternehmung wird von einer einzelnen Person gegründet, die alleiniger Eigentümer ist." },
+  { topic: "Einzelunternehmung", q: "Wie haftet der Einzelunternehmer?",
+    options: ["Nur mit seiner Einlage", "Gar nicht", "Nur mit dem Geschäftsvermögen", "Mit seinem gesamten Privatvermögen"],
+    a: 3, e: "Der Einzelunternehmer haftet unbeschränkt mit seinem gesamten Privatvermögen." },
+  { topic: "OHG", q: "Wie wird der Gewinn einer OHG verteilt, wenn der Gesellschaftsvertrag nichts anderes regelt?",
+    options: ["4 % auf die Kapitaleinlage, der Rest nach Köpfen", "Alles an den ältesten Gesellschafter", "Nur nach der Arbeitszeit", "Gleichmäßig an alle Angestellten"],
+    a: 0, e: "Ohne abweichende Regelung erhält jeder Gesellschafter zunächst 4 % auf seine Kapitaleinlage, der Rest wird nach Köpfen verteilt." },
+  { topic: "KG", q: "Welche zwei Gesellschaftertypen gibt es mindestens in einer KG?",
+    options: ["Zwei Vollhafter", "Zwei Teilhafter", "Mindestens einen Komplementär (Vollhafter) und einen Kommanditisten (Teilhafter)", "Zwei Prokuristen"],
+    a: 2, e: "Die KG hat mindestens einen Komplementär (Vollhafter) und mindestens einen Kommanditisten (Teilhafter)." },
+  { topic: "KG", q: "Wie haftet der Komplementär einer KG?",
+    options: ["Nur mit seiner Einlage", "Unbeschränkt, unmittelbar und solidarisch", "Gar nicht", "Nur mit der Hälfte seines Vermögens"],
+    a: 1, e: "Der Komplementär haftet wie ein OHG-Gesellschafter unbeschränkt, unmittelbar und solidarisch mit seinem Privatvermögen." },
+  { topic: "KG", q: "Wie haftet der Kommanditist einer KG?",
+    options: ["Unbeschränkt mit dem Privatvermögen", "Gar nicht", "Solidarisch mit den anderen", "Beschränkt auf seine Kapitaleinlage"],
+    a: 3, e: "Die Haftung des Kommanditisten ist auf seine Kapitaleinlage beschränkt." },
+  { topic: "KG", q: "Wer darf bei der KG die Geschäftsführung und Vertretung übernehmen?",
+    options: ["Nur die Komplementäre", "Nur die Kommanditisten", "Alle gemeinsam", "Nur ein externer Geschäftsführer"],
+    a: 0, e: "Die Geschäftsführung und Vertretung gegenüber Dritten darf nur durch die Komplementäre ausgeführt werden." },
+  { topic: "KG", q: "In welche Abteilung des Handelsregisters wird die KG eingetragen?",
+    options: ["Abteilung B", "Genossenschaftsregister", "Abteilung A", "Vereinsregister"],
+    a: 2, e: "Als Personengesellschaft wird die KG in Abteilung A des Handelsregisters eingetragen." },
+  { topic: "GmbH", q: "Wie hoch ist das gesetzliche Mindeststammkapital einer GmbH?",
+    options: ["1 €", "5.000 €", "25.000 €", "50.000 €"],
+    a: 2, e: "Das Mindeststammkapital der GmbH beträgt 25.000 €. Es wird in Form von Gesellschaftsanteilen aufgebracht." },
+  { topic: "GmbH", q: "Wie haften die Gesellschafter einer GmbH?",
+    options: ["Mit ihrem gesamten Privatvermögen", "Nur mit ihrer Einlage, nicht persönlich", "Gar nicht", "Solidarisch und unbeschränkt"],
+    a: 1, e: "In der GmbH haften die Gesellschafter nur mit ihrer Einlage und nicht persönlich; die GmbH haftet mit ihrem Gesamtvermögen." },
+  { topic: "GmbH", q: "Welches Organ bestellt bei der GmbH den bzw. die Geschäftsführer?",
+    options: ["Die Hauptversammlung", "Der Aufsichtsrat allein", "Das Finanzamt", "Die Gesellschafterversammlung"],
+    a: 3, e: "Die Gesellschafterversammlung besteht aus den Gesellschaftern und bestellt einen oder mehrere Geschäftsführer." },
+  { topic: "UG", q: "Mit welchem Mindeststammkapital kann eine Unternehmergesellschaft (haftungsbeschränkt) gegründet werden?",
+    options: ["Mit mindestens 25.000 €", "Mit mindestens 50.000 €", "Mit mindestens einem Euro", "Mit mindestens 12.500 €"],
+    a: 2, e: "Die UG (haftungsbeschränkt), umgangssprachlich Mini-GmbH, kann mit einem Mindeststammkapital von einem Euro gegründet werden." },
+  { topic: "UG", q: "Welche Besonderheit gilt bei der Gewinnverwendung der UG (haftungsbeschränkt)?",
+    options: ["Gewinne dürfen voll ausgeschüttet werden", "Gewinne dürfen nicht voll ausgeschüttet werden, bis 25.000 € Stammkapital angesammelt sind", "Es gibt niemals Gewinne", "Der Gewinn geht an den Staat"],
+    a: 1, e: "Die UG muss Gewinne teilweise zurücklegen (thesaurieren), um ein Stammkapital von 25.000 € anzusammeln — sie darf nicht voll ausschütten." },
+  { topic: "AG", q: "Wie hoch ist das Mindestgrundkapital einer Aktiengesellschaft (AG)?",
+    options: ["25.000 €", "50.000 €", "100.000 €", "1 €"],
+    a: 1, e: "Das in Aktien zerlegte Grundkapital der AG muss mindestens 50.000 € betragen." },
+  { topic: "AG", q: "Wer sind die Eigentümer einer AG und welches Organ bilden sie?",
+    options: ["Die Aktionäre, die die Hauptversammlung bilden", "Die Vorstände, die den Aufsichtsrat bilden", "Die Gläubiger, die die Gesellschafterversammlung bilden", "Die Angestellten, die den Betriebsrat bilden"],
+    a: 0, e: "Eigentümer der AG sind die Aktionäre; sie bilden die Hauptversammlung." },
+  { topic: "AG", q: "Wie wird der ausgeschüttete Gewinnanteil an die Aktionäre genannt?",
+    options: ["Zins", "Tantieme", "Provision", "Dividende"],
+    a: 3, e: "Der nach Beschluss der Hauptversammlung an die Aktionäre ausgezahlte Gewinnanteil heißt Dividende." },
+  { topic: "Genossenschaft", q: "Welchem obersten Zweck ist die eingetragene Genossenschaft (eG) verpflichtet?",
+    options: ["Der Förderung ihrer Mitglieder", "Der Maximierung der Steuern", "Der Auszahlung hoher Dividenden an Fremde", "Der schnellen Auflösung"],
+    a: 0, e: "Die eG ist der Förderung ihrer Mitglieder (Eigentümer) verpflichtet — das ist ihr Grundgedanke." },
+  { topic: "Genossenschaft", q: "Wer wählt bei der eG den Vorstand?",
+    options: ["Das Finanzamt", "Die Hauptversammlung der Aktionäre", "Die Mitglieder- bzw. Vertreterversammlung", "Der Aufsichtsrat allein"],
+    a: 2, e: "Die Mitglieder- bzw. Vertreterversammlung der eG wählt den Vorstand, der die Geschäfte führt und die eG nach außen vertritt." },
+  { topic: "Genossenschaft", q: "Wie haftet die eingetragene Genossenschaft?",
+    options: ["Die Mitglieder haften mit ihrem Privatvermögen", "Gar nicht", "Nur der Vorstand haftet privat", "Die eG haftet mit ihrem gesamten Vermögen"],
+    a: 3, e: "Die eG ist eine juristische Person und haftet mit ihrem gesamten Vermögen." },
+  { topic: "Vollmachten", q: "Wer darf eine Prokura erteilen?",
+    options: ["Jeder Mitarbeiter", "Nur der Inhaber des Handelsgeschäfts oder sein gesetzlicher Vertreter", "Nur das Finanzamt", "Jeder Prokurist selbst"],
+    a: 1, e: "Nach § 48 HGB kann die Prokura nur vom Inhaber des Handelsgeschäfts oder seinem gesetzlichen Vertreter mittels ausdrücklicher Erklärung erteilt werden." },
+  { topic: "Vollmachten", q: "Wozu ermächtigt die Prokura grundsätzlich?",
+    options: ["Nur zum Kassieren von Kleinbeträgen", "Nur zu Einkäufen", "Zu allen gerichtlichen und außergerichtlichen Geschäften, die ein Handelsgewerbe mit sich bringt", "Zu gar nichts ohne Einzelfreigabe"],
+    a: 2, e: "Die Prokura ermächtigt nach § 49 HGB zu allen Arten von gerichtlichen und außergerichtlichen Geschäften, die der Betrieb eines Handelsgewerbes mit sich bringt." },
+  { topic: "Vollmachten", q: "Wofür braucht der Prokurist eine besondere, ausdrückliche Befugnis?",
+    options: ["Für den Einkauf von Büromaterial", "Für das Einstellen von Aushilfen", "Für das Versenden von Rechnungen", "Für die Veräußerung und Belastung von Grundstücken"],
+    a: 3, e: "Für die Veräußerung und Belastung von Grundstücken braucht der Prokurist eine besonders erteilte Befugnis (§ 49 Abs. 2 HGB)." },
+  { topic: "Vollmachten", q: "Welche Arten der Handlungsvollmacht unterscheidet § 54 HGB?",
+    options: ["Nur Generalvollmacht", "Steuer-, Zoll- und Abgabenvollmacht", "General-, Art- (Gattungs-) und Einzel-/Spezialvollmacht", "Nur Einzelvollmacht"],
+    a: 2, e: "§ 54 HGB unterscheidet Generalvollmacht (alle üblichen Geschäfte), Artvollmacht (bestimmte Geschäftsart) und Einzel-/Spezialvollmacht (einzelne Geschäfte)." },
+  { topic: "Aufbauorganisation", q: "Was ist eine Stelle in der Aufbauorganisation?",
+    options: ["Ein Gebäude des Unternehmens", "Die kleinste organisatorische Einheit, ein abgegrenzter Aufgabenbereich für einen Mitarbeiter", "Nur ein Schreibtisch", "Ein einzelnes Werkzeug"],
+    a: 1, e: "Eine Stelle ist die kleinste organisatorische Einheit: ein abgegrenzter Aufgabenbereich, der einem (gedachten) Mitarbeiter zugeordnet ist." },
+  { topic: "Aufbauorganisation", q: "Was kennzeichnet eine Instanz?",
+    options: ["Eine Stelle mit Weisungsbefugnis (Leitungsstelle)", "Eine Stelle ohne jede Aufgabe", "Ein externer Berater ohne Kompetenz", "Ein Lagerraum"],
+    a: 0, e: "Eine Instanz ist eine Leitungsstelle mit Weisungsbefugnis gegenüber untergeordneten Mitarbeitern." },
+  { topic: "Aufbauorganisation", q: "Welche Aufgabe hat eine Stabsstelle?",
+    options: ["Sie leitet die Produktion", "Sie hat volle Weisungsbefugnis über alle Bereiche", "Sie berät die Instanz, hat aber keine Weisungsbefugnis", "Sie ersetzt die Geschäftsführung"],
+    a: 2, e: "Eine Stabsstelle unterstützt und berät eine Instanz (z. B. die Geschäftsführung), besitzt aber keine Weisungsbefugnis gegenüber Mitarbeitern." },
+  { topic: "Leitungssysteme", q: "Was kennzeichnet das Einliniensystem?",
+    options: ["Jede Stelle hat mehrere Vorgesetzte", "Jede Stelle erhält Weisungen von genau einem Vorgesetzten", "Es gibt keine Vorgesetzten", "Nur Stäbe erteilen Weisungen"],
+    a: 1, e: "Im Einliniensystem erhält jede Stelle Weisungen von nur einem unmittelbar vorgesetzten Vorgesetzten — klare, eindeutige Dienstwege." },
+  { topic: "Leitungssysteme", q: "Was ist typisch für das Mehrliniensystem?",
+    options: ["Eine Stelle kann von mehreren spezialisierten Vorgesetzten Weisungen erhalten", "Es gibt nur einen einzigen Vorgesetzten", "Es gibt keine Weisungen", "Nur Stabsstellen leiten"],
+    a: 0, e: "Im Mehrliniensystem kann eine Stelle von mehreren, jeweils fachlich spezialisierten Vorgesetzten Weisungen erhalten (Prinzip der Spezialisierung)." },
+  { topic: "Leitungssysteme", q: "Was ist das Stabliniensystem?",
+    options: ["Ein reines Mehrliniensystem", "Ein System ganz ohne Leitung", "Ein Einliniensystem, das durch beratende Stabsstellen ergänzt wird", "Ein System nur aus Stäben"],
+    a: 2, e: "Das Stabliniensystem ist ein Einliniensystem, das durch beratende Stabsstellen (ohne Weisungsbefugnis) ergänzt wird." },
+  { topic: "Ablauforganisation", q: "Womit befasst sich die Ablauforganisation?",
+    options: ["Mit dem statischen Gerüst der Stellen", "Mit der räumlichen, zeitlichen und logischen Abfolge der Arbeitsvorgänge (Prozesse)", "Nur mit dem Organigramm", "Nur mit den Gehältern"],
+    a: 1, e: "Die Ablauforganisation regelt die räumliche, zeitliche und logische Abfolge der Arbeitsvorgänge (Geschäftsprozesse) — das „Wie“ und „Wann“." },
+  { topic: "Geschäftsprozesse", q: "Wie wird der wichtigste Geschäftsprozess (z. B. die Büromöbelproduktion) bezeichnet?",
+    options: ["Unterstützungsprozess", "Managementprozess", "Kernprozess", "Störprozess"],
+    a: 2, e: "Der wichtigste, wertschöpfende Geschäftsprozess (z. B. die Produktion der Büromöbel) heißt Kernprozess." },
+  { topic: "Leitbild", q: "Was ist ein Unternehmensleitbild?",
+    options: ["Eine reine Preisliste", "Eine schriftliche Erklärung über Werte, Selbstverständnis und Grundsätze des Unternehmens", "Der Jahresabschluss", "Ein Organigramm"],
+    a: 1, e: "Das Leitbild beschreibt schriftlich das Selbstverständnis, die Werte und Grundsätze eines Unternehmens und gibt Orientierung nach innen und außen." },
+  { topic: "Unternehmensziele", q: "Was versteht man unter Sachzielen?",
+    options: ["Ziele zur konkreten Leistungserstellung (Art, Menge, Qualität der Güter/Dienste)", "Nur Gewinnziele", "Ausschließlich soziale Ziele", "Ziele der Finanzverwaltung"],
+    a: 0, e: "Sachziele beziehen sich auf die konkrete Leistungserstellung — welche Güter/Dienstleistungen in welcher Art, Menge und Qualität erstellt werden." },
+  { topic: "Unternehmensziele", q: "Was sind Formalziele?",
+    options: ["Ziele zur Bürodekoration", "Nur Umweltziele", "Nur Formvorschriften für Briefe", "Übergeordnete Erfolgsziele wie Gewinn, Wirtschaftlichkeit und Rentabilität"],
+    a: 3, e: "Formalziele sind übergeordnete Erfolgsziele wie Gewinn, Wirtschaftlichkeit, Rentabilität und Produktivität." },
+  { topic: "Nachhaltigkeit", q: "Auf welchen drei Säulen beruht das Konzept der Nachhaltigkeit?",
+    options: ["Ökonomie, Ökologie und Soziales", "Einkauf, Verkauf und Lager", "Vorstand, Aufsichtsrat und Hauptversammlung", "Gewinn, Umsatz und Kosten"],
+    a: 0, e: "Nachhaltigkeit ruht auf drei Säulen: der ökonomischen (Wirtschaft), der ökologischen (Umwelt) und der sozialen (Gesellschaft) Säule." },
+  { topic: "Nachhaltigkeit", q: "Was bedeutet nachhaltiges Wirtschaften im Kern?",
+    options: ["Möglichst schnell alle Ressourcen verbrauchen", "Nur an den kurzfristigen Gewinn denken", "Umweltschutz gänzlich ignorieren", "Bedürfnisse der Gegenwart decken, ohne die Möglichkeiten künftiger Generationen zu gefährden"],
+    a: 3, e: "Nachhaltigkeit bedeutet, die Bedürfnisse der Gegenwart zu befriedigen, ohne die Möglichkeiten künftiger Generationen zu gefährden — dauerhaftes Gleichgewicht der drei Säulen." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

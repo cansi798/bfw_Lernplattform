@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Session 4 — Den Betrieb präsentieren & Wiederholung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Session 4</span>
+    <h1>Den Betrieb präsentieren &amp; Wiederholung</h1>
+    <p class="subtitle">Wie Sie sicher präsentieren — und was Lernfeld 1 zusammenhält</p>
+    <div class="cover-meta">
+      <span><strong>Modul</strong>Lernfeld 1 — Die eigene Rolle im Betrieb mitgestalten und den Betrieb präsentieren</span>
+      <span><strong>Inhalt</strong>Präsentationstechnik + Rückblick Sessions 1–3</span>
+      <span><strong>Ziel</strong>Betrieb präsentieren &amp; Lernfeld sichern</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie in dieser Session lernen</h2>
+    <p class="subtitle">Am Ende können Sie...</p>
+    <ul class="checklist">
+      <li>den <strong>Zweck und die Ziele</strong> einer Präsentation erklären</li>
+      <li>eine <strong>Zielgruppe analysieren</strong> und die Präsentation darauf ausrichten</li>
+      <li>eine Präsentation <strong>vorbereiten</strong> — mit rotem Faden, Recherche und Zeitplan</li>
+      <li>den <strong>Aufbau Einleitung – Hauptteil – Schluss</strong> anwenden</li>
+      <li><strong>Medien</strong> (Beamer, Flipchart, Handout …) mit Vor- und Nachteilen auswählen</li>
+      <li>Folien nach <strong>KISS und der 6×6-Regel</strong> gestalten</li>
+      <li>sicher <strong>vortragen</strong> — Stimme, Körpersprache, Lampenfieber meistern</li>
+      <li>einen <strong>Betrieb präsentieren</strong> (Unternehmenssteckbrief) und faires <strong>Feedback</strong> geben</li>
+      <li>die Inhalte der <strong>Sessions 1–3</strong> wiederholen und einordnen</li>
+    </ul>
+  </section>
+
+  <!-- 3. Warum präsentieren? -->
+  <section class="slide">
+    <h2>Warum überhaupt präsentieren?</h2>
+    <p>Eine Präsentation ist ein <strong>Vortrag mit Anschauungsmitteln</strong>. Sie soll Zuhörerinnen und Zuhörer <strong>informieren, überzeugen oder zu einer Entscheidung bewegen</strong> — verständlich und im Gedächtnis bleibend.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Informieren</div>Wissen weitergeben, z. B. den eigenen Ausbildungsbetrieb vorstellen.</div>
+      <div class="card teal"><div class="card-title">Überzeugen</div>Für eine Idee oder ein Produkt werben, Argumente liefern.</div>
+      <div class="card amber"><div class="card-title">Aktivieren</div>Zu einer Handlung oder Entscheidung bewegen.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Am Anfang steht immer <strong>ein klares Ziel</strong>: Was sollen die Zuhörenden am Ende wissen, glauben oder tun?
+    </div>
+  </section>
+
+  <!-- 4. Zielgruppe -->
+  <section class="slide">
+    <h2>Die Zielgruppe kennen</h2>
+    <p>Eine gute Präsentation richtet sich nach dem <strong>Publikum</strong> — nicht nach dem, was der Vortragende gern erzählen möchte.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Diese Fragen klären</div>
+        <ul style="margin-left: 1rem;">
+          <li>Wer sitzt vor mir (Alter, Vorwissen)?</li>
+          <li>Was interessiert die Zuhörenden?</li>
+          <li>Welche Erwartungen haben sie?</li>
+          <li>Wie viele Personen sind es?</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Folgen für die Präsentation</div>
+        <ul style="margin-left: 1rem;">
+          <li>Fachbegriffe erklären oder vermeiden</li>
+          <li>Passende Beispiele wählen</li>
+          <li>Sprache und Tempo anpassen</li>
+          <li>Länge auf die Situation abstimmen</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Beispiel: Vor Auszubildenden erklären Sie einen Fachbegriff — vor Fachleuten dürfen Sie ihn voraussetzen.</p>
+  </section>
+
+  <!-- 5. Vorbereitung / roter Faden -->
+  <section class="slide">
+    <h2>Vorbereitung: der rote Faden</h2>
+    <p>Die meiste Arbeit steckt in der <strong>Vorbereitung</strong>. Ein „roter Faden" ist der klare Gedankengang, der die Präsentation von Anfang bis Ende zusammenhält.</p>
+    <ol class="numlist">
+      <li><strong>Thema und Ziel</strong> festlegen — worum geht es, was will ich erreichen?</li>
+      <li><strong>Recherche</strong> — Informationen sammeln, prüfen und ordnen (nur seriöse Quellen).</li>
+      <li><strong>Kerngedanken</strong> auswählen — lieber wenige Punkte gut als viele oberflächlich.</li>
+      <li><strong>Gliederung</strong> erstellen — Einleitung, Hauptteil, Schluss.</li>
+      <li><strong>Zeitplan</strong> aufstellen und den Vortrag <strong>üben</strong>.</li>
+    </ol>
+    <div class="merksatz">
+      <span class="merksatz-label">⏱️ Zeitregel</span>
+      Als Faustregel plant man pro Folie etwa <strong>1–2 Minuten</strong> ein. Lieber weniger Folien und dafür ruhig vortragen.
+    </div>
+  </section>
+
+  <!-- 6. Aufbau E-H-S Diagramm -->
+  <section class="slide">
+    <h2>Aufbau: Einleitung – Hauptteil – Schluss</h2>
+    <div class="figure" id="fig-ehs"></div>
+    <p class="caption">Jede gute Präsentation folgt dieser klaren Dreiteilung.</p>
+  </section>
+
+  <!-- 7. Aufbau im Detail -->
+  <section class="slide">
+    <h2>Was in jeden Teil gehört</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Einleitung</div>
+        <ul style="margin-left: 1rem;">
+          <li>Begrüßung, eigene Vorstellung</li>
+          <li>Thema und Ziel nennen</li>
+          <li>Interesse wecken (Frage, Bild, Zahl)</li>
+          <li>Kurzer Überblick über den Ablauf</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Hauptteil</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kerninhalte in logischer Reihenfolge</li>
+          <li>Roter Faden, klare Übergänge</li>
+          <li>Beispiele, Bilder, Vergleiche</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Schluss</div>
+        <ul style="margin-left: 1rem;">
+          <li>Wichtigste Punkte zusammenfassen</li>
+          <li>Fazit / Handlungsaufruf</li>
+          <li>Dank &amp; Raum für Fragen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>„Sag, was du sagen willst — sag es — sag, was du gesagt hast."</strong>
+    </div>
+  </section>
+
+  <!-- 8. Medien Überblick -->
+  <section class="slide">
+    <h2>Medien &amp; Visualisierung</h2>
+    <p>Medien sollen den Vortrag <strong>unterstützen</strong>, nicht ersetzen. Die Auswahl hängt von Ziel, Gruppengröße und Technik vor Ort ab.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Beamer / PowerPoint</div>Folien mit Text, Bildern, Grafiken.</div>
+      <div class="card teal"><div class="card-title">Flipchart</div>Papierbogen zum Schreiben und Zeichnen.</div>
+      <div class="card amber"><div class="card-title">Whiteboard</div>Beschreibbare Tafel, jederzeit löschbar.</div>
+      <div class="card amber"><div class="card-title">Moderationskarten</div>Begriffe auf Karten, an Pinnwand geheftet.</div>
+      <div class="card rose"><div class="card-title">Handout</div>Zusammenfassung auf Papier zum Mitnehmen.</div>
+    </div>
+  </section>
+
+  <!-- 9. Medien-Vergleichstabelle -->
+  <section class="slide">
+    <h2>Medien im Vergleich — Vor- &amp; Nachteile</h2>
+    <table>
+      <thead><tr><th>Medium</th><th>Vorteile</th><th>Nachteile</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Beamer/PowerPoint</strong></td><td>Bilder, Animationen, große Gruppen</td><td>Technik-Abhängigkeit, „Folienschlacht"</td></tr>
+        <tr><td><strong>Flipchart</strong></td><td>Ohne Strom, spontan, wirkt persönlich</td><td>Nur kleine Gruppen, begrenzter Platz</td></tr>
+        <tr><td><strong>Whiteboard</strong></td><td>Flexibel, gut für Entwicklungen</td><td>Nicht speicherbar, Schrift muss lesbar sein</td></tr>
+        <tr><td><strong>Moderationskarten</strong></td><td>Beteiligung, umstellbar, übersichtlich</td><td>Vorbereitung aufwendig, wenig Text</td></tr>
+        <tr><td><strong>Handout</strong></td><td>Bleibt beim Publikum, entlastet Folien</td><td>Lenkt evtl. ab, Aufwand beim Erstellen</td></tr>
+      </tbody>
+    </table>
+    <p class="muted">Handout am besten <strong>am Ende</strong> verteilen — sonst liest das Publikum statt zuzuhören.</p>
+  </section>
+
+  <!-- 10. Foliengestaltung KISS / 6x6 -->
+  <section class="slide">
+    <h2>Folien gestalten: KISS &amp; 6×6</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">KISS-Prinzip</div>
+        <p style="font-size: 1.05rem;"><strong>K</strong>eep <strong>I</strong>t <strong>S</strong>hort and <strong>S</strong>imple — kurz und einfach halten. Eine Kernaussage pro Folie.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">6×6-Regel</div>
+        <p style="font-size: 1.05rem;">Höchstens <strong>6 Zeilen</strong> pro Folie und höchstens <strong>6 Wörter</strong> pro Zeile — Stichworte statt ganzer Sätze.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die Folie ist die <strong>Landkarte</strong>, nicht der Text des Vortrags. Sie reden — die Folie zeigt nur das Wichtigste.
+    </div>
+  </section>
+
+  <!-- 11. Foliengestaltung Details -->
+  <section class="slide">
+    <h2>Gute Folien — die Checkliste</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">So wird's gut ✓</div>
+        <ul class="checklist" style="margin-left: 0;">
+          <li>Große, gut lesbare Schrift (ab ca. 24 pt)</li>
+          <li>Starker Kontrast (dunkle Schrift, heller Grund)</li>
+          <li>Wenig Text, viele Bilder/Grafiken</li>
+          <li>Einheitliches Design &amp; ruhige Farben</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Das vermeiden ✗</div>
+        <ul style="margin-left: 1rem;">
+          <li>Ganze Sätze zum Ablesen</li>
+          <li>Zu viele Farben und Effekte</li>
+          <li>Winzige Schrift, überladene Grafiken</li>
+          <li>Text vor unruhigem Hintergrund</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Faustregel: Was man aus <strong>der letzten Reihe nicht lesen</strong> kann, gehört nicht auf die Folie.</p>
+  </section>
+
+  <!-- 12. Vortrag & Körpersprache -->
+  <section class="slide">
+    <h2>Der Vortrag: Stimme &amp; Körper</h2>
+    <p>Wie Sie etwas sagen, wirkt oft stärker als das, was Sie sagen. Ihr Auftreten entscheidet mit über den Erfolg.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Stimme &amp; Sprache</div>
+        <ul style="margin-left: 1rem;">
+          <li>Laut und deutlich sprechen</li>
+          <li>Nicht zu schnell — Pausen setzen</li>
+          <li>Betonung, Lautstärke wechseln</li>
+          <li>Kurze, klare Sätze</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Körpersprache</div>
+        <ul style="margin-left: 1rem;">
+          <li>Blickkontakt zum ganzen Publikum</li>
+          <li>Aufrechter, sicherer Stand</li>
+          <li>Gestik unterstützt das Gesagte</li>
+          <li>Freundliche Mimik, Lächeln</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Tipp</span>
+      Nicht zur Leinwand sprechen, sondern zum <strong>Publikum</strong>. Und: <strong>frei reden</strong> statt ablesen.
+    </div>
+  </section>
+
+  <!-- 13. Lampenfieber -->
+  <section class="slide">
+    <h2>Lampenfieber — ganz normal</h2>
+    <p>Nervosität vor einem Vortrag hat fast jeder. Ein bisschen Aufregung ist sogar gut — sie macht wach. Wichtig ist, gut damit umzugehen.</p>
+    <ul class="checklist">
+      <li><strong>Gut vorbereiten und üben</strong> — Sicherheit nimmt die größte Angst.</li>
+      <li><strong>Tief durchatmen</strong> vor dem Start, kurz sammeln.</li>
+      <li><strong>Karten oder Notizen</strong> als Stütze bereithalten.</li>
+      <li><strong>Langsam anfangen</strong> — die erste Minute entscheidet über das Selbstvertrauen.</li>
+      <li><strong>Freundliche Gesichter</strong> im Publikum suchen.</li>
+      <li>Kleine Fehler sind <strong>menschlich</strong> — einfach weitermachen.</li>
+    </ul>
+    <p class="muted">Merke: Das Publikum will, dass Sie Erfolg haben — nicht, dass Sie scheitern.</p>
+  </section>
+
+  <!-- 14. Betrieb präsentieren / Steckbrief -->
+  <section class="slide">
+    <h2>Einen Betrieb präsentieren</h2>
+    <p>Eine typische Aufgabe: den eigenen Ausbildungsbetrieb vorstellen. Der <strong>Unternehmenssteckbrief</strong> gibt die Struktur vor.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Steckbrief — Teil 1</div>
+        <ul style="margin-left: 1rem;">
+          <li>Name, Firma &amp; Rechtsform</li>
+          <li>Standort &amp; Gründungsjahr</li>
+          <li>Branche &amp; Größe (Mitarbeitende)</li>
+          <li>Produkte / Dienstleistungen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Steckbrief — Teil 2</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kunden &amp; Markt</li>
+          <li>Unternehmensziele &amp; Leitbild</li>
+          <li>Organisation (Abteilungen)</li>
+          <li>Ausbildung im Betrieb</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🏢 Beispiel</span>
+      Die <strong>Duisdorfer BüroKonzept KG</strong> lässt sich so vorstellen: Rechtsform KG, Herstellung/Handel von Büromöbeln, ökonomische, ökologische und soziale Ziele.
+    </div>
+  </section>
+
+  <!-- 15. Feedback / Bewertung -->
+  <section class="slide">
+    <h2>Feedback geben &amp; bewerten</h2>
+    <p>Nach der Präsentation folgt oft eine Rückmeldung. Faires Feedback hilft, besser zu werden.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Feedbackregeln</div>
+        <ul style="margin-left: 1rem;">
+          <li>Erst das <strong>Positive</strong>, dann Verbesserungen</li>
+          <li><strong>Konkret</strong> statt allgemein</li>
+          <li><strong>Ich-Botschaften</strong> („Auf mich wirkte …")</li>
+          <li>Sachlich &amp; wertschätzend</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Bewertungskriterien</div>
+        <ul style="margin-left: 1rem;">
+          <li>Inhalt: richtig, vollständig, roter Faden</li>
+          <li>Aufbau: Einleitung–Hauptteil–Schluss</li>
+          <li>Medien: sinnvoll, gut gestaltet</li>
+          <li>Vortrag: frei, verständlich, sicher</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💬 Merksatz</span>
+      Feedback ist ein <strong>Geschenk</strong>: Wer es sachlich gibt und annimmt, lernt am schnellsten dazu.
+    </div>
+  </section>
+
+  <!-- 16. Zusammenfassung Präsentationstechnik -->
+  <section class="slide">
+    <h2>Zusammenfassung: Gut präsentieren</h2>
+    <ol class="numlist">
+      <li>Immer mit <strong>klarem Ziel</strong> und Blick auf die <strong>Zielgruppe</strong> starten.</li>
+      <li>Sorgfältig <strong>vorbereiten</strong> — roter Faden, Recherche, Zeitplan, üben.</li>
+      <li>Klar <strong>gliedern</strong>: Einleitung – Hauptteil – Schluss.</li>
+      <li><strong>Medien</strong> passend wählen und sparsam einsetzen.</li>
+      <li>Folien nach <strong>KISS und 6×6</strong> gestalten — wenig Text, gut lesbar.</li>
+      <li>Sicher <strong>vortragen</strong>: Stimme, Blickkontakt, Körpersprache.</li>
+      <li><strong>Lampenfieber</strong> akzeptieren und mit Übung meistern.</li>
+      <li>Faires <strong>Feedback</strong> geben und annehmen.</li>
+    </ol>
+  </section>
+
+  <!-- 17. Übergang zur Wiederholung -->
+  <section class="slide cover">
+    <span class="cover-tag">Teil 2</span>
+    <h1>Lernfeld 1 im Rückblick</h1>
+    <p class="subtitle">Kompakte Wiederholung der Sessions 1 – 3</p>
+    <div class="cover-meta">
+      <span><strong>Session 1</strong>Rechtliche Grundlagen der Berufsausbildung</span>
+      <span><strong>Session 2</strong>Betrieb in der Wirtschaft &amp; Wirtschaftskreislauf</span>
+      <span><strong>Session 3</strong>Unternehmen, Firma, Rechtsformen &amp; Organisation</span>
+    </div>
+  </section>
+
+  <!-- 18. Wiederholung Session 1 -->
+  <section class="slide">
+    <h2>Rückblick Session 1: Berufsausbildung &amp; Recht</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Duales System &amp; Vertrag</div>
+        <ul style="margin-left: 1rem;">
+          <li>Zwei Lernorte: <strong>Betrieb + Berufsschule</strong></li>
+          <li>Rahmen: <strong>BBiG</strong>, Ausbildungsordnung, Rahmenplan</li>
+          <li>Berufsausbildungsvertrag: Form, Pflichtinhalte, Eintragung bei der IHK</li>
+          <li>Probezeit, Vergütung, Urlaub, Zeugnis</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Pflichten &amp; Mitbestimmung</div>
+        <ul style="margin-left: 1rem;">
+          <li>Pflichten Azubi (§ 13) &amp; Ausbildende (§§ 14–16)</li>
+          <li><strong>Jugendarbeitsschutzgesetz</strong> für unter 18-Jährige</li>
+          <li><strong>Betriebsrat</strong> (BetrVG) &amp; <strong>JAV</strong></li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🔑 Kernidee</span>
+      Die Ausbildung ist ein <strong>Rechtsverhältnis mit Rechten und Pflichten</strong> auf beiden Seiten — geregelt vor allem im BBiG.
+    </div>
+  </section>
+
+  <!-- 19. Wiederholung Session 2 -->
+  <section class="slide">
+    <h2>Rückblick Session 2: Wirtschaft &amp; Kreislauf</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Bedürfnisse &amp; Güter</div>
+        <ul style="margin-left: 1rem;">
+          <li>Bedürfnis → Bedarf → <strong>Nachfrage</strong> (mit Kaufkraft)</li>
+          <li>Existenz-, Kultur-, Luxusbedürfnis; <strong>Maslow</strong></li>
+          <li>Güterarten: freie/knappe, Sach-/Dienstleistung, Konsum-/Produktionsgüter</li>
+          <li><strong>Markt</strong>: Angebot trifft Nachfrage → Preis</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Prinzip &amp; Kreislauf</div>
+        <ul style="margin-left: 1rem;">
+          <li><strong>Ökonomisches Prinzip</strong>: Maximal- &amp; Minimalprinzip</li>
+          <li>Produktionsfaktoren (Boden, Arbeit, Kapital)</li>
+          <li><strong>Wirtschaftskreislauf</strong>: einfach → erweitert → offen</li>
+          <li><strong>Geldstrom</strong> ↔ <strong>Güterstrom</strong> gegenläufig</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🔑 Kernidee</span>
+      Weil Güter <strong>knapp</strong> sind, muss gewirtschaftet werden — sparsam mit Mitteln umgehen, um Bedürfnisse zu decken.
+    </div>
+  </section>
+
+  <!-- 20. Wiederholung Session 3 -->
+  <section class="slide">
+    <h2>Rückblick Session 3: Firma &amp; Rechtsformen</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Kaufmann, Firma, Register</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kaufmann: <strong>Ist-, Kann-, Formkaufmann</strong></li>
+          <li>Firma = Handelsname (5 Firmengrundsätze)</li>
+          <li><strong>Handelsregister</strong> A/B, Publizität (§ 15 HGB)</li>
+          <li>Vollmachten: <strong>Prokura</strong> &amp; Handlungsvollmacht</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Rechtsformen &amp; Organisation</div>
+        <ul style="margin-left: 1rem;">
+          <li>Einzelunt., Personenges. (GbR, OHG, KG)</li>
+          <li>Kapitalges. (GmbH, UG, AG), Genossenschaft (eG)</li>
+          <li>Leitfrage: <strong>Haftung</strong> &amp; Kapital</li>
+          <li><strong>Aufbau-/Ablauforganisation</strong>, Organigramm</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🔑 Kernidee</span>
+      Die <strong>Rechtsform</strong> entscheidet über Haftung, Kapital und Leitung — der rote Faden ist immer die <strong>Haftung</strong>.
+    </div>
+  </section>
+
+  <!-- 21. Lernfeld 1 als Ganzes -->
+  <section class="slide">
+    <h2>Lernfeld 1 — der große Zusammenhang</h2>
+    <p>Die vier Sessions bauen aufeinander auf und ergeben ein vollständiges Bild des Betriebs:</p>
+    <ol class="numlist">
+      <li><strong>Meine Rolle &amp; mein Recht</strong> im Betrieb (Ausbildung, BBiG, Mitbestimmung).</li>
+      <li>Der Betrieb <strong>in der Wirtschaft</strong> (Bedürfnisse, Güter, Kreislauf).</li>
+      <li>Der Betrieb <strong>als Unternehmen</strong> (Firma, Rechtsform, Organisation).</li>
+      <li>Den Betrieb <strong>präsentieren</strong> — das erworbene Wissen wirksam vermitteln.</li>
+    </ol>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Wer den Betrieb <strong>versteht</strong>, kann ihn auch <strong>präsentieren</strong> — beides gehört zusammen.
+    </div>
+  </section>
+
+  <!-- 22. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Aufbau einer Präsentation benennen</li>
+          <li>Medien mit Vor-/Nachteilen zuordnen</li>
+          <li>Grundbegriffe aus Sessions 1–3</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Passendes Medium situativ empfehlen</li>
+          <li>Eine Folie/Präsentation beurteilen</li>
+          <li>Betrieb sachlich präsentieren</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>" = Aufzählung, „<strong>erläutern</strong>" = Begründung, „<strong>beurteilen</strong>" = eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 23. Prüfungstipps -->
+  <section class="slide">
+    <h2>Tipps für die Prüfungsvorbereitung</h2>
+    <ul class="checklist">
+      <li>Alle vier <strong>Quizze</strong> von Lernfeld 1 durcharbeiten und wiederholen.</li>
+      <li>Die <strong>Grundbegriffe</strong> jeder Session sicher erklären können.</li>
+      <li>Präsentation üben — am besten <strong>laut und vor anderen</strong>.</li>
+      <li>Bei Aufgaben genau auf den <strong>Operator</strong> achten (nennen / erläutern / beurteilen).</li>
+      <li>Regelmäßig in <strong>kleinen Einheiten</strong> lernen statt alles auf einmal.</li>
+    </ul>
+    <p class="muted">Verweis: Vertiefen Sie mit <code>Quiz_Den-Betrieb-praesentieren-und-Wiederholung.html</code> (60 Fragen, inkl. Wiederholung 1–3).</p>
+  </section>
+
+  <!-- 24. Praxisbeispiel Präsentation planen -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Präsentation planen</h2>
+    <p>Aufgabe: „Stellen Sie Ihren Ausbildungsbetrieb in 5 Minuten vor."</p>
+    <ol class="numlist">
+      <li><strong>Ziel</strong>: Zuhörende sollen den Betrieb und meine Rolle kennen.</li>
+      <li><strong>Zielgruppe</strong>: Mitschülerinnen und Mitschüler — wenig Vorwissen zum Betrieb.</li>
+      <li><strong>Roter Faden</strong>: Steckbrief → Produkte → Organisation → meine Aufgaben.</li>
+      <li><strong>Medium</strong>: wenige Beamer-Folien (KISS, 6×6) + kurzes Handout am Ende.</li>
+      <li><strong>Vortrag</strong>: frei sprechen, Blickkontakt, ruhiges Tempo.</li>
+      <li><strong>Schluss</strong>: Zusammenfassung, Dank, Fragen.</li>
+    </ol>
+    <p class="muted">So entsteht in wenigen Schritten eine klare, überzeugende Präsentation.</p>
+  </section>
+
+  <!-- 25. Häufige Fehler -->
+  <section class="slide">
+    <h2>Häufige Fehler — und wie Sie sie vermeiden</h2>
+    <table>
+      <thead><tr><th>Fehler</th><th>Besser so</th></tr></thead>
+      <tbody>
+        <tr><td>Folien voller Text vorlesen</td><td>Stichworte zeigen, frei erklären</td></tr>
+        <tr><td>Zur Leinwand sprechen</td><td>Blickkontakt zum Publikum halten</td></tr>
+        <tr><td>Zu schnell und zu leise</td><td>Ruhig, laut, mit Pausen sprechen</td></tr>
+        <tr><td>Kein roter Faden</td><td>Klare Gliederung E–H–S</td></tr>
+        <tr><td>Zeit überziehen</td><td>Vorher üben und Zeit stoppen</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die drei größten Erfolgsfaktoren: <strong>Vorbereitung, Klarheit, Übung.</strong>
+    </div>
+  </section>
+
+  <!-- 26. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Austausch — nicht zum Abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Welche Präsentation ist Ihnen positiv in Erinnerung — und warum?</li>
+      <li>Was macht Sie beim Vortragen am nervösesten? Was hilft Ihnen dagegen?</li>
+      <li>Welches Medium würden Sie für Ihren Betrieb wählen — und warum?</li>
+      <li>Wie geben Sie Feedback, ohne jemanden zu verletzen?</li>
+    </ol>
+  </section>
+
+  <!-- 27. Abschluss / Reflektion -->
+  <section class="slide">
+    <h2>Abschluss &amp; Reflektion</h2>
+    <p>Dies ist die letzte Session von Lernfeld 1. Sie haben gelernt, den Betrieb zu verstehen — und ihn zu präsentieren.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Das nehme ich mit</div>
+        <ul style="margin-left: 1rem;">
+          <li>Ein klares Vorgehen zum Präsentieren</li>
+          <li>Sicherheit im Vortrag &amp; Umgang mit Lampenfieber</li>
+          <li>Überblick über das gesamte Lernfeld 1</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Reflektieren Sie</div>
+        <ul style="margin-left: 1rem;">
+          <li>Was fiel mir leicht, was schwer?</li>
+          <li>Woran möchte ich noch arbeiten?</li>
+          <li>Wie wende ich das im Betrieb an?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🎓 Zum Schluss</span>
+      Präsentieren ist eine <strong>Fähigkeit, die man übt</strong> — jede Präsentation macht Sie besser. Viel Erfolg!
+    </div>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · Lernfeld 1 — Die eigene Rolle im Betrieb mitgestalten · <span id="slideCount">1 / 27</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Aufbau Einleitung - Hauptteil - Schluss
+  const c1 = document.getElementById('fig-ehs');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 230');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '230');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const teile = [
+      { t: 'Einleitung', s: 'Begrüßung · Thema · Ziel', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Hauptteil', s: 'Kerninhalte · roter Faden', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Schluss', s: 'Fazit · Dank · Fragen', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let x = 40;
+    teile.forEach((f, i) => {
+      box(rc, svg, x, 80, 220, 90, f.c, f.st);
+      text(svg, x + 110, 120, f.t, { bold: true, size: 20, color: f.st });
+      text(svg, x + 110, 148, f.s, { size: 13, color: '#475569' });
+      if (i < teile.length - 1) arrow(rc, svg, x + 220, 125, x + 275, 125, '#0F766E');
+      x += 275;
+    });
+    text(svg, 450, 45, 'Der klare Dreischritt jeder Präsentation', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 205, 'Anfang ⟶ Kern ⟶ Abschluss', { size: 13, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

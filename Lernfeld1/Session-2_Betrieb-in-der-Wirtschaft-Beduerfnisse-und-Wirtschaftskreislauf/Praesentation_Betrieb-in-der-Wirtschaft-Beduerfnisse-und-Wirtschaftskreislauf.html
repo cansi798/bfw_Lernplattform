@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Session 2 — Der Betrieb in der Wirtschaft: Bedürfnisse, Bedarf &amp; Wirtschaftskreislauf</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Session 2</span>
+    <h1>Der Betrieb in der Wirtschaft</h1>
+    <p class="subtitle">Bedürfnisse, Bedarf &amp; Wirtschaftskreislauf — wie Wünsche zu Wirtschaft werden</p>
+    <div class="cover-meta">
+      <span><strong>Lernfeld</strong>LF 1 — Die eigene Rolle im Betrieb mitgestalten und den Betrieb präsentieren</span>
+      <span><strong>Ausbildung</strong>Kaufmann/-frau für Büromanagement (IHK)</span>
+      <span><strong>Quelle</strong>Lehrwerk Lernfeld 1, Kapitel 1</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie in dieser Session lernen</h2>
+    <p class="subtitle">Am Ende können Sie...</p>
+    <ul class="checklist">
+      <li>die <strong>Bedürfnisarten</strong> unterscheiden und die <strong>Maslow-Pyramide</strong> erklären</li>
+      <li>den Weg vom <strong>Bedürfnis über den Bedarf zur Nachfrage</strong> beschreiben</li>
+      <li>erklären, wie am <strong>Markt</strong> aus Angebot und Nachfrage ein Preis entsteht</li>
+      <li>die <strong>Güterarten</strong> mit Beispielen einordnen</li>
+      <li>das <strong>ökonomische Prinzip</strong> (Minimal-/Maximalprinzip) anwenden</li>
+      <li>die <strong>Produktionsfaktoren</strong> volkswirtschaftlich und betrieblich benennen</li>
+      <li>den <strong>Wirtschaftskreislauf</strong> vom einfachen bis zum vollständigen Modell erläutern</li>
+    </ul>
+  </section>
+
+  <!-- 3. Der rote Faden -->
+  <section class="slide">
+    <h2>Der rote Faden dieser Session</h2>
+    <p>Am Anfang steht immer ein <strong>Wunsch des Menschen</strong>. Daraus entsteht Schritt für Schritt das, was wir „Wirtschaft“ nennen.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">🧭 Große Linie</span>
+      <strong>Bedürfnis → Bedarf → Nachfrage → Markt → Güter → Produktion → Kreislauf.</strong> Diese Kette ziehen wir heute von Anfang bis Ende durch.
+    </div>
+    <p class="muted">Grundproblem der Wirtschaft: Die Bedürfnisse der Menschen sind <strong>unbegrenzt</strong>, die Güter aber <strong>knapp</strong>.</p>
+  </section>
+
+  <!-- 4. Was ist ein Bedürfnis? -->
+  <section class="slide">
+    <h2>Was ist ein Bedürfnis?</h2>
+    <p>Ein <strong>Bedürfnis</strong> ist ein <strong>Mangelgefühl</strong>, verbunden mit dem Wunsch, diesen Mangel zu beseitigen.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Beispiel Alltag</div>
+        <p style="font-size: 1rem;">Sie haben Hunger (Mangel) und möchten etwas essen (Wunsch, den Mangel zu beseitigen).</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Beispiel Wunsch</div>
+        <p style="font-size: 1rem;">Ihr altes Smartphone ist langsam — Sie wünschen sich ein neues Gerät.</p>
+      </div>
+    </div>
+    <p class="muted">Bedürfnisse lassen sich nach mehreren Kriterien ordnen — das sehen wir uns jetzt an.</p>
+  </section>
+
+  <!-- 5. Bedürfnisarten nach Dringlichkeit -->
+  <section class="slide">
+    <h2>Bedürfnisse nach der Dringlichkeit</h2>
+    <table>
+      <thead><tr><th>Art</th><th>Bedeutung</th><th>Beispiele</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Existenzbedürfnisse</strong></td><td>Sichern das Überleben (Grundbedürfnisse)</td><td>Essen, Trinken, Wohnung</td></tr>
+        <tr><td><strong>Kulturbedürfnisse</strong></td><td>Im Kulturkreis üblich, von Umwelt geprägt</td><td>Bildung, Kino, modische Kleidung</td></tr>
+        <tr><td><strong>Luxusbedürfnisse</strong></td><td>Nicht notwendig, nicht für jeden erschwinglich</td><td>Yacht, Sportwagen, Villa</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Die Grenzen sind <strong>fließend</strong>: Was für den einen Luxus ist, kann für den anderen Kultur- oder sogar Existenzbedürfnis sein.
+    </div>
+  </section>
+
+  <!-- 6. Weitere Bedürfnisunterteilungen -->
+  <section class="slide">
+    <h2>Weitere Einteilungen von Bedürfnissen</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Nach dem Gegenstand</div>
+        <ul style="margin-left: 1rem;">
+          <li><strong>materiell</strong>: Smartphone, Schuhe</li>
+          <li><strong>immateriell</strong>: Anerkennung, Bildung</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Nach der Bewusstheit</div>
+        <ul style="margin-left: 1rem;">
+          <li><strong>akut</strong>: offener, konkreter Wunsch</li>
+          <li><strong>latent</strong>: schlummernd, z. B. durch Werbung geweckt</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Nach dem Träger</div>
+        <ul style="margin-left: 1rem;">
+          <li><strong>Individual</strong>: ein Mensch (Smartphone)</li>
+          <li><strong>Kollektiv</strong>: die Gemeinschaft (Umwelt, Autobahnnetz)</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">Ein latentes Bedürfnis kann zum akuten werden — z. B. wenn Sie im Onlineshop neue Schuhe entdecken.</p>
+  </section>
+
+  <!-- 7. Maslow-Pyramide -->
+  <section class="slide">
+    <h2>Die Bedürfnispyramide nach Maslow</h2>
+    <p>Der Psychologe Abraham Maslow ordnete Bedürfnisse in <strong>fünf Stufen</strong> — von unten nach oben.</p>
+    <div class="figure" id="fig-maslow"></div>
+    <p class="caption">Idee: Erst wenn die unteren Stufen weitgehend erfüllt sind, rücken die höheren in den Vordergrund.</p>
+  </section>
+
+  <!-- 8. Bedürfnis, Bedarf, Nachfrage -->
+  <section class="slide">
+    <h2>Vom Bedürfnis zur Nachfrage</h2>
+    <div class="figure" id="fig-nachfrage"></div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kernkette</span>
+      <strong>Bedürfnis</strong> (Mangelgefühl) → mit <strong>Kaufkraft</strong> wird daraus <strong>Bedarf</strong> → durch tatsächlichen <strong>Kauf</strong> wird daraus <strong>Nachfrage</strong>.
+    </div>
+    <p class="muted">Kaufkraft kommt aus dem Einkommen — z. B. Ihrer Ausbildungsvergütung.</p>
+  </section>
+
+  <!-- 9. Bedarf & Nachfrage erklärt -->
+  <section class="slide">
+    <h2>Bedarf und Nachfrage — der Unterschied</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Bedarf</div>
+        <p style="font-size: 1.05rem;">Ein Bedürfnis, das mit <strong>Kaufkraft</strong> ausgestattet ist. Sie <em>könnten</em> das neue Smartphone bezahlen.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Nachfrage</div>
+        <p style="font-size: 1.05rem;">Der Bedarf wird am Markt <strong>wirksam</strong>: Sie kaufen das Smartphone tatsächlich.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🧠 Wichtig</span>
+      Nicht jedes Bedürfnis wird zur Nachfrage. Ohne Kaufkraft bleibt es ein reiner Wunsch.
+    </div>
+  </section>
+
+  <!-- 10. Der Markt -->
+  <section class="slide">
+    <h2>Der Markt: Angebot trifft Nachfrage</h2>
+    <p>Ein <strong>Markt</strong> ist der Ort oder Vorgang, an dem <strong>Angebot</strong> und <strong>Nachfrage</strong> zusammentreffen. Das kann ein Wochenmarkt sein — oder ein Onlineshop.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Angebot</div>Die Menge an Gütern, die Anbieter verkaufen wollen.</div>
+      <div class="card amber"><div class="card-title">Nachfrage</div>Die Menge, die Käufer mit Kaufkraft kaufen wollen.</div>
+      <div class="card rose"><div class="card-title">Preis</div>Entsteht aus dem Zusammenspiel beider.</div>
+    </div>
+    <p class="muted">Am Markt einigen sich Anbieter und Nachfrager über Menge und Preis.</p>
+  </section>
+
+  <!-- 11. Preisbildung -->
+  <section class="slide">
+    <h2>Wie entsteht der Preis?</h2>
+    <table>
+      <thead><tr><th>Situation</th><th>Wirkung auf den Preis</th></tr></thead>
+      <tbody>
+        <tr><td>Nachfrage groß, Gut knapp</td><td>Preis <strong>steigt</strong> ↑</td></tr>
+        <tr><td>Angebot groß, Nachfrage gering</td><td>Preis <strong>sinkt</strong> ↓</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Je <strong>knapper</strong> ein Gut ist bzw. je <strong>größer</strong> die Nachfrage danach, desto <strong>höher</strong> wird der Preis.
+    </div>
+  </section>
+
+  <!-- 12. Was sind Güter? -->
+  <section class="slide">
+    <h2>Was sind Güter?</h2>
+    <p><strong>Güter</strong> sind alle Mittel, mit denen der Mensch seine Bedürfnisse befriedigt.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Freie Güter</div>
+        <p style="font-size: 1rem;">In großen Mengen vorhanden, <strong>ohne Preis</strong>. Beispiele: Luft, Sonne, Meerwasser.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Knappe Güter (Wirtschaftsgüter)</div>
+        <p style="font-size: 1rem;">Nur begrenzt verfügbar, verursachen Kosten, haben einen <strong>Preis</strong>. Beispiele: Schuhe, Holz, Schrauben.</p>
+      </div>
+    </div>
+    <p class="muted">In der Wirtschaftslehre geht es fast immer um die knappen Güter.</p>
+  </section>
+
+  <!-- 13. Güterarten Übersicht -->
+  <section class="slide">
+    <h2>Die Güterarten im Überblick</h2>
+    <div class="figure" id="fig-gueter"></div>
+    <p class="caption">Knappe Güter lassen sich Schritt für Schritt weiter unterteilen.</p>
+  </section>
+
+  <!-- 14. Güterarten mit Beispielen -->
+  <section class="slide">
+    <h2>Güterarten mit Beispielen</h2>
+    <table>
+      <thead><tr><th>Einteilung</th><th>Art</th><th>Beispiel</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2">materiell / immateriell</td><td>Sachgut (materiell)</td><td>Schreibtisch, Lebensmittel</td></tr>
+        <tr><td>Dienstleistung / Recht (immateriell)</td><td>Reparatur, Beratung / Patent, Marke</td></tr>
+        <tr><td rowspan="2">Konsum / Produktion</td><td>Konsumgut</td><td>privates Smartphone, privates Auto</td></tr>
+        <tr><td>Produktionsgut</td><td>Maschine, Betriebsfahrzeug</td></tr>
+        <tr><td rowspan="2">Gebrauch / Verbrauch</td><td>Gebrauchsgut (mehrfach)</td><td>Produktionsmaschine</td></tr>
+        <tr><td>Verbrauchsgut (einmalig)</td><td>Holz als Rohstoff</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 15. Komplementär- & Substitutionsgüter -->
+  <section class="slide">
+    <h2>Güter in Beziehung: Ergänzen oder Ersetzen?</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Komplementärgüter (ergänzen sich)</div>
+        <p style="font-size: 1.05rem;">Werden <strong>gemeinsam</strong> nachgefragt. Beispiele: Butter &amp; Toast, Maschine &amp; Strom.</p>
+        <p style="font-size: 1rem;" class="muted">Steigt die Nachfrage nach dem einen, steigt meist auch die nach dem anderen.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Substitutionsgüter (ersetzen sich)</div>
+        <p style="font-size: 1.05rem;">Sind <strong>austauschbar</strong>. Beispiele: Butter oder Margarine, Lkw oder Bahn.</p>
+        <p style="font-size: 1rem;" class="muted">Die Nachfrage verläuft entgegengesetzt: mehr Butter → weniger Margarine.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16. Ökonomisches Prinzip -->
+  <section class="slide">
+    <h2>Das ökonomische Prinzip</h2>
+    <p>Weil Bedürfnisse unbegrenzt, Güter aber knapp sind, gehen Haushalte und Unternehmen <strong>planvoll</strong> mit ihren Mitteln um.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Maximalprinzip</div>
+        <p style="font-size: 1.05rem;">Mit <strong>festen Mitteln</strong> einen <strong>maximalen Erfolg</strong> erzielen.</p>
+        <p style="font-size: 1rem;" class="muted">Mit einer bestimmten Menge Holz möglichst viele Schreibtische bauen.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Minimalprinzip</div>
+        <p style="font-size: 1.05rem;">Ein <strong>festes Ziel</strong> mit <strong>minimalem Aufwand</strong> erreichen.</p>
+        <p style="font-size: 1rem;" class="muted">Eine bestimmte Menge Schreibtische mit möglichst wenig Holz herstellen.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🐴 Eselsbrücke</span>
+      <strong>Maximal</strong> = feste Mittel, maximales Ergebnis. <strong>Minimal</strong> = festes Ziel, minimaler Einsatz.
+    </div>
+  </section>
+
+  <!-- 17. Volkswirtschaftliche Produktionsfaktoren -->
+  <section class="slide">
+    <h2>Produktionsfaktoren (volkswirtschaftlich)</h2>
+    <p>Um Güter herzustellen, braucht man <strong>Produktionsfaktoren</strong>. Volkswirtschaftlich sind das drei:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">Boden</div>Die wirtschaftlich genutzte Natur: Anbauboden, Abbauboden, Standortboden.</div>
+      <div class="card amber"><div class="card-title">Arbeit</div>Jede geistige und körperliche Arbeit, mit der Einkommen erzielt wird.</div>
+      <div class="card rose"><div class="card-title">Kapital</div>Entsteht durch Sparen (Konsumverzicht); wird investiert → Sachkapital.</div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Kapital ist ein <strong>abgeleiteter (derivativer)</strong> Faktor — es entsteht erst durch die Kombination von Boden und Arbeit.
+    </div>
+  </section>
+
+  <!-- 18. Betriebliche Produktionsfaktoren -->
+  <section class="slide">
+    <h2>Produktionsfaktoren (betrieblich)</h2>
+    <table>
+      <thead><tr><th>Gruppe</th><th>Inhalt</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Elementarfaktoren</strong></td><td>ausführende Arbeitskräfte · Betriebsmittel (Maschinen, Fahrzeuge, Werkzeuge) · Werkstoffe</td></tr>
+        <tr><td><strong>Dispositive Faktoren</strong></td><td>Leitung · Planung · Organisation · Überwachung (Kontrolle)</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🧩 Werkstoffe unterscheiden</span>
+      <strong>Rohstoff</strong> = Hauptbestandteil (Holz). <strong>Hilfsstoff</strong> = Nebenbestandteil (Leim, Schrauben). <strong>Betriebsstoff</strong> = geht nicht ins Produkt ein (Strom, Öl).
+    </div>
+  </section>
+
+  <!-- 19. Faktorkombination -->
+  <section class="slide">
+    <h2>Faktoren sinnvoll kombinieren</h2>
+    <p>Ziel des Unternehmens ist es, die Produktionsfaktoren so zu kombinieren, dass das Ergebnis mit <strong>minimalen Kosten</strong> erreicht wird.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Minimalkostenkombination</div>
+        <p style="font-size: 1.05rem;">Die kostengünstigste Kombination der betrieblichen Faktoren.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">substitutional / limitational</div>
+        <p style="font-size: 1.05rem;"><strong>substitutional</strong>: Faktoren ersetzbar (Mensch → Maschine). <strong>limitational</strong>: nicht ersetzbar (technisch festgelegt).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. Arbeitsteilung -->
+  <section class="slide">
+    <h2>Arbeitsteilige Wirtschaft</h2>
+    <p>Kein Betrieb macht alles allein. Durch <strong>Arbeitsteilung</strong> spezialisiert sich jeder auf das, was er am besten kann.</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">beruflich</div>Spezialisierung in Berufe (z. B. Kaufmann/-frau für Büromanagement).</div>
+      <div class="card amber"><div class="card-title">betrieblich</div>Aufteilung in Abteilungen (Beschaffung, Vertrieb, Personal).</div>
+      <div class="card rose"><div class="card-title">volkswirtschaftlich / international</div>Primär-, Sekundär-, Tertiärsektor · Import &amp; Export.</div>
+    </div>
+    <p class="muted">Sektoren: <strong>primär</strong> = Urerzeugung, <strong>sekundär</strong> = Verarbeitung, <strong>tertiär</strong> = Dienstleistung.</p>
+  </section>
+
+  <!-- 21. Wirtschaftskreislauf - einfach -->
+  <section class="slide">
+    <h2>Der einfache Wirtschaftskreislauf</h2>
+    <p>Das <strong>Kreislaufmodell</strong> zeigt, wie Geld und Güter zwischen den Sektoren fließen. Zunächst nur <strong>Haushalte</strong> und <strong>Unternehmen</strong>.</p>
+    <div class="figure" id="fig-kreislauf"></div>
+    <p class="caption">Güter- und Geldkreislauf laufen gegenläufig und gleichen sich aus.</p>
+  </section>
+
+  <!-- 22. Einfacher Kreislauf - Details -->
+  <section class="slide">
+    <h2>Einfacher Kreislauf: Was fließt wohin?</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Haushalte → Unternehmen</div>
+        <ul style="margin-left: 1rem;">
+          <li>stellen Produktionsfaktoren bereit (Boden, Arbeit, Kapital)</li>
+          <li>geben ihr Einkommen für Konsum aus</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Unternehmen → Haushalte</div>
+        <ul style="margin-left: 1rem;">
+          <li>zahlen Miete/Pacht, Lohn/Gehalt, Zinsen</li>
+          <li>liefern Konsumgüter und Dienstleistungen</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Warum „stationär“?</span>
+      Es gibt keine Investitionen; das gesamte Einkommen wird konsumiert — der Kreislauf bleibt gleich.
+    </div>
+  </section>
+
+  <!-- 23. Erweiterter Kreislauf -->
+  <section class="slide">
+    <h2>Der erweiterte Wirtschaftskreislauf (+ Banken)</h2>
+    <p>Jetzt geben die Haushalte <strong>nicht mehr alles</strong> aus — sie <strong>sparen</strong> einen Teil. Das Modell wird um den Sektor <strong>Banken</strong> erweitert.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Kerngedanke</span>
+      Ersparnisse der Haushalte fließen über die Banken als <strong>Kredite</strong> zu den Unternehmen, die damit <strong>investieren</strong> (z. B. in neue Maschinen).
+    </div>
+    <p class="muted">Weil dadurch Weiterentwicklung möglich wird, heißt dieser Kreislauf auch <strong>evolutionär</strong>.</p>
+  </section>
+
+  <!-- 24. Vollständiger Kreislauf -->
+  <section class="slide">
+    <h2>Der vollständige Wirtschaftskreislauf (+ Staat + Ausland)</h2>
+    <p>Zum realistischen Bild fehlen noch zwei Sektoren:</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Staat</div>
+        <ul style="margin-left: 1rem;">
+          <li>bezieht Steuern von Haushalten und Unternehmen</li>
+          <li>zahlt Löhne, Sozialleistungen, Subventionen</li>
+          <li>konsumiert selbst Güter und Dienstleistungen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Ausland (offene Volkswirtschaft)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Import von Gütern und Dienstleistungen</li>
+          <li>Export von Gütern und Dienstleistungen</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 25. Kreislauf-Steigerung -->
+  <section class="slide">
+    <h2>Die drei Ausbaustufen im Vergleich</h2>
+    <table>
+      <thead><tr><th>Stufe</th><th>Beteiligte Sektoren</th><th>Besonderheit</th></tr></thead>
+      <tbody>
+        <tr><td><strong>einfach</strong> (stationär)</td><td>Haushalte, Unternehmen</td><td>alles wird konsumiert, keine Investition</td></tr>
+        <tr><td><strong>erweitert</strong> (evolutionär)</td><td>+ Banken</td><td>Sparen &amp; Investieren möglich</td></tr>
+        <tr><td><strong>vollständig</strong></td><td>+ Staat + Ausland</td><td>Steuern, Subventionen, Im-/Export</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🧠 Merken</span>
+      Jede Stufe kommt ein Stück näher an die <strong>Wirklichkeit</strong> heran — vom Modell zur echten Volkswirtschaft.
+    </div>
+  </section>
+
+  <!-- 26. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung</h2>
+    <ol class="numlist">
+      <li>Bedürfnisse ordnet man nach <strong>Dringlichkeit, Gegenstand, Bewusstheit und Träger</strong> (Maslow: 5 Stufen).</li>
+      <li><strong>Bedürfnis → Bedarf (Kaufkraft) → Nachfrage (Kauf).</strong></li>
+      <li>Am <strong>Markt</strong> bilden Angebot und Nachfrage den Preis.</li>
+      <li><strong>Güter</strong>: frei/knapp, materiell/immateriell, Konsum/Produktion, Gebrauch/Verbrauch.</li>
+      <li><strong>Ökonomisches Prinzip</strong>: Maximal- und Minimalprinzip.</li>
+      <li><strong>Produktionsfaktoren</strong>: Boden, Arbeit, Kapital (betrieblich: Elementar- &amp; dispositive Faktoren).</li>
+      <li><strong>Wirtschaftskreislauf</strong>: einfach → erweitert → vollständig.</li>
+    </ol>
+  </section>
+
+  <!-- 27. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Bedürfnis-, Güter- und Faktorarten benennen</li>
+          <li>Minimal-/Maximalprinzip unterscheiden</li>
+          <li>Sektoren des Wirtschaftskreislaufs</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Beispiele richtig einordnen</li>
+          <li>Preisentwicklung begründen</li>
+          <li>Kreislauf-Ströme erläutern</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>“ = Aufzählung, „<strong>erläutern</strong>“ = Begründung, „<strong>beurteilen</strong>“ = eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 28. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Welche Ihrer letzten Käufe waren Existenz-, welche Kultur- oder Luxusbedürfnisse?</li>
+      <li>Wo haben Sie zuletzt erlebt, dass Werbung ein <em>latentes</em> Bedürfnis geweckt hat?</li>
+      <li>Nennen Sie ein Substitutions- und ein Komplementärgüterpaar aus Ihrem Alltag.</li>
+      <li>Warum ist der einfache Wirtschaftskreislauf zwar hilfreich, aber unrealistisch?</li>
+    </ol>
+  </section>
+
+  <!-- 29. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Session 3</h2>
+    <p class="subtitle">Das Unternehmen: Firma, Rechtsformen &amp; Organisation</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Der Kaufmannsbegriff</strong> nach HGB — wer ist Kaufmann?</li>
+      <li><strong>Firma</strong> — der Name, unter dem ein Kaufmann Geschäfte betreibt</li>
+      <li><strong>Rechtsformen</strong> — Einzelunternehmen, Personen- und Kapitalgesellschaften</li>
+      <li><strong>Aufbauorganisation</strong> — Organigramm, Stellen und Abteilungen</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Betrieb-in-der-Wirtschaft-Beduerfnisse-und-Wirtschaftskreislauf.html</code> bearbeiten — 60 Fragen zur Wiederholung.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 29</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+function newSvg(container, w, h) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+  svg.setAttribute('width', w); svg.setAttribute('height', h);
+  container.appendChild(svg);
+  return svg;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Maslow-Pyramide (5 Stufen)
+  const cM = document.getElementById('fig-maslow');
+  if (cM) {
+    const svg = newSvg(cM, 760, 320);
+    makeRough(svg, (rc, s) => {
+      const stufen = [
+        { label: 'Physiologische Grundbedürfnisse (Essen, Trinken, Schlaf)', c: '#ECFEFF', st: '#0F766E' },
+        { label: 'Sicherheit (Wohnung, sicherer Arbeitsplatz)', c: '#ECFEFF', st: '#0F766E' },
+        { label: 'Soziale Bedürfnisse (Familie, Freunde)', c: '#FEF3C7', st: '#F59E0B' },
+        { label: 'Anerkennung (Wertschätzung, Status)', c: '#FEF3C7', st: '#F59E0B' },
+        { label: 'Selbstverwirklichung', c: '#FFE4E6', st: '#F97316' }
+      ];
+      const baseW = 640, cx = 380, h = 48, top = 20;
+      stufen.forEach((st4, i) => {
+        const level = 4 - i; // bottom = widest
+        const w = 200 + (baseW - 200) * (level / 4);
+        const y = top + i * (h + 8);
+        box(rc, s, cx - w / 2, y, w, h, st4.c, st4.st);
+        text(s, cx, y + 30, st4.label, { size: 14, bold: true });
+      });
+    });
+  }
+
+  // FIG: Bedürfnis -> Bedarf -> Nachfrage
+  const cN = document.getElementById('fig-nachfrage');
+  if (cN) {
+    const svg = newSvg(cN, 900, 190);
+    makeRough(svg, (rc, s) => {
+      const steps = [
+        { t: 'Bedürfnis', sub: 'Mangelgefühl', c: '#ECFEFF', st: '#0F766E', x: 30 },
+        { t: 'Bedarf', sub: '+ Kaufkraft', c: '#FEF3C7', st: '#F59E0B', x: 350 },
+        { t: 'Nachfrage', sub: '+ Kauf', c: '#FFE4E6', st: '#F97316', x: 670 }
+      ];
+      steps.forEach((sp) => {
+        box(rc, s, sp.x, 55, 200, 80, sp.c, sp.st);
+        text(s, sp.x + 100, 92, sp.t, { size: 20, bold: true, color: sp.st });
+        text(s, sp.x + 100, 118, sp.sub, { size: 14, color: '#475569' });
+      });
+      arrow(rc, s, 235, 95, 345, 95, '#0F766E');
+      arrow(rc, s, 555, 95, 665, 95, '#0F766E');
+      text(s, 450, 30, 'Vom Wunsch zur wirksamen Nachfrage', { size: 17, bold: true, color: '#0F766E' });
+    });
+  }
+
+  // FIG: Güterarten-Baum (freie / knappe)
+  const cG = document.getElementById('fig-gueter');
+  if (cG) {
+    const svg = newSvg(cG, 900, 300);
+    makeRough(svg, (rc, s) => {
+      box(rc, s, 360, 20, 180, 55, '#ECFEFF', '#0F766E');
+      text(s, 450, 53, 'Güter', { size: 20, bold: true, color: '#0F766E' });
+
+      box(rc, s, 120, 120, 220, 55, '#FEF3C7', '#F59E0B');
+      text(s, 230, 145, 'freie Güter', { size: 16, bold: true, color: '#F59E0B' });
+      text(s, 230, 165, 'Luft, Sonne (kein Preis)', { size: 12, color: '#475569' });
+
+      box(rc, s, 560, 120, 220, 55, '#FEF3C7', '#F59E0B');
+      text(s, 670, 145, 'knappe Güter', { size: 16, bold: true, color: '#F59E0B' });
+      text(s, 670, 165, 'mit Preis', { size: 12, color: '#475569' });
+
+      arrow(rc, s, 430, 78, 300, 118, '#0F766E');
+      arrow(rc, s, 470, 78, 620, 118, '#0F766E');
+
+      box(rc, s, 470, 225, 180, 50, '#FFE4E6', '#F97316');
+      text(s, 560, 250, 'materiell (Sachgut)', { size: 13, bold: true, color: '#F97316' });
+      text(s, 560, 268, 'Schreibtisch', { size: 11, color: '#475569' });
+
+      box(rc, s, 690, 225, 190, 50, '#FFE4E6', '#F97316');
+      text(s, 785, 250, 'immateriell', { size: 13, bold: true, color: '#F97316' });
+      text(s, 785, 268, 'Dienstleistung / Recht', { size: 11, color: '#475569' });
+
+      arrow(rc, s, 650, 178, 560, 222, '#F59E0B');
+      arrow(rc, s, 690, 178, 785, 222, '#F59E0B');
+    });
+  }
+
+  // FIG: Einfacher Wirtschaftskreislauf
+  const cK = document.getElementById('fig-kreislauf');
+  if (cK) {
+    const svg = newSvg(cK, 900, 280);
+    makeRough(svg, (rc, s) => {
+      box(rc, s, 80, 100, 220, 90, '#ECFEFF', '#0F766E');
+      text(s, 190, 150, 'Haushalte', { size: 22, bold: true, color: '#0F766E' });
+
+      box(rc, s, 600, 100, 220, 90, '#FEF3C7', '#F59E0B');
+      text(s, 710, 150, 'Unternehmen', { size: 22, bold: true, color: '#F59E0B' });
+
+      // oberer Bogen: Güter/Konsum von Unternehmen zu Haushalten
+      arrow(rc, s, 600, 120, 300, 120, '#0F766E');
+      text(s, 450, 95, 'Konsumgüter & Dienstleistungen', { size: 13, color: '#0F766E' });
+      arrow(rc, s, 300, 145, 600, 145, '#94A3B8');
+      text(s, 450, 168, 'Ausgaben für Konsum (Geld)', { size: 13, color: '#475569' });
+
+      // unterer Bogen: Produktionsfaktoren von Haushalten zu Unternehmen
+      arrow(rc, s, 300, 175, 600, 175, '#0F766E');
+      text(s, 450, 200, 'Produktionsfaktoren (Boden, Arbeit, Kapital)', { size: 13, color: '#0F766E' });
+      arrow(rc, s, 600, 200, 300, 200, '#94A3B8');
+      text(s, 450, 223, 'Einkommen / Entlohnung (Geld)', { size: 13, color: '#475569' });
+
+      text(s, 450, 40, 'Einfacher Wirtschaftskreislauf', { size: 18, bold: true, color: '#0F766E' });
+      text(s, 450, 62, 'grün = Güterströme · grau = Geldströme (gegenläufig)', { size: 12, color: '#475569' });
+    });
+  }
+});
+</script>
+
+</body>
+</html>

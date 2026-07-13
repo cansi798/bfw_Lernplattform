@@ -1,0 +1,260 @@
+{
+  "session": 1,
+  "thema": "Rechtliche Grundlagen der Berufsausbildung",
+  "slug": "Rechtliche-Grundlagen-der-Berufsausbildung",
+  "day_id": "lf1-s1",
+  "words": [
+    {
+      "word": "BERUFSBILDUNG",
+      "hint": "Ausbildung im dualen System aus Betrieb und Schule."
+    },
+    {
+      "word": "AUSBILDUNG",
+      "hint": "Erwerb beruflicher Handlungsfähigkeit im Betrieb und in der Schule."
+    },
+    {
+      "word": "BETRIEB",
+      "hint": "Lernort für die praktische berufliche Ausbildung."
+    },
+    {
+      "word": "BERUFSSCHULE",
+      "hint": "Lernort für den theoretischen Teil der Ausbildung."
+    },
+    {
+      "word": "AUSBILDENDER",
+      "hint": "Vertragspartner des Auszubildenden; das Unternehmen."
+    },
+    {
+      "word": "AUSBILDER",
+      "hint": "Person, die die Ausbildung im Betrieb praktisch durchführt."
+    },
+    {
+      "word": "AUSZUBILDENDER",
+      "hint": "Person, die im Betrieb ausgebildet wird."
+    },
+    {
+      "word": "BÜROMANAGEMENT",
+      "hint": "Kaufmann/-frau für ... — der Ausbildungsberuf."
+    },
+    {
+      "word": "VERTRAG",
+      "hint": "Schriftliche Grundlage des Ausbildungsverhältnisses."
+    },
+    {
+      "word": "BERUFSVERTRAG",
+      "hint": "Kurzform für den Berufsausbildungsvertrag."
+    },
+    {
+      "word": "VERORDNUNG",
+      "hint": "Ausbildungsordnung wird als Rechts... erlassen."
+    },
+    {
+      "word": "RAHMENPLAN",
+      "hint": "Bundeseinheitliche Gliederung der Ausbildungsinhalte."
+    },
+    {
+      "word": "PLAN",
+      "hint": "Betrieblicher ...; Anlage zum Ausbildungsvertrag."
+    },
+    {
+      "word": "BERUFSBILD",
+      "hint": "Fertigkeiten, Kenntnisse und Fähigkeiten des Berufs."
+    },
+    {
+      "word": "SCHRIFTFORM",
+      "hint": "Vorgeschriebene Form des Vertragsinhalts; elektronisch ausgeschlossen."
+    },
+    {
+      "word": "EINTRAGUNG",
+      "hint": "Registrierung des Ausbildungsverhältnisses bei der IHK."
+    },
+    {
+      "word": "PROBEZEIT",
+      "hint": "Beginn der Ausbildung; ein bis vier Monate."
+    },
+    {
+      "word": "VERGÜTUNG",
+      "hint": "Angemessene Bezahlung nach § 17 BBiG, jährlich steigend."
+    },
+    {
+      "word": "URLAUB",
+      "hint": "Freie Tage; mind. 24 Werktage für Erwachsene."
+    },
+    {
+      "word": "WERKTAGE",
+      "hint": "Einheit für den gesetzlichen Mindesturlaub."
+    },
+    {
+      "word": "PFLICHTEN",
+      "hint": "Aufgaben beider Vertragspartner aus dem BBiG."
+    },
+    {
+      "word": "WEISUNG",
+      "hint": "Anordnung, der Auszubildende folgen müssen (§ 13)."
+    },
+    {
+      "word": "BERICHTSHEFT",
+      "hint": "Ausbildungsnachweis, den Azubis führen müssen."
+    },
+    {
+      "word": "SORGFALT",
+      "hint": "Mit dieser sind aufgetragene Aufgaben auszuführen."
+    },
+    {
+      "word": "STILLSCHWEIGEN",
+      "hint": "Über Betriebs- und Geschäftsgeheimnisse zu wahren."
+    },
+    {
+      "word": "ORDNUNG",
+      "hint": "Regeln der Ausbildungsstätte, die zu beachten sind."
+    },
+    {
+      "word": "WERKZEUG",
+      "hint": "Ausbildungsmittel, das kostenlos zu stellen ist."
+    },
+    {
+      "word": "FREISTELLUNG",
+      "hint": "Für Berufsschule und Prüfungen (§ 15 BBiG)."
+    },
+    {
+      "word": "FÜRSORGE",
+      "hint": "Pflicht der Ausbildenden zum Schutz der Azubis."
+    },
+    {
+      "word": "ZEUGNIS",
+      "hint": "Bei Beendigung schriftlich auszustellen (§ 16 BBiG)."
+    },
+    {
+      "word": "KÜNDIGUNG",
+      "hint": "Beendigung des Ausbildungsvertrages nach § 22 BBiG."
+    },
+    {
+      "word": "FRISTLOS",
+      "hint": "Kündigung aus wichtigem Grund nach der Probezeit."
+    },
+    {
+      "word": "FRISTGERECHT",
+      "hint": "Ordentliche Kündigung mit vier Wochen Frist."
+    },
+    {
+      "word": "WICHTIGERGRUND",
+      "hint": "Voraussetzung der fristlosen Kündigung."
+    },
+    {
+      "word": "TARIFVERTRAG",
+      "hint": "Zwischen Arbeitgeberverband und Gewerkschaft geschlossen."
+    },
+    {
+      "word": "GEWERKSCHAFT",
+      "hint": "Vertritt die Arbeitnehmerseite bei Tarifverhandlungen."
+    },
+    {
+      "word": "SOZIALPLAN",
+      "hint": "Vereinbarung zwischen Arbeitgeber und Betriebsrat."
+    },
+    {
+      "word": "JUGENDSCHUTZ",
+      "hint": "Besonderer Schutz von Beschäftigten unter 18 Jahren."
+    },
+    {
+      "word": "JUGENDLICHER",
+      "hint": "Wer mind. 15, aber noch nicht 18 Jahre alt ist."
+    },
+    {
+      "word": "KIND",
+      "hint": "Im JArbSchG: wer noch nicht 15 Jahre alt ist."
+    },
+    {
+      "word": "ARBEITSZEIT",
+      "hint": "Für Jugendliche max. 8 Stunden am Tag."
+    },
+    {
+      "word": "NACHTRUHE",
+      "hint": "Mind. 12 Stunden Freizeit nach Arbeitsende."
+    },
+    {
+      "word": "RUHEPAUSE",
+      "hint": "Unterbrechung; 60 Min. bei mehr als 6 Std."
+    },
+    {
+      "word": "AKKORDARBEIT",
+      "hint": "Für Jugendliche verbotene Arbeitsform (§ 23)."
+    },
+    {
+      "word": "ERSTUNTERS",
+      "hint": "Ärztliche Untersuchung vor Ausbildungsbeginn (§ 32)."
+    },
+    {
+      "word": "NACHUNTERS",
+      "hint": "Ärztliche Kontrolle im ersten Ausbildungsjahr (§ 33)."
+    },
+    {
+      "word": "MITBESTIMMUNG",
+      "hint": "Beteiligung der Arbeitnehmer im Unternehmen."
+    },
+    {
+      "word": "BETRIEBSRAT",
+      "hint": "Gewähltes Organ der Arbeitnehmervertretung."
+    },
+    {
+      "word": "AMTSZEIT",
+      "hint": "Beim Betriebsrat vier, bei der JAV zwei Jahre."
+    },
+    {
+      "word": "WAHLRECHT",
+      "hint": "Aktiv ab 18; nötig für die Betriebsratswahl."
+    },
+    {
+      "word": "VERSAMMLUNG",
+      "hint": "Zusammenkunft der Arbeitnehmer im Betrieb."
+    },
+    {
+      "word": "EINIGUNG",
+      "hint": "Beilegung von Streit zwischen den Betriebsparteien."
+    },
+    {
+      "word": "VERTRETUNG",
+      "hint": "Jugend- und Auszubildenden... im Betrieb (JAV)."
+    },
+    {
+      "word": "INTERESSEN",
+      "hint": "Was Betriebsrat und JAV vertreten."
+    },
+    {
+      "word": "ARBEITNEHMER",
+      "hint": "Beschäftigte, deren Rechte das BetrVG schützt."
+    },
+    {
+      "word": "ARBEITGEBER",
+      "hint": "Gegenpart des Betriebsrats im Unternehmen."
+    },
+    {
+      "word": "NOVELLE",
+      "hint": "Änderung des BBiG mit Wirkung ab 2020."
+    },
+    {
+      "word": "HANDWERK",
+      "hint": "Ein Bereich, in dem ausgebildet werden kann."
+    },
+    {
+      "word": "KLAUSEL",
+      "hint": "Verweisungs...; Hinweis auf Tarifverträge im Vertrag."
+    },
+    {
+      "word": "LERNORT",
+      "hint": "Ort der Ausbildung: Betrieb oder Berufsschule."
+    },
+    {
+      "word": "KOMPETENZ",
+      "hint": "Berufliche Handlungsfähigkeit, die vermittelt wird."
+    },
+    {
+      "word": "PRÜFUNG",
+      "hint": "Abschluss der Ausbildung vor der IHK."
+    },
+    {
+      "word": "GEHEIMNIS",
+      "hint": "Interne Information, über die zu schweigen ist."
+    }
+  ]
+}

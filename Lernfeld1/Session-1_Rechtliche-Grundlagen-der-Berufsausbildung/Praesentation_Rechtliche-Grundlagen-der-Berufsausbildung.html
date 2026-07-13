@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Session 1 — Rechtliche Grundlagen der Berufsausbildung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:       #0EA5A4;
+  --bfw-primary-dark:  #0F766E;
+  --bfw-accent:        #F59E0B;
+  --bfw-warn:          #F97316;
+  --bfw-success:       #10B981;
+  --bfw-ink:           #0F172A;
+  --bfw-ink-soft:      #475569;
+  --bfw-bg:            #FAFAFA;
+  --bfw-bg-teal:       #ECFEFF;
+  --bfw-bg-amber:      #FEF3C7;
+  --bfw-bg-rose:       #FFE4E6;
+  --bfw-border:        #E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Inter', system-ui, sans-serif; color: var(--bfw-ink); background: var(--bfw-bg); }
+
+.deck { position: relative; width: 100vw; height: 100vh; }
+.slide {
+  position: absolute; inset: 0;
+  display: none;
+  padding: 4rem 6rem;
+  flex-direction: column;
+  justify-content: center;
+  background: white;
+  animation: fadeIn 0.35s ease;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+h1 { font-size: 3.5rem; line-height: 1.1; color: var(--bfw-primary-dark); margin-bottom: 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 2.4rem; color: var(--bfw-primary-dark); margin-bottom: 1.5rem; }
+h3 { font-size: 1.4rem; color: var(--bfw-primary); margin-bottom: 0.8rem; font-weight: 600; }
+p { font-size: 1.25rem; line-height: 1.55; margin-bottom: 0.8rem; color: var(--bfw-ink); }
+ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+li { font-size: 1.2rem; line-height: 1.6; margin-bottom: 0.4rem; }
+.subtitle { font-size: 1.4rem; color: var(--bfw-ink-soft); margin-bottom: 2rem; font-weight: 500; }
+.muted { color: var(--bfw-ink-soft); }
+
+/* Deckblatt */
+.cover { background: linear-gradient(135deg, var(--bfw-bg-teal) 0%, white 60%, var(--bfw-bg-amber) 100%); }
+.cover-tag {
+  display: inline-block;
+  padding: 0.4rem 1rem;
+  background: var(--bfw-primary);
+  color: white;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+.cover-meta { display: flex; gap: 2rem; margin-top: 2rem; color: var(--bfw-ink-soft); font-size: 1.1rem; }
+.cover-meta span strong { color: var(--bfw-ink); display: block; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* Karten-Grid */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+.card { background: white; border: 1px solid var(--bfw-border); border-radius: 14px; padding: 1.4rem; box-shadow: 0 2px 8px rgba(15,23,42,0.04); }
+.card.teal { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.card.amber { background: var(--bfw-bg-amber); border-color: var(--bfw-accent); }
+.card.rose { background: var(--bfw-bg-rose); border-color: var(--bfw-warn); }
+.card-title { font-size: 1.15rem; font-weight: 700; color: var(--bfw-primary-dark); margin-bottom: 0.5rem; }
+.card.amber .card-title { color: var(--bfw-warn); }
+
+/* Merksatz */
+.merksatz {
+  background: var(--bfw-bg-teal);
+  border-left: 6px solid var(--bfw-primary);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.2rem 0;
+  font-size: 1.15rem;
+}
+.merksatz-label { font-weight: 700; color: var(--bfw-primary-dark); display: block; margin-bottom: 0.3rem; font-size: 1rem; }
+
+/* Tabellen */
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 1.1rem; }
+th { background: var(--bfw-bg-teal); color: var(--bfw-primary-dark); text-align: left; padding: 0.7rem 1rem; font-weight: 700; }
+td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--bfw-border); }
+
+/* Diagramm-Container für Rough.js */
+.figure { margin: 1.5rem auto; text-align: center; }
+.figure svg { max-width: 100%; height: auto; }
+.caption { color: var(--bfw-ink-soft); font-size: 0.95rem; margin-top: 0.5rem; }
+
+/* Navigation */
+.nav { position: fixed; bottom: 1rem; right: 1.5rem; display: flex; gap: 0.5rem; align-items: center; z-index: 100; }
+.nav button {
+  border: none; background: var(--bfw-primary); color: white;
+  width: 44px; height: 44px; border-radius: 50%;
+  font-size: 1.2rem; cursor: pointer;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+  transition: all 0.15s;
+}
+.nav button:hover { background: var(--bfw-primary-dark); transform: translateY(-1px); }
+.nav-counter { background: white; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 600; color: var(--bfw-ink-soft); font-size: 0.95rem; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
+
+.slide-num { position: fixed; bottom: 1rem; left: 1.5rem; color: var(--bfw-ink-soft); font-size: 0.9rem; }
+
+/* Listen mit Icons */
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { padding-left: 2rem; position: relative; }
+.checklist li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--bfw-success); font-weight: 700; font-size: 1.3rem; }
+
+.numlist { list-style: none; margin-left: 0; counter-reset: numitem; }
+.numlist li { padding-left: 3rem; position: relative; counter-increment: numitem; margin-bottom: 0.8rem; }
+.numlist li::before {
+  content: counter(numitem);
+  position: absolute; left: 0; top: 0;
+  width: 2rem; height: 2rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+}
+
+/* Print-friendly */
+@media print {
+  .slide { display: flex; page-break-after: always; }
+  .nav, .slide-num { display: none; }
+  html, body { height: auto; overflow: visible; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 1. Deckblatt -->
+  <section class="slide active cover">
+    <span class="cover-tag">Session 1</span>
+    <h1>Rechtliche Grundlagen der Berufsausbildung</h1>
+    <p class="subtitle">Ihre Rechte und Pflichten in der Ausbildung — einfach erklärt</p>
+    <div class="cover-meta">
+      <span><strong>Lernfeld</strong>1 — Die eigene Rolle im Betrieb mitgestalten und den Betrieb präsentieren</span>
+      <span><strong>Beruf</strong>Kaufmann/-frau für Büromanagement (IHK)</span>
+      <span><strong>Quelle</strong>Lehrwerk Lernfeld 1, Kap. 2</span>
+    </div>
+  </section>
+
+  <!-- 2. Lernziele -->
+  <section class="slide">
+    <h2>Was Sie in dieser Session lernen</h2>
+    <p class="subtitle">Am Ende können Sie...</p>
+    <ul class="checklist">
+      <li>das <strong>duale System</strong> und die drei Rollen (Ausbildende, Ausbilder, Auszubildende) erklären</li>
+      <li>das <strong>Berufsbildungsgesetz (BBiG)</strong> und die Ausbildungsordnung einordnen</li>
+      <li>Aufbau, Form und <strong>Pflichtinhalte des Ausbildungsvertrags</strong> beschreiben</li>
+      <li>die <strong>Pflichten</strong> von Azubi und Betrieb sowie <strong>Vergütung und Urlaub</strong> nennen</li>
+      <li><strong>Probezeit, Kündigung und Zeugnis</strong> rechtssicher unterscheiden</li>
+      <li>die Schutzregeln des <strong>Jugendarbeitsschutzgesetzes</strong> anwenden</li>
+      <li><strong>Betriebsrat</strong> und <strong>JAV</strong> als Mitbestimmungsorgane erklären</li>
+    </ul>
+  </section>
+
+  <!-- 3. Das duale System -->
+  <section class="slide">
+    <h2>Das duale System — zwei Lernorte</h2>
+    <p>„Dual“ bedeutet: Sie lernen an <strong>zwei Orten gleichzeitig</strong>. Beide Orte ergänzen sich — das eine ist die Praxis, das andere die Theorie.</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Lernort Betrieb</div>
+        <p style="font-size: 1rem;">Praktisches Arbeiten, echte Aufgaben, Anleitung durch den Ausbilder. Grundlage: der betriebliche Ausbildungsplan.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Lernort Berufsschule</div>
+        <p style="font-size: 1rem;">Fachtheorie und Allgemeinbildung. Grundlage: der Rahmenlehrplan. Für die Schule werden Sie freigestellt.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Merksatz</span>
+      Grundlage der dualen Ausbildung ist das <strong>Berufsbildungsgesetz (BBiG)</strong> von 1969 — zuletzt novelliert, gültig seit dem <strong>01. Januar 2020</strong>.
+    </div>
+  </section>
+
+  <!-- 4. Die drei Rollen -->
+  <section class="slide">
+    <h2>Wer ist wer? Die drei Rollen</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Ausbildende:r</div>
+        <p style="font-size: 1rem;">Der <strong>Betrieb/Arbeitgeber</strong>, der Sie einstellt. Ihr Vertragspartner (§ 10 BBiG).</p>
+      </div>
+      <div class="card teal">
+        <div class="card-title">Ausbilder:in</div>
+        <p style="font-size: 1rem;">Die Person, die Sie <strong>täglich fachlich anleitet</strong>. Vom Betrieb ausdrücklich beauftragt (§ 14 BBiG).</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Auszubildende:r</div>
+        <p style="font-size: 1rem;">Sie selbst — die Person, die den Beruf <strong>erlernt</strong>.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top: 1rem;">Merken Sie sich den Unterschied: Der <strong>Ausbildende</strong> ist der Betrieb, der <strong>Ausbilder</strong> ist der Mensch, der Sie anleitet.</p>
+  </section>
+
+  <!-- 5. Von der Ausbildungsordnung zum Plan -->
+  <section class="slide">
+    <h2>Von der Ausbildungsordnung zum Ausbildungsplan</h2>
+    <div class="figure" id="fig-planung"></div>
+    <p class="caption">Die Regeln werden immer konkreter — von bundesweit gültig bis zu Ihrem persönlichen Ausbildungsbetrieb.</p>
+  </section>
+
+  <!-- 6. BBiG & Ausbildungsordnung -->
+  <section class="slide">
+    <h2>BBiG &amp; Ausbildungsordnung</h2>
+    <p>Das <strong>BBiG</strong> ist das Gesetz. Für jeden Beruf gibt es zusätzlich eine <strong>Ausbildungsordnung</strong> (§ 5 BBiG), die staatlich anerkannt wird (§ 4 BBiG).</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Die Ausbildungsordnung enthält</div>
+        <ul style="margin-left: 1rem;">
+          <li>Bezeichnung des Ausbildungsberufes</li>
+          <li>Ausbildungsdauer (hier: 3 Jahre)</li>
+          <li>Ausbildungsberufsbild (Fertigkeiten &amp; Kenntnisse)</li>
+          <li>Ausbildungsrahmenplan</li>
+          <li>Prüfungsanforderungen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Gut zu wissen</div>
+        <p style="font-size: 1rem;">Seit dem 01.08.2014 sind drei alte Büroberufe zum modernen Beruf <strong>„Kaufmann/-frau für Büromanagement“</strong> zusammengefasst. Ausbildung in Industrie &amp; Handel, Handwerk oder im Öffentlichen Dienst.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Der Ausbildungsvertrag - Form -->
+  <section class="slide">
+    <h2>Der Berufsausbildungsvertrag (§§ 10, 11 BBiG)</h2>
+    <p>Wer ausbildet, muss einen <strong>schriftlichen Vertrag</strong> abschließen. Die <strong>elektronische Form ist ausgeschlossen</strong> — ein Vertrag per E-Mail reicht nicht!</p>
+    <ul class="numlist">
+      <li>Der wesentliche Inhalt wird <strong>schriftlich</strong> niedergelegt (§ 11 BBiG).</li>
+      <li>Unterschrift von <strong>Betrieb und Auszubildendem</strong> — bei Minderjährigen zusätzlich die <strong>gesetzlichen Vertreter</strong> (i. d. R. beide Eltern).</li>
+      <li>Der Azubi (und ggf. die Eltern) erhalten <strong>unverzüglich eine Ausfertigung</strong>.</li>
+      <li>Eintragung in das Verzeichnis bei der <strong>IHK</strong>; Änderungen meldet der Betrieb unverzüglich.</li>
+    </ul>
+  </section>
+
+  <!-- 8. Pflichtinhalte des Vertrags -->
+  <section class="slide">
+    <h2>Was MUSS im Vertrag stehen?</h2>
+    <p>Neun Punkte sind Pflicht (§ 11 BBiG). Die wichtigsten:</p>
+    <div class="cards">
+      <div class="card teal"><div class="card-title">1. Art, Gliederung &amp; Ziel</div>sachliche + zeitliche Gliederung (Ausbildungsplan als Anlage)</div>
+      <div class="card teal"><div class="card-title">2. Beginn &amp; Dauer</div>Startdatum und Dauer der Ausbildung</div>
+      <div class="card teal"><div class="card-title">3. Maßnahmen außerhalb</div>z. B. überbetriebliche Ausbildung</div>
+      <div class="card amber"><div class="card-title">4. Tägliche Ausbildungszeit</div>Dauer pro Tag</div>
+      <div class="card amber"><div class="card-title">5. Probezeit</div>Länge der Probezeit</div>
+      <div class="card amber"><div class="card-title">6. Vergütung</div>Höhe der Ausbildungsvergütung</div>
+      <div class="card rose"><div class="card-title">7. Urlaub</div>Dauer des Jahresurlaubs</div>
+      <div class="card rose"><div class="card-title">8. Kündigung</div>Voraussetzungen der Kündigung</div>
+      <div class="card rose"><div class="card-title">9. Verweisungsklausel</div>Hinweis auf Tarifverträge / Betriebsvereinbarungen</div>
+    </div>
+  </section>
+
+  <!-- 9. Probezeit -->
+  <section class="slide">
+    <h2>Die Probezeit (§ 20 BBiG)</h2>
+    <p>Das Ausbildungsverhältnis <strong>beginnt mit der Probezeit</strong>. Beide Seiten lernen sich kennen und prüfen, ob es passt.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">⏱️ Merksatz</span>
+      Die Probezeit dauert <strong>mindestens 1 Monat</strong> und <strong>höchstens 4 Monate</strong>.
+    </div>
+    <div class="merksatz" style="background: var(--bfw-bg-amber); border-left-color: var(--bfw-accent);">
+      <span class="merksatz-label" style="color: var(--bfw-warn);">⚡ Wichtig</span>
+      Während der Probezeit können <strong>beide Seiten jederzeit ohne Frist und ohne Grund</strong> kündigen (§ 22 Abs. 1 BBiG).
+    </div>
+  </section>
+
+  <!-- 10. Pflichten der Auszubildenden -->
+  <section class="slide">
+    <h2>Ihre Pflichten als Auszubildende:r (§ 13 BBiG)</h2>
+    <p>Sie müssen sich bemühen, die <strong>berufliche Handlungsfähigkeit</strong> zu erwerben. Konkret heißt das:</p>
+    <ul class="checklist">
+      <li>Aufgaben <strong>sorgfältig ausführen</strong></li>
+      <li>An Ausbildungsmaßnahmen <strong>teilnehmen</strong> (z. B. Berufsschule)</li>
+      <li><strong>Weisungen folgen</strong> (Ausbilder, weisungsberechtigte Personen)</li>
+      <li>Die betriebliche <strong>Ordnung beachten</strong></li>
+      <li>Werkzeug und Maschinen <strong>pfleglich behandeln</strong></li>
+      <li>Über Betriebs- und Geschäftsgeheimnisse <strong>Stillschweigen wahren</strong></li>
+      <li>Einen <strong>Ausbildungsnachweis (Berichtsheft)</strong> führen — schriftlich oder elektronisch</li>
+    </ul>
+  </section>
+
+  <!-- 11. Pflichten der Ausbildenden -->
+  <section class="slide">
+    <h2>Pflichten des Betriebs (§§ 14–16 BBiG)</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">§ 14 Ausbildung durchführen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Handlungsfähigkeit vermitteln</li>
+          <li>Selbst ausbilden oder Ausbilder beauftragen</li>
+          <li>Ausbildungsmittel kostenlos stellen</li>
+          <li>Zum Berufsschulbesuch anhalten</li>
+          <li>Nur angemessene Aufgaben übertragen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">§ 15 Freistellung &amp; § 16 Zeugnis</div>
+        <ul style="margin-left: 1rem;">
+          <li>Freistellen für Berufsschule &amp; Prüfungen</li>
+          <li>Berichtsheft-Führung ermöglichen</li>
+          <li>Am Ende ein schriftliches Zeugnis</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted" style="margin-top: 1rem;">Seit 01.01.2020 werden <strong>alle</strong> Azubis für die Berufsschule freigestellt — egal ob minderjährig oder volljährig.</p>
+  </section>
+
+  <!-- 12. Vergütung & Urlaub -->
+  <section class="slide">
+    <h2>Ausbildungsvergütung &amp; Urlaub</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Vergütung (§ 17 BBiG)</div>
+        <ul style="margin-left: 1rem;">
+          <li>Muss <strong>angemessen</strong> sein</li>
+          <li>Muss <strong>mindestens jährlich steigen</strong></li>
+          <li>Höhe steht im Vertrag</li>
+          <li>Tarifgebunden? Dann gilt der <strong>Tarifvertrag</strong></li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Urlaub</div>
+        <ul style="margin-left: 1rem;">
+          <li>Erwachsene: mind. <strong>24 Werktage</strong> (BUrlG)</li>
+          <li>Jugendliche (unter 18): nach Alter gestaffelt (JArbSchG)</li>
+          <li>unter 16: mind. 30 Werktage</li>
+          <li>unter 17: 27 · unter 18: 25 Werktage</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🛡️ Faustregel</span>
+      Für <strong>Jugendliche unter 18</strong> gilt das strengere <strong>Jugendarbeitsschutzgesetz</strong> — sie werden besonders geschützt.
+    </div>
+  </section>
+
+  <!-- 13. Beendigung & Kündigung -->
+  <section class="slide">
+    <h2>Beendigung &amp; Kündigung (§ 22 BBiG)</h2>
+    <table>
+      <thead><tr><th>Situation</th><th>Wer &amp; wie?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>In der Probezeit</strong></td><td>Beide Seiten, jederzeit, ohne Frist, ohne Grund</td></tr>
+        <tr><td><strong>Fristlos (wichtiger Grund)</strong></td><td>Beide Seiten — innerhalb von <strong>2 Wochen</strong> nach Bekanntwerden</td></tr>
+        <tr><td><strong>Ordentlich (4 Wochen Frist)</strong></td><td><strong>Nur der Azubi</strong> — bei Aufgabe/Berufswechsel</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">⚖️ Besonderer Schutz</span>
+      Nach der Probezeit hat der <strong>Betrieb kein ordentliches Kündigungsrecht</strong>. So schützt der Gesetzgeber Ihre Ausbildung. Normal endet die Ausbildung mit <strong>Bestehen der Abschlussprüfung</strong>.
+    </div>
+  </section>
+
+  <!-- 14. Das Ausbildungszeugnis -->
+  <section class="slide">
+    <h2>Das Ausbildungszeugnis (§ 16 BBiG)</h2>
+    <p>Am Ende bekommen Sie ein <strong>schriftliches Zeugnis</strong> (elektronische Form ausgeschlossen). Es gibt zwei Arten:</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Einfaches Zeugnis</div>
+        <p style="font-size: 1rem;">Enthält <strong>Art, Dauer und Ziel</strong> der Ausbildung sowie die erworbenen <strong>Fertigkeiten, Kenntnisse und Fähigkeiten</strong>.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Qualifiziertes Zeugnis</div>
+        <p style="font-size: 1rem;"><strong>Auf Verlangen</strong> des Azubis zusätzlich: Angaben über <strong>Verhalten und Leistung</strong>.</p>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Tipp</span>
+      Das <strong>qualifizierte</strong> Zeugnis ist meist wertvoller für Bewerbungen — verlangen Sie es aktiv!
+    </div>
+  </section>
+
+  <!-- 15. Der rote Faden: Vom Vertrag zum Zeugnis -->
+  <section class="slide">
+    <h2>Der rote Faden: Vom Vertrag zum Zeugnis</h2>
+    <p class="subtitle">So läuft Ihre Ausbildung rechtlich ab — Schritt für Schritt.</p>
+    <ol class="numlist">
+      <li><strong>Vertrag</strong> schriftlich abschließen &amp; bei der IHK eintragen</li>
+      <li><strong>Probezeit</strong> (1–4 Monate) — beide prüfen, ob es passt</li>
+      <li><strong>Ausbildung</strong> im Betrieb + Berufsschule; Berichtsheft führen</li>
+      <li><strong>Vergütung &amp; Urlaub</strong> nach Vertrag/Gesetz</li>
+      <li><strong>Prüfung</strong> — mit Bestehen endet das Ausbildungsverhältnis</li>
+      <li><strong>Zeugnis</strong> (§ 16) — einfach oder auf Wunsch qualifiziert</li>
+    </ol>
+  </section>
+
+  <!-- 16. JArbSchG Geltungsbereich -->
+  <section class="slide">
+    <h2>Jugendarbeitsschutzgesetz — für wen?</h2>
+    <p>Das <strong>JArbSchG</strong> schützt junge Menschen bei der Arbeit. Es unterscheidet zwei Gruppen:</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Kind</div>
+        <p style="font-size: 1.05rem;">Wer <strong>noch nicht 15</strong> Jahre alt ist. Beschäftigung grundsätzlich verboten (Ausnahme: Berufsausbildung).</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Jugendliche:r</div>
+        <p style="font-size: 1.05rem;">Wer <strong>mindestens 15, aber noch nicht 18</strong> Jahre alt ist. Für diese Gruppe gelten die Schutzregeln.</p>
+      </div>
+    </div>
+    <p class="muted" style="margin-top: 1rem;">Merke: Ab dem <strong>18. Geburtstag</strong> gilt das JArbSchG nicht mehr — dann greifen BBiG, ArbZG und BUrlG.</p>
+  </section>
+
+  <!-- 17. JArbSchG Arbeitszeit -->
+  <section class="slide">
+    <h2>JArbSchG — Arbeitszeit &amp; Pausen</h2>
+    <div class="figure" id="fig-jarbschg"></div>
+    <p class="caption">Die wichtigsten Schutzregeln für Jugendliche auf einen Blick.</p>
+  </section>
+
+  <!-- 18. JArbSchG Verbote & Untersuchungen -->
+  <section class="slide">
+    <h2>JArbSchG — Nachtruhe, Verbote &amp; Untersuchungen</h2>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Zeit &amp; Ruhe</div>
+        <ul style="margin-left: 1rem;">
+          <li>Beschäftigung nur <strong>6–20 Uhr</strong> (§ 14)</li>
+          <li><strong>Nachtruhe</strong>: mind. 12 Std. Freizeit (§ 13)</li>
+          <li>Nur an <strong>5 Tagen/Woche</strong> (§ 15)</li>
+          <li>Keine Samstags-/Sonntagsarbeit (§§ 16, 17)</li>
+        </ul>
+      </div>
+      <div class="card rose">
+        <div class="card-title">Verbote</div>
+        <ul style="margin-left: 1rem;">
+          <li>Keine <strong>gefährlichen Arbeiten</strong> (§ 22)</li>
+          <li>Keine <strong>Akkordarbeit</strong> (§ 23)</li>
+          <li>Keine Arbeit unter Tage (§ 24)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">🩺 Ärztliche Untersuchung</span>
+      Vor Beginn: <strong>Erstuntersuchung</strong> (§ 32) — im ersten Jahr eine <strong>Nachuntersuchung</strong> (§ 33). Ohne Bescheinigung keine Beschäftigung!
+    </div>
+  </section>
+
+  <!-- 19. Mitbestimmung - Überblick -->
+  <section class="slide">
+    <h2>Mitbestimmung im Betrieb</h2>
+    <p>Arbeitnehmer sollen mitreden dürfen. Das regelt das <strong>Betriebsverfassungsgesetz (BetrVG)</strong>.</p>
+    <div class="merksatz">
+      <span class="merksatz-label">💡 Grundidee</span>
+      Zwei Organe vertreten die Beschäftigten: der <strong>Betriebsrat</strong> für alle, die <strong>JAV</strong> speziell für Jugendliche und Auszubildende.
+    </div>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Betriebsrat</div>
+        <p style="font-size: 1rem;">Vertritt <strong>alle</strong> Arbeitnehmer gegenüber dem Arbeitgeber.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-title">JAV</div>
+        <p style="font-size: 1rem;">Vertritt <strong>Jugendliche und Azubis</strong> — arbeitet eng mit dem Betriebsrat zusammen.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20. Der Betriebsrat -->
+  <section class="slide">
+    <h2>Der Betriebsrat</h2>
+    <table>
+      <thead><tr><th>Frage</th><th>Regelung (BetrVG)</th></tr></thead>
+      <tbody>
+        <tr><td>Ab wann wählbar?</td><td>Betrieb mit mind. <strong>5 ständigen</strong> wahlberechtigten AN (§ 1)</td></tr>
+        <tr><td>Wer darf wählen?</td><td>AN ab <strong>18 Jahren</strong> (aktives Wahlrecht, § 7)</td></tr>
+        <tr><td>Wer ist wählbar?</td><td>Wahlberechtigt + mind. <strong>6 Monate</strong> im Betrieb (§ 8)</td></tr>
+        <tr><td>Amtszeit?</td><td><strong>4 Jahre</strong> (§ 21)</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">⚖️ Echte Mitbestimmung</span>
+      In <strong>sozialen Angelegenheiten</strong> (z. B. Beginn/Ende der Arbeitszeit, Unfallverhütung) hat der Betriebsrat gleichberechtigte Mitbestimmung (§§ 87–89). Bei Streit hilft die <strong>Einigungsstelle</strong> (§ 76).
+    </div>
+  </section>
+
+  <!-- 21. Die JAV -->
+  <section class="slide">
+    <h2>Jugend- und Auszubildendenvertretung (JAV)</h2>
+    <table>
+      <thead><tr><th>Frage</th><th>Regelung (BetrVG)</th></tr></thead>
+      <tbody>
+        <tr><td>Wann gewählt?</td><td>Mind. <strong>5</strong> AN unter 18 oder Azubis unter 25 (§ 60)</td></tr>
+        <tr><td>Wer ist wählbar?</td><td>AN, die das <strong>25. Lebensjahr</strong> noch nicht vollendet haben (§ 61)</td></tr>
+        <tr><td>Amtszeit?</td><td><strong>2 Jahre</strong> (§ 64)</td></tr>
+        <tr><td>Größe?</td><td>1 bis 15 Vertreter, je nach Anzahl (§ 62)</td></tr>
+      </tbody>
+    </table>
+    <div class="merksatz">
+      <span class="merksatz-label">🎯 Aufgabe der JAV (§ 70)</span>
+      Maßnahmen zugunsten Jugendlicher/Azubis beim Betriebsrat <strong>beantragen</strong> und über die <strong>Einhaltung der Schutzvorschriften wachen</strong> — z. B. Übernahme nach der Ausbildung.
+    </div>
+  </section>
+
+  <!-- 22. Zusammenfassung -->
+  <section class="slide">
+    <h2>Zusammenfassung Session 1</h2>
+    <ol class="numlist">
+      <li><strong>Duales System</strong>: Betrieb + Berufsschule; Grundlage ist das <strong>BBiG</strong>.</li>
+      <li>Drei Rollen: <strong>Ausbildende:r</strong> (Betrieb), <strong>Ausbilder:in</strong>, <strong>Auszubildende:r</strong>.</li>
+      <li>Der <strong>Vertrag</strong> ist schriftlich, wird bei der IHK eingetragen, hat 9 Pflichtinhalte.</li>
+      <li><strong>Probezeit</strong> 1–4 Monate; <strong>Vergütung</strong> angemessen &amp; steigend (§ 17).</li>
+      <li><strong>Kündigung</strong> §22; ordentlich nur durch Azubi. <strong>Zeugnis</strong> §16 (einfach/qualifiziert).</li>
+      <li><strong>JArbSchG</strong> schützt unter 18-Jährige; <strong>Betriebsrat &amp; JAV</strong> geben Mitbestimmung.</li>
+    </ol>
+  </section>
+
+  <!-- 23. Praxisbeispiel -->
+  <section class="slide">
+    <h2>Praxisbeispiel: Marie, 17, startet ihre Ausbildung</h2>
+    <p><em>Marie (17)</em> beginnt als Kauffrau für Büromanagement. Was gilt für sie rechtlich?</p>
+    <ol class="numlist">
+      <li><strong>Vertrag</strong>: Ihre Eltern müssen mit unterschreiben (Marie ist minderjährig).</li>
+      <li><strong>JArbSchG</strong>: max. 8 Std./Tag, 40 Std./Woche, keine Nacht-/Wochenendarbeit.</li>
+      <li><strong>Urlaub</strong>: als unter 18-Jährige mind. 25 Werktage (JArbSchG).</li>
+      <li><strong>Untersuchung</strong>: Erstuntersuchung muss vorliegen, sonst kein Start.</li>
+      <li><strong>Probezeit</strong>: 1–4 Monate; danach besonderer Kündigungsschutz.</li>
+      <li><strong>Mitbestimmung</strong>: Gibt es eine JAV, kann Marie sie ansprechen.</li>
+    </ol>
+  </section>
+
+  <!-- 24. IHK-Prüfungsbezug -->
+  <section class="slide">
+    <h2>Bezug zur IHK-Abschlussprüfung</h2>
+    <p class="subtitle">Was ist hier prüfungsrelevant?</p>
+    <div class="cards">
+      <div class="card teal">
+        <div class="card-title">Wissen abrufen</div>
+        <ul style="margin-left: 1rem;">
+          <li>Pflichtinhalte des Vertrags nennen</li>
+          <li>Probezeit-Grenzen (1–4 Monate)</li>
+          <li>§§ zu Vergütung, Zeugnis, Kündigung zuordnen</li>
+        </ul>
+      </div>
+      <div class="card amber">
+        <div class="card-title">Anwenden &amp; bewerten</div>
+        <ul style="margin-left: 1rem;">
+          <li>Kündigungsfall rechtlich beurteilen</li>
+          <li>JArbSchG auf einen Fall anwenden</li>
+          <li>Aufgaben von Betriebsrat/JAV unterscheiden</li>
+        </ul>
+      </div>
+    </div>
+    <div class="merksatz">
+      <span class="merksatz-label">📝 IHK-Operatoren</span>
+      „<strong>nennen</strong>“ = Aufzählung, „<strong>erläutern</strong>“ = mit Begründung, „<strong>beurteilen</strong>“ = eigene Bewertung mit Argumenten.
+    </div>
+  </section>
+
+  <!-- 25. Diskussionsfragen -->
+  <section class="slide">
+    <h2>Diskussionsfragen</h2>
+    <p class="subtitle">Zum Abschluss — austauschen, nicht abfragen.</p>
+    <ol style="font-size: 1.2rem;">
+      <li>Welche Rechte in der Ausbildung waren Ihnen bisher unbekannt?</li>
+      <li>Warum darf der Betrieb nach der Probezeit nicht ordentlich kündigen — finden Sie das fair?</li>
+      <li>Wozu braucht es das strenge Jugendarbeitsschutzgesetz — schützt es zu viel oder zu wenig?</li>
+      <li>Würden Sie sich in einer JAV engagieren? Was könnten Sie dort bewirken?</li>
+    </ol>
+  </section>
+
+  <!-- 26. Ausblick -->
+  <section class="slide">
+    <h2>Ausblick: Session 2</h2>
+    <p class="subtitle">Der Betrieb in der Wirtschaft</p>
+    <ul style="font-size: 1.2rem;">
+      <li><strong>Betriebe &amp; Unternehmen</strong> — Aufgaben und Ziele</li>
+      <li><strong>Wirtschaftssektoren</strong> und Branchen</li>
+      <li><strong>Der Betrieb im Wirtschaftskreislauf</strong></li>
+      <li><strong>Standortfaktoren</strong> und betriebliche Zusammenarbeit</li>
+      <li>Wie Ihr Ausbildungsbetrieb in die Gesamtwirtschaft eingebettet ist</li>
+    </ul>
+    <p class="muted" style="margin-top: 2rem;">Hausaufgabe: Quiz <code>Quiz_Rechtliche-Grundlagen-der-Berufsausbildung.html</code> bearbeiten — 60 Fragen zur Wiederholung. Handout <code>Handout_Rechtliche-Grundlagen-der-Berufsausbildung.pdf</code> als Selbstlernmaterial.</p>
+  </section>
+
+</div>
+
+<div class="slide-num">© Can Siebert · 2026 · <span id="slideCount">1 / 26</span></div>
+<nav class="nav">
+  <button onclick="prev()" title="Zurück (←)">←</button>
+  <span class="nav-counter"><span id="slideNum">1</span></span>
+  <button onclick="next()" title="Weiter (→)">→</button>
+</nav>
+
+<!-- Rough.js für handgezeichnete Diagramme -->
+<script src="https://cdn.jsdelivr.net/npm/roughjs@4.6.6/bundled/rough.min.js"></script>
+<script>
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+
+function show(i) {
+  slides.forEach(s => s.classList.remove('active'));
+  current = Math.max(0, Math.min(i, slides.length - 1));
+  slides[current].classList.add('active');
+  document.getElementById('slideNum').textContent = current + 1;
+  document.getElementById('slideCount').textContent = `${current + 1} / ${slides.length}`;
+}
+function next() { show(current + 1); }
+function prev() { show(current - 1); }
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { next(); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') prev();
+  if (e.key === 'Home') show(0);
+  if (e.key === 'End') show(slides.length - 1);
+});
+
+// Rough.js-Skizzen
+function makeRough(svgEl, fn) {
+  const rc = rough.svg(svgEl);
+  fn(rc, svgEl);
+}
+
+function box(rc, svg, x, y, w, h, fill, stroke) {
+  const node = rc.rectangle(x, y, w, h, {
+    roughness: 1.6, bowing: 1, fill: fill, fillStyle: 'solid', stroke: stroke, strokeWidth: 1.6
+  });
+  svg.appendChild(node);
+}
+function arrow(rc, svg, x1, y1, x2, y2, color) {
+  svg.appendChild(rc.line(x1, y1, x2, y2, { roughness: 1.4, stroke: color, strokeWidth: 1.8 }));
+  // Pfeilspitze
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const ah = 10;
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang - Math.PI / 7), y2 - ah * Math.sin(ang - Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+  svg.appendChild(rc.line(x2, y2, x2 - ah * Math.cos(ang + Math.PI / 7), y2 - ah * Math.sin(ang + Math.PI / 7), { roughness: 1.2, stroke: color, strokeWidth: 1.8 }));
+}
+function text(svg, x, y, str, opts = {}) {
+  const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t.setAttribute('x', x); t.setAttribute('y', y);
+  t.setAttribute('text-anchor', opts.anchor || 'middle');
+  t.setAttribute('font-family', 'Inter, sans-serif');
+  t.setAttribute('font-size', opts.size || 15);
+  t.setAttribute('fill', opts.color || '#0F172A');
+  t.setAttribute('font-weight', opts.bold ? 700 : 500);
+  t.textContent = str;
+  svg.appendChild(t);
+  return t;
+}
+
+window.addEventListener('load', () => {
+  // FIG: Von der Ausbildungsordnung zum Ausbildungsplan (Trichter/Kette)
+  const c1 = document.getElementById('fig-planung');
+  const svg1 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg1.setAttribute('viewBox', '0 0 900 300');
+  svg1.setAttribute('width', '900'); svg1.setAttribute('height', '300');
+  c1.appendChild(svg1);
+  makeRough(svg1, (rc, svg) => {
+    const stufen = [
+      { t: 'Ausbildungs-', t2: 'ordnung (§ 5)', s: 'bundesweit, je Beruf', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'Ausbildungs-', t2: 'rahmenplan', s: 'grobe Gliederung', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Betrieblicher', t2: 'Ausbildungsplan', s: 'individuell im Betrieb', c: '#FFE4E6', st: '#F97316' }
+    ];
+    let x = 40;
+    stufen.forEach((f, i) => {
+      box(rc, svg, x, 90, 220, 110, f.c, f.st);
+      text(svg, x + 110, 130, f.t, { bold: true, size: 18, color: f.st });
+      text(svg, x + 110, 155, f.t2, { bold: true, size: 18, color: f.st });
+      text(svg, x + 110, 182, f.s, { size: 14, color: '#475569' });
+      if (i < stufen.length - 1) arrow(rc, svg, x + 220, 145, x + 290, 145, '#0F766E');
+      x += 290;
+    });
+    text(svg, 450, 45, 'Vom Gesetz zum persönlichen Plan — immer konkreter', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 250, 'allgemein  ⟶  individuell', { size: 14, color: '#475569' });
+  });
+
+  // FIG: JArbSchG Arbeitszeit-Regeln
+  const c2 = document.getElementById('fig-jarbschg');
+  const svg2 = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg2.setAttribute('viewBox', '0 0 900 260');
+  svg2.setAttribute('width', '900'); svg2.setAttribute('height', '260');
+  c2.appendChild(svg2);
+  makeRough(svg2, (rc, svg) => {
+    const regeln = [
+      { t: 'max. 8 Std.', s: 'pro Tag (§ 8)', c: '#ECFEFF', st: '#0F766E' },
+      { t: 'max. 40 Std.', s: 'pro Woche (§ 8)', c: '#ECFEFF', st: '#0F766E' },
+      { t: '5-Tage-', s: 'Woche (§ 15)', c: '#FEF3C7', st: '#F59E0B' },
+      { t: 'Pause 60 Min.', s: 'bei > 6 Std. (§ 11)', c: '#FEF3C7', st: '#F59E0B' }
+    ];
+    let x = 30;
+    regeln.forEach((f) => {
+      box(rc, svg, x, 80, 195, 100, f.c, f.st);
+      text(svg, x + 97, 122, f.t, { bold: true, size: 19, color: f.st });
+      text(svg, x + 97, 150, f.s, { size: 14, color: '#475569' });
+      x += 215;
+    });
+    text(svg, 450, 45, 'Arbeitszeit Jugendlicher (unter 18) — JArbSchG', { size: 18, bold: true, color: '#0F766E' });
+    text(svg, 450, 215, 'Pause: 30 Min. bei 4,5–6 Std.  ·  60 Min. bei über 6 Std.', { size: 14, color: '#475569' });
+  });
+});
+</script>
+
+</body>
+</html>

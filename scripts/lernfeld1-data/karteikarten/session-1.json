@@ -1,0 +1,308 @@
+{
+  "session": 1,
+  "thema": "Rechtliche Grundlagen der Berufsausbildung",
+  "slug": "Rechtliche-Grundlagen-der-Berufsausbildung",
+  "day_id": "lf1-s1",
+  "cards": [
+    {
+      "topic": "Duales System",
+      "front": "Warum spricht man von dualer Ausbildung?",
+      "back": "Weil die Ausbildung parallel an zwei Lernorten stattfindet: im Betrieb (Praxis) und in der Berufsschule (Theorie)."
+    },
+    {
+      "topic": "Duales System",
+      "front": "Welche zwei Lernorte hat die duale Ausbildung?",
+      "back": "Der Betrieb und die Berufsschule."
+    },
+    {
+      "topic": "Duales System",
+      "front": "Was vermittelt der Betrieb in der Ausbildung?",
+      "back": "Die praktische berufliche Handlungsfähigkeit (Fertigkeiten und praktische Kenntnisse)."
+    },
+    {
+      "topic": "Duales System",
+      "front": "Was vermittelt die Berufsschule?",
+      "back": "Fachtheoretische und allgemeinbildende Kenntnisse."
+    },
+    {
+      "topic": "Rollen",
+      "front": "Wer ist der/die Ausbildende?",
+      "back": "Der Vertragspartner: das Unternehmen bzw. die Inhaberin/der Inhaber, das andere zur Berufsausbildung einstellt."
+    },
+    {
+      "topic": "Rollen",
+      "front": "Wer ist der/die Ausbilder:in?",
+      "back": "Die Person, die die Ausbildung im Betrieb praktisch durchführt und dazu beauftragt ist."
+    },
+    {
+      "topic": "Rollen",
+      "front": "Wer ist der/die Auszubildende?",
+      "back": "Die Person, die ausgebildet wird und sich um den Erwerb der beruflichen Handlungsfähigkeit bemüht."
+    },
+    {
+      "topic": "Rechtsgrundlagen",
+      "front": "Berufsbildungsgesetz (BBiG)",
+      "back": "Gesetz von 1969, das die Berufsausbildung in Deutschland regelt; zuletzt novelliert mit Wirkung ab 01.01.2020."
+    },
+    {
+      "topic": "Rechtsgrundlagen",
+      "front": "Was ist eine Ausbildungsordnung?",
+      "back": "Nach § 5 BBiG für jeden Beruf erlassene Verordnung mit Berufsbild, Dauer, Ausbildungsrahmenplan und Prüfungsanforderungen."
+    },
+    {
+      "topic": "Rechtsgrundlagen",
+      "front": "Was ist der Ausbildungsrahmenplan?",
+      "back": "Die bundeseinheitliche grobe sachliche und zeitliche Gliederung der zu vermittelnden Inhalte; Teil der Ausbildungsordnung."
+    },
+    {
+      "topic": "Rechtsgrundlagen",
+      "front": "Was ist der betriebliche Ausbildungsplan?",
+      "back": "Der vom Betrieb erstellte, auf das Unternehmen abgestimmte Plan; Anlage des Berufsausbildungsvertrages."
+    },
+    {
+      "topic": "Rechtsgrundlagen",
+      "front": "Wer erstellt den betrieblichen Ausbildungsplan?",
+      "back": "Der/die Ausbildende (das Unternehmen)."
+    },
+    {
+      "topic": "Rechtsgrundlagen",
+      "front": "Reihenfolge der Rechtsgrundlagen vom Allgemeinen zum Konkreten?",
+      "back": "BBiG → Ausbildungsordnung → Ausbildungsrahmenplan → betrieblicher Ausbildungsplan."
+    },
+    {
+      "topic": "Ausbildungsvertrag",
+      "front": "Was schreibt § 10 BBiG vor?",
+      "back": "Wer andere zur Berufsausbildung einstellt, hat mit ihnen einen Berufsausbildungsvertrag abzuschließen."
+    },
+    {
+      "topic": "Ausbildungsvertrag",
+      "front": "In welcher Form ist der wesentliche Vertragsinhalt niederzulegen?",
+      "back": "Schriftlich (§ 11 Abs. 1 BBiG); die elektronische Form ist ausgeschlossen."
+    },
+    {
+      "topic": "Ausbildungsvertrag",
+      "front": "Wer unterschreibt den Vertrag bei einem/einer unter 18-jährigen Auszubildenden?",
+      "back": "Der/die Ausbildende, der/die Auszubildende und zusätzlich die gesetzlichen Vertreter (i.d.R. beide Elternteile)."
+    },
+    {
+      "topic": "Ausbildungsvertrag",
+      "front": "Bei welcher Stelle wird das Ausbildungsverhältnis eingetragen?",
+      "back": "Bei der zuständigen Stelle; für kaufmännische Berufe die Industrie- und Handelskammer (IHK)."
+    },
+    {
+      "topic": "Ausbildungsvertrag",
+      "front": "Wie viele Pflichtinhalte muss der Vertrag nach § 11 BBiG enthalten?",
+      "back": "Neun Pflichtinhalte."
+    },
+    {
+      "topic": "Ausbildungsvertrag",
+      "front": "Nenne drei Pflichtinhalte des Ausbildungsvertrages.",
+      "back": "z.B.: Ziel und Gliederung der Ausbildung; Beginn und Dauer; Probezeit; Vergütung; Urlaub; Kündigungsvoraussetzungen."
+    },
+    {
+      "topic": "Probezeit",
+      "front": "Wie lange muss/darf die Probezeit dauern (§ 20 BBiG)?",
+      "back": "Mindestens einen Monat und höchstens vier Monate."
+    },
+    {
+      "topic": "Vergütung",
+      "front": "Was schreibt § 17 BBiG zur Vergütung vor?",
+      "back": "Es ist eine angemessene Vergütung zu zahlen, die im Vertrag angegeben sein muss und mindestens jährlich steigen muss."
+    },
+    {
+      "topic": "Vergütung",
+      "front": "Was gilt bei tarifgebundenen Arbeitgebern für die Vergütung?",
+      "back": "Es gilt die tarifvertragliche Ausbildungsvergütung."
+    },
+    {
+      "topic": "Urlaub",
+      "front": "Wie viel Urlaub steht erwachsenen Auszubildenden mindestens zu (§ 3 BUrlG)?",
+      "back": "Mindestens 24 Werktage jährlich."
+    },
+    {
+      "topic": "Urlaub",
+      "front": "Wie ist der Mindesturlaub Jugendlicher gestaffelt (§ 19 JArbSchG)?",
+      "back": "Mind. 30 Werktage (unter 16), 27 Werktage (unter 17), 25 Werktage (unter 18)."
+    },
+    {
+      "topic": "Pflichten Azubi",
+      "front": "Welche Pflichten regelt § 13 BBiG?",
+      "back": "Die Pflichten der Auszubildenden während der Berufsausbildung."
+    },
+    {
+      "topic": "Pflichten Azubi",
+      "front": "Nenne drei Pflichten der Auszubildenden (§ 13 BBiG).",
+      "back": "z.B.: Aufgaben sorgfältig ausführen, Weisungen folgen, Betriebsordnung beachten, Berichtsheft führen, Stillschweigen wahren."
+    },
+    {
+      "topic": "Pflichten Azubi",
+      "front": "Was ist der Ausbildungsnachweis?",
+      "back": "Das Berichtsheft; von der/dem Auszubildenden zu führen (§ 13) und vom/von der Ausbildenden durchzusehen."
+    },
+    {
+      "topic": "Pflichten Ausbildende",
+      "front": "Welche Paragrafen regeln die Pflichten der Ausbildenden?",
+      "back": "Die §§ 14–16 BBiG."
+    },
+    {
+      "topic": "Pflichten Ausbildende",
+      "front": "Nenne drei Pflichten der Ausbildenden (§§ 14–16 BBiG).",
+      "back": "z.B.: Handlungsfähigkeit vermitteln, Ausbildungsmittel kostenlos stellen, freistellen, Vergütung zahlen, Zeugnis ausstellen."
+    },
+    {
+      "topic": "Pflichten Ausbildende",
+      "front": "Was regelt § 15 BBiG?",
+      "back": "Die Freistellung der Auszubildenden für den Berufsschulunterricht und für Prüfungen."
+    },
+    {
+      "topic": "Pflichten Ausbildende",
+      "front": "Was bedeutet die Fürsorgepflicht der Ausbildenden?",
+      "back": "Dafür zu sorgen, dass Auszubildende charakterlich gefördert und sittlich sowie körperlich nicht gefährdet werden."
+    },
+    {
+      "topic": "Kündigung",
+      "front": "Welcher Paragraf regelt die Kündigung des Ausbildungsvertrages?",
+      "back": "§ 22 BBiG."
+    },
+    {
+      "topic": "Kündigung",
+      "front": "Wie kann während der Probezeit gekündigt werden?",
+      "back": "Von beiden Seiten jederzeit, ohne Kündigungsfrist und ohne Angabe von Gründen (§ 22 Abs. 1)."
+    },
+    {
+      "topic": "Kündigung",
+      "front": "Was ist eine außerordentliche (fristlose) Kündigung?",
+      "back": "Kündigung aus wichtigem Grund nach der Probezeit, ohne Frist; muss innerhalb von zwei Wochen nach Bekanntwerden erfolgen."
+    },
+    {
+      "topic": "Kündigung",
+      "front": "Innerhalb welcher Frist muss die fristlose Kündigung ausgesprochen werden?",
+      "back": "Innerhalb von zwei Wochen nach Bekanntwerden des wichtigen Grundes (§ 22 Abs. 4)."
+    },
+    {
+      "topic": "Kündigung",
+      "front": "Wer darf nach der Probezeit ordentlich (mit 4 Wochen Frist) kündigen?",
+      "back": "Nur der/die Auszubildende, wenn er/sie die Ausbildung aufgibt oder einen anderen Beruf anstrebt; der Betrieb hat dieses Recht nicht."
+    },
+    {
+      "topic": "Zeugnis",
+      "front": "Was regelt § 16 BBiG?",
+      "back": "Das Ausbildungszeugnis bei Beendigung des Berufsausbildungsverhältnisses."
+    },
+    {
+      "topic": "Zeugnis",
+      "front": "Was enthält das einfache Ausbildungszeugnis?",
+      "back": "Angaben über Art, Dauer und Ziel der Ausbildung sowie über die erworbenen Fertigkeiten, Kenntnisse und Fähigkeiten."
+    },
+    {
+      "topic": "Zeugnis",
+      "front": "Was enthält das qualifizierte Ausbildungszeugnis zusätzlich?",
+      "back": "Auf Verlangen Angaben über Verhalten und Leistung."
+    },
+    {
+      "topic": "Zeugnis",
+      "front": "In welcher Form ist das Ausbildungszeugnis auszustellen?",
+      "back": "Schriftlich; die elektronische Form ist ausgeschlossen."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "Für wen gilt das Jugendarbeitsschutzgesetz?",
+      "back": "Für Auszubildende und Arbeitnehmer, die noch nicht 18 Jahre alt sind."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "Wer gilt als Kind, wer als Jugendlicher (§ 2 JArbSchG)?",
+      "back": "Kind: wer noch nicht 15 Jahre alt ist. Jugendlicher: mindestens 15, aber noch nicht 18 Jahre."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "Wie lange dürfen Jugendliche höchstens arbeiten (§ 8 JArbSchG)?",
+      "back": "Höchstens 8 Stunden täglich (in Ausnahmen 8,5) und 40 Stunden wöchentlich."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "An wie vielen Tagen dürfen Jugendliche in der Regel arbeiten?",
+      "back": "In der Regel nur an fünf Tagen in der Woche (§ 15 JArbSchG)."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "In welcher Zeitspanne dürfen Jugendliche beschäftigt werden (§ 14 JArbSchG)?",
+      "back": "Grundsätzlich nur von 6 bis 20 Uhr."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "Wie lange muss die Nachtruhe Jugendlicher mindestens sein (§ 13 JArbSchG)?",
+      "back": "Mindestens 12 Stunden ununterbrochene Freizeit nach Arbeitsende."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "Welche Ruhepause gilt bei mehr als 6 Stunden Arbeit (§ 11 JArbSchG)?",
+      "back": "Mindestens 60 Minuten (bei mehr als 4,5 bis 6 Stunden: 30 Minuten)."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "Welche Arbeiten sind für Jugendliche verboten?",
+      "back": "Gefährliche Arbeiten (§ 22), Akkordarbeit (§ 23) und Arbeiten unter Tage (§ 24)."
+    },
+    {
+      "topic": "JArbSchG",
+      "front": "Welche ärztlichen Untersuchungen schreibt das JArbSchG vor?",
+      "back": "Eine Erstuntersuchung vor Beginn (§ 32) und eine Nachuntersuchung im ersten Jahr (§ 33)."
+    },
+    {
+      "topic": "Mitbestimmung",
+      "front": "Welches Gesetz regelt die betriebliche Mitbestimmung?",
+      "back": "Das Betriebsverfassungsgesetz (BetrVG)."
+    },
+    {
+      "topic": "Mitbestimmung",
+      "front": "Ab wie vielen Arbeitnehmern wird ein Betriebsrat gewählt (§ 1 BetrVG)?",
+      "back": "Ab in der Regel mindestens fünf ständigen wahlberechtigten Arbeitnehmern, von denen drei wählbar sind."
+    },
+    {
+      "topic": "Mitbestimmung",
+      "front": "Ab welchem Alter ist man für den Betriebsrat wahlberechtigt?",
+      "back": "Ab 18 Jahren (aktives Wahlrecht, § 7 BetrVG)."
+    },
+    {
+      "topic": "Mitbestimmung",
+      "front": "Wie lange dauert die Amtszeit des Betriebsrats?",
+      "back": "Vier Jahre (§ 21 BetrVG)."
+    },
+    {
+      "topic": "Mitbestimmung",
+      "front": "In welchen Angelegenheiten hat der Betriebsrat echte Mitbestimmungsrechte?",
+      "back": "In sozialen Angelegenheiten, z.B. Beginn/Ende der Arbeitszeit, Ordnung des Betriebs (§§ 87–89 BetrVG)."
+    },
+    {
+      "topic": "Mitbestimmung",
+      "front": "Was ist die Einigungsstelle?",
+      "back": "Eine Stelle zur Beilegung von Meinungsverschiedenheiten zwischen Arbeitgeber und Betriebsrat (§ 76 BetrVG)."
+    },
+    {
+      "topic": "JAV",
+      "front": "Wofür steht die Abkürzung JAV?",
+      "back": "Jugend- und Auszubildendenvertretung."
+    },
+    {
+      "topic": "JAV",
+      "front": "Wann wird eine JAV gewählt (§ 60 BetrVG)?",
+      "back": "In Betrieben mit i.d.R. mindestens fünf jugendlichen Arbeitnehmern (unter 18) oder Auszubildenden (unter 25)."
+    },
+    {
+      "topic": "JAV",
+      "front": "Wie lange dauert die Amtszeit der JAV?",
+      "back": "Zwei Jahre (§ 64 BetrVG)."
+    },
+    {
+      "topic": "JAV",
+      "front": "Wer ist für die JAV wählbar?",
+      "back": "Beschäftigte, die das 25. Lebensjahr noch nicht vollendet haben; Betriebsratsmitglieder nicht."
+    },
+    {
+      "topic": "JAV",
+      "front": "Nenne eine Aufgabe der JAV.",
+      "back": "Maßnahmen beim Betriebsrat zugunsten junger Beschäftigter beantragen und über die Einhaltung ihrer Schutzvorschriften wachen."
+    }
+  ]
+}

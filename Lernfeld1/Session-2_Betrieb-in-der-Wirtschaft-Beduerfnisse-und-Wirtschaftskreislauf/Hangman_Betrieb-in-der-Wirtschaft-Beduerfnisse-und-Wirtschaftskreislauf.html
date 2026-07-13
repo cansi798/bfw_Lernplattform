@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Hängemann Session 2 — Bedürfnisse, Bedarf & Wirtschaftskreislauf</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA;
+  --bfw-bg-teal:#ECFEFF; --bfw-border:#E2E8F0; --bfw-success:#10B981; --bfw-danger:#EF4444;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 560px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+.hint { background: white; border: 1px solid var(--bfw-border); border-left: 4px solid var(--bfw-accent); border-radius: 10px; padding: 0.85rem 1.1rem; margin-bottom: 1rem; font-size: 1rem; line-height: 1.45; }
+.hint b { color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.stage { display: flex; justify-content: center; margin-bottom: 0.5rem; }
+.stage svg { width: 200px; height: 220px; }
+.lives { text-align: center; font-size: 0.9rem; color: var(--bfw-ink-soft); margin-bottom: 0.75rem; }
+.word { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 1rem; }
+.slot { width: 34px; height: 44px; border-bottom: 4px solid var(--bfw-ink-soft); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; text-transform: uppercase; }
+.slot.revealed { color: var(--bfw-primary-dark); }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin-bottom: 0.75rem; }
+.msg.win { color: var(--bfw-success); } .msg.lose { color: var(--bfw-danger); }
+.keyboard { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+.key { width: 40px; height: 46px; border: none; border-radius: 8px; background: #E2E8F0; color: var(--bfw-ink); font-size: 1rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.key:disabled { cursor: default; opacity: 0.55; }
+.key.right { background: var(--bfw-success); color: white; } .key.wrong { background: var(--bfw-danger); color: white; }
+.key:active:not(:disabled) { transform: translateY(1px); }
+.controls { text-align: center; margin: 1rem 0; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Session 2 · Hängemann</span>
+    <h1>Bedürfnisse, Bedarf & Wirtschaftskreislauf</h1>
+  </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Errate das gesuchte Fachwort Buchstabe für Buchstabe. Der <b>Hinweis</b> oben hilft dir dabei.</p>
+    <p>Klicke einen Buchstaben (oder tippe ihn auf der Tastatur). <b>Richtige</b> Buchstaben erscheinen im Wort, <b>falsche</b> zeichnen Stück für Stück den Galgen.</p>
+    <p>Bei <b>6 Fehlversuchen</b> ist die Runde verloren – das gesuchte Wort wird dann aufgelöst.</p>
+  </details>
+  <div class="hint" id="hint"><b>Hinweis:</b> <span id="hintText">…</span></div>
+  <div class="stage">
+    <svg viewBox="0 0 200 220">
+      <!-- Galgen -->
+      <line x1="20" y1="210" x2="120" y2="210" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="210" x2="50" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="50" y1="20" x2="130" y2="20" stroke="#0F766E" stroke-width="6"/>
+      <line x1="130" y1="20" x2="130" y2="45" stroke="#0F766E" stroke-width="6"/>
+      <!-- Körperteile (per JS eingeblendet) -->
+      <circle id="p0" cx="130" cy="62" r="17" stroke="#EF4444" stroke-width="4" fill="none" style="display:none"/>
+      <line id="p1" x1="130" y1="79" x2="130" y2="140" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p2" x1="130" y1="95" x2="105" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p3" x1="130" y1="95" x2="155" y2="120" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p4" x1="130" y1="140" x2="110" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+      <line id="p5" x1="130" y1="140" x2="150" y2="175" stroke="#EF4444" stroke-width="4" style="display:none"/>
+    </svg>
+  </div>
+  <div class="lives" id="lives"></div>
+  <div class="word" id="word"></div>
+  <div class="msg" id="msg"></div>
+  <div class="keyboard" id="keyboard"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Wort</button></div>
+  <div class="stats" id="stats"></div>
+  <footer>BFW Lernplattform · Lernfeld 1 · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'lf1-s2';
+const WORDS = [{"word":"BEDÜRFNIS","hint":"Gefühl eines Mangels mit dem Wunsch, ihn zu beseitigen."},{"word":"MANGEL","hint":"Empfundenes Fehlen, das ein Bedürfnis auslöst."},{"word":"EXISTENZ","hint":"Bedürfnis dieser Art sichert das Überleben (Essen, Wohnung)."},{"word":"KULTUR","hint":"Bedürfnis dieser Art wird vom Kulturkreis geprägt (Bildung, Kino)."},{"word":"LUXUS","hint":"Nicht notwendiges Bedürfnis wie Yacht oder Villa."},{"word":"GRUNDBEDARF","hint":"Anderer Name für die lebensnotwendigen Existenzbedürfnisse."},{"word":"MATERIELL","hint":"Bedürfnis nach einem fassbaren Gegenstand."},{"word":"AKUT","hint":"Offener, konkreter Wunsch (Gegenteil von latent)."},{"word":"LATENT","hint":"Schlummerndes Bedürfnis, durch Werbung weckbar."},{"word":"INDIVIDUAL","hint":"Bedürfnis, das von einem einzelnen Menschen ausgeht."},{"word":"KOLLEKTIV","hint":"Bedürfnis, das aus dem Zusammenleben entsteht (Umweltschutz)."},{"word":"MASLOW","hint":"Nach ihm ist die Bedürfnispyramide benannt."},{"word":"PYRAMIDE","hint":"Stufenmodell der Bedürfnisse nach Maslow."},{"word":"SICHERHEIT","hint":"Zweite Stufe der Maslow-Pyramide (Wohnung, Arbeit)."},{"word":"BEDARF","hint":"Mit Kaufkraft ausgestattetes Bedürfnis."},{"word":"NACHFRAGE","hint":"Marktwirksames Bedürfnis; der tatsächliche Kauf."},{"word":"KAUFKRAFT","hint":"Einkommen; macht aus dem Bedürfnis einen Bedarf."},{"word":"EINKOMMEN","hint":"Finanzielle Mittel, die die Kaufkraft bilden."},{"word":"MARKT","hint":"Ort, an dem Angebot und Nachfrage zusammentreffen."},{"word":"ANGEBOT","hint":"Zum Verkauf bereitgestellte Menge an Gütern."},{"word":"PREIS","hint":"Bildet sich aus Angebot und Nachfrage."},{"word":"PREISBILDUNG","hint":"Vorgang, bei dem sich am Markt der Preis ergibt."},{"word":"GÜTER","hint":"Alle Mittel, mit denen Bedürfnisse befriedigt werden."},{"word":"FREIESGUT","hint":"Reichlich vorhandenes Gut ohne Preis wie Luft."},{"word":"KNAPPESGUT","hint":"Begrenztes Wirtschaftsgut mit Preis."},{"word":"WIRTSCHAFTSGUT","hint":"Anderer Name für ein knappes, kostenpflichtiges Gut."},{"word":"SACHGUT","hint":"Materielles, fassbares Gut wie ein Schreibtisch."},{"word":"DIENSTLEISTUNG","hint":"Immaterielles Gut; Handlung mit Nutzen wie Reparatur."},{"word":"RECHT","hint":"Immaterielles Gut wie Patent oder Warenzeichen."},{"word":"PATENT","hint":"Gewerbliches Schutzrecht für eine Erfindung."},{"word":"WARENZEICHEN","hint":"Geschütztes Markenzeichen als immaterielles Gut."},{"word":"KONSUMGUT","hint":"Gut, das Endverbraucher nutzen."},{"word":"PRODUKTIONSGUT","hint":"Gut, das Unternehmen im Herstellungsprozess einsetzen."},{"word":"GEBRAUCHSGUT","hint":"Gut, das mehrmals verwendet werden kann."},{"word":"VERBRAUCHSGUT","hint":"Gut, das nur einmal verwendet werden kann."},{"word":"KOMPLEMENTÄR","hint":"Güter dieser Art ergänzen sich (Maschine und Strom)."},{"word":"SUBSTITUTION","hint":"Güter dieser Art ersetzen sich (Butter oder Margarine)."},{"word":"KNAPPHEIT","hint":"Begrenztheit der Güter; Grund fürs Wirtschaften."},{"word":"PRINZIP","hint":"Ökonomisches ... des wirtschaftlichen Handelns."},{"word":"MAXIMAL","hint":"Prinzip: gegebene Mittel, größter Erfolg."},{"word":"MINIMAL","hint":"Prinzip: gegebenes Ziel, geringster Aufwand."},{"word":"AUFWAND","hint":"Einsatz von Mitteln, der beim Minimalprinzip klein sein soll."},{"word":"ERFOLG","hint":"Ergebnis, das beim Maximalprinzip groß sein soll."},{"word":"BODEN","hint":"Volkswirtschaftlicher Faktor: die genutzte Natur."},{"word":"ARBEIT","hint":"Faktor: geistige und körperliche Tätigkeit für Einkommen."},{"word":"KAPITAL","hint":"Faktor, der durch Sparen entsteht; derivativ."},{"word":"GELDKAPITAL","hint":"Gesparte Mittel, die investiert werden können."},{"word":"SACHKAPITAL","hint":"In Maschinen investiertes Kapital."},{"word":"BETRIEBSMITTEL","hint":"Maschinen, Fahrzeuge, Werkzeuge im Betrieb."},{"word":"WERKSTOFF","hint":"Roh-, Hilfs- oder Betriebsstoff der Produktion."},{"word":"ROHSTOFF","hint":"Hauptbestandteil eines Produkts, z. B. Holz."},{"word":"HILFSSTOFF","hint":"Nebenbestandteil eines Produkts wie Leim oder Schrauben."},{"word":"BETRIEBSSTOFF","hint":"Stoff, der nicht ins Produkt eingeht (Strom, Öl)."},{"word":"DISPOSITIV","hint":"Faktor der Leitung, Planung, Organisation, Kontrolle."},{"word":"ELEMENTAR","hint":"Faktoren: Arbeitskräfte, Betriebsmittel, Werkstoffe."},{"word":"KREISLAUF","hint":"Modell der Güter- und Geldströme in der Volkswirtschaft."},{"word":"HAUSHALTE","hint":"Sektor, der die Produktionsfaktoren bereitstellt."},{"word":"UNTERNEHMEN","hint":"Sektor, der Güter herstellt und Einkommen zahlt."},{"word":"BANKEN","hint":"Sektor, der im erweiterten Kreislauf hinzukommt."},{"word":"STAAT","hint":"Sektor im vollständigen Kreislauf (Steuern, Subventionen)."},{"word":"AUSLAND","hint":"Sektor im offenen Kreislauf (Import und Export)."},{"word":"GELDSTROM","hint":"Fluss von Einkommen und Ausgaben im Kreislauf."},{"word":"GÜTERSTROM","hint":"Fluss von Gütern und Faktoren im Kreislauf."},{"word":"INVESTITION","hint":"Einsatz von Kredit für neue Maschinen/Technologien."},{"word":"SPAREN","hint":"Konsumverzicht der Haushalte; Quelle des Kapitals."},{"word":"STEUERN","hint":"Zahlungen der Haushalte und Unternehmen an den Staat."},{"word":"IMPORT","hint":"Einfuhr von Gütern aus dem Ausland."},{"word":"EXPORT","hint":"Ausfuhr von Gütern ins Ausland."}];
+const MAX_WRONG = 6;
+const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜß'.split('');
+const STORAGE = 'hangman_' + DAY_ID;
+
+let target='', hint='', wrong=0, guessed=new Set(), over=false, lastIdx=-1;
+function pickWord(){ let i; do { i=Math.floor(Math.random()*WORDS.length); } while(WORDS.length>1 && i===lastIdx); lastIdx=i; return WORDS[i]; }
+
+function loadStats(){ try { return JSON.parse(localStorage.getItem(STORAGE)) || {played:0,won:0}; } catch(e){ return {played:0,won:0}; } }
+function saveStats(s){ try { localStorage.setItem(STORAGE, JSON.stringify(s)); } catch(e){} }
+function renderStats(){ const s=loadStats(); document.getElementById('stats').textContent = `Gespielt: ${s.played} · Gewonnen: ${s.won}`; }
+
+function newGame(){
+  const pick = pickWord();
+  target = pick.word.toUpperCase(); hint = pick.hint;
+  wrong=0; guessed=new Set(); over=false;
+  document.getElementById('hintText').textContent = hint;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  for(let i=0;i<MAX_WRONG;i++) document.getElementById('p'+i).style.display='none';
+  buildWord(); buildKeyboard(); updateLives();
+}
+
+function buildWord(){
+  const w=document.getElementById('word'); w.innerHTML='';
+  for(const ch of target){
+    const s=document.createElement('div'); s.className='slot';
+    if(guessed.has(ch) || over){ s.textContent=ch; s.classList.add('revealed'); }
+    w.appendChild(s);
+  }
+}
+function buildKeyboard(){
+  const kb=document.getElementById('keyboard'); kb.innerHTML='';
+  ALPHABET.forEach(ch=>{
+    const b=document.createElement('button'); b.className='key'; b.textContent=ch;
+    if(guessed.has(ch)){ b.disabled=true; b.classList.add(target.includes(ch)?'right':'wrong'); }
+    if(over) b.disabled=true;
+    b.onclick=()=>guess(ch);
+    kb.appendChild(b);
+  });
+}
+function updateLives(){ document.getElementById('lives').textContent = `Fehlversuche: ${wrong} / ${MAX_WRONG}`; }
+
+function guess(ch){
+  if(over || guessed.has(ch)) return;
+  guessed.add(ch);
+  if(target.includes(ch)){ buildWord(); buildKeyboard(); checkWin(); }
+  else { wrong++; document.getElementById('p'+(wrong-1)).style.display='block'; updateLives(); buildKeyboard(); if(wrong>=MAX_WRONG) lose(); }
+}
+function checkWin(){ if([...target].every(c=>guessed.has(c))){ over=true; const m=document.getElementById('msg'); m.textContent='🎉 Gewonnen! '+target; m.className='msg win'; const s=loadStats(); s.played++; s.won++; saveStats(s); renderStats(); buildKeyboard(); } }
+function lose(){ over=true; const m=document.getElementById('msg'); m.textContent='Verloren! Das Wort war: '+target; m.className='msg lose'; buildWord(); buildKeyboard(); const s=loadStats(); s.played++; saveStats(s); renderStats(); }
+
+document.addEventListener('keydown', e=>{ const c=e.key.toUpperCase(); if(/^[A-ZÄÖÜß]$/.test(c)) guess(c); });
+
+renderStats(); newGame();
+</script>
+</body>
+</html>

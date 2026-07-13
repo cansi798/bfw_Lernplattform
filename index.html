@@ -118,6 +118,9 @@ body {
   font-size: 0.98rem;
 }
 .kurs-card.alt .kurs-cta { color: #4F46E5; }
+.kurs-card.green .kurs-stripe { background: linear-gradient(90deg, #0F766E 0%, #10B981 100%); }
+.kurs-card.green .kurs-modul { background: #D1FAE5; color: #047857; }
+.kurs-card.green .kurs-cta { color: #047857; }
 .kurs-card:hover .kurs-cta { gap: 0.8rem; }
 
 footer {
@@ -199,6 +202,14 @@ footer a:hover { text-decoration: underline; }
         <span class="kurs-cta">Zum Kurs <span>→</span></span>
       </a>
 
+      <a class="kurs-card green" id="card-lernfeld1" href="kurs-lernfeld1.html" style="display:none;">
+        <div class="kurs-stripe"></div>
+        <span class="kurs-modul">Lernfeld 1</span>
+        <h2>Die eigene Rolle im Betrieb mitgestalten</h2>
+        <div class="kurs-meta">4 Sessions<br>Berufsausbildung &amp; Recht, Wirtschaftskreislauf, Rechtsformen &amp; Organisation, Präsentation</div>
+        <span class="kurs-cta">Zum Kurs <span>→</span></span>
+      </a>
+
     </div>
 
   </div>
@@ -216,7 +227,8 @@ footer a:hover { text-decoration: underline; }
   // Der passende Kurs wird zugleich freigeschaltet (kein zweiter Code nötig).
   const KURSE = {
     'büroprozesse': { card: 'card-bueroprozesse', storageKey: 'bfw_lernplattform_m067_unlocked' },
-    'beschaffung':  { card: 'card-beschaffung',   storageKey: 'bfw_lernplattform_unlocked' }
+    'beschaffung':  { card: 'card-beschaffung',   storageKey: 'bfw_lernplattform_unlocked' },
+    'lernfeld1':    { card: 'card-lernfeld1',     storageKey: 'bfw_lernplattform_lf1_unlocked' }
   };
   const gate  = document.getElementById('gate');
   const grid  = document.getElementById('kursGrid');

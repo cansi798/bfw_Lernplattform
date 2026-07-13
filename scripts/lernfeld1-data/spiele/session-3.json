@@ -1,0 +1,284 @@
+{
+  "session": 3,
+  "thema": "Firma, Rechtsformen & Organisation",
+  "slug": "Unternehmen-Firma-Rechtsformen-und-Organisation",
+  "day_id": "lf1-s3",
+  "words": [
+    {
+      "word": "KAUFMANN",
+      "hint": "Wer nach HGB ein Handelsgewerbe betreibt."
+    },
+    {
+      "word": "ISTKAUFMANN",
+      "hint": "Kaufmann kraft Gesetzes nach Paragraf 1 HGB."
+    },
+    {
+      "word": "KANNKAUFMANN",
+      "hint": "Kleingewerbetreibender, der sich freiwillig eintragen lässt."
+    },
+    {
+      "word": "FORMKAUFMANN",
+      "hint": "Kapitalgesellschaft, die kraft Rechtsform Kaufmann ist."
+    },
+    {
+      "word": "HANDELSGEWERBE",
+      "hint": "Gewerbe, das der Istkaufmann betreibt."
+    },
+    {
+      "word": "KLEINGEWERBE",
+      "hint": "Betrieb, der keinen kaufmännischen Geschäftsbetrieb erfordert."
+    },
+    {
+      "word": "FIRMA",
+      "hint": "Name, unter dem ein Kaufmann seine Geschäfte betreibt."
+    },
+    {
+      "word": "FIRMENKERN",
+      "hint": "Teil der Firma mit Name, Gegenstand oder Fantasiebezeichnung."
+    },
+    {
+      "word": "FIRMENZUSATZ",
+      "hint": "Teil der Firma mit dem Rechtsformzusatz."
+    },
+    {
+      "word": "RECHTSFORM",
+      "hint": "Bestimmt Haftung, Kapital und Organe eines Unternehmens."
+    },
+    {
+      "word": "PERSONENFIRMA",
+      "hint": "Firma, deren Kern die beteiligten Personen nennt."
+    },
+    {
+      "word": "SACHFIRMA",
+      "hint": "Firma, deren Kern sich aus dem Gegenstand ableitet."
+    },
+    {
+      "word": "MISCHFIRMA",
+      "hint": "Firma mit Namen und Gegenstand im Kern."
+    },
+    {
+      "word": "FANTASIEFIRMA",
+      "hint": "Firma mit frei erfundenem Namen im Kern."
+    },
+    {
+      "word": "FIRMENWAHRHEIT",
+      "hint": "Grundsatz: die Firma darf nicht irreführen."
+    },
+    {
+      "word": "FIRMENKLARHEIT",
+      "hint": "Grundsatz: die Firma muss verständlich sein."
+    },
+    {
+      "word": "FIRMENEINHEIT",
+      "hint": "Grundsatz: ein Kaufmann führt für ein Geschäft eine Firma."
+    },
+    {
+      "word": "REGISTER",
+      "hint": "Amtliches Verzeichnis der Kaufleute beim Amtsgericht."
+    },
+    {
+      "word": "ABTEILUNG",
+      "hint": "Teil des Handelsregisters, A oder B."
+    },
+    {
+      "word": "AMTSGERICHT",
+      "hint": "Gericht, das das Handelsregister führt."
+    },
+    {
+      "word": "PUBLIZITAET",
+      "hint": "Öffentlicher Glaube des Handelsregisters nach Paragraf 15."
+    },
+    {
+      "word": "KONSTITUTIV",
+      "hint": "Rechtsbegründende Wirkung einer Eintragung."
+    },
+    {
+      "word": "DEKLARATORISCH",
+      "hint": "Rechtsbekundende Wirkung einer Eintragung."
+    },
+    {
+      "word": "EINTRAGUNG",
+      "hint": "Aufnahme einer Tatsache ins Handelsregister."
+    },
+    {
+      "word": "INHABER",
+      "hint": "Alleiniger Eigentümer eines Einzelunternehmens."
+    },
+    {
+      "word": "GESELLSCHAFT",
+      "hint": "Zusammenschluss mehrerer Personen zu einem Unternehmen."
+    },
+    {
+      "word": "GESELLSCHAFTER",
+      "hint": "Mitinhaber einer OHG oder KG."
+    },
+    {
+      "word": "KAPITAL",
+      "hint": "Von den Eigentümern aufgebrachtes Vermögen der Gesellschaft."
+    },
+    {
+      "word": "BUCHFUEHRUNG",
+      "hint": "Pflicht des Kaufmanns nach dem HGB."
+    },
+    {
+      "word": "EINLAGE",
+      "hint": "Kapitalbeitrag eines Gesellschafters oder Kommanditisten."
+    },
+    {
+      "word": "KOMPLEMENTAER",
+      "hint": "Vollhafter in der Kommanditgesellschaft."
+    },
+    {
+      "word": "KOMMANDITIST",
+      "hint": "Teilhafter, der nur bis zur Einlage haftet."
+    },
+    {
+      "word": "GMBH",
+      "hint": "Kapitalgesellschaft mit 25.000 Euro Stammkapital."
+    },
+    {
+      "word": "STAMMKAPITAL",
+      "hint": "Mindestkapital der GmbH von 25.000 Euro."
+    },
+    {
+      "word": "BESTELLUNG",
+      "hint": "Ernennung des Geschäftsführers durch die Gesellschafter."
+    },
+    {
+      "word": "SATZUNG",
+      "hint": "Grundregeln einer AG oder Genossenschaft."
+    },
+    {
+      "word": "GRUNDKAPITAL",
+      "hint": "In Aktien zerlegtes Kapital der AG."
+    },
+    {
+      "word": "AKTIE",
+      "hint": "Anteil am Grundkapital einer AG."
+    },
+    {
+      "word": "AKTIONAER",
+      "hint": "Eigentümer einer AG, Mitglied der Hauptversammlung."
+    },
+    {
+      "word": "VORSTAND",
+      "hint": "Organ, das die Geschäfte der AG führt."
+    },
+    {
+      "word": "AUFSICHTSRAT",
+      "hint": "Kontrollorgan der Aktiengesellschaft."
+    },
+    {
+      "word": "BESCHLUSS",
+      "hint": "Entscheidung der Gesellschafter- oder Hauptversammlung."
+    },
+    {
+      "word": "DIVIDENDE",
+      "hint": "Gewinnausschüttung an die Aktionäre."
+    },
+    {
+      "word": "GENOSSENSCHAFT",
+      "hint": "Rechtsform zur Förderung ihrer Mitglieder."
+    },
+    {
+      "word": "MITGLIED",
+      "hint": "Eigentümer einer eingetragenen Genossenschaft."
+    },
+    {
+      "word": "HAFTUNG",
+      "hint": "Einstehen für Verbindlichkeiten mit Vermögen."
+    },
+    {
+      "word": "PROKURA",
+      "hint": "Umfassende, eingetragene Vollmacht nach Paragraf 48 HGB."
+    },
+    {
+      "word": "PROKURIST",
+      "hint": "Person mit Prokura, unterschreibt mit ppa."
+    },
+    {
+      "word": "VOLLMACHT",
+      "hint": "Befugnis, für einen anderen zu handeln."
+    },
+    {
+      "word": "WEISUNG",
+      "hint": "Anordnung einer Instanz an Mitarbeiter."
+    },
+    {
+      "word": "ARTVOLLMACHT",
+      "hint": "Vollmacht für eine bestimmte Art von Geschäften."
+    },
+    {
+      "word": "GEWERBE",
+      "hint": "Selbstständige, auf Dauer angelegte Erwerbstätigkeit."
+    },
+    {
+      "word": "VERTRETUNG",
+      "hint": "Handeln für das Unternehmen nach außen."
+    },
+    {
+      "word": "HIERARCHIE",
+      "hint": "Rangordnung der Stellen im Betrieb."
+    },
+    {
+      "word": "PROZESS",
+      "hint": "Ablauf zusammenhängender Arbeitsschritte."
+    },
+    {
+      "word": "STELLE",
+      "hint": "Kleinste organisatorische Einheit im Betrieb."
+    },
+    {
+      "word": "INSTANZ",
+      "hint": "Stelle mit Leitungs- und Weisungsbefugnis."
+    },
+    {
+      "word": "STABSTELLE",
+      "hint": "Beratende Stelle ohne Weisungsbefugnis."
+    },
+    {
+      "word": "ORGANIGRAMM",
+      "hint": "Grafische Darstellung des Stellengefüges."
+    },
+    {
+      "word": "LEITUNGSSPANNE",
+      "hint": "Zahl der einer Instanz unterstellten Stellen."
+    },
+    {
+      "word": "DIENSTWEG",
+      "hint": "Weg der Weisungen im Einliniensystem."
+    },
+    {
+      "word": "MATRIXSYSTEM",
+      "hint": "Leitungssystem mit doppelter Unterstellung."
+    },
+    {
+      "word": "KERNPROZESS",
+      "hint": "Wertschöpfender Hauptprozess im Betrieb."
+    },
+    {
+      "word": "KONTROLLE",
+      "hint": "Managementaufgabe neben Planung und Organisation."
+    },
+    {
+      "word": "LEITBILD",
+      "hint": "Beschreibung von Vision und Werten eines Unternehmens."
+    },
+    {
+      "word": "FORMALZIEL",
+      "hint": "Übergeordnetes Erfolgsziel wie Gewinn und Rentabilität."
+    },
+    {
+      "word": "NACHHALTIGKEIT",
+      "hint": "Konzept aus Ökonomie, Ökologie und Soziales."
+    },
+    {
+      "word": "OEKONOMIE",
+      "hint": "Wirtschaftliche Säule der Nachhaltigkeit."
+    },
+    {
+      "word": "OEKOLOGIE",
+      "hint": "Umweltbezogene Säule der Nachhaltigkeit."
+    }
+  ]
+}

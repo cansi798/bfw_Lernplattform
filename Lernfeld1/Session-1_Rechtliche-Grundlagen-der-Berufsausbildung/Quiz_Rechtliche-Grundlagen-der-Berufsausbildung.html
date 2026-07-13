@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Quiz Session 1 — Rechtliche Grundlagen der Berufsausbildung</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E;
+  --bfw-accent:#F59E0B; --bfw-warn:#F97316;
+  --bfw-success:#10B981; --bfw-danger:#EF4444;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569;
+  --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-amber:#FEF3C7;
+  --bfw-bg-rose:#FFE4E6; --bfw-bg-green:#D1FAE5;
+  --bfw-bg-red:#FEE2E2; --bfw-border:#E2E8F0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px);
+  color: var(--bfw-ink);
+  min-height: 100vh;
+  padding: 2rem 1rem 6rem;
+}
+.container { max-width: 880px; margin: 0 auto; }
+
+header { text-align: center; margin-bottom: 2.5rem; }
+.tag-pill {
+  display: inline-block; padding: 0.4rem 1rem;
+  background: var(--bfw-primary); color: white;
+  border-radius: 999px; font-weight: 600;
+  font-size: 0.85rem; letter-spacing: 0.05em;
+  text-transform: uppercase; margin-bottom: 1rem;
+}
+h1 {
+  font-size: 2.4rem; color: var(--bfw-primary-dark);
+  margin-bottom: 0.5rem; letter-spacing: -0.01em;
+}
+.subtitle { color: var(--bfw-ink-soft); font-size: 1.15rem; }
+
+.controls {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex; flex-wrap: wrap; gap: 1rem;
+  align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.progress {
+  flex: 1; min-width: 200px;
+  background: var(--bfw-bg-teal); height: 10px;
+  border-radius: 999px; overflow: hidden;
+}
+.progress > div {
+  height: 100%; background: var(--bfw-primary);
+  border-radius: 999px; transition: width 0.3s;
+}
+.score {
+  font-weight: 700; color: var(--bfw-primary-dark);
+  font-size: 1.05rem;
+}
+
+.btn {
+  border: none; padding: 0.55rem 1.1rem;
+  border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 0.95rem; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: var(--bfw-primary); color: white; }
+.btn-primary:hover { background: var(--bfw-primary-dark); }
+.btn-ghost {
+  background: transparent; color: var(--bfw-primary-dark);
+  border: 1.5px solid var(--bfw-primary);
+}
+.btn-ghost:hover { background: var(--bfw-bg-teal); }
+
+.question {
+  background: white; border: 1px solid var(--bfw-border);
+  border-radius: 14px; padding: 1.6rem 1.8rem;
+  margin-bottom: 1.2rem;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+}
+.question.locked { background: var(--bfw-bg-soft); }
+.q-num {
+  display: inline-block;
+  background: var(--bfw-bg-teal); color: var(--bfw-primary-dark);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.25rem 0.7rem; border-radius: 999px;
+  margin-bottom: 0.7rem;
+}
+.q-topic {
+  display: inline-block; margin-left: 0.5rem;
+  color: var(--bfw-ink-soft); font-size: 0.85rem;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.q-text { font-size: 1.15rem; line-height: 1.55; margin-bottom: 1rem; font-weight: 500; }
+
+.options { display: flex; flex-direction: column; gap: 0.6rem; }
+.option {
+  display: flex; align-items: flex-start; gap: 0.8rem;
+  padding: 0.8rem 1rem;
+  background: var(--bfw-bg-soft);
+  border: 1.5px solid var(--bfw-border);
+  border-radius: 10px;
+  cursor: pointer; font-size: 1.02rem;
+  transition: all 0.15s;
+}
+.option:hover:not(.locked) { background: var(--bfw-bg-teal); border-color: var(--bfw-primary); }
+.option .marker {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: white; border: 1.5px solid var(--bfw-border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: var(--bfw-ink-soft);
+  font-size: 0.9rem;
+}
+.option.correct { background: var(--bfw-bg-green); border-color: var(--bfw-success); }
+.option.correct .marker { background: var(--bfw-success); color: white; border-color: var(--bfw-success); }
+.option.incorrect { background: var(--bfw-bg-red); border-color: var(--bfw-danger); }
+.option.incorrect .marker { background: var(--bfw-danger); color: white; border-color: var(--bfw-danger); }
+.option.locked { cursor: default; }
+
+.explanation {
+  margin-top: 0.9rem; padding: 0.9rem 1.1rem;
+  background: var(--bfw-bg-amber);
+  border-left: 4px solid var(--bfw-accent);
+  border-radius: 6px; font-size: 0.98rem; line-height: 1.5;
+}
+.explanation::before {
+  content: "Erklärung:"; font-weight: 700;
+  color: var(--bfw-warn); margin-right: 0.5rem;
+}
+
+.summary {
+  background: white; border-radius: 14px;
+  padding: 2rem; text-align: center;
+  border: 2px solid var(--bfw-primary);
+  box-shadow: 0 8px 24px rgba(14,165,164,0.12);
+  margin-top: 2rem;
+}
+.summary h2 { color: var(--bfw-primary-dark); margin-bottom: 0.6rem; font-size: 1.8rem; }
+.summary .big-score {
+  font-size: 3.5rem; font-weight: 800;
+  color: var(--bfw-primary); line-height: 1;
+  margin: 1rem 0;
+}
+.summary .grade { font-size: 1.2rem; color: var(--bfw-ink-soft); }
+
+footer {
+  text-align: center; color: var(--bfw-ink-soft);
+  font-size: 0.85rem; margin-top: 3rem;
+}
+
+@media print {
+  .controls, .btn { display: none; }
+  .option.locked { background: white; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <span class="tag-pill">Session 1 · 60 Fragen</span>
+  <h1>Quiz: Rechtliche Grundlagen der Berufsausbildung</h1>
+  <p class="subtitle">Multiple-Choice zur Selbstkontrolle und Wiederholung — IHK-Format</p>
+  <p class="subtitle" style="font-size: 0.95rem; margin-top: 0.4rem;">Alle 60 Fragen basieren direkt auf der <strong>Praesentation_Rechtliche-Grundlagen-der-Berufsausbildung.html</strong> und dem <strong>Handout_Rechtliche-Grundlagen-der-Berufsausbildung.pdf</strong>. Antwortpositionen werden bei jedem Quiz-Start zufällig gemischt.</p>
+</header>
+
+<div class="controls">
+  <div class="progress"><div id="progressBar" style="width: 0%"></div></div>
+  <div class="score">Beantwortet: <span id="answered">0</span> / <span id="total">60</span> · Richtig: <span id="correct">0</span></div>
+</div>
+
+<div class="controls" style="gap: 0.6rem;">
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Ansicht:</span>
+    <button class="btn btn-ghost mode-btn" id="modeList" onclick="setView('list')">Alle untereinander</button>
+    <button class="btn btn-ghost mode-btn" id="modeSlide" onclick="setView('slide')">Eine pro Slide</button>
+  </div>
+  <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+    <span style="color: var(--bfw-ink-soft); font-size: 0.9rem;">Auswertung:</span>
+    <button class="btn btn-ghost mode-btn" id="modeImmediate" onclick="setEval('immediate')">Sofort nach jeder Frage</button>
+    <button class="btn btn-ghost mode-btn" id="modeEnd" onclick="setEval('end')">Erst am Ende</button>
+  </div>
+  <button class="btn btn-primary" onclick="finishNow()">Quiz auswerten</button>
+  <button class="btn btn-ghost" onclick="resetQuiz()">Zurücksetzen</button>
+</div>
+
+<div id="quiz"></div>
+
+<div id="slideNav" style="display:none; text-align:center; margin: 1.5rem 0;">
+  <button class="btn btn-ghost" onclick="prevSlide()">← Zurück</button>
+  <span style="margin: 0 1rem; color: var(--bfw-ink-soft); font-weight: 600;"><span id="slidePos">1</span> / <span id="slideTotal">60</span></span>
+  <button class="btn btn-primary" onclick="nextSlide()">Weiter →</button>
+</div>
+
+<div id="summary" style="display:none;"></div>
+
+<footer>© Can Siebert · 2026 · Lernfeld 1 — Die eigene Rolle im Betrieb mitgestalten</footer>
+
+</div>
+
+<script>
+const QUESTIONS = [
+  // === Block A: Duales System, Rollen & BBiG-Grundlagen ===
+  { topic: "Duales System", q: "Warum wird die Berufsausbildung in Deutschland als „duale Ausbildung“ bezeichnet?",
+    options: ["Weil sie an zwei Lernorten stattfindet: Betrieb und Berufsschule", "Weil sie zwei Jahre dauert", "Weil zwei Prüfungen abgelegt werden müssen", "Weil zwei Ausbilder pflicht sind"],
+    a: 0, e: "Die Ausbildung findet parallel an zwei Lernorten statt — im Betrieb und in der Berufsschule; daher „dual“." },
+  { topic: "BBiG", q: "Welches Gesetz bildet die zentrale Grundlage der Berufsausbildung in Deutschland?",
+    options: ["Das Bürgerliche Gesetzbuch (BGB)", "Das Handelsgesetzbuch (HGB)", "Das Berufsbildungsgesetz (BBiG)", "Das Betriebsverfassungsgesetz (BetrVG)"],
+    a: 2, e: "Das Berufsbildungsgesetz (BBiG) regelt die Berufsausbildung; es trat 1969 in Kraft und wurde zuletzt Ende 2019 novelliert." },
+  { topic: "BBiG", q: "Seit wann gelten die Regeln der letzten großen BBiG-Novelle?",
+    options: ["Seit dem 01. Januar 2010", "Seit dem 01. Januar 2020", "Seit dem 01. August 2014", "Seit dem 01. Januar 2000"],
+    a: 1, e: "Das BBiG wurde Ende 2019 novelliert; die neuen Regeln gelten seit dem 01. Januar 2020." },
+  { topic: "Rollen", q: "Wer ist der oder die „Ausbildende“ im Sinne des BBiG?",
+    options: ["Die Berufsschullehrkraft", "Der Prüfungsausschuss der IHK", "Die für die Ausbildung verantwortliche Person, die täglich anleitet", "Der Ausbildungsbetrieb, der Auszubildende einstellt"],
+    a: 3, e: "Ausbildender ist, wer andere zur Berufsausbildung einstellt — also der Betrieb bzw. Arbeitgeber (§ 10 BBiG)." },
+  { topic: "Berufsbild", q: "Zu welchem Berufsbild wurden die drei früheren Büroberufe 2014 zusammengelegt?",
+    options: ["Industriekaufmann/-frau", "Verwaltungsfachangestellte/r", "Kaufmann/-frau für Büromanagement", "Fachangestellte/r für Bürokommunikation"],
+    a: 2, e: "Seit dem 1. August 2014 sind Bürokaufmann/-frau, Kaufmann/-frau für Bürokommunikation und Fachangestellte/r für Bürokommunikation zum Beruf „Kaufmann/-frau für Büromanagement“ zusammengefasst." },
+  { topic: "Berufsbild", q: "Wie lange dauert die Ausbildung zum/zur Kaufmann/-frau für Büromanagement regulär?",
+    options: ["2 Jahre", "2,5 Jahre", "3,5 Jahre", "3 Jahre"],
+    a: 3, e: "Die reguläre Ausbildungsdauer für diesen Beruf beträgt drei Jahre." },
+
+  // === Block B: Ausbildungsordnung, Rahmenplan & Ausbildungsplan ===
+  { topic: "Ausbildungsordnung", q: "Wodurch werden Ausbildungsberufe in Deutschland staatlich anerkannt?",
+    options: ["Durch Rechtsverordnung des zuständigen Bundesministeriums (§ 4 BBiG)", "Durch einen Beschluss der IHK vor Ort", "Durch den Ausbildungsbetrieb selbst", "Durch die Gewerkschaften"],
+    a: 0, e: "Nach § 4 BBiG werden Ausbildungsberufe durch Rechtsverordnung des zuständigen Bundesministeriums staatlich anerkannt." },
+  { topic: "Ausbildungsordnung", q: "Was enthält eine Ausbildungsordnung nach § 5 BBiG unter anderem NICHT zwingend?",
+    options: ["Die Bezeichnung des Ausbildungsberufes", "Die Ausbildungsdauer", "Die Höhe der individuellen Vergütung des einzelnen Azubis", "Das Ausbildungsberufsbild und die Prüfungsanforderungen"],
+    a: 2, e: "Die Ausbildungsordnung regelt Bezeichnung, Dauer, Berufsbild, Rahmenplan und Prüfungsanforderungen — nicht die individuelle Vergütung; die steht im Berufsausbildungsvertrag." },
+  { topic: "Rahmenplan", q: "Was ist der Ausbildungsrahmenplan?",
+    options: ["Ein Vertrag zwischen Azubi und IHK", "Eine grobe sachliche und zeitliche Gliederung der Ausbildungsinhalte als Vorgabe", "Der Stundenplan der Berufsschule", "Ein Zeugnis am Ende der Ausbildung"],
+    a: 1, e: "Der Ausbildungsrahmenplan gibt eine grobe sachliche und zeitliche Gliederung der zu vermittelnden Inhalte vor (§ 5 BBiG)." },
+  { topic: "Ausbildungsplan", q: "Wer erstellt den betrieblichen Ausbildungsplan?",
+    options: ["Die Berufsschule", "Die Auszubildenden selbst", "Die zuständige Kammer (IHK)", "Der Ausbildende (das Unternehmen) — individuell auf den Betrieb abgestimmt"],
+    a: 3, e: "Der Ausbildende erstellt einen individuellen betrieblichen Ausbildungsplan; er ist Bestandteil des Vertrages und wird als Anlage beigefügt." },
+
+  // === Block C: Berufsausbildungsvertrag – Form & Eintragung ===
+  { topic: "Vertrag", q: "Nach welchem Paragrafen muss der wesentliche Vertragsinhalt schriftlich niedergelegt werden?",
+    options: ["§ 5 BBiG", "§ 22 BBiG", "§ 11 BBiG", "§ 17 BBiG"],
+    a: 2, e: "Nach § 11 BBiG ist der wesentliche Vertragsinhalt unverzüglich schriftlich niederzulegen — die elektronische Form ist ausgeschlossen." },
+  { topic: "Vertrag", q: "Wer muss den Ausbildungsvertrag mit unterschreiben, wenn der/die Auszubildende noch keine 18 Jahre alt ist?",
+    options: ["Der Betriebsrat", "Die Berufsschule", "Die zuständige IHK", "Die gesetzlichen Vertreter (i. d. R. beide Elternteile)"],
+    a: 3, e: "Bei Minderjährigen müssen die gesetzlichen Vertreter — in der Regel beide Elternteile — mit unterzeichnen (§ 11 BBiG)." },
+  { topic: "Eintragung", q: "Bei welcher Stelle wird das Berufsausbildungsverhältnis in das Verzeichnis eingetragen?",
+    options: ["Beim Finanzamt", "Bei der zuständigen Kammer, z. B. der Industrie- und Handelskammer (IHK)", "Beim Arbeitsgericht", "Bei der Bundesagentur für Arbeit"],
+    a: 1, e: "Das Berufsausbildungsverhältnis ist in das Verzeichnis der Berufsausbildungsverhältnisse bei der zuständigen Kammer (z. B. IHK) einzutragen." },
+  { topic: "Vertrag", q: "Wer muss Änderungen des wesentlichen Vertragsinhalts der IHK anzeigen?",
+    options: ["Die Berufsschule", "Der Auszubildende", "Die gesetzlichen Vertreter", "Der/die Ausbildende — unverzüglich zur Eintragung"],
+    a: 3, e: "Änderungen des wesentlichen Vertragsinhalts sind vom Ausbildenden unverzüglich zur Eintragung im Verzeichnis anzuzeigen." },
+
+  // === Block D: Pflichtangaben im Vertrag ===
+  { topic: "Vertragsinhalt", q: "Welche Angabe gehört zwingend in den Berufsausbildungsvertrag?",
+    options: ["Beginn und Dauer der Berufsausbildung", "Die Handynummer des Ausbilders", "Der Name der Berufsschullehrkraft", "Die Kontonummer der IHK"],
+    a: 0, e: "Zu den Pflichtangaben zählen u. a. Art, Gliederung und Ziel der Ausbildung sowie Beginn und Dauer." },
+  { topic: "Vertragsinhalt", q: "Was versteht man unter einer Verweisungsklausel im Ausbildungsvertrag?",
+    options: ["Einen Verweis auf das Berufsschulzeugnis", "Einen Hinweis, dass der Azubi verwiesen werden kann", "Einen allgemeinen Hinweis auf anzuwendende Tarifverträge, Betriebs- oder Dienstvereinbarungen", "Eine Klausel zur Kündigung"],
+    a: 2, e: "Die Hinweise auf geltende Tarifverträge sowie Betriebs- oder Dienstvereinbarungen bezeichnet man als Verweisungsklauseln." },
+  { topic: "Vertragsinhalt", q: "Was ist der Unterschied zwischen Tarifvertrag und Betriebsvereinbarung?",
+    options: ["Beide sind identisch", "Ein Tarifvertrag gilt nur für einen Betrieb, die Betriebsvereinbarung für ganze Branchen", "Es gibt keinen rechtlichen Unterschied", "Ein Tarifvertrag regelt ganze Wirtschaftszweige, eine Betriebsvereinbarung nur einen einzelnen Betrieb"],
+    a: 3, e: "Tarifverträge (Arbeitgeberverbände/Gewerkschaften) gelten branchenweit; Betriebsvereinbarungen (Arbeitgeber/Betriebsrat) betreffen nur einen Betrieb." },
+
+  // === Block E: Ausbildungszeit, Verkürzung & Anrechnung ===
+  { topic: "Ausbildungszeit", q: "Wer kann die Ausbildungszeit auf gemeinsamen Antrag verkürzen?",
+    options: ["Die zuständige Stelle (z. B. IHK), wenn das Ausbildungsziel erreichbar bleibt", "Nur der Ausbildungsbetrieb allein", "Nur die Berufsschule", "Der Auszubildende allein ohne Antrag"],
+    a: 0, e: "Nach § 8 BBiG kürzt die zuständige Stelle (z. B. IHK) auf gemeinsamen Antrag die Ausbildungszeit, wenn das Ziel in kürzerer Zeit erreichbar ist." },
+  { topic: "Ausbildungszeit", q: "Was passiert nach § 24 BBiG, wenn ein Azubi nach bestandener Prüfung ohne besondere Vereinbarung weiterbeschäftigt wird?",
+    options: ["Das Ausbildungsverhältnis läuft einfach weiter", "Es entsteht ein unbefristetes Arbeitsverhältnis", "Der Betrieb muss eine Strafe zahlen", "Es entsteht ein neues Ausbildungsverhältnis"],
+    a: 1, e: "Nach § 24 BBiG entsteht ein unbefristetes Arbeitsverhältnis, wenn ohne besondere Vereinbarung weiterbeschäftigt wird." },
+  { topic: "Ausbildungszeit", q: "Auf wessen Antrag kann die zuständige Stelle die Ausbildungszeit in Ausnahmefällen verlängern?",
+    options: ["Auf Antrag des Betriebsrats", "Auf Antrag der Eltern", "Auf Antrag des Auszubildenden", "Auf Antrag der Berufsschule"],
+    a: 2, e: "Nach § 8 Abs. 2 BBiG kann die Ausbildungszeit auf Antrag des Auszubildenden verlängert werden, wenn dies zum Erreichen des Ziels nötig ist." },
+  { topic: "Ausbildungszeit", q: "Was ist eine Teilzeitberufsausbildung?",
+    options: ["Eine Ausbildung nur in den Ferien", "Eine Ausbildung ohne Berufsschule", "Eine Ausbildung ohne Prüfung", "Eine Ausbildung mit verkürzter täglicher oder wöchentlicher Ausbildungszeit"],
+    a: 3, e: "Bei der Teilzeitberufsausbildung kann die tägliche oder wöchentliche Ausbildungszeit verkürzt werden (§ 7a BBiG)." },
+
+  // === Block F: Probezeit ===
+  { topic: "Probezeit", q: "Wie lang muss die Probezeit im Ausbildungsverhältnis MINDESTENS sein?",
+    options: ["Mindestens einen Monat", "Mindestens zwei Wochen", "Mindestens drei Monate", "Es gibt kein Minimum"],
+    a: 0, e: "Nach § 20 BBiG muss die Probezeit mindestens einen Monat betragen." },
+  { topic: "Probezeit", q: "Wie lang darf die Probezeit HÖCHSTENS sein?",
+    options: ["Höchstens sechs Monate", "Höchstens vier Monate", "Höchstens zwei Monate", "Höchstens ein Jahr"],
+    a: 1, e: "Nach § 20 BBiG darf die Probezeit höchstens vier Monate betragen." },
+  { topic: "Probezeit", q: "Womit beginnt das Berufsausbildungsverhältnis?",
+    options: ["Mit der Zwischenprüfung", "Mit dem ersten Berufsschultag", "Mit der Probezeit", "Mit der Eintragung bei der IHK"],
+    a: 2, e: "Nach § 20 BBiG beginnt das Berufsausbildungsverhältnis mit der Probezeit." },
+
+  // === Block G: Pflichten der Auszubildenden (§ 13 BBiG) ===
+  { topic: "Azubi-Pflichten", q: "Welche Pflicht der Auszubildenden ist in § 13 BBiG geregelt?",
+    options: ["Einen schriftlichen oder elektronischen Ausbildungsnachweis (Berichtsheft) zu führen", "Die Ausbildungsvergütung selbst festzulegen", "Den Ausbildungsplan zu erstellen", "Die IHK-Prüfung zu organisieren"],
+    a: 0, e: "Nach § 13 BBiG müssen Auszubildende u. a. einen schriftlichen oder elektronischen Ausbildungsnachweis führen." },
+  { topic: "Azubi-Pflichten", q: "Wie müssen Auszubildende mit Werkzeugen, Maschinen und Einrichtungen umgehen?",
+    options: ["Sie dürfen sie beliebig benutzen", "Sie müssen sie kaufen", "Sie dürfen sie nicht anfassen", "Sie müssen sie pfleglich behandeln"],
+    a: 3, e: "Nach § 13 BBiG müssen Auszubildende Werkzeug, Maschinen und sonstige Einrichtungen pfleglich behandeln." },
+  { topic: "Azubi-Pflichten", q: "Wessen Weisungen müssen Auszubildende im Rahmen der Ausbildung folgen?",
+    options: ["Nur denen der Berufsschule", "Denen von Ausbildenden, Ausbildern/-innen oder anderen weisungsberechtigten Personen", "Ausschließlich denen der IHK", "Nur denen der Eltern"],
+    a: 1, e: "Nach § 13 BBiG folgen Auszubildende den Weisungen weisungsberechtigter Personen im Rahmen der Berufsausbildung." },
+
+  // === Block H: Pflichten der Ausbildenden (§§ 14–16 BBiG) ===
+  { topic: "Betriebs-Pflichten", q: "Was müssen Ausbildende ihren Auszubildenden nach § 14 BBiG kostenlos zur Verfügung stellen?",
+    options: ["Ein Firmenauto", "Ausbildungsmittel, insbesondere Werkzeuge und Werkstoffe", "Ein eigenes Büro", "Die Berufsschulbücher der Schule"],
+    a: 1, e: "Nach § 14 BBiG müssen Ausbildende die Ausbildungsmittel — insbesondere Werkzeuge und Werkstoffe — kostenlos bereitstellen." },
+  { topic: "Betriebs-Pflichten", q: "Welche Aufgabe hat der Ausbildende bezüglich der Ausbildungsnachweise?",
+    options: ["Er muss sie selbst schreiben", "Er darf sie ignorieren", "Er muss den Azubi zum Führen anhalten und sie regelmäßig durchsehen", "Er muss sie an die IHK schicken"],
+    a: 2, e: "Nach § 14 BBiG hält der Ausbildende zum Führen der Nachweise an und sieht sie regelmäßig durch; dem Azubi ist Gelegenheit zu geben, sie am Arbeitsplatz zu führen." },
+  { topic: "Betriebs-Pflichten", q: "Welche Aufgaben dürfen Auszubildenden nach § 14 BBiG übertragen werden?",
+    options: ["Beliebige, auch berufsfremde Aufgaben", "Nur körperlich schwere Aufgaben", "Nur Botengänge", "Nur solche, die dem Ausbildungszweck dienen und den Kräften angemessen sind"],
+    a: 3, e: "Auszubildenden dürfen nur Aufgaben übertragen werden, die dem Ausbildungszweck dienen und ihren körperlichen Kräften angemessen sind." },
+  { topic: "Freistellung", q: "Wofür müssen Ausbildende Auszubildende nach § 15 BBiG freistellen?",
+    options: ["Für Berufsschulunterricht, Prüfungen und Ausbildungsmaßnahmen außerhalb der Stätte", "Nur für Arztbesuche", "Für private Termine", "Für Nebenjobs"],
+    a: 0, e: "Nach § 15 BBiG sind Auszubildende für Berufsschulunterricht, Prüfungen und außerbetriebliche Ausbildungsmaßnahmen freizustellen." },
+
+  // === Block I: Vergütung & Urlaub ===
+  { topic: "Vergütung", q: "Nach welchem Paragrafen muss eine angemessene Ausbildungsvergütung gezahlt werden?",
+    options: ["§ 13 BBiG", "§ 20 BBiG", "§ 17 BBiG", "§ 22 BBiG"],
+    a: 2, e: "Nach § 17 BBiG muss eine angemessene Ausbildungsvergütung gezahlt werden; die Höhe steht im Vertrag." },
+  { topic: "Vergütung", q: "Wie muss sich die Ausbildungsvergütung im Verlauf der Ausbildung entwickeln?",
+    options: ["Sie muss mindestens jährlich steigen", "Sie darf sinken", "Sie bleibt immer gleich", "Sie steigt nur bei guter Leistung"],
+    a: 0, e: "Die Ausbildungsvergütung muss angemessen sein und mindestens jährlich (mit fortschreitender Ausbildung) ansteigen (§ 17 BBiG)." },
+  { topic: "Urlaub", q: "Wie viele Werktage Urlaub stehen erwachsenen Auszubildenden nach dem Bundesurlaubsgesetz mindestens zu?",
+    options: ["30 Werktage", "20 Werktage", "18 Werktage", "24 Werktage"],
+    a: 3, e: "Nach § 3 BUrlG beträgt der Mindesturlaub für erwachsene Auszubildende mindestens 24 Werktage jährlich (bei 6-Tage-Woche)." },
+
+  // === Block J: Beendigung & Kündigung (§ 22 BBiG) ===
+  { topic: "Kündigung", q: "Wie kann während der Probezeit gekündigt werden?",
+    options: ["Von beiden Seiten jederzeit ohne Frist und ohne Angabe von Gründen", "Nur vom Betrieb mit vier Wochen Frist", "Gar nicht", "Nur mit Zustimmung der IHK"],
+    a: 0, e: "Nach § 22 Abs. 1 BBiG kann während der Probezeit von beiden Seiten jederzeit ohne Frist und ohne Grund gekündigt werden." },
+  { topic: "Kündigung", q: "Was ist eine fristlose (außerordentliche) Kündigung nach der Probezeit?",
+    options: ["Eine Kündigung mit vier Wochen Frist", "Eine Kündigung durch die IHK", "Eine Kündigung aus wichtigem Grund ohne Einhaltung einer Frist", "Eine Kündigung ohne jeden Grund"],
+    a: 2, e: "Nach § 22 Abs. 2 BBiG ist die fristlose Kündigung aus wichtigem Grund ohne Frist möglich." },
+  { topic: "Kündigung", q: "Innerhalb welcher Frist muss eine Kündigung aus wichtigem Grund ausgesprochen werden?",
+    options: ["Innerhalb von vier Wochen", "Innerhalb von zwei Wochen nach Bekanntwerden des Grundes", "Innerhalb von drei Monaten", "Innerhalb eines Jahres"],
+    a: 1, e: "Nach § 22 Abs. 4 BBiG muss die fristlose Kündigung innerhalb von zwei Wochen nach Bekanntwerden des Grundes erfolgen, sonst ist sie unwirksam." },
+  { topic: "Kündigung", q: "Wer darf nach der Probezeit ordentlich mit vier Wochen Frist kündigen, wenn die Ausbildung aufgegeben wird?",
+    options: ["Nur der Auszubildende", "Nur der Ausbildungsbetrieb", "Beide gleichermaßen", "Nur die IHK"],
+    a: 0, e: "Nach § 22 Abs. 2 BBiG steht das ordentliche Kündigungsrecht (4 Wochen Frist) ausschließlich dem Auszubildenden zu; der Betrieb hat es nicht." },
+  { topic: "Kündigung", q: "Was ist ein möglicher wichtiger Grund für eine fristlose Kündigung SEITENS des Auszubildenden?",
+    options: ["Ein besseres Stellenangebot", "Ein Umzug in eine andere Stadt", "Ein Streit mit einem Kollegen", "Die Nichtzahlung der Ausbildungsvergütung durch den Betrieb"],
+    a: 3, e: "Wichtige Gründe für Azubis sind u. a. Nichtzahlung der Vergütung, Nichtgewährung von Urlaub oder Verstöße gegen die Freistellung zur Berufsschule." },
+
+  // === Block K: Ausbildungszeugnis (§ 16 BBiG) ===
+  { topic: "Zeugnis", q: "Nach welchem Paragrafen haben Ausbildende bei Beendigung ein Zeugnis auszustellen?",
+    options: ["§ 16 BBiG", "§ 13 BBiG", "§ 22 BBiG", "§ 20 BBiG"],
+    a: 0, e: "Nach § 16 BBiG haben Ausbildende bei Beendigung des Berufsausbildungsverhältnisses ein schriftliches Zeugnis auszustellen." },
+  { topic: "Zeugnis", q: "Was enthält ein EINFACHES Ausbildungszeugnis?",
+    options: ["Nur die Vergütungshöhe", "Angaben über Art, Dauer und Ziel der Ausbildung sowie erworbene Fertigkeiten/Kenntnisse", "Angaben über Verhalten und Leistung", "Nur den Namen des Azubis"],
+    a: 1, e: "Das einfache Zeugnis nennt Art, Dauer und Ziel der Ausbildung sowie die erworbenen beruflichen Fertigkeiten, Kenntnisse und Fähigkeiten (§ 16 Abs. 2)." },
+  { topic: "Zeugnis", q: "Wodurch wird aus einem einfachen ein QUALIFIZIERTES Zeugnis?",
+    options: ["Durch die Unterschrift der IHK", "Durch einen Stempel des Betriebsrats", "Auf Verlangen des Azubis werden Angaben über Verhalten und Leistung aufgenommen", "Durch eine Note der Berufsschule"],
+    a: 2, e: "Auf Verlangen des Auszubildenden sind auch Angaben über Verhalten und Leistung aufzunehmen — dann ist es ein qualifiziertes Zeugnis." },
+
+  // === Block L: Jugendarbeitsschutzgesetz – Grundlagen & Arbeitszeit ===
+  { topic: "JArbSchG", q: "Für wen gilt das Jugendarbeitsschutzgesetz (JArbSchG) vor allem?",
+    options: ["Für alle Arbeitnehmer über 50", "Für Auszubildende und Arbeitnehmer, die noch nicht 18 Jahre alt sind", "Nur für Beamte", "Nur für Führungskräfte"],
+    a: 1, e: "Das JArbSchG gilt u. a. für Auszubildende und Arbeitnehmer, die noch nicht 18 Jahre alt sind (§ 1)." },
+  { topic: "JArbSchG", q: "Wer ist im Sinne des JArbSchG ein „Jugendlicher“?",
+    options: ["Wer mindestens 15, aber noch nicht 18 Jahre alt ist", "Wer noch nicht 15 Jahre alt ist", "Wer zwischen 18 und 21 Jahren alt ist", "Jeder Auszubildende"],
+    a: 0, e: "Nach § 2 JArbSchG ist Jugendlicher, wer mindestens 15, aber noch nicht 18 Jahre alt ist; ein Kind ist, wer noch nicht 15 ist." },
+  { topic: "JArbSchG", q: "Wie viele Stunden dürfen Jugendliche laut § 8 JArbSchG in der Regel höchstens täglich beschäftigt werden?",
+    options: ["10 Stunden", "6 Stunden", "12 Stunden", "8 Stunden (in Ausnahmefällen 8,5)"],
+    a: 3, e: "Nach § 8 JArbSchG dürfen Jugendliche in der Regel nicht mehr als 8 Stunden täglich (ausnahmsweise 8,5) beschäftigt werden." },
+  { topic: "JArbSchG", q: "Wie viele Stunden pro Woche dürfen Jugendliche höchstens beschäftigt werden?",
+    options: ["48 Stunden", "40 Stunden", "35 Stunden", "45 Stunden"],
+    a: 1, e: "Nach § 8 JArbSchG dürfen Jugendliche nicht mehr als 40 Stunden wöchentlich beschäftigt werden." },
+
+  // === Block M: JArbSchG – Pausen, Nachtruhe, Verbote, Untersuchungen ===
+  { topic: "JArbSchG", q: "Wie lange muss die Ruhepause bei einer Arbeitszeit von mehr als sechs Stunden für Jugendliche mindestens sein?",
+    options: ["15 Minuten", "30 Minuten", "45 Minuten", "60 Minuten"],
+    a: 3, e: "Nach § 11 JArbSchG betragen die Ruhepausen mindestens 60 Minuten bei mehr als sechs Stunden Arbeitszeit (30 Minuten bei 4,5–6 Stunden)." },
+  { topic: "JArbSchG", q: "In welchem Zeitraum dürfen Jugendliche grundsätzlich beschäftigt werden?",
+    options: ["Rund um die Uhr", "Nur nachts", "Nur in der Zeit von 6 bis 20 Uhr", "Von 8 bis 22 Uhr"],
+    a: 2, e: "Nach § 14 JArbSchG dürfen Jugendliche grundsätzlich nur zwischen 6 und 20 Uhr beschäftigt werden (mit branchenbezogenen Ausnahmen)." },
+  { topic: "JArbSchG", q: "Wie viele Stunden ununterbrochene Freizeit (Nachtruhe) müssen Jugendlichen nach Arbeitsende gewährt werden?",
+    options: ["Mindestens 12 Stunden", "Mindestens 8 Stunden", "Mindestens 10 Stunden", "Mindestens 6 Stunden"],
+    a: 0, e: "Nach § 13 JArbSchG dürfen Jugendliche nicht vor Ablauf einer ununterbrochenen Freizeit von mindestens 12 Stunden wieder beschäftigt werden." },
+  { topic: "JArbSchG", q: "Welche Arbeit ist für Jugendliche nach dem JArbSchG grundsätzlich verboten?",
+    options: ["Jede Büroarbeit", "Akkordarbeit und gefährliche Arbeiten", "Arbeit am Computer", "Arbeit im Team"],
+    a: 1, e: "Jugendliche dürfen u. a. nicht mit gefährlichen Arbeiten (§ 22), Akkordarbeit (§ 23) oder Arbeiten unter Tage (§ 24) beschäftigt werden." },
+
+  // === Block N: Betriebsverfassungsgesetz & Betriebsrat ===
+  { topic: "BetrVG", q: "Welches Gesetz regelt die Interessenvertretung der Arbeitnehmer durch Betriebsräte?",
+    options: ["Das Berufsbildungsgesetz (BBiG)", "Das Jugendarbeitsschutzgesetz (JArbSchG)", "Das Betriebsverfassungsgesetz (BetrVG)", "Das Bundesurlaubsgesetz (BUrlG)"],
+    a: 2, e: "Das Betriebsverfassungsgesetz (BetrVG) legt die Regelungen für die Interessenvertretung durch Betriebsräte fest." },
+  { topic: "Betriebsrat", q: "Ab welcher Betriebsgröße kann ein Betriebsrat gewählt werden?",
+    options: ["In Betrieben mit in der Regel mindestens fünf ständigen wahlberechtigten Arbeitnehmern", "Erst ab 20 Arbeitnehmern", "Erst ab 100 Arbeitnehmern", "In jedem Betrieb ab einem Arbeitnehmer"],
+    a: 0, e: "Nach § 1 BetrVG werden Betriebsräte in Betrieben mit i. d. R. mindestens fünf ständigen wahlberechtigten Arbeitnehmern gewählt, von denen drei wählbar sind." },
+  { topic: "Betriebsrat", q: "Ab welchem Alter ist man für die Betriebsratswahl wahlberechtigt (aktives Wahlrecht)?",
+    options: ["Ab 16 Jahren", "Ab 21 Jahren", "Ab 25 Jahren", "Ab dem vollendeten 18. Lebensjahr"],
+    a: 3, e: "Nach § 7 BetrVG sind alle Arbeitnehmer wahlberechtigt, die das 18. Lebensjahr vollendet haben." },
+  { topic: "Betriebsrat", q: "Welche Voraussetzung gilt für das passive Wahlrecht (Wählbarkeit) zum Betriebsrat?",
+    options: ["Mindestens 25 Jahre und 1 Jahr Betriebszugehörigkeit", "Wahlberechtigt sein und dem Betrieb mindestens sechs Monate angehören", "Nur volljährig sein", "Mitglied einer Gewerkschaft sein"],
+    a: 1, e: "Nach § 8 BetrVG ist wählbar, wer wahlberechtigt ist (mind. 18) und dem Betrieb mindestens sechs Monate angehört." },
+  { topic: "Betriebsrat", q: "In welchen Angelegenheiten hat der Betriebsrat echte, gleichberechtigte Mitbestimmungsrechte?",
+    options: ["In wirtschaftlichen Grundsatzentscheidungen", "In der Wahl der Geschäftsführung", "In sozialen Angelegenheiten (z. B. Beginn/Ende der Arbeitszeit)", "In der Preisgestaltung der Produkte"],
+    a: 2, e: "Nach §§ 87–89 BetrVG hat der Betriebsrat in sozialen Angelegenheiten (z. B. Arbeitszeit, betriebliche Ordnung, Unfallverhütung) echte Mitbestimmungsrechte." },
+
+  // === Block O: Jugend- und Auszubildendenvertretung (JAV) ===
+  { topic: "JAV", q: "Ab welcher Voraussetzung wird eine Jugend- und Auszubildendenvertretung (JAV) gewählt?",
+    options: ["Bei mindestens 100 Arbeitnehmern", "In Betrieben mit i. d. R. mindestens fünf Arbeitnehmern unter 18 oder Azubis unter 25", "In jedem Betrieb", "Nur auf Antrag der IHK"],
+    a: 1, e: "Nach § 60 BetrVG wird eine JAV gewählt, wenn i. d. R. mindestens fünf jugendliche Arbeitnehmer (unter 18) oder Auszubildende (unter 25) im Betrieb sind." },
+  { topic: "JAV", q: "Wer ist zur JAV wählbar (passives Wahlrecht)?",
+    options: ["Alle Arbeitnehmer des Betriebes, die das 25. Lebensjahr noch nicht vollendet haben", "Nur Betriebsratsmitglieder", "Nur Personen über 25", "Nur die Geschäftsführung"],
+    a: 0, e: "Nach § 61 BetrVG sind alle Arbeitnehmer wählbar, die das 25. Lebensjahr noch nicht vollendet haben; Betriebsratsmitglieder können nicht in die JAV gewählt werden." },
+  { topic: "JAV", q: "Wie lange dauert die Amtszeit der JAV?",
+    options: ["Vier Jahre", "Ein Jahr", "Zwei Jahre", "Drei Jahre"],
+    a: 2, e: "Nach § 64 BetrVG beträgt die Amtszeit der JAV zwei Jahre; die Wahlen finden alle zwei Jahre vom 1. Oktober bis 30. November statt." },
+  { topic: "JAV", q: "Welche Aufgabe hat die JAV nach § 70 BetrVG?",
+    options: ["Die Geschäftsführung zu ernennen", "Maßnahmen zugunsten Jugendlicher/Azubis beim Betriebsrat zu beantragen und über die Einhaltung von Schutzvorschriften zu wachen", "Die Ausbildungsvergütung festzulegen", "Die IHK-Prüfung abzunehmen"],
+    a: 1, e: "Die JAV beantragt Maßnahmen zugunsten Jugendlicher und Auszubildender beim Betriebsrat und wacht über die Einhaltung der für sie geltenden Vorschriften (§ 70 BetrVG)." },
+  { topic: "JAV", q: "Wie viele Vertreter hat eine JAV bei 5 bis 20 wahlberechtigten Jugendlichen/Azubis im Betrieb?",
+    options: ["Drei Vertreter", "Fünf Vertreter", "Sieben Vertreter", "Einen Vertreter"],
+    a: 3, e: "Nach § 62 BetrVG besteht die JAV bei 5 bis 20 Wahlberechtigten aus einem Vertreter; die Zahl steigt gestaffelt mit der Anzahl (max. 15)." }
+];
+
+let answers = new Array(QUESTIONS.length).fill(null);
+let viewMode = 'list';      // 'list' oder 'slide'
+let evalMode = 'immediate'; // 'immediate' oder 'end'
+let currentSlide = 0;
+
+// Pro Frage: shuffled[displayIdx] = origIdx (so bleibt qd.a der originale Lösungs-Index)
+function shuffleAnswers() {
+  QUESTIONS.forEach(qd => {
+    const n = qd.options.length;
+    qd.shuffled = Array.from({length: n}, (_, k) => k);
+    for (let i = n - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [qd.shuffled[i], qd.shuffled[j]] = [qd.shuffled[j], qd.shuffled[i]];
+    }
+  });
+}
+shuffleAnswers();
+function origIndex(qi, displayIdx) { return QUESTIONS[qi].shuffled[displayIdx]; }
+function displayCorrectIdx(qi) { return QUESTIONS[qi].shuffled.indexOf(QUESTIONS[qi].a); }
+function isCorrect(qi) {
+  if (answers[qi] === null) return false;
+  return origIndex(qi, answers[qi]) === QUESTIONS[qi].a;
+}
+
+// IHK-Notenschlüssel (offiziell, AbschlussPrüfungen kaufmännischer Berufe)
+function ihkNote(pct) {
+  if (pct >= 92) return { num: 1, name: 'sehr gut',     color: '#10B981', bestanden: true };
+  if (pct >= 81) return { num: 2, name: 'gut',          color: '#0EA5A4', bestanden: true };
+  if (pct >= 67) return { num: 3, name: 'befriedigend', color: '#0EA5A4', bestanden: true };
+  if (pct >= 50) return { num: 4, name: 'ausreichend',  color: '#F59E0B', bestanden: true };
+  if (pct >= 30) return { num: 5, name: 'mangelhaft',   color: '#F97316', bestanden: false };
+  return                         { num: 6, name: 'ungenügend',   color: '#EF4444', bestanden: false };
+}
+
+function setView(mode) {
+  viewMode = mode;
+  document.getElementById('modeList').classList.toggle('btn-primary', mode === 'list');
+  document.getElementById('modeList').classList.toggle('btn-ghost',   mode !== 'list');
+  document.getElementById('modeSlide').classList.toggle('btn-primary', mode === 'slide');
+  document.getElementById('modeSlide').classList.toggle('btn-ghost',   mode !== 'slide');
+  document.getElementById('slideNav').style.display = (mode === 'slide') ? 'block' : 'none';
+  applyView();
+}
+
+function setEval(mode) {
+  evalMode = mode;
+  document.getElementById('modeImmediate').classList.toggle('btn-primary', mode === 'immediate');
+  document.getElementById('modeImmediate').classList.toggle('btn-ghost',   mode !== 'immediate');
+  document.getElementById('modeEnd').classList.toggle('btn-primary', mode === 'end');
+  document.getElementById('modeEnd').classList.toggle('btn-ghost',   mode !== 'end');
+}
+
+function applyView() {
+  const allQ = document.querySelectorAll('.question');
+  if (viewMode === 'list') {
+    allQ.forEach(q => q.style.display = '');
+  } else {
+    allQ.forEach((q, i) => q.style.display = (i === currentSlide ? '' : 'none'));
+    document.getElementById('slidePos').textContent = currentSlide + 1;
+    document.getElementById('slideTotal').textContent = QUESTIONS.length;
+  }
+}
+
+function nextSlide() {
+  if (currentSlide < QUESTIONS.length - 1) { currentSlide++; applyView(); window.scrollTo(0, 0); }
+}
+function prevSlide() {
+  if (currentSlide > 0) { currentSlide--; applyView(); window.scrollTo(0, 0); }
+}
+
+function renderQuiz() {
+  const root = document.getElementById('quiz');
+  root.innerHTML = '';
+  document.getElementById('total').textContent = QUESTIONS.length;
+  QUESTIONS.forEach((qd, i) => {
+    const q = document.createElement('div');
+    q.className = 'question';
+    q.id = `q-${i}`;
+    let html = `
+      <span class="q-num">Frage ${i + 1}</span>
+      <span class="q-topic">${qd.topic}</span>
+      <p class="q-text">${qd.q}</p>
+      <div class="options">
+    `;
+    qd.shuffled.forEach((origIdx, j) => {
+      const letter = String.fromCharCode(65 + j);
+      const opt = qd.options[origIdx];
+      html += `<div class="option" data-q="${i}" data-opt="${j}" onclick="answer(${i}, ${j})">
+        <div class="marker">${letter}</div>
+        <div>${opt}</div>
+      </div>`;
+    });
+    html += '</div>';
+    q.innerHTML = html;
+    root.appendChild(q);
+  });
+  applyView();
+  updateScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const q = document.getElementById(`q-${qi}`);
+  const opts = q.querySelectorAll('.option');
+  opts.forEach(o => o.classList.add('locked'));
+
+  if (evalMode === 'immediate') {
+    // Sofort markieren und Erklärung zeigen — vergleicht im Display-Index-Raum
+    const correctDisplayIdx = displayCorrectIdx(qi);
+    const userIsCorrect = (oi === correctDisplayIdx);
+    opts[oi].classList.add(userIsCorrect ? 'correct' : 'incorrect');
+    if (!userIsCorrect) opts[correctDisplayIdx].classList.add('correct');
+    const exp = document.createElement('div');
+    exp.className = 'explanation';
+    exp.textContent = QUESTIONS[qi].e;
+    q.appendChild(exp);
+    q.classList.add('locked');
+  } else {
+    // Nur „angekreuzt”-Status, keine Bewertung anzeigen
+    opts[oi].style.borderColor = 'var(--bfw-primary)';
+    opts[oi].style.background = 'var(--bfw-bg-teal)';
+    opts[oi].querySelector('.marker').style.background = 'var(--bfw-primary)';
+    opts[oi].querySelector('.marker').style.color = 'white';
+    opts[oi].querySelector('.marker').style.borderColor = 'var(--bfw-primary)';
+  }
+  updateScore();
+}
+
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('answered').textContent = answered;
+  document.getElementById('progressBar').style.width = `${(answered / QUESTIONS.length) * 100}%`;
+  if (evalMode === 'immediate') {
+    const correct = answers.filter((a, i) => isCorrect(i)).length;
+    document.getElementById('correct').textContent = correct;
+  } else {
+    document.getElementById('correct').textContent = '—';
+  }
+  if (answered === QUESTIONS.length && evalMode === 'immediate') showSummary();
+}
+
+function finishNow() {
+  // Im End-Modus: alle bislang nicht beantworteten Fragen werden als „nicht beantwortet” gewertet
+  // und alle Lösungen+Erklärungen werden offengelegt.
+  for (let i = 0; i < QUESTIONS.length; i++) {
+    const q = document.getElementById(`q-${i}`);
+    if (!q) continue;
+    const opts = q.querySelectorAll('.option');
+    opts.forEach(o => o.classList.add('locked'));
+    const correctDisplayIdx = displayCorrectIdx(i);
+    if (answers[i] !== null) {
+      const wasRight = (answers[i] === correctDisplayIdx);
+      opts[answers[i]].classList.add(wasRight ? 'correct' : 'incorrect');
+      if (!wasRight) opts[correctDisplayIdx].classList.add('correct');
+    } else {
+      opts[correctDisplayIdx].classList.add('correct');
+    }
+    if (!q.querySelector('.explanation')) {
+      const exp = document.createElement('div');
+      exp.className = 'explanation';
+      exp.textContent = QUESTIONS[i].e;
+      q.appendChild(exp);
+    }
+    q.classList.add('locked');
+  }
+  // Im Slide-Modus: zur Übersicht wechseln
+  setView('list');
+  showSummary();
+}
+
+function showSummary() {
+  const total = QUESTIONS.length;
+  const correct = answers.filter((a, i) => isCorrect(i)).length;
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((correct / total) * 100);
+  const note = ihkNote(pct);
+
+  // IHK-Skala-Tabelle
+  const skala = [
+    { stufe: 1, label: 'sehr gut',     range: '92 – 100 %', col: '#10B981' },
+    { stufe: 2, label: 'gut',          range: '81 – 91 %',  col: '#0EA5A4' },
+    { stufe: 3, label: 'befriedigend', range: '67 – 80 %',  col: '#0EA5A4' },
+    { stufe: 4, label: 'ausreichend',  range: '50 – 66 %',  col: '#F59E0B' },
+    { stufe: 5, label: 'mangelhaft',   range: '30 – 49 %',  col: '#F97316' },
+    { stufe: 6, label: 'ungenügend',   range: '0 – 29 %',   col: '#EF4444' }
+  ];
+
+  const skalaRows = skala.map(s => `
+    <tr style="${s.stufe === note.num ? 'background: var(--bfw-bg-teal); font-weight: 700;' : ''}">
+      <td style="color: ${s.col}; font-weight: 700;">${s.stufe}</td>
+      <td>${s.label}</td>
+      <td>${s.range}</td>
+    </tr>`).join('');
+
+  const s = document.getElementById('summary');
+  s.style.display = 'block';
+  s.innerHTML = `
+    <div class="summary">
+      <h2>Quiz ausgewertet</h2>
+      <div class="big-score" style="color: ${note.color};">${note.num}</div>
+      <div class="grade"><strong>${note.name}</strong> · ${correct} von ${total} richtig (${pct} %)</div>
+      <div style="margin-top: 0.5rem; color: ${note.bestanden ? 'var(--bfw-success)' : 'var(--bfw-danger)'}; font-weight: 600;">
+        ${note.bestanden ? '✓ bestanden' : '✗ nicht bestanden'}
+      </div>
+      ${answered < total ? `<div style="margin-top: 0.6rem; color: var(--bfw-warn); font-size: 0.95rem;">${total - answered} Fragen unbeantwortet — als falsch gewertet.</div>` : ''}
+
+      <div style="margin: 1.6rem auto 0; max-width: 360px;">
+        <table style="font-size: 0.9rem;">
+          <thead><tr><th>Note</th><th>Beurteilung</th><th>Punktebereich</th></tr></thead>
+          <tbody>${skalaRows}</tbody>
+        </table>
+        <p style="font-size: 0.78rem; color: var(--bfw-ink-soft); margin-top: 0.4rem;">
+          IHK-Notenschlüssel (kaufmännische Abschlussprüfungen)
+        </p>
+      </div>
+
+      <div style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="resetQuiz()">Neu starten</button>
+        <button class="btn btn-ghost" onclick="window.print()" style="margin-left: 0.5rem;">Drucken / als PDF speichern</button>
+      </div>
+    </div>
+  `;
+  s.scrollIntoView({ behavior: 'smooth' });
+}
+
+function resetQuiz() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  currentSlide = 0;
+  shuffleAnswers();
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('summary').innerHTML = '';
+  renderQuiz();
+  window.scrollTo(0, 0);
+}
+
+// Initial: Buttons-Default-Status setzen
+setView('list');
+setEval('immediate');
+renderQuiz();
+</script>
+
+</body>
+</html>

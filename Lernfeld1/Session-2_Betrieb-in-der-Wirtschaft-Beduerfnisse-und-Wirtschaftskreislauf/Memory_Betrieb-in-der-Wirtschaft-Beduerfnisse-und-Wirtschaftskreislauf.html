@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Memory Session 2 — Bedürfnisse, Bedarf & Wirtschaftskreislauf</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root {
+  --bfw-primary:#0EA5A4; --bfw-primary-dark:#0F766E; --bfw-accent:#F59E0B;
+  --bfw-ink:#0F172A; --bfw-ink-soft:#475569; --bfw-bg:#FAFAFA; --bfw-bg-soft:#F8FAFC;
+  --bfw-bg-teal:#ECFEFF; --bfw-bg-green:#D1FAE5; --bfw-border:#E2E8F0; --bfw-success:#10B981;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(180deg, var(--bfw-bg-teal) 0%, var(--bfw-bg) 240px); color: var(--bfw-ink); min-height: 100vh; padding: 1.5rem 1rem 3rem; }
+.container { max-width: 820px; margin: 0 auto; }
+header { text-align: center; margin-bottom: 1rem; }
+.tag-pill { display: inline-block; padding: 0.4rem 1rem; background: var(--bfw-primary); color: white; border-radius: 999px; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 0.75rem; }
+h1 { font-size: 1.6rem; color: var(--bfw-primary-dark); }
+details.how { background: var(--bfw-bg-soft); border: 1px solid var(--bfw-border); border-radius: 10px; padding: 0.6rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); line-height: 1.5; }
+details.how summary { cursor: pointer; font-weight: 600; color: var(--bfw-primary-dark); }
+details.how p { margin: 0.5rem 0 0; }
+.stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; background: white; border: 1px solid var(--bfw-border); border-radius: 12px; padding: 0.7rem 1rem; margin-bottom: 1rem; font-size: 0.9rem; color: var(--bfw-ink-soft); }
+.stats b { color: var(--bfw-primary-dark); }
+.grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 620px){ .grid { grid-template-columns: repeat(2, 1fr); } }
+.mcard { position: relative; min-height: 120px; border-radius: 12px; cursor: pointer; border: 2px solid var(--bfw-border);
+  background: var(--bfw-primary); color: white; display: flex; align-items: center; justify-content: center;
+  padding: 0.6rem; text-align: center; transition: transform 0.12s, background 0.2s; user-select: none; }
+.mcard:active { transform: scale(0.98); }
+.mcard .content { display: none; font-size: 0.82rem; line-height: 1.35; color: var(--bfw-ink); overflow: auto; max-height: 150px; }
+.mcard .facedown { font-size: 1.8rem; }
+.mcard .label { position: absolute; top: 5px; left: 8px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.mcard.up { background: white; cursor: default; }
+.mcard.up.term { border-color: var(--bfw-primary); }
+.mcard.up.term .content { font-weight: 700; font-size: 1rem; color: var(--bfw-primary-dark); }
+.mcard.up .content { display: block; }
+.mcard.up .facedown { display: none; }
+.mcard.up .label { color: var(--bfw-ink-soft); }
+.mcard.matched { background: var(--bfw-bg-green); border-color: var(--bfw-success); cursor: default; }
+.mcard.matched .content { display: block; }
+.mcard.matched .facedown { display: none; }
+.mcard.matched.term .content { color: #065F46; }
+.msg { text-align: center; min-height: 1.6rem; font-weight: 600; margin: 1rem 0; }
+.msg.win { color: var(--bfw-success); }
+.controls { text-align: center; margin-top: 0.5rem; }
+.btn { padding: 0.7rem 1.4rem; border: none; border-radius: 10px; background: var(--bfw-primary); color: white; font-size: 0.95rem; font-weight: 600; cursor: pointer; font-family: inherit; }
+.stats2 { text-align: center; font-size: 0.85rem; color: var(--bfw-ink-soft); margin-top: 0.5rem; }
+footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--bfw-ink-soft); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <span class="tag-pill">Session 2 · Memory</span>
+    <h1>Bedürfnisse, Bedarf & Wirtschaftskreislauf</h1>
+  </header>
+  <details class="how" open>
+    <summary>ℹ️ Spielanleitung</summary>
+    <p>Finde die zusammengehörenden Paare: Jede Karte zeigt entweder einen <b>Begriff</b> oder eine <b>Definition</b>.
+    Decke zwei Karten auf – gehören Begriff und Definition zusammen, bleiben sie offen (grün).</p>
+    <p>Passt es nicht, werden beide wieder umgedreht. Ziel: alle <b>8 Paare</b> mit möglichst wenigen Zügen aufdecken – so prägst du dir Begriffe und ihre Bedeutung ein.</p>
+  </details>
+  <div class="stats">
+    <div>Paare: <b id="pairs">0</b> / 8</div>
+    <div>Züge: <b id="moves">0</b></div>
+  </div>
+  <div class="grid" id="grid"></div>
+  <div class="msg" id="msg"></div>
+  <div class="controls"><button class="btn" onclick="newGame()">🔄 Neues Spiel</button></div>
+  <div class="stats2" id="best"></div>
+  <footer>BFW Lernplattform · Lernfeld 1 · © Can Siebert 2026</footer>
+</div>
+<script>
+const DAY_ID = 'lf1-s2';
+const PAIRS = [{"term":"Was ist ein Bedürfnis?","def":"Das Gefühl eines Mangels, verbunden mit dem Wunsch, diesen Mangel zu beseitigen."},{"term":"Wonach werden Bedürfnisse nach Dringlichkeit eingeteilt?","def":"In Existenzbedürfnisse, Kulturbedürfnisse und Luxusbedürfnisse."},{"term":"Was sind Existenzbedürfnisse?","def":"Grundbedürfnisse zur Sicherung des Überlebens, z. B. Essen, Trinken, Kleidung, Wohnung."},{"term":"Was sind Kulturbedürfnisse?","def":"Vom Kulturkreis geprägte, als üblich angesehene Bedürfnisse, z. B. Bildung, modische Kleidung, Kino."},{"term":"Was sind Luxusbedürfnisse?","def":"Nicht notwendige Ansprüche, die sich nicht jeder leisten kann, z. B. Yacht, Sportwagen, Villa."},{"term":"Warum sind die Grenzen zwischen den Bedürfnisarten fließend?","def":"Weil dasselbe Gut je nach Person unterschiedlich eingeordnet wird; eine eindeutige Abgrenzung ist nicht immer möglich."},{"term":"Was ist ein materielles Bedürfnis?","def":"Ein Bedürfnis nach einem fassbaren Gegenstand, z. B. nach einem Smartphone oder neuen Schuhen."},{"term":"Was ist ein immaterielles Bedürfnis?","def":"Ein Bedürfnis ohne fassbaren Gegenstand, z. B. nach Anerkennung oder dem Schreiben einer Nachricht."},{"term":"Was ist ein akutes Bedürfnis?","def":"Ein konkreter, offener Wunsch, z. B. sich jetzt ein neues Smartphone kaufen zu wollen."},{"term":"Was ist ein latentes Bedürfnis?","def":"Ein schlummerndes, unbewusstes Bedürfnis, das z. B. durch Werbung geweckt werden kann."},{"term":"Was ist ein Individualbedürfnis?","def":"Ein Bedürfnis, das von einem einzelnen Menschen ausgeht, z. B. der Wunsch nach einem eigenen Smartphone."},{"term":"Was ist ein Kollektivbedürfnis?","def":"Ein Bedürfnis, das aus dem Zusammenleben entsteht, z. B. Umweltschutz oder ein gutes Autobahnnetz."},{"term":"Was zeigt die Bedürfnispyramide nach Maslow?","def":"Ein Stufenmodell: Erst wenn untere, dringlichere Bedürfnisse befriedigt sind, treten höhere in den Vordergrund."},{"term":"Welche Stufe steht ganz unten in der Maslow-Pyramide?","def":"Die physiologischen Grundbedürfnisse (Essen, Trinken, Schlaf)."},{"term":"Welche Stufe steht ganz oben in der Maslow-Pyramide?","def":"Die Selbstverwirklichung (Entfaltung der eigenen Fähigkeiten)."},{"term":"Nenne die fünf Stufen der Maslow-Pyramide von unten nach oben.","def":"Physiologische Grundbedürfnisse, Sicherheit, soziale Bedürfnisse, Wertschätzung, Selbstverwirklichung."},{"term":"Was sind Defizitbedürfnisse bei Maslow?","def":"Die unteren Stufen, deren Fehlen als Mangel empfunden wird (physiologische, Sicherheits-, soziale Bedürfnisse)."},{"term":"Was ist Bedarf?","def":"Ein mit Kaufkraft (Einkommen) ausgestattetes Bedürfnis."},{"term":"Was ist Nachfrage?","def":"Ein marktwirksames Bedürfnis; der tatsächliche Kauf eines Gutes."},{"term":"Wie lautet die richtige Reihenfolge von Bedürfnis zum Kauf?","def":"Bedürfnis → Bedarf → Nachfrage."},{"term":"Welche Rolle spielt die Kaufkraft?","def":"Sie ist das Bindeglied: Erst mit Einkommen wird aus einem Bedürfnis ein Bedarf."},{"term":"Was ist ein Markt?","def":"Der Ort, an dem Angebot und Nachfrage zusammentreffen und sich der Preis bildet."},{"term":"Was versteht man unter Angebot?","def":"Die von den Anbietern zum Verkauf bereitgestellten Güter und Dienstleistungen."},{"term":"Was passiert mit dem Preis bei großer Knappheit oder hoher Nachfrage?","def":"Der Preis steigt."},{"term":"Was passiert mit dem Preis bei großem Angebot oder geringer Nachfrage?","def":"Der Preis sinkt."},{"term":"Was sind Güter?","def":"Alle Mittel, mit denen der Mensch seine Bedürfnisse befriedigt."},{"term":"Was sind freie Güter?","def":"In großer Menge vorhandene Güter ohne Preis, z. B. Luft, Sonne, Meerwasser."},{"term":"Was sind knappe Güter?","def":"Wirtschaftsgüter: begrenzt verfügbar, verursachen Kosten und haben einen Preis."},{"term":"Was sind Sachgüter?","def":"Materielle, fassbare Güter, z. B. Schreibtische oder Lebensmittel."},{"term":"In welche zwei Arten teilen sich immaterielle Güter?","def":"In Dienstleistungen und Rechte."},{"term":"Was ist eine Dienstleistung?","def":"Eine Handlung, durch die ein Nutzen entsteht, z. B. eine Reparatur oder Beratung."},{"term":"Nenne Beispiele für Rechte als immaterielle Güter.","def":"Warenzeichen (Marken) und Patente."},{"term":"Was sind Konsumgüter?","def":"Güter, die von Endverbrauchern (Konsumenten) genutzt werden, z. B. das private Smartphone."},{"term":"Was sind Produktionsgüter?","def":"Güter, die Unternehmen im Herstellungsprozess einsetzen, z. B. Maschinen oder das dienstliche Fahrzeug."},{"term":"Was sind Gebrauchsgüter?","def":"Güter, die mehrmals verwendet werden können, z. B. eine Maschine."},{"term":"Was sind Verbrauchsgüter?","def":"Güter, die nur einmal verwendet werden können, z. B. Holz als Rohstoff."},{"term":"Was sind Komplementärgüter?","def":"Güter, die sich ergänzen und gemeinsam nachgefragt werden, z. B. Maschine und Strom."},{"term":"Was sind Substitutionsgüter?","def":"Güter, die sich gegenseitig ersetzen, z. B. Butter oder Margarine."},{"term":"Wie verläuft die Nachfrage bei Substitutionsgütern?","def":"Gegenläufig: Steigt die Nachfrage nach Butter, sinkt die nach Margarine."},{"term":"Warum muss der Mensch wirtschaften?","def":"Weil die Bedürfnisse unbegrenzt, die Güter aber knapp sind (Spannungsverhältnis)."},{"term":"Was besagt das Maximalprinzip?","def":"Mit gegebenen Mitteln soll ein maximaler Erfolg erzielt werden."},{"term":"Was besagt das Minimalprinzip?","def":"Ein gegebenes Ziel soll mit minimalem Aufwand erreicht werden."},{"term":"Kann man Maximal- und Minimalprinzip gleichzeitig anwenden?","def":"Nein; entweder ist das Mittel fest vorgegeben oder das Ziel, nie beides zugleich."},{"term":"Was sind Produktionsfaktoren?","def":"Alle an der Produktion beteiligten Menschen und Güter."},{"term":"Nenne die drei volkswirtschaftlichen Produktionsfaktoren.","def":"Boden, Arbeit und Kapital."},{"term":"Was umfasst der Produktionsfaktor Boden?","def":"Die zu wirtschaftlichen Zwecken genutzte Natur: Anbau-, Abbau- und Standortboden."},{"term":"Was ist der Produktionsfaktor Arbeit?","def":"Jede geistige und körperliche Tätigkeit, mit der Einkommen erzielt wird."},{"term":"Wie entsteht der Produktionsfaktor Kapital?","def":"Durch Sparen (Konsumverzicht); Geldkapital wird investiert und wird zu Sachkapital."},{"term":"Warum gilt Kapital als derivativer Faktor?","def":"Weil es nicht von Anfang an vorhanden ist, sondern erst aus Boden und Arbeit entsteht."},{"term":"Welche betriebswirtschaftlichen Faktoren gibt es?","def":"Elementarfaktoren und dispositive Faktoren."},{"term":"Was gehört zu den Elementarfaktoren?","def":"Ausführende Arbeitskräfte, Betriebsmittel und Werkstoffe."},{"term":"Was gehört zu den dispositiven Faktoren?","def":"Leitung, Planung, Organisation und Überwachung (Kontrolle)."},{"term":"Was ist ein Rohstoff?","def":"Ein Werkstoff, der als Hauptbestandteil in ein Produkt eingeht, z. B. Holz im Schreibtisch."},{"term":"Was ist ein Hilfsstoff?","def":"Ein Nebenbestandteil eines Produkts, z. B. Leim oder Schrauben."},{"term":"Was ist ein Betriebsstoff?","def":"Ein Stoff, der nicht in das Produkt eingeht, z. B. Strom, Benzin oder Öl."},{"term":"Was ist der Wirtschaftskreislauf?","def":"Ein Modell, das die volkswirtschaftlichen Güter- und Geldströme zwischen den Sektoren darstellt."},{"term":"Welche Sektoren zeigt der einfache Wirtschaftskreislauf?","def":"Nur die privaten Haushalte und die Unternehmen."},{"term":"Wie laufen Geld- und Güterstrom im Kreislauf?","def":"Gegenläufig; sie gleichen sich aus (geschlossener, stationärer Kreislauf)."},{"term":"Welcher Sektor kommt im erweiterten Kreislauf hinzu?","def":"Der Sektor Banken (Sparen der Haushalte → Kredite/Investitionen der Unternehmen)."},{"term":"Welche Sektoren enthält der offene Wirtschaftskreislauf zusätzlich?","def":"Den Staat (vollständiger Kreislauf) und das Ausland (offener Kreislauf mit Import/Export)."}];       // [{term, def}, ...] – ganzer Tagespool
+const PAIRS_PER_GAME = 8;
+const STORAGE = 'memory_' + DAY_ID;
+
+let deck=[], flipped=[], matched=0, moves=0, busy=false;
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function loadBest(){ try { return JSON.parse(localStorage.getItem(STORAGE)); } catch(e){ return null; } }
+function saveBest(m){ try { localStorage.setItem(STORAGE, JSON.stringify(m)); } catch(e){} }
+function renderBest(){ const b=loadBest(); document.getElementById('best').textContent = b!=null ? `Bestleistung: ${b} Züge` : ''; }
+
+function newGame(){
+  const n = Math.min(PAIRS_PER_GAME, PAIRS.length);
+  const chosen = shuffle(PAIRS.map((p,i)=>i)).slice(0, n);
+  deck = [];
+  chosen.forEach((pi, k) => {
+    deck.push({ pair:k, kind:'term', text:PAIRS[pi].term });
+    deck.push({ pair:k, kind:'def',  text:PAIRS[pi].def  });
+  });
+  shuffle(deck);
+  flipped=[]; matched=0; moves=0; busy=false;
+  document.getElementById('pairs').textContent='0';
+  document.getElementById('pairs').nextSibling; // noop
+  document.getElementById('moves').textContent='0';
+  document.querySelector('.stats').firstElementChild.innerHTML = `Paare: <b id="pairs">0</b> / ${n}`;
+  document.getElementById('msg').textContent=''; document.getElementById('msg').className='msg';
+  render();
+  renderBest();
+}
+
+function render(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  deck.forEach((card, i)=>{
+    const el=document.createElement('div');
+    el.className='mcard'; el.id='c'+i;
+    el.innerHTML = `<span class="label"></span><span class="facedown">🧠</span><span class="content"></span>`;
+    el.onclick=()=>flip(i);
+    g.appendChild(el);
+  });
+}
+
+function flip(i){
+  if(busy) return;
+  const card=deck[i]; const el=document.getElementById('c'+i);
+  if(el.classList.contains('up') || el.classList.contains('matched')) return;
+  el.classList.add('up', card.kind);
+  el.querySelector('.content').textContent = card.text;
+  el.querySelector('.label').textContent = card.kind==='term' ? 'Begriff' : 'Definition';
+  flipped.push(i);
+  if(flipped.length===2){
+    moves++; document.getElementById('moves').textContent=moves;
+    const [a,b]=flipped;
+    if(deck[a].pair===deck[b].pair && deck[a].kind!==deck[b].kind){
+      // Treffer
+      document.getElementById('c'+a).classList.add('matched');
+      document.getElementById('c'+b).classList.add('matched');
+      flipped=[]; matched++;
+      document.getElementById('pairs').textContent=matched;
+      if(matched === deck.length/2) win();
+    } else {
+      busy=true;
+      setTimeout(()=>{
+        [a,b].forEach(idx=>{ const e=document.getElementById('c'+idx); e.classList.remove('up','term','def'); e.querySelector('.content').textContent=''; e.querySelector('.label').textContent=''; });
+        flipped=[]; busy=false;
+      }, 1000);
+    }
+  }
+}
+
+function win(){
+  const m=document.getElementById('msg'); m.textContent=`🎉 Geschafft in ${moves} Zügen!`; m.className='msg win';
+  const best=loadBest();
+  if(best==null || moves<best){ saveBest(moves); renderBest(); m.textContent += ' Neue Bestleistung!'; }
+}
+
+newGame();
+</script>
+</body>
+</html>

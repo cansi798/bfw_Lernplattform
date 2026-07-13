@@ -1,0 +1,308 @@
+{
+  "session": 3,
+  "thema": "Firma, Rechtsformen & Organisation",
+  "slug": "Unternehmen-Firma-Rechtsformen-und-Organisation",
+  "day_id": "lf1-s3",
+  "cards": [
+    {
+      "topic": "Kaufmannsbegriff",
+      "front": "Was ist ein Istkaufmann?",
+      "back": "Wer ein Handelsgewerbe betreibt, das nach Art und Umfang einen kaufmännisch eingerichteten Geschäftsbetrieb erfordert (§ 1 HGB) — Kaufmann kraft Gesetzes."
+    },
+    {
+      "topic": "Kaufmannsbegriff",
+      "front": "Was ist ein Kannkaufmann?",
+      "back": "Kleingewerbetreibende sowie land- und forstwirtschaftliche Unternehmen, die sich freiwillig ins Handelsregister eintragen lassen können (§§ 2, 3 HGB)."
+    },
+    {
+      "topic": "Kaufmannsbegriff",
+      "front": "Was ist ein Formkaufmann?",
+      "back": "Eine Kapitalgesellschaft (AG, GmbH, KGaA, eG), die allein wegen ihrer Rechtsform Kaufmann ist."
+    },
+    {
+      "topic": "Kaufmannsbegriff",
+      "front": "Welche Wirkung hat die Eintragung des Istkaufmanns?",
+      "back": "Deklaratorische (rechtsbekundende) Wirkung — er ist bereits vorher Kaufmann."
+    },
+    {
+      "topic": "Kaufmannsbegriff",
+      "front": "Welche Wirkung hat die Eintragung des Formkaufmanns?",
+      "back": "Konstitutive (rechtsbegründende) Wirkung — die Gesellschaft wird erst mit der Eintragung Kaufmann."
+    },
+    {
+      "topic": "Kaufmannsbegriff",
+      "front": "Warum sollte ein Kleingewerbetreibender die freiwillige Eintragung überlegen?",
+      "back": "Er muss dann Buchführungspflichten nach HGB sowie besondere Untersuchungs- und Rügepflichten beim Kaufvertrag erfüllen."
+    },
+    {
+      "topic": "Firma",
+      "front": "Was ist die Firma nach § 17 HGB?",
+      "back": "Der Name, unter dem ein Kaufmann seine Geschäfte betreibt und die Unterschrift abgibt."
+    },
+    {
+      "topic": "Firma",
+      "front": "Aus welchen zwei Teilen besteht die Firma?",
+      "back": "Aus dem Firmenkern und dem Firmenzusatz."
+    },
+    {
+      "topic": "Firma",
+      "front": "Was enthält der Firmenkern?",
+      "back": "Den Namen, den Gegenstand des Unternehmens oder eine Fantasiebezeichnung."
+    },
+    {
+      "topic": "Firma",
+      "front": "Was enthält der Firmenzusatz?",
+      "back": "Eine Erläuterung zum Gesellschaftsverhältnis, vor allem den Rechtsformzusatz (z. B. e.K., OHG, GmbH)."
+    },
+    {
+      "topic": "Firmenarten",
+      "front": "Was ist eine Personenfirma?",
+      "back": "Eine Firma, in deren Firmenkern die am Unternehmen beteiligten Personen mit Namen genannt sind (z. B. Gilles e.K.)."
+    },
+    {
+      "topic": "Firmenarten",
+      "front": "Was ist eine Sachfirma?",
+      "back": "Eine Firma, deren Firmenkern sich aus dem Gegenstand des Unternehmens ableitet (z. B. Balthasar Transporte GmbH)."
+    },
+    {
+      "topic": "Firmenarten",
+      "front": "Was ist eine Mischfirma?",
+      "back": "Eine Firma, deren Firmenkern sowohl Namen als auch Gegenstand des Unternehmens nennt (z. B. Duisdorfer BüroKonzept KG)."
+    },
+    {
+      "topic": "Firmenarten",
+      "front": "Was ist eine Fantasiefirma?",
+      "back": "Eine Firma, deren Firmenkern ein frei erfundener Fantasiename ist (z. B. Kalyptus OHG)."
+    },
+    {
+      "topic": "Firmengrundsätze",
+      "front": "Wie lauten die fünf Firmengrundsätze?",
+      "back": "Firmenwahrheit, Firmenklarheit, Firmenausschließlichkeit, Firmenbeständigkeit und Firmenöffentlichkeit."
+    },
+    {
+      "topic": "Firmengrundsätze",
+      "front": "Was besagt die Firmenwahrheit (§ 18 HGB)?",
+      "back": "Die Firma muss zur Kennzeichnung geeignet sein, Unterscheidungskraft besitzen und darf nicht über geschäftliche Verhältnisse irreführen."
+    },
+    {
+      "topic": "Firmengrundsätze",
+      "front": "Was besagt die Firmenausschließlichkeit (§ 30 HGB)?",
+      "back": "Jede neue Firma muss sich von bereits am selben Ort eingetragenen Firmen deutlich unterscheiden."
+    },
+    {
+      "topic": "Firmengrundsätze",
+      "front": "Was besagt die Firmenbeständigkeit (§§ 22, 23 HGB)?",
+      "back": "Eine bestehende Firma darf beim Erwerb des Handelsgeschäfts fortgeführt, aber nicht ohne das Geschäft veräußert werden."
+    },
+    {
+      "topic": "Handelsregister",
+      "front": "Was ist das Handelsregister?",
+      "back": "Ein elektronisch geführtes amtliches Verzeichnis, das vom Amtsgericht des jeweiligen Bezirks geführt wird (§ 8 HGB)."
+    },
+    {
+      "topic": "Handelsregister",
+      "front": "Wer wird in Abteilung A eingetragen?",
+      "back": "Einzelkaufleute (e.K.) und Personengesellschaften (OHG, KG)."
+    },
+    {
+      "topic": "Handelsregister",
+      "front": "Wer wird in Abteilung B eingetragen?",
+      "back": "Kapitalgesellschaften (GmbH, AG)."
+    },
+    {
+      "topic": "Handelsregister",
+      "front": "In welchem Register werden Genossenschaften und Vereine geführt?",
+      "back": "Genossenschaften im Genossenschaftsregister, Vereine im Vereinsregister."
+    },
+    {
+      "topic": "Handelsregister",
+      "front": "Was bedeutet eine deklaratorische Eintragung?",
+      "back": "Sie ist rechtsbekundend und bestätigt nur eine bereits bestehende Rechtslage (z. B. Istkaufmann, Prokura)."
+    },
+    {
+      "topic": "Handelsregister",
+      "front": "Was bedeutet eine konstitutive Eintragung?",
+      "back": "Sie ist rechtsbegründend; die Rechtslage entsteht erst mit der Eintragung (z. B. GmbH, AG)."
+    },
+    {
+      "topic": "Handelsregister",
+      "front": "Was besagt die Publizität nach § 15 HGB?",
+      "back": "Auf eingetragene und bekanntgemachte Tatsachen darf sich jeder Dritte verlassen; nicht eingetragene Tatsachen kann man einem Gutgläubigen nicht entgegenhalten."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wie haftet der Einzelunternehmer?",
+      "back": "Unbeschränkt mit seinem gesamten Privatvermögen."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wie haften die Gesellschafter einer OHG?",
+      "back": "Unbeschränkt, unmittelbar und solidarisch (gesamtschuldnerisch) mit dem Privatvermögen."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wer führt bei der OHG die Geschäfte?",
+      "back": "Jeder Gesellschafter ist allein zur Geschäftsführung und zur Vertretung berechtigt."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wer sind die zwei Gesellschaftertypen der KG?",
+      "back": "Der Komplementär (Vollhafter) und der Kommanditist (Teilhafter)."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wie haftet der Kommanditist?",
+      "back": "Nur beschränkt bis zur Höhe seiner Kapitaleinlage."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wer führt bei der KG die Geschäfte und vertritt sie?",
+      "back": "Nur die Komplementäre (die Vollhafter)."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wie hoch ist das Mindeststammkapital der GmbH?",
+      "back": "25.000,00 €."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wie haftet die GmbH?",
+      "back": "Beschränkt auf das Gesellschaftsvermögen; die Gesellschafter haften nur mit ihrer Einlage."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Welche Organe hat die GmbH?",
+      "back": "Die Gesellschafterversammlung (bestellt die Geschäftsführer) und ein oder mehrere Geschäftsführer."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Was ist eine UG (haftungsbeschränkt)?",
+      "back": "Die 'Mini-GmbH', gründbar ab 1 € Stammkapital; sie muss Gewinne zurücklegen, bis 25.000 € Stammkapital erreicht sind."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wie hoch ist das Mindestgrundkapital der AG?",
+      "back": "50.000,00 €, zerlegt in Aktien."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Welche Organe hat die AG?",
+      "back": "Hauptversammlung (Aktionäre), Vorstand (Geschäftsführung) und Aufsichtsrat (Kontrolle)."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Wie heißt die Gewinnausschüttung an Aktionäre?",
+      "back": "Dividende."
+    },
+    {
+      "topic": "Rechtsformen",
+      "front": "Was ist das Ziel einer eingetragenen Genossenschaft (eG)?",
+      "back": "Die Förderung ihrer Mitglieder; das Kapital wird aus Genossenschaftsanteilen der Mitglieder gebildet."
+    },
+    {
+      "topic": "Vollmachten",
+      "front": "Was ist die Prokura?",
+      "back": "Eine umfassende, ins Handelsregister eingetragene Handlungsvollmacht (§§ 48 ff. HGB) für alle Geschäfte eines Handelsgewerbes."
+    },
+    {
+      "topic": "Vollmachten",
+      "front": "Wer darf die Prokura erteilen?",
+      "back": "Nur der Inhaber des Handelsgeschäfts oder sein gesetzlicher Vertreter durch ausdrückliche Erklärung."
+    },
+    {
+      "topic": "Vollmachten",
+      "front": "Wozu ist ein Prokurist NICHT ohne besondere Befugnis ermächtigt?",
+      "back": "Zur Veräußerung und Belastung von Grundstücken."
+    },
+    {
+      "topic": "Vollmachten",
+      "front": "Mit welchem Zusatz unterschreibt ein Prokurist?",
+      "back": "Mit 'ppa.' (per procura)."
+    },
+    {
+      "topic": "Vollmachten",
+      "front": "Wird die Handlungsvollmacht ins Handelsregister eingetragen?",
+      "back": "Nein, sie wird formlos erteilt und nicht ins Handelsregister eingetragen."
+    },
+    {
+      "topic": "Vollmachten",
+      "front": "Welche drei Arten der Handlungsvollmacht gibt es?",
+      "back": "General-, Art-/Gattungs- und Einzel-/Spezialvollmacht."
+    },
+    {
+      "topic": "Vollmachten",
+      "front": "Mit welchem Zusatz unterschreibt man bei Generalvollmacht bzw. bei Art-/Einzelvollmacht?",
+      "back": "Generalvollmacht: 'i. V.' (in Vollmacht); Art-/Einzelvollmacht: 'i. A.' (im Auftrag)."
+    },
+    {
+      "topic": "Aufbauorganisation",
+      "front": "Was ist eine Stelle?",
+      "back": "Die kleinste organisatorische Einheit; ein Aufgabenbündel für eine Person."
+    },
+    {
+      "topic": "Aufbauorganisation",
+      "front": "Was ist eine Instanz?",
+      "back": "Eine Stelle mit Leitungs- und Weisungsbefugnis gegenüber untergeordneten Mitarbeitern."
+    },
+    {
+      "topic": "Aufbauorganisation",
+      "front": "Was ist eine Stabstelle?",
+      "back": "Eine beratende Stelle ohne Weisungsbefugnis, die eine Instanz unterstützt (z. B. Öffentlichkeitsarbeit)."
+    },
+    {
+      "topic": "Aufbauorganisation",
+      "front": "Was ist ein Organigramm?",
+      "back": "Die grafische Darstellung des Stellengefüges eines Unternehmens."
+    },
+    {
+      "topic": "Aufbauorganisation",
+      "front": "Was kennzeichnet das Einliniensystem?",
+      "back": "Jede Stelle hat nur einen Vorgesetzten; klare Wege, aber lange Dienstwege."
+    },
+    {
+      "topic": "Aufbauorganisation",
+      "front": "Was kennzeichnet das Matrixsystem?",
+      "back": "Eine doppelte Unterstellung nach Funktion und Objekt/Projekt; flexibel, aber Gefahr von Kompetenzkonflikten."
+    },
+    {
+      "topic": "Ablauforganisation",
+      "front": "Was regelt die Ablauforganisation?",
+      "back": "Die zeitlich-räumlichen Arbeitsabläufe — wer was wann und wo erledigt."
+    },
+    {
+      "topic": "Ablauforganisation",
+      "front": "Was ist ein Kernprozess?",
+      "back": "Der wertschöpfende Hauptprozess eines Unternehmens (z. B. die Produktion der Büromöbel)."
+    },
+    {
+      "topic": "Ablauforganisation",
+      "front": "Was ist ein Unterstützungsprozess?",
+      "back": "Ein Prozess, der den Kernprozess flankiert (z. B. Buchhaltung, Personalwesen)."
+    },
+    {
+      "topic": "Ablauforganisation",
+      "front": "Was ist ein Managementprozess?",
+      "back": "Ein steuernder Prozess wie Planung, Organisation und Kontrolle."
+    },
+    {
+      "topic": "Leitbild & Ziele",
+      "front": "Was ist ein Unternehmensleitbild?",
+      "back": "Es beschreibt das Selbstverständnis eines Unternehmens: Vision, Werte und Grundsätze im Umgang mit Kunden, Mitarbeitenden und Gesellschaft."
+    },
+    {
+      "topic": "Leitbild & Ziele",
+      "front": "Was ist der Unterschied zwischen Sachzielen und Formalzielen?",
+      "back": "Sachziele betreffen, was hergestellt/angeboten wird; Formalziele sind übergeordnete Erfolgsziele wie Gewinn, Wirtschaftlichkeit und Rentabilität."
+    },
+    {
+      "topic": "Leitbild & Ziele",
+      "front": "Welche drei inhaltlichen Zielarten unterscheidet man?",
+      "back": "Ökonomische, ökologische und soziale Ziele."
+    },
+    {
+      "topic": "Nachhaltigkeit",
+      "front": "Wie lauten die drei Säulen der Nachhaltigkeit?",
+      "back": "Ökonomie (wirtschaftlich tragfähig), Ökologie (umweltverträglich) und Soziales (gesellschaftlich verantwortungsvoll)."
+    }
+  ]
+}
