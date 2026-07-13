@@ -3,13 +3,13 @@
 **Buchverweis:** PDF `Grundlagen_Den-Betrieb-praesentieren-und-Wiederholung.pdf`
 _© Can Siebert · 2026_
 
-> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst das verlinkte Video zur Aufgabe an (die Links öffnen eine YouTube-Suche mit passenden Stichwörtern — wählen Sie ein aktuelles, gut bewertetes Video). Bearbeiten Sie die Aufgabe danach mit dem im Video gezeigten Wissen plus den Inhalten aus PDF, Handout und Tagesplan. **Empfohlene YouTube-Kanäle:** Lehrer Schmidt · Simpleclub · BWL Crashkurs · Wirtschaftsschule.de · IHK-Bildungswerkstatt.
+> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst den verlinkten Lernbeitrag zur Aufgabe an. Bearbeiten Sie die Aufgabe danach mit dem dort gezeigten Wissen plus den Inhalten aus PDF, Handout und Tagesplan. **Quelle der Vorbereitungslinks:** StudyFlix (studyflix.de) — jede Seite bietet einen Erklärtext und ein Video.
 
 ---
 
 ## Aufgabe 1 — Zweck, Ziele & Zielgruppe einer Präsentation
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Präsentation Zielgruppenanalyse Grundlagen"](https://www.youtube.com/results?search_query=Pr%C3%A4sentation+Zielgruppenanalyse+Grundlagen)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Gutes Referat vorbereiten – Zielgruppe & Tipps"](https://studyflix.de/studientipps/tipps-fuer-ein-gutes-referat-735)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Sie präsentieren dasselbe Thema einmal vor Auszubildenden und einmal vor der
 
 ## Aufgabe 2 — Vorbereitung & Aufbau (roter Faden)
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Präsentation Aufbau Einleitung Hauptteil Schluss"](https://www.youtube.com/results?search_query=Pr%C3%A4sentation+Aufbau+Einleitung+Hauptteil+Schluss)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Referat-Aufbau (Einleitung, Hauptteil, Schluss)"](https://studyflix.de/deutsch/referat-aufbau-4476)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Sie haben für Ihre Präsentation 10 Minuten Zeit. Erstellen Sie eine grobe Z
 
 ## Aufgabe 3 — Präsentationsmedien vergleichen
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Präsentationsmedien Flipchart Beamer Pinnwand Vorteile Nachteile"](https://www.youtube.com/results?search_query=Pr%C3%A4sentationsmedien+Flipchart+Beamer+Pinnwand+Vorteile+Nachteile)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Präsentationstechniken (Medien)"](https://studyflix.de/jobs/karriere-tipps/praesentationstechniken-7191)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -51,7 +51,7 @@ c) Warum ist ein Handout sinnvoll, obwohl bereits ein Beamer eingesetzt wird? Wa
 
 ## Aufgabe 4 — Foliengestaltung (KISS & 6×6-Regel)
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „PowerPoint Foliengestaltung Regeln 6x6 KISS"](https://www.youtube.com/results?search_query=PowerPoint+Foliengestaltung+Regeln+6x6+KISS)
+📺 **Vorbereitungsvideo:** [StudyFlix: „PowerPoint Tipps (Foliengestaltung)"](https://studyflix.de/informatik/powerpoint-tipps-7741)
 
 **Sozialform:** Einzelarbeit
 
@@ -65,7 +65,7 @@ c) Formulieren Sie diese überladene Folie in Stichpunkte um: *„Unser Unterneh
 
 ## Aufgabe 5 — Kurzpräsentation eines Betriebs planen und halten
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Unternehmen vorstellen Steckbrief Präsentation frei sprechen"](https://www.youtube.com/results?search_query=Unternehmen+vorstellen+Steckbrief+Pr%C3%A4sentation+frei+sprechen)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Kurzvorstellung (frei sprechen)"](https://studyflix.de/studientipps/kurzvorstellung-5670)
 
 **Sozialform:** Kleingruppe / Einzelvortrag
 
@@ -81,7 +81,7 @@ c) Halten Sie die Präsentation frei (Stimme, Blickkontakt, Körpersprache beach
 
 ## Aufgabe 6 — Wiederholung Lernfeld 1 (Sessions 1–3)
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Wirtschaftskreislauf Rechtsformen Berufsausbildungsvertrag einfach erklärt"](https://www.youtube.com/results?search_query=Wirtschaftskreislauf+Rechtsformen+Berufsausbildungsvertrag+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Wirtschaftskreislauf (Wiederholung)"](https://studyflix.de/wirtschaft/wirtschaftskreislauf-1755)
 
 **Sozialform:** Partnerarbeit (gegenseitiges Abfragen)
 

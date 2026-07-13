@@ -3,13 +3,13 @@
 **Buchverweis:** PDF `Grundlagen_Rechtliche-Grundlagen-der-Berufsausbildung.pdf`
 _© Can Siebert · 2026_
 
-> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst das verlinkte Video zur Aufgabe an. Bearbeiten Sie die Aufgabe danach mit dem im Video gezeigten Wissen plus den Inhalten aus PDF und Tagesplan. **Empfohlene YouTube-Kanäle:** Lehrer Schmidt · Daniel Jung · BWL Crashkurs · Wirtschaftsschule.de · IHK-Bildungswerkstatt.
+> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst den verlinkten Lernbeitrag zur Aufgabe an. Bearbeiten Sie die Aufgabe danach mit dem dort gezeigten Wissen plus den Inhalten aus PDF und Tagesplan. **Quelle der Vorbereitungslinks:** StudyFlix (studyflix.de) — jede Seite bietet einen Erklärtext und ein Video.
 
 ---
 
 ## Aufgabe 1 — Duales System und Rollen
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „duales System Berufsausbildung einfach erklärt"](https://www.youtube.com/results?search_query=duales+System+Berufsausbildung+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Duale Ausbildung"](https://studyflix.de/ausbildung/karriere-ausbildung/duale-ausbildung-4787)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Unterscheiden Sie die Begriffe **Ausbildende:r**, **Ausbilder:in** und **Ausz
 
 ## Aufgabe 2 — Rechtsgrundlagen und ihr Zusammenspiel
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Ausbildungsordnung Ausbildungsrahmenplan BBiG"](https://www.youtube.com/results?search_query=Ausbildungsordnung+Ausbildungsrahmenplan+BBiG)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Ausbildungsvertrag (BBiG, Ausbildungsordnung)"](https://studyflix.de/ausbildung/karriere-ausbildung/ausbildungsvertrag-4788)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Wer erstellt den betrieblichen Ausbildungsplan, und wozu dient er?
 
 ## Aufgabe 3 — Der Berufsausbildungsvertrag
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Berufsausbildungsvertrag Inhalt § 11 BBiG"](https://www.youtube.com/results?search_query=Berufsausbildungsvertrag+Inhalt+%C2%A7+11+BBiG)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Ausbildungsvertrag — § 11 BBiG"](https://studyflix.de/ausbildung/karriere-ausbildung/ausbildungsvertrag-4788)
 
 **Sozialform:** Einzelarbeit
 
@@ -54,7 +54,7 @@ d) Bei welcher Stelle wird das Ausbildungsverhältnis eingetragen bzw. angezeigt
 
 ## Aufgabe 4 — Pflichten der Vertragspartner
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Pflichten Auszubildende Ausbildende BBiG"](https://www.youtube.com/results?search_query=Pflichten+Auszubildende+Ausbildende+BBiG)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Rechte und Pflichten als Azubi"](https://studyflix.de/ausbildung/karriere-ausbildung/rechte-und-pflichten-als-azubi-4792)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -68,7 +68,7 @@ c) Ordnen Sie zu: „Freistellung für den Berufsschulunterricht" und „Führen
 
 ## Aufgabe 5 — Jugendarbeitsschutzgesetz anwenden
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Jugendarbeitsschutzgesetz einfach erklärt"](https://www.youtube.com/results?search_query=Jugendarbeitsschutzgesetz+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Jugendarbeitsschutzgesetz (Suche)"](https://studyflix.de/suche?q=Jugendarbeitsschutzgesetz)
 
 **Sozialform:** Partnerarbeit
 
@@ -84,8 +84,8 @@ c) Wie viel Urlaub steht Lena als noch nicht 18-Jähriger mindestens zu? Welche 
 
 ## Aufgabe 6 — Kündigung, Zeugnis und Mitbestimmung
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Kündigung Ausbildungsvertrag Probezeit § 22 BBiG"](https://www.youtube.com/results?search_query=K%C3%BCndigung+Ausbildungsvertrag+Probezeit+%C2%A7+22+BBiG)
-📺 **Ergänzend:** [YouTube-Suche: „Betriebsrat JAV Aufgaben einfach erklärt"](https://www.youtube.com/results?search_query=Betriebsrat+JAV+Aufgaben+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Kündigung Ausbildung (§ 22 BBiG)"](https://studyflix.de/ausbildung/karriere-ausbildung/kuendigung-ausbildung-4804)
+📺 **Ergänzend:** [StudyFlix: „Betriebsrat / JAV (Suche)"](https://studyflix.de/suche?q=Betriebsrat+JAV)
 
 **Sozialform:** Plenumsdiskussion
 

@@ -3,13 +3,13 @@
 **Buchverweis:** PDF `Grundlagen_Betrieb-in-der-Wirtschaft-Beduerfnisse-und-Wirtschaftskreislauf.pdf`
 _© Can Siebert · 2026_
 
-> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst das verlinkte Video zur Aufgabe an. Bearbeiten Sie die Aufgabe danach mit dem im Video gezeigten Wissen plus den Inhalten aus PDF und Tagesplan. **Empfohlene YouTube-Kanäle:** Lehrer Schmidt · Daniel Jung · BWL Crashkurs · Wirtschaftsschule.de · IHK-Bildungswerkstatt.
+> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst den verlinkten Lernbeitrag zur Aufgabe an. Bearbeiten Sie die Aufgabe danach mit dem dort gezeigten Wissen plus den Inhalten aus PDF und Tagesplan. **Quelle der Vorbereitungslinks:** StudyFlix (studyflix.de) — jede Seite bietet einen Erklärtext und ein Video.
 
 ---
 
 ## Aufgabe 1 — Bedürfnisarten unterscheiden
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Bedürfnisarten Existenzbedürfnis Kulturbedürfnis Luxusbedürfnis"](https://www.youtube.com/results?search_query=Bed%C3%BCrfnisarten+Existenzbed%C3%BCrfnis+Kulturbed%C3%BCrfnis+Luxusbed%C3%BCrfnis)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Bedürfnisse (Bedürfnisarten)"](https://studyflix.de/wirtschaft/bedurfnisse-6034)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Erläutern Sie den Unterschied zwischen einem akuten und einem latenten Bedü
 
 ## Aufgabe 2 — Vom Bedürfnis über den Bedarf zur Nachfrage
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Bedürfnis Bedarf Nachfrage einfach erklärt"](https://www.youtube.com/results?search_query=Bed%C3%BCrfnis+Bedarf+Nachfrage+einfach+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Bedürfnis, Bedarf, Nachfrage"](https://studyflix.de/wirtschaft/beduerfnis-bedarf-nachfrage-4827)
 
 **Sozialform:** Partnerarbeit
 
@@ -37,7 +37,7 @@ c) Beschreiben Sie an einem eigenen Beispiel (z. B. Kauf eines Smartphones) den 
 
 ## Aufgabe 3 — Güterarten systematisch einordnen
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Güterarten freie knappe Konsumgüter Produktionsgüter"](https://www.youtube.com/results?search_query=G%C3%BCterarten+freie+knappe+Konsumg%C3%BCter+Produktionsg%C3%BCter)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Güterarten"](https://studyflix.de/wirtschaft/gueterarten-3103)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -51,7 +51,7 @@ c) Erklären Sie den Unterschied zwischen Komplementär- und Substitutionsgüter
 
 ## Aufgabe 4 — Ökonomisches Prinzip anwenden
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Ökonomisches Prinzip Maximalprinzip Minimalprinzip"](https://www.youtube.com/results?search_query=%C3%96konomisches+Prinzip+Maximalprinzip+Minimalprinzip)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Ökonomisches Prinzip"](https://studyflix.de/wirtschaft/okonomisches-prinzip-1613)
 
 **Sozialform:** Partnerarbeit
 
@@ -65,7 +65,7 @@ c) Beurteilen Sie: Kann man beide Prinzipien gleichzeitig anwenden („mit minim
 
 ## Aufgabe 5 — Produktionsfaktoren
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Produktionsfaktoren Boden Arbeit Kapital Betriebsmittel Werkstoffe"](https://www.youtube.com/results?search_query=Produktionsfaktoren+Boden+Arbeit+Kapital+Betriebsmittel+Werkstoffe)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Produktionsfaktoren"](https://studyflix.de/wirtschaft/produktionsfaktoren-1699)
 
 **Sozialform:** Einzelarbeit
 
@@ -79,7 +79,7 @@ c) Ordnen Sie den Werkstoffen zu: Holz, Leim/Schrauben, Strom/Benzin — Roh-, H
 
 ## Aufgabe 6 — Wirtschaftskreislauf aufbauen
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Wirtschaftskreislauf einfach erweitert vollständig erklärt"](https://www.youtube.com/results?search_query=Wirtschaftskreislauf+einfach+erweitert+vollst%C3%A4ndig+erkl%C3%A4rt)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Wirtschaftskreislauf"](https://studyflix.de/wirtschaft/wirtschaftskreislauf-1755)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 

@@ -3,13 +3,13 @@
 **Buchverweis:** PDF `Grundlagen_Unternehmen-Firma-Rechtsformen-und-Organisation.pdf` (Lernfeld 1, Kap. 1.3–1.4)
 _© Can Siebert · 2026_
 
-> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst das verlinkte Video zur Aufgabe an. Bearbeiten Sie die Aufgabe danach mit dem im Video gezeigten Wissen plus den Inhalten aus PDF und Tagesplan. **Empfohlene YouTube-Kanäle:** Lehrer Schmidt · Daniel Jung · BWL Crashkurs · Wirtschaftsschule.de · IHK-Bildungswerkstatt.
+> 📺 **So nutzen Sie diese Aufgaben:** Schauen Sie zunächst den verlinkten Lernbeitrag zur Aufgabe an. Bearbeiten Sie die Aufgabe danach mit dem dort gezeigten Wissen plus den Inhalten aus PDF und Tagesplan. **Quelle der Vorbereitungslinks:** StudyFlix (studyflix.de) — jede Seite bietet einen Erklärtext und ein Video.
 
 ---
 
 ## Aufgabe 1 — Der Kaufmannsbegriff nach HGB
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Kaufmann HGB Istkaufmann Kannkaufmann Formkaufmann"](https://www.youtube.com/results?search_query=Kaufmann+HGB+Istkaufmann+Kannkaufmann+Formkaufmann)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Kaufmannseigenschaften (HGB)"](https://studyflix.de/wirtschaft/kaufmannseigenschaften-8547)
 
 **Sozialform:** Einzelarbeit
 
@@ -23,7 +23,7 @@ c) Warum sollte sich ein Kleingewerbetreibender die freiwillige Eintragung als K
 
 ## Aufgabe 2 — Firma und Firmengrundsätze
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Firma HGB Firmengrundsätze Firmenwahrheit"](https://www.youtube.com/results?search_query=Firma+HGB+Firmengrunds%C3%A4tze+Firmenwahrheit)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Firmengrundsätze"](https://studyflix.de/wirtschaft/firmengrundsaetze-8653)
 
 **Sozialform:** Partnerarbeit
 
@@ -39,7 +39,7 @@ c) Beurteilen Sie: Darf die „Duisdorfer BüroKonzept KG" ihren Namen in „Dui
 
 ## Aufgabe 3 — Das Handelsregister
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Handelsregister Abteilung A B konstitutiv deklaratorisch"](https://www.youtube.com/results?search_query=Handelsregister+Abteilung+A+B+konstitutiv+deklaratorisch)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Handelsregister"](https://studyflix.de/wirtschaft/handelsregister-7760)
 
 **Sozialform:** Einzelarbeit
 
@@ -53,7 +53,7 @@ c) Eine Prokura wurde widerrufen und der Widerruf ordnungsgemäß eingetragen un
 
 ## Aufgabe 4 — Rechtsform begründet auswählen (Fallbeispiel)
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Rechtsformen Vergleich GmbH OHG KG Einzelunternehmen"](https://www.youtube.com/results?search_query=Rechtsformen+Vergleich+GmbH+OHG+KG+Einzelunternehmen)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Rechtsformen"](https://studyflix.de/wirtschaft/rechtsformen-9213)
 
 **Sozialform:** Gruppenarbeit (3–4 Personen)
 
@@ -69,7 +69,7 @@ c) Erläutern Sie, welche Organe eine GmbH hat und wer die Gesellschaft nach au�
 
 ## Aufgabe 5 — Prokura und Handlungsvollmacht
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Prokura Handlungsvollmacht Unterschied HGB"](https://www.youtube.com/results?search_query=Prokura+Handlungsvollmacht+Unterschied+HGB)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Prokura (und Handlungsvollmacht)"](https://studyflix.de/wirtschaft/prokura-4807)
 
 **Sozialform:** Partnerarbeit
 
@@ -83,7 +83,7 @@ c) Mit welchem Zusatz unterschreibt ein Prokurist, mit welchem ein Handlungsbevo
 
 ## Aufgabe 6 — Aufbauorganisation und Organigramm
 
-📺 **Vorbereitungsvideo:** [YouTube-Suche: „Aufbauorganisation Stelle Instanz Stabstelle Organigramm"](https://www.youtube.com/results?search_query=Aufbauorganisation+Stelle+Instanz+Stabstelle+Organigramm)
+📺 **Vorbereitungsvideo:** [StudyFlix: „Aufbauorganisation"](https://studyflix.de/wirtschaft/aufbauorganisation-1346)
 
 **Sozialform:** Einzelarbeit
 
