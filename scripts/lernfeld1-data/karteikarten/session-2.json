@@ -20,7 +20,7 @@
     { "topic": "Maslow", "front": "Welche Stufe steht ganz unten in der Maslow-Pyramide?", "back": "Die physiologischen Grundbedürfnisse (Essen, Trinken, Schlaf)." },
     { "topic": "Maslow", "front": "Welche Stufe steht ganz oben in der Maslow-Pyramide?", "back": "Die Selbstverwirklichung (Entfaltung der eigenen Fähigkeiten)." },
     { "topic": "Maslow", "front": "Nenne die fünf Stufen der Maslow-Pyramide von unten nach oben.", "back": "Physiologische Grundbedürfnisse, Sicherheit, soziale Bedürfnisse, Wertschätzung, Selbstverwirklichung." },
-    { "topic": "Maslow", "front": "Was sind Defizitbedürfnisse bei Maslow?", "back": "Die unteren Stufen, deren Fehlen als Mangel empfunden wird (physiologische, Sicherheits-, soziale Bedürfnisse)." },
+    { "topic": "Maslow", "front": "Was sind Defizitbedürfnisse bei Maslow?", "back": "Die unteren vier Stufen (physiologische, Sicherheits-, soziale Bedürfnisse und Wertschätzung), deren Fehlen als Mangel empfunden wird; nur die Selbstverwirklichung ist ein Wachstumsbedürfnis." },
     { "topic": "Bedarf", "front": "Was ist Bedarf?", "back": "Ein mit Kaufkraft (Einkommen) ausgestattetes Bedürfnis." },
     { "topic": "Bedarf", "front": "Was ist Nachfrage?", "back": "Ein marktwirksames Bedürfnis; der tatsächliche Kauf eines Gutes." },
     { "topic": "Bedarf", "front": "Wie lautet die richtige Reihenfolge von Bedürfnis zum Kauf?", "back": "Bedürfnis → Bedarf → Nachfrage." },
